@@ -3,6 +3,7 @@ package com.taf.data.repository.datasource;
 import android.content.Context;
 
 import com.taf.data.BuildConfig;
+import com.taf.data.database.dao.DaoSession;
 import com.taf.data.di.DaggerNetworkComponent;
 import com.taf.data.di.NetworkComponent;
 import com.taf.data.di.NetworkModule;
@@ -10,8 +11,6 @@ import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 
 import javax.inject.Inject;
-
-import database.DaoSession;
 
 @PerActivity
 public class DataStoreFactory {

@@ -6,8 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.taf.data.api.ApiRequest;
+import com.taf.data.database.dao.DaoSession;
 
-import database.DaoSession;
 
 public class RestDataStore implements IDataStore {
 

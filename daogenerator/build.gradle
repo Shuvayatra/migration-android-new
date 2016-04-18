@@ -3,7 +3,7 @@ project(':daogenerator') {
     apply plugin: 'java'
 
     mainClassName = "com.taf.MyDaoGenerator"
-    outputDir = "../data/src/main/java/database"
+    outputDir = "../data/src/main/java"
 
     dependencies {
         compile fileTree(dir: 'libs', include: ['*.jar'])

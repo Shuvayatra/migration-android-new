@@ -3,9 +3,9 @@ package com.taf.data.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.taf.data.database.dao.DaoMaster;
 import com.taf.data.utils.Logger;
 
-import database.DaoMaster;
 
 public class MyOpenHelper extends DaoMaster.DevOpenHelper {
 
