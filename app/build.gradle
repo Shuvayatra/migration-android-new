@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    def globalConfig = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfig.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfig.getAt("androidBuildToolsVersion")
+
+    defaultConfig {
+        applicationId "com.taf.shuvayatra"
+        minSdkVersion globalConfig.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfig.getAt("androidTargetSdkVersion")
+        versionCode 1
+        versionName "0.0.1"
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def appDependencies = rootProject.ext.appDependencies
+
+    compile project(':domain');
+    compile project(':data');
+
+    compile appDependencies.supportv4
+    compile appDependencies.appCompatv7
+    compile appDependencies.cardView
+    compile appDependencies.palette
+    compile appDependencies.designSupport
+    compile appDependencies.cardView
+    compile appDependencies.analytics
+
+    compile appDependencies.butterKnife
+    apt appDependencies.daggerCompiler
+    compile appDependencies.dagger
+    compile appDependencies.rxJava
+    compile appDependencies.rxAndroid
+    provided appDependencies.javaxAnnotation
+    compile appDependencies.pagerIndicator
+    compile appDependencies.stetho
+    compile appDependencies.fresco
+    compile appDependencies.facebookSdk
+    compile appDependencies.iconics
+    compile appDependencies.iconicsGoogle
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile appDependencies.showCase
+}
