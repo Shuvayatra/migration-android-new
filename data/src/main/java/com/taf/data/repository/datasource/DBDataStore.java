@@ -1,7 +1,7 @@
 package com.taf.data.repository.datasource;
 
 
-import com.taf.data.database.dao.DaoSession;
+import com.taf.data.database.DatabaseHelper;
 
 import javax.inject.Inject;
 
@@ -10,11 +10,11 @@ import javax.inject.Inject;
  */
 public class DBDataStore implements IDataStore {
 
-    DaoSession mDaoSession;
+    DatabaseHelper mHelper;
 
     @Inject
-    public DBDataStore(DaoSession pDaoSession) {
-        mDaoSession = pDaoSession;
+    public DBDataStore(DatabaseHelper pHelper) {
+        mHelper = pHelper;
     }
 }
 

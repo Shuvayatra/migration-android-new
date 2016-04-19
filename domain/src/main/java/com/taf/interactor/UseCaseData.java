@@ -7,10 +7,7 @@ import java.util.Map;
 public class UseCaseData implements Serializable {
     public static final String PER_PAGE = "per_page";
     public static final String PAGE = "page";
-    public static final String AUTHENTICATION_DATA = "authentication_data";
-    public static final String QUESTION_DATA = "question_data";
-    public static final String SUBMISSION_DATA = "submission_data";
-    public static final String SUBMISSION_ID = "submission_id";
+    public static final String LAST_UPDATED = "last_updated";
 
     Map<String, Object> data = null;
 

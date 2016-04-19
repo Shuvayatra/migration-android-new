@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Migration App</string>
+    <string name="app_name">Shuvayatra</string>
 
     <string name="action_settings">सेटिङ</string>
     <string name="action_refresh">रिफ्रेस</string>
@@ -25,6 +25,13 @@
     <string name="latest_audios">नयाँ अडियोहरु</string>
     <string name="latest_videos">नयाँ भिडियोहरु</string>
     <string name="latest_articles">नयाँ लेखहरु</string>
+
+    <string-array name="home_tabs">
+        <item>journey</item>
+        <item>destination</item>
+        <item>info</item>
+        <item>user</item>
+    </string-array>
 
     <string-array name="question_tabs">
         <item>सबै</item>

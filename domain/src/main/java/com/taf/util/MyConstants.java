@@ -107,15 +107,10 @@ public class MyConstants {
     }
 
     public static final class Adapter {
-        public static final int TYPE_QUESTION = 0;
         public static final int TYPE_AUDIO = 1;
         public static final int TYPE_VIDEO = 2;
         public static final int TYPE_TEXT = 3;
-        public static final int TYPE_COUNTRY = 4;
-        public static final int TYPE_COUNTRY_UPDATE = 5;
-        public static final int TYPE_ANSWER = 6;
-        public static final int TYPE_FOOTER = 7;
-        public static final int TYPE_DOWNLOAD_ITEM = 8;
+        public static final int TYPE_NEWS = 4;
     }
 
     public static final class VideoAdapterType {

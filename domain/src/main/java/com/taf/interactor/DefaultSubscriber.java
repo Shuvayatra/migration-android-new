@@ -10,7 +10,7 @@ public class DefaultSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-
+        e.printStackTrace();
     }
 
     @Override

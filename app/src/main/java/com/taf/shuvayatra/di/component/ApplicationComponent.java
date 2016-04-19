@@ -3,6 +3,7 @@ package com.taf.shuvayatra.di.component;
 
 import android.content.Context;
 
+import com.taf.data.database.dao.DaoSession;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -26,4 +27,6 @@ public interface ApplicationComponent {
     PostExecutionThread postExecutionThread();
 
     AppPreferences getAppPreferences();
+
+    DaoSession getDaoSession();
 }

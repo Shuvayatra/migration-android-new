@@ -21,4 +21,12 @@ public class AppPreferences {
         mContext = pContext;
     }
 
+    public long getLastUpdateStamp() {
+        return pref.getLong(LAST_UPDATE_STAMP, -1);
+    }
+
+    public void setLastUpdateStamp(long pStamp) {
+        editor.putLong(LAST_UPDATE_STAMP, pStamp);
+        editor.apply();
+    }
 }
