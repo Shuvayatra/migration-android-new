@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.taf.data.database.MyOpenHelper;
+import com.taf.data.database.dao.DaoMaster;
+import com.taf.data.database.dao.DaoSession;
 import com.taf.data.executor.JobExecutor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
@@ -15,8 +17,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import database.DaoMaster;
-import database.DaoSession;
 
 @Module
 public class ApplicationModule {

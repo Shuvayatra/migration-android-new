@@ -3,7 +3,7 @@ package com.taf.data.repository.datasource;
 import android.content.Context;
 
 import com.taf.data.BuildConfig;
-import com.taf.data.database.dao.DaoSession;
+import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.DaggerNetworkComponent;
 import com.taf.data.di.NetworkComponent;
 import com.taf.data.di.NetworkModule;
@@ -16,17 +16,18 @@ import javax.inject.Inject;
 public class DataStoreFactory {
     private final Context mContext;
     private final DataMapper mDataMapper;
-    private final DaoSession mDaoSession;
+    private final DatabaseHelper mHelper;
 
     @Inject
-    public DataStoreFactory(Context pContext, DataMapper pDataMapper, DaoSession pDaoSession) {
+    public DataStoreFactory(Context pContext, DataMapper pDataMapper, DatabaseHelper
+            pHelper) {
         mContext = pContext;
         mDataMapper = pDataMapper;
-        mDaoSession = pDaoSession;
+        mHelper = pHelper;
     }
 
     public DBDataStore createDBDataStore() {
-        return new DBDataStore(mDaoSession);
+        return new DBDataStore(mHelper);
     }
 
     public RestDataStore createRestDataStore() {
@@ -34,6 +35,6 @@ public class DataStoreFactory {
                 .builder()
                 .networkModule(new NetworkModule(BuildConfig.BASE_URL))
                 .build();
-        return new RestDataStore(mContext, networkComponent.getApiRequest(), mDaoSession);
+        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper);
     }
 }
