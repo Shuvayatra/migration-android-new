@@ -47,8 +47,10 @@
         <item name="sv_detailTextAppearance">@style/showcase_description</item>
         <item name="sv_titleTextAppearance">@style/showcase_title</item>
     </style>
+
     <style name="showcase_title" parent="TextAppearance.ShowcaseView.Title">
     </style>
+
     <style name="showcase_description" parent="TextAppearance.ShowcaseView.Detail.Light">
         <item name="android:textColor">@color/divider</item>
     </style>
@@ -60,17 +62,23 @@
 
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabTextColor">@color/white_alpha_70</item>
-        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabIndicatorHeight">2dp</item>
     </style>
 
     <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">@dimen/text_big</item>
-        <item name="textAllCaps">true</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="textAllCaps">false</item>
         <!--<item name="android:textStyle">bold</item>-->
     </style>
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay"
+           parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

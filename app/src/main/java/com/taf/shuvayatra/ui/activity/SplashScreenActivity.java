@@ -2,8 +2,11 @@ package com.taf.shuvayatra.ui.activity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.taf.interactor.UseCaseData;
@@ -26,6 +29,8 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
 
     @Bind(R.id.message)
     TextView messageView;
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     @Override
     public int getLayout() {
@@ -86,20 +91,23 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-
+                        Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
-                }, 1000
+                }, 600
         );
     }
 
     @Override
     public void showLoadingView() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
+        messageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoadingView() {
-
+        mProgressBar.setVisibility(View.GONE);
+        messageView.setVisibility(View.GONE);
     }
 
     @Override
