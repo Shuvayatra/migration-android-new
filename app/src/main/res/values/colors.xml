@@ -23,4 +23,7 @@
     <color name="list_background">#cccccc</color>
     <color name="nav_item_selected">#ffffff</color>
     <color name="nav_item_normal">#deffffff</color>
+
+    <!--- 8******* new**********-->
+    <color name="main_background">#ededed</color>
 </resources>

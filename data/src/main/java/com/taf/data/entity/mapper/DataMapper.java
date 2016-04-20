@@ -1,7 +1,7 @@
 package com.taf.data.entity.mapper;
 
 import com.google.gson.Gson;
-import com.taf.data.database.dao.DbPost;
+import com.taf.data.database.dao.dbPost;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
@@ -56,9 +56,9 @@ public class DataMapper {
         return null;
     }
 
-    public DbPost transformPostForDB(PostEntity pEntity) {
+    public dbPost transformPostForDB(PostEntity pEntity) {
         if (pEntity != null) {
-            DbPost post = new DbPost(pEntity.getId());
+            dbPost post = new dbPost(pEntity.getId());
             post.setUpdatedAt(pEntity.getUpdatedAt());
             post.setCreatedAt(pEntity.getCreatedAt());
             post.setDescription(pEntity.getDescription());
