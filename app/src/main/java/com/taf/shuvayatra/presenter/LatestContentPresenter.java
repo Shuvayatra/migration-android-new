@@ -69,7 +69,6 @@ public class LatestContentPresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            Logger.e("LatestContentSubscriber_onError", e.getLocalizedMessage());
             mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));

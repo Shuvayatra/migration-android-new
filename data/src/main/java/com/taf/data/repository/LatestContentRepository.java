@@ -21,7 +21,7 @@ public class LatestContentRepository implements IBaseRepository<LatestContent> {
     }
 
     @Override
-    public Observable<List<LatestContent>> getList(int pLimit) {
+    public Observable<List<LatestContent>> getList(int pLimit, int pOffset) {
         throw new UnsupportedOperationException();
     }
 

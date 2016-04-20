@@ -1,12 +1,15 @@
 package com.taf.data.entity.mapper;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.model.LatestContent;
 import com.taf.model.Post;
+import com.taf.model.PostData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,23 +51,72 @@ public class DataMapper {
             post.setType(pEntity.getType());
             post.setTitle(pEntity.getTitle());
             post.setDescription(pEntity.getDescription());
+            post.setSource(pEntity.getSource());
             post.setUpdatedAt(pEntity.getUpdatedAt());
             post.setCreatedAt(pEntity.getCreatedAt());
             post.setTags(pEntity.getTags());
+            post.setData(transformPostData(pEntity.getData()));
             return post;
         }
         return null;
     }
 
+    public PostData transformPostData(PostDataEntity pEntity) {
+        PostData data = null;
+        if (pEntity != null) {
+            data = new PostData();
+            data.setContent(pEntity.getContent());
+            data.setMediaUrl(pEntity.getMediaUrl());
+            data.setDuration(pEntity.getDuration());
+            data.setThumbnail(pEntity.getThumbnail());
+        }
+        return data;
+    }
+
     public DbPost transformPostForDB(PostEntity pEntity) {
         if (pEntity != null) {
+            Gson gson = new Gson();
             DbPost post = new DbPost(pEntity.getId());
+            post.setTitle(pEntity.getTitle());
+            post.setDescription(pEntity.getDescription());
+            post.setType(pEntity.getType());
+            post.setData(gson.toJson(pEntity.getData()));
+            post.setTags(gson.toJson(pEntity.getTags()));
+            post.setType(pEntity.getType());
             post.setUpdatedAt(pEntity.getUpdatedAt());
             post.setCreatedAt(pEntity.getCreatedAt());
-            post.setDescription(pEntity.getDescription());
-            post.setTitle(pEntity.getTitle());
-            post.setTags(new Gson().toJson(pEntity.getTags()));
-            post.setType(pEntity.getType());
+            return post;
+        }
+        return null;
+    }
+
+    public List<Post> transformPostFromDb(List<DbPost> dbPosts) {
+        List<Post> postList = new ArrayList<>();
+        if (dbPosts != null) {
+            for (DbPost dbPost : dbPosts) {
+                Post post = transformPostFromDb(dbPost);
+                if (post != null) {
+                    postList.add(post);
+                }
+            }
+        }
+        return postList;
+    }
+
+    public Post transformPostFromDb(DbPost pPost) {
+        if (pPost != null) {
+            Gson gson = new Gson();
+            Post post = new Post();
+            post.setId(pPost.getId());
+            post.setTitle(pPost.getTitle());
+            post.setDescription(pPost.getDescription());
+            post.setType(pPost.getType());
+            post.setData(transformPostData(gson.fromJson(pPost.getData(), PostDataEntity.class)));
+            post.setTags(gson.fromJson(pPost.getTags(), new TypeToken<List<String>>(){}.getType()));
+            post.setType(pPost.getType());
+            post.setUpdatedAt(pPost.getUpdatedAt());
+            post.setCreatedAt(pPost.getCreatedAt());
+            return post;
         }
         return null;
     }

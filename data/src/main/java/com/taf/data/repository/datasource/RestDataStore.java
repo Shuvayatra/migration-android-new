@@ -40,6 +40,31 @@ public class RestDataStore implements IDataStore {
         }
     }
 
+    //// TODO: 4/20/16
+    public Observable updateFavouriteState(Long pId, boolean isFavourite) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.updateFavouriteState(pId, isFavourite)
+                    .doOnNext(pO -> {
+                        Observable.create(pSubscriber -> {
+                            mDBHelper.updateFavouriteState(pId, isFavourite, true);
+                            pSubscriber.onCompleted();
+                        }).subscribeOn(Schedulers.computation()).subscribe();
+                    })
+                    .doOnError(pThrowable -> {
+                        Observable.create(pSubscriber -> {
+                            mDBHelper.updateFavouriteState(pId, isFavourite, false);
+                            pSubscriber.onCompleted();
+                        }).subscribeOn(Schedulers.computation()).subscribe();
+                    });
+        } else {
+            Observable.create(pSubscriber -> {
+                mDBHelper.updateFavouriteState(pId, isFavourite, false);
+                pSubscriber.onCompleted();
+            }).subscribeOn(Schedulers.computation()).subscribe();
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
     private boolean isThereInternetConnection() {
         boolean isConnected;
 

@@ -9,17 +9,18 @@ import java.util.List;
  * Created by julian on 12/8/15.
  */
 public class Post extends BaseModel {
-    Long mCreatedAt;
-    Long mUpdatedAt;
-    List<String> mTags;
-    String mDescription;
     String mTitle;
+    String mDescription;
     String mType;
     PostData mData;
-    String type;
+    String mSource;
+    List<String> mTags;
+    Long mCreatedAt;
+    Long mUpdatedAt;
     Integer likes;
     Integer share;
     String category;
+
 
     public Long getCreatedAt() {
         return mCreatedAt;

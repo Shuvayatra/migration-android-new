@@ -24,12 +24,18 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property CreatedAt = new Property(1, Long.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(2, Long.class, "updatedAt", false, "UPDATED_AT");
-        public final static Property Tags = new Property(3, String.class, "tags", false, "TAGS");
-        public final static Property Type = new Property(4, String.class, "type", false, "TYPE");
-        public final static Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
-        public final static Property Title = new Property(6, String.class, "title", false, "TITLE");
+        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
+        public final static Property Description = new Property(2, String.class, "description", false, "DESCRIPTION");
+        public final static Property Type = new Property(3, String.class, "type", false, "TYPE");
+        public final static Property Data = new Property(4, String.class, "data", false, "DATA");
+        public final static Property Source = new Property(5, String.class, "source", false, "SOURCE");
+        public final static Property Tags = new Property(6, String.class, "tags", false, "TAGS");
+        public final static Property CreatedAt = new Property(7, Long.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(8, Long.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property FavouriteCount = new Property(9, Integer.class, "favouriteCount", false, "FAVOURITE_COUNT");
+        public final static Property ShareCount = new Property(10, Integer.class, "shareCount", false, "SHARE_COUNT");
+        public final static Property IsFavourite = new Property(11, Boolean.class, "isFavourite", false, "IS_FAVOURITE");
+        public final static Property IsSynced = new Property(12, Boolean.class, "isSynced", false, "IS_SYNCED");
     };
 
 
@@ -46,12 +52,18 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DB_POST\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"CREATED_AT\" INTEGER," + // 1: createdAt
-                "\"UPDATED_AT\" INTEGER," + // 2: updatedAt
-                "\"TAGS\" TEXT," + // 3: tags
-                "\"TYPE\" TEXT," + // 4: type
-                "\"DESCRIPTION\" TEXT," + // 5: description
-                "\"TITLE\" TEXT);"); // 6: title
+                "\"TITLE\" TEXT," + // 1: title
+                "\"DESCRIPTION\" TEXT," + // 2: description
+                "\"TYPE\" TEXT," + // 3: type
+                "\"DATA\" TEXT," + // 4: data
+                "\"SOURCE\" TEXT," + // 5: source
+                "\"TAGS\" TEXT," + // 6: tags
+                "\"CREATED_AT\" INTEGER," + // 7: createdAt
+                "\"UPDATED_AT\" INTEGER," + // 8: updatedAt
+                "\"FAVOURITE_COUNT\" INTEGER," + // 9: favouriteCount
+                "\"SHARE_COUNT\" INTEGER," + // 10: shareCount
+                "\"IS_FAVOURITE\" INTEGER," + // 11: isFavourite
+                "\"IS_SYNCED\" INTEGER);"); // 12: isSynced
     }
 
     /** Drops the underlying database table. */
@@ -70,34 +82,64 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long createdAt = entity.getCreatedAt();
-        if (createdAt != null) {
-            stmt.bindLong(2, createdAt);
-        }
- 
-        Long updatedAt = entity.getUpdatedAt();
-        if (updatedAt != null) {
-            stmt.bindLong(3, updatedAt);
-        }
- 
-        String tags = entity.getTags();
-        if (tags != null) {
-            stmt.bindString(4, tags);
-        }
- 
-        String type = entity.getType();
-        if (type != null) {
-            stmt.bindString(5, type);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(6, description);
+            stmt.bindString(3, description);
         }
  
-        String title = entity.getTitle();
-        if (title != null) {
-            stmt.bindString(7, title);
+        String type = entity.getType();
+        if (type != null) {
+            stmt.bindString(4, type);
+        }
+ 
+        String data = entity.getData();
+        if (data != null) {
+            stmt.bindString(5, data);
+        }
+ 
+        String source = entity.getSource();
+        if (source != null) {
+            stmt.bindString(6, source);
+        }
+ 
+        String tags = entity.getTags();
+        if (tags != null) {
+            stmt.bindString(7, tags);
+        }
+ 
+        Long createdAt = entity.getCreatedAt();
+        if (createdAt != null) {
+            stmt.bindLong(8, createdAt);
+        }
+ 
+        Long updatedAt = entity.getUpdatedAt();
+        if (updatedAt != null) {
+            stmt.bindLong(9, updatedAt);
+        }
+ 
+        Integer favouriteCount = entity.getFavouriteCount();
+        if (favouriteCount != null) {
+            stmt.bindLong(10, favouriteCount);
+        }
+ 
+        Integer shareCount = entity.getShareCount();
+        if (shareCount != null) {
+            stmt.bindLong(11, shareCount);
+        }
+ 
+        Boolean isFavourite = entity.getIsFavourite();
+        if (isFavourite != null) {
+            stmt.bindLong(12, isFavourite ? 1L: 0L);
+        }
+ 
+        Boolean isSynced = entity.getIsSynced();
+        if (isSynced != null) {
+            stmt.bindLong(13, isSynced ? 1L: 0L);
         }
     }
 
@@ -112,12 +154,18 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
     public DbPost readEntity(Cursor cursor, int offset) {
         DbPost entity = new DbPost( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // createdAt
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // updatedAt
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // tags
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // type
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // description
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // title
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // description
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // type
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // data
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // source
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tags
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // createdAt
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // updatedAt
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // favouriteCount
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // shareCount
+            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFavourite
+            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0 // isSynced
         );
         return entity;
     }
@@ -126,12 +174,18 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
     @Override
     public void readEntity(Cursor cursor, DbPost entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCreatedAt(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setUpdatedAt(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setTags(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setType(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setDescription(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setTitle(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setDescription(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setData(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setSource(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTags(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreatedAt(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setUpdatedAt(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setFavouriteCount(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setShareCount(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setIsFavourite(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
+        entity.setIsSynced(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
      }
     
     /** @inheritdoc */

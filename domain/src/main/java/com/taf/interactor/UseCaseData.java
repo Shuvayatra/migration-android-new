@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UseCaseData implements Serializable {
-    public static final String PER_PAGE = "per_page";
-    public static final String PAGE = "page";
+    public static final String LIMIT = "limit";
+    public static final String OFFSET = "offset";
+    public static final String POST_TYPE = "post_type";
+    public static final String ID = "id";
+    public static final String FAVOURITE_STATE = "is_favourite";
     public static final String LAST_UPDATED = "last_updated";
 
     Map<String, Object> data = null;
