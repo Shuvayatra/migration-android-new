@@ -19,4 +19,7 @@
         <item>info</item>
         <item>user</item>
     </string-array>
+
+    <string name="query_hint">What you want to know?</string>
+    <string name="similar_video">SIMILAR VIDEOS</string>
 </resources>

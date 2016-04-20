@@ -1,8 +1,8 @@
 package com.taf.data.database;
 
 import com.taf.data.database.dao.DaoSession;
-import com.taf.data.database.dao.DbPost;
-import com.taf.data.database.dao.DbPostDao;
+import com.taf.data.database.dao.dbPost;
+import com.taf.data.database.dao.dbPostDao;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
@@ -31,9 +31,9 @@ public class DatabaseHelper{
     }
 
     public void insertUpdate(List<PostEntity> pEntities){
-        DbPostDao postDao = mDaoSession.getDbPostDao();
+        dbPostDao postDao = mDaoSession.getDbPostDao();
         for (PostEntity entity : pEntities) {
-            DbPost post = mDataMapper.transformPostForDB(entity);
+            dbPost post = mDataMapper.transformPostForDB(entity);
             if(post != null) {
                 postDao.insertOrReplace(post);
             }
