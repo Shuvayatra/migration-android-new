@@ -2,10 +2,12 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.widget.FrameLayout;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.ui.fragment.HomeFeedFragment;
 
 import butterknife.Bind;
 
@@ -26,8 +28,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
-
         setUpTabs();
+        showFragment(4);
     }
 
     private void setUpTabs(){
@@ -71,6 +73,11 @@ public class MainActivity extends BaseActivity {
             case 2:
                 break;
             case 3:
+                break;
+            case 4:
+                HomeFeedFragment homeFeedFragment = new HomeFeedFragment();
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().add(R.id.fragment_container,homeFeedFragment).commit();
                 break;
         }
     }

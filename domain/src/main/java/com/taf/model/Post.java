@@ -16,6 +16,10 @@ public class Post extends BaseModel {
     String mTitle;
     String mType;
     PostData mData;
+    String type;
+    Integer likes;
+    Integer share;
+    String category;
 
     public Long getCreatedAt() {
         return mCreatedAt;
@@ -86,17 +90,27 @@ public class Post extends BaseModel {
         }
     }
 
-    public static Post getDummyData(){
-        Post post = new Post();
-        post.setId(1l);
-        post.setType("audio");
-        post.setDescription("<p>नेपाल सरकारले वैदेशिक रोजगारलाई व्यवस्थित गर्नका लागि वैदेशिक रोजगारमा जानेहरुलाई के गर्नु हुन्छ, के गर्नु हुदैन, के के तयारी गर्नु पर्छ, त्यँहाको धर्म, संस्कृति, रिति रिवाज, कानुन आदिका वारेमा अभिमुखिकरण तालिमबाट जानकारी पाउन सकिन्छ, यस्तो तालिम २ दिनमा १० घण्टाको हुन्छ, तालिमका लागि जम्मा ७०० रुपैया लाग्छ, त्यो पनि महिलाहरुका लागि निःशुल्क छ ।</p> <p>राजु खड्का <br />आप्रवासन बिग्य, गैरआवासिय नेपाली संघ <br /> </p>");
-        post.setTitle("अभिमुखीकरण तालिम कहांबाट लिनुपर्दछ?");
+    public Integer getLikes() {
+        return likes;
+    }
 
-        PostData data = new PostData();
-        data.setThumbnail("http://nrna.yipl.com.np/uploads/audio/2ea80bd3668b251117454d21bbc310673b1193d4.jpg");
-        data.setMediaUrl("https://storage.googleapis.com/audiopod/22_Where to go for orientation training_RKhadka.mp3");
-        post.setData(data);
-        return post;
+    public void setLikes(Integer pLikes) {
+        likes = pLikes;
+    }
+
+    public Integer getShare() {
+        return share;
+    }
+
+    public void setShare(Integer pShare) {
+        share = pShare;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String pCategory) {
+        category = pCategory;
     }
 }
