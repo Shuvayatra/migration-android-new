@@ -35,16 +35,13 @@ public class BindingUtil {
         }
     }
 
-    @BindingAdapter("bind:fromHtml")
-    public static void setFromHtml(WebView pView, String text) {
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>");
-            sb.append(text);
-            sb.append("</body></HTML>");
-            pView.loadDataWithBaseURL("file:///android_asset/", sb.toString(), "text/html",
-                    "utf-8", null);
-        } catch (NullPointerException e) {
-        }
+    @BindingAdapter("bind:htmlContent")
+    public static void setHtmlContent(WebView pView, String content) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>");
+        sb.append(content);
+        sb.append("</body></HTML>");
+        pView.loadDataWithBaseURL("file:///android_asset/", sb.toString(), "text/html",
+                "utf-8", null);
     }
 }

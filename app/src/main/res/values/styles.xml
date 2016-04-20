@@ -28,18 +28,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="post_title">
-        <item name="android:textColor">@color/text_color_primary</item>
-        <item name="android:textSize">@dimen/text_big</item>
-        <!--<item name="android:lineSpacingExtra">@dimen/text_big</item>-->
-    </style>
-
-    <style name="post_duration">
-        <item name="android:textColor">@color/text_color_primary_faded_70</item>
-        <item name="android:textSize">@dimen/text_small</item>
-        <item name="android:layout_marginTop">@dimen/spacing_xxsmall</item>
-    </style>
-
     <style name="showcase" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">@color/black_alpha_55</item>
         <item name="sv_showcaseColor">@color/colorPrimary</item>

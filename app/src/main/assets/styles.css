@@ -1,0 +1,29 @@
+body {
+	opacity: 0.69;
+    font-size: 16px;
+    color: #2C3E50  ;
+    line-height: 30px;
+
+    /* Careful, this breaks the word wherever it is without a hyphen */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    /* Adds a hyphen where the word breaks */
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+
+a[href^="tel:"]{
+    background: url("https://cdn1.iconfinder.com/data/icons/MetroStation-PNG/128/MB__phone.png")
+    no-repeat center left;
+    background-size: 20px;
+    padding-left: 30px;
+    display: block;
+}

@@ -1,5 +1,7 @@
 package com.taf.shuvayatra.base;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -23,16 +25,25 @@ public abstract class BaseActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     AppPreferences mPreferences;
+    public ViewDataBinding mBinding;
 
     public abstract int getLayout();
+    public boolean isDataBindingEnabled(){
+        return false;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         initLanguage();
         super.onCreate(savedInstanceState);
         getApplicationComponent().inject(this);
-        setContentView(getLayout());
-        ButterKnife.bind(this);
+        if(!isDataBindingEnabled()) {
+            setContentView(getLayout());
+            ButterKnife.bind(this);
+        }else{
+            mBinding = DataBindingUtil.setContentView(this, getLayout());
+            ButterKnife.bind(this, mBinding.getRoot());
+        }
         initializeToolbar();
 
         mPreferences = new AppPreferences(this);

@@ -1,30 +1,17 @@
 <resources>
     <string name="app_name">Shuvayatra</string>
 
-    <string name="action_settings">सेटिङ</string>
-    <string name="action_refresh">रिफ्रेस</string>
-    <string name="action_sync">नयाँ सामग्रीहरू प्राप्त गर्नुहोस्</string>
-    <string name="action_retry">फेरि प्रयास गर्नुहोस्</string>
-    <string name="action_download">डाउनलोड गर्नुहोस</string>
-    <string name="action_share">शेयर गर्नुहोस</string>
-    <string name="action_share_facebook">फेसबुक मा शेयर गर्नुहोस</string>
-    <string name="action_share_bluetooth">ब्लुतूथबाट शेयर गर्नुहोस</string>
+    <string name="message_fetching_latest_content">नयाँ सामग्री खोज्दै...</string>
+    <string name="message_content_available">नयाँ सामग्री उपलब्ध...</string>
+    <string name="error_message_no_metadata">डाटा प्राप्त गर्न असमर्थ</string>
+    <string name="exception_message_generic">त्रुटि फेला पर्यो</string>
+    <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
 
-    <string name="title_home">गृह पृष्ठ</string>
-    <string name="title_info_center">सूचना केन्द्र</string>
-    <string name="title_countries">गन्तव्य देशहरु</string>
-    <string name="title_audio">अडियोहरु / पोडकास्टहरु</string>
-    <string name="title_video">भिडियोहरु</string>
-    <string name="title_article">लेखहरु</string>
-    <string name="title_questions">तपाइँको प्रश्न हाम्रो समाधान</string>
-    <string name="title_downloads">मेरो डाउनलोडहरु</string>
-    <string name="title_personalization">Personalization</string>
-    <string name="title_setting">सेटिङ</string>
+    <string name="action_download">Download</string>
+    <string name="action_settings">Settings</string>
 
-    <string name="see_all_questions">सबै प्रश्न हेर्नुहोस्</string>
-    <string name="latest_audios">नयाँ अडियोहरु</string>
-    <string name="latest_videos">नयाँ भिडियोहरु</string>
-    <string name="latest_articles">नयाँ लेखहरु</string>
+    <string name="similar_audios">similar audios</string>
+    <string name="audio_time">%1$s | %2$s</string>
 
     <string-array name="home_tabs">
         <item>journey</item>
@@ -32,107 +19,4 @@
         <item>info</item>
         <item>user</item>
     </string-array>
-
-    <string-array name="question_tabs">
-        <item>सबै</item>
-        <item>अडियो</item>
-        <item>भिडियो</item>
-        <item>लेख</item>
-    </string-array>
-
-    <string-array name="stages">
-        <item>@string/stage_pre_application</item>
-        <item>@string/stage_application</item>
-        <item>@string/stage_work_permit</item>
-        <item>@string/stage_destination_country</item>
-    </string-array>
-
-    <string name="stage_pre_application">पूर्ण - आवेदन</string>
-    <string name="stage_application">आवेदन</string>
-    <string name="stage_work_permit">कार्य अनुमति</string>
-    <string name="stage_destination_country">गन्तव्य देश</string>
-
-    <string-array name="country_info">
-        <item>समान्य जान्कारी</item>
-        <item>गर्न हुने / नहुने</item>
-        <item>सम्पर्क</item>
-        <item>अप्डेटहरु</item>
-        <item>सम्बन्धित सामग्री</item>
-    </string-array>
-
-    <string name="message_fetching_latest_content">नयाँ सामग्री खोज्दै...</string>
-    <string name="message_content_available">नयाँ सामग्री उपलब्ध...</string>
-    <string name="error_message_no_metadata">डाटा प्राप्त गर्न असमर्थ</string>
-    <string name="exception_message_generic">त्रुटि फेला पर्यो</string>
-    <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
-
-    <string name="sorry_prefix">माफ गर्नुहोला। %1$s</string>
-    <string name="question_related_text">यस प्रश्न समबन्धि  %1$s</string>
-    <string name="stage_related_text">यस चरण समबन्धि  %1$s</string>
-    <string name="empty_audio">कुनै अडियोहरु उपलब्ध छैन</string>
-    <string name="empty_video">कुनै भिडियोहरु उपलब्ध छैन</string>
-    <string name="empty_country">कुनै देशहरु उपलब्ध छैन</string>
-    <string name="empty_answer">कुनै जवाफ उपलब्ध छैन</string>
-    <string name="empty_updates">कुनै अप्डेट उपलब्ध छैन</string>
-    <string name="empty_post">कुनै पोस्ट उपलब्ध छैन</string>
-    <string name="empty_info">%1$s चरणको कुनै जानकारी उपलब्ध छैन</string>
-    <string name="empty_question">कुनै प्रश्नहर उपलब्ध छैन</string>
-    <string name="empty_related_content">सम्बन्धित सामग्री उपलब्ध छैन</string>
-    <string name="empty_article">कुनै लेख उपलब्ध छैन</string>
-    <string name="not_available">उपलब्ध छैन</string>
-    <string name="sub_questions">उप-प्रश्नहरू</string>
-    <string name="related_contents">सम्बन्धित सामग्री</string>
-    <string name="no_pdf_viewer_error">PDF खोल्न एप्लिकेसन  फेला परेन</string>
-
-    <string name="filter_by_stage">चरणबाट फिल्टर गर्नुहोस</string>
-    <string name="filter_by_tag">ट्यागबाट फिल्टर गर्नुहोस</string>
-    <string name="menu_filter">फिल्टर</string>
-
-    <string name="download_start">%1$s डाउनलोड हुँद</string>
-    <string name="download_success">%1$s डाउनलोड भयो</string>
-    <string name="download_already">%1$s पहिले नै डाउनलोड भइसक्यो </string>
-    <string name="error_bluetooth_share">शेयर गर्नको लागी पहिले डाउनलोड गर्नुहोस </string>
-
-    <string name="male">पुरुष</string>
-    <string name="female">महिला</string>
-    <string name="third_gender">तेस्रो लिङ्ग</string>
-
-    <string name="language_nepali">नेपाली</string>
-    <string name="language_english">अंग्रेजी</string>
-
-    <string name="user_type_first">पहिलो पटक</string>
-    <string name="user_type_returnee">फर्किएको</string>
-
-    <string name="download_description">डाउनलोड हुँदै छ...</string>
-    <string name="share_audio">अडियो शेयर गर्नुहोस</string>
-
-    <!-- Personalization settings -->
-    <string name="setting_language">भाषा</string>
-    <string name="setting_countries">देश</string>
-    <string name="setting_usertype">प्रयोगकर्ता को प्रकार</string>
-    <string name="setting_gender">लिङ्ग</string>
-
-    <string name="save">सेभ</string>
-    <string name="skip">स्कीप</string>
-    <string name="see_all_countries">सबै देश प्रश्न हेर्नुहोस्</string>
-
-    <string name="showcase_question_title">नयाँ प्रश्नहरू</string>
-    <string name="showcase_question_detail">नयाँ प्रश्नहरू हेर्न दाँयाबाट स्वाईप गर्नुहोस् </string>
-    <string name="showcase_setting_title">मेनुको लागि क्लिक</string>
-    <string name="showcase_setting_detail">नयाँ सामग्रीहरू प्राप्त गर्न \" नयाँ सामग्रीहरू प्राप्त गर्नुहोस \" मा थिच्नुहोस्
-        \nआफ्नो चाहन अनुसार एप बदल्न \" सेटिङ \" थिच्नु होस् </string>
-    <string name="showcase_audio_download_title">डाउनलोड अडियो</string>
-    <string name="showcase_auido_download_detail">अडियो डाउनलोड गरेर फोन मा शेभ गर्न माथि थिच्नुहोस्   </string>
-
-    <string name="related_document">सम्बन्धित कागजातहरू</string>
-    <string name="download">डाउनलोड</string>
-    <string name="view_pdf">PDF हेर्नुहोस् </string>
-
-    <string name="filter">फिल्टर गर्नुहोस् </string>
-    <string name="cancel">रद्द गर्नुहोस् </string>
-
-    <string name="ok">हुन्छ </string>
-    <string name="message_buffering">बफर हुँदैछ ...</string>
-    <string name="read_more">थप पढ्नुहोस्</string>
-    <string name="read_less">कम पढ्नुहोस्</string>
 </resources>

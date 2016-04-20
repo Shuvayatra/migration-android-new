@@ -121,6 +121,7 @@ public class MyConstants {
     public static class Media {
         public static final String ACTION_MEDIA_BUFFER_START = "media.action.BUFFER_START";
         public static final String ACTION_MEDIA_BUFFER_STOP = "media.action.BUFFER_STOP";
+        public static final String ACTION_MEDIA_COMPLETE = "media.action.COMPLETE";
         public static final String ACTION_MEDIA_CHANGE = "media.action.MEDIA_CHANGE";
         public static final String ACTION_STATUS_PREPARED = "media.action.STATUS_PREPARED";
         public static final String ACTION_SHOW_HIDE_CONTROLS = "media.action.SHOW_HIDE_CONTROLS";
