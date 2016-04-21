@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
@@ -19,6 +18,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
+import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.MainActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
@@ -144,6 +144,9 @@ public class FeedFragment extends BaseFragment implements
                 intent = new Intent(getContext(), ArticleDetailActivity.class);
                 intent.putExtra(MyConstants.Extras.KEY_ARTICLE, pModel);
                 break;
+            case MyConstants.Adapter.TYPE_AUDIO:
+                intent = new Intent(getContext(), AudioDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_AUDIO, pModel);
         }
         if(intent!=null)
             startActivity(intent);
@@ -155,8 +158,6 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void renderPostList(List<Post> pPosts, int pOffset, int pTotalCount) {
-        Logger.d("FeedFragment_renderPostList", "offset/total :" + pOffset +"/"+pTotalCount);
-
         if (mOffset == INITIAL_OFFSET)
             mListAdapter.setDataCollection(pPosts);
         else

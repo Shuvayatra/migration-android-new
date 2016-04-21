@@ -11,7 +11,6 @@ import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
-import com.taf.data.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +109,6 @@ public class DatabaseHelper {
         List<DbPost> dbPosts = new ArrayList<>();
         String sql = "select (select count(*) from db_post) total_count, p.* from db_post p order" +
                 " by created_at desc limit " + pLimit + " offset " + (pOffset * pLimit);
-        Logger.d("DatabaseHelper_getPostsPagination", "sql: " + sql);
         Cursor c = mDaoSession.getDatabase().rawQuery(sql, null);
         try {
             if (c.moveToFirst()) {
