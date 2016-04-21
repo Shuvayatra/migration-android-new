@@ -13,18 +13,25 @@ public class MyDaoGenerator {
     }
 
     private static void createDB(Schema pSchema) {
+        pSchema.enableKeepSectionsByDefault();
         createPostTable(pSchema);
     }
 
     private static void createPostTable(Schema pSchema){
         Entity post = pSchema.addEntity("DbPost");
         post.addIdProperty();
+        post.addStringProperty("title");
+        post.addStringProperty("description");
+        post.addStringProperty("type");
+        post.addStringProperty("data");
+        post.addStringProperty("source");
+        post.addStringProperty("tags");
         post.addLongProperty("createdAt");
         post.addLongProperty("updatedAt");
-        post.addStringProperty("tags");
-        post.addStringProperty("type");
-        post.addStringProperty("description");
-        post.addStringProperty("title");
+        post.addIntProperty("favouriteCount");
+        post.addIntProperty("shareCount");
+        post.addBooleanProperty("isFavourite");
+        post.addBooleanProperty("isSynced");
     }
 }
 

@@ -5,21 +5,23 @@ import com.taf.util.MyConstants;
 
 import java.util.List;
 
-/**
- * Created by julian on 12/8/15.
- */
 public class Post extends BaseModel {
-    Long mCreatedAt;
-    Long mUpdatedAt;
-    List<String> mTags;
-    String mDescription;
     String mTitle;
+    String mDescription;
     String mType;
     PostData mData;
-    String type;
+    String mSource;
+    List<String> mTags;
+    Long mCreatedAt;
+    Long mUpdatedAt;
     Integer likes;
     Integer share;
     String category;
+
+    // for pagination purpose
+    Integer mTotalCount;
+    Integer mCurrentOffset;
+
 
     public Long getCreatedAt() {
         return mCreatedAt;
@@ -77,6 +79,14 @@ public class Post extends BaseModel {
         mData = pData;
     }
 
+    public String getSource() {
+        return mSource;
+    }
+
+    public void setSource(String pSource) {
+        mSource = pSource;
+    }
+
     @Override
     public int getDataType() {
         if (getType().equalsIgnoreCase("audio")) {
@@ -112,5 +122,21 @@ public class Post extends BaseModel {
 
     public void setCategory(String pCategory) {
         category = pCategory;
+    }
+
+    public Integer getTotalCount() {
+        return mTotalCount;
+    }
+
+    public void setTotalCount(Integer pTotalCount) {
+        mTotalCount = pTotalCount;
+    }
+
+    public Integer getCurrentOffset() {
+        return mCurrentOffset;
+    }
+
+    public void setCurrentOffset(Integer pCurrentOffset) {
+        mCurrentOffset = pCurrentOffset;
     }
 }

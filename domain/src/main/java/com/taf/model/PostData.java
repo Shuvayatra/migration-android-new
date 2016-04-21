@@ -3,40 +3,40 @@ package com.taf.model;
 import java.io.Serializable;
 
 public class PostData implements Serializable {
-    String mediaUrl;
-    String content;
-    String thumbnail;
-    String duration;
+    String mMediaUrl;
+    String mContent;
+    String mThumbnail;
+    String mDuration;
 
     public String getMediaUrl() {
-        return mediaUrl;
+        return mMediaUrl;
     }
 
     public void setMediaUrl(String pMediaUrl) {
-        mediaUrl = pMediaUrl;
+        mMediaUrl = pMediaUrl;
     }
 
     public String getContent() {
-        return content;
+        return mContent;
     }
 
     public void setContent(String pContent) {
-        content = pContent;
+        mContent = pContent;
     }
 
     public String getThumbnail() {
-        return thumbnail;
+        return mThumbnail;
     }
 
     public void setThumbnail(String pThumbnail) {
-        thumbnail = pThumbnail;
+        mThumbnail = pThumbnail;
     }
 
     public String getDuration() {
-        return duration;
+        return mDuration;
     }
 
     public void setDuration(String pDuration) {
-        duration = pDuration;
+        mDuration = pDuration;
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -78,24 +79,17 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
 
     private void fetchLatestContent() {
         UseCaseData data = new UseCaseData();
+        Logger.d("SplashScreenActivity_fetchLatestContent", "timestamp: " + getPreferences().getLastUpdateStamp());
         data.putLong(UseCaseData.LAST_UPDATED, getPreferences().getLastUpdateStamp());
         mPresenter.initialize(data);
     }
 
     @Override
-    public void latestContentFetched() {
-        Snackbar.make(messageView, getString(R.string.message_content_available), Snackbar
-                .LENGTH_LONG).show();
-
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                }, 600
-        );
+    public void latestContentFetched(boolean hasNewContents) {
+        if (hasNewContents)
+            Snackbar.make(messageView, getString(R.string.message_content_available), Snackbar
+                    .LENGTH_LONG).show();
+        exitSplashScreen();
     }
 
     @Override
@@ -113,10 +107,23 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
     @Override
     public void showErrorView(String pErrorMessage) {
         Snackbar.make(messageView, pErrorMessage, Snackbar.LENGTH_LONG).show();
+        exitSplashScreen();
     }
 
     @Override
     public Context getContext() {
         return this;
+    }
+
+    private void exitSplashScreen() {
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }, 600
+        );
     }
 }

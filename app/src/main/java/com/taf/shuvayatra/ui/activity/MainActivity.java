@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.ui.fragment.HomeFeedFragment;
+import com.taf.shuvayatra.ui.fragment.FeedFragment;
 
 import butterknife.Bind;
 
@@ -75,9 +75,9 @@ public class MainActivity extends BaseActivity {
             case 3:
                 break;
             case 4:
-                HomeFeedFragment homeFeedFragment = new HomeFeedFragment();
+                FeedFragment feedFragment = new FeedFragment();
                 FragmentManager manager = getSupportFragmentManager();
-                manager.beginTransaction().add(R.id.fragment_container,homeFeedFragment).commit();
+                manager.beginTransaction().add(R.id.fragment_container, feedFragment).commit();
                 break;
         }
     }

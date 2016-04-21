@@ -1,7 +1,6 @@
 package com.taf.shuvayatra.presenter;
 
 import com.taf.data.di.PerActivity;
-import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -69,7 +68,6 @@ public class LatestContentPresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            Logger.e("LatestContentSubscriber_onError", e.getLocalizedMessage());
             mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
@@ -81,7 +79,8 @@ public class LatestContentPresenter implements Presenter {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
                 ((BaseActivity) mView).getPreferences().setLastUpdateStamp((timestamp / 1000L));
             }
-            mView.latestContentFetched();
+            mView.latestContentFetched(pLatestContent != null && !pLatestContent.getPosts()
+                    .isEmpty());
             onCompleted();
         }
     }

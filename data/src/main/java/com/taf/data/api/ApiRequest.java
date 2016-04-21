@@ -17,4 +17,10 @@ public class ApiRequest {
     public Observable<LatestContentEntity> getLatestContents(long pLatestUpdateStamp) {
         return mApiService.getLatestContent(pLatestUpdateStamp);
     }
+
+    // TODO: 4/20/16
+    public Observable updateFavouriteState(Long pId, boolean isFavourite){
+        //return mApiService.
+        return null;
+    }
 }
