@@ -5,5 +5,5 @@ import com.taf.model.Post;
 import java.util.List;
 
 public interface PostListView extends LoadDataView {
-    void renderPostList(List<Post> pPosts);
+    void renderPostList(List<Post> pPosts, int pOffset, int pTotalCount);
 }

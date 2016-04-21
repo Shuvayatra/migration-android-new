@@ -5,9 +5,6 @@ import com.taf.util.MyConstants;
 
 import java.util.List;
 
-/**
- * Created by julian on 12/8/15.
- */
 public class Post extends BaseModel {
     String mTitle;
     String mDescription;
@@ -20,6 +17,10 @@ public class Post extends BaseModel {
     Integer likes;
     Integer share;
     String category;
+
+    // for pagination purpose
+    Integer mTotalCount;
+    Integer mCurrentOffset;
 
 
     public Long getCreatedAt() {
@@ -78,6 +79,14 @@ public class Post extends BaseModel {
         mData = pData;
     }
 
+    public String getSource() {
+        return mSource;
+    }
+
+    public void setSource(String pSource) {
+        mSource = pSource;
+    }
+
     @Override
     public int getDataType() {
         if (getType().equalsIgnoreCase("audio")) {
@@ -113,5 +122,21 @@ public class Post extends BaseModel {
 
     public void setCategory(String pCategory) {
         category = pCategory;
+    }
+
+    public Integer getTotalCount() {
+        return mTotalCount;
+    }
+
+    public void setTotalCount(Integer pTotalCount) {
+        mTotalCount = pTotalCount;
+    }
+
+    public Integer getCurrentOffset() {
+        return mCurrentOffset;
+    }
+
+    public void setCurrentOffset(Integer pCurrentOffset) {
+        mCurrentOffset = pCurrentOffset;
     }
 }

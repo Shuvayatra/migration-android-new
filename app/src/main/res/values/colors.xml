@@ -13,6 +13,7 @@
     <color name="window_background">#ededed</color>
     <color name="rippleColor">#5000bbd3</color>
     <color name="rippleColorDark">#cc0096a6</color>
+    <color name="colorEmptyState">#b2b2b2</color>
 
     <color name="article_art_bg">#f0f0f0</color>
     <color name="divider">#d2f6fb</color>

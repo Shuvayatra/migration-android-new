@@ -23,7 +23,7 @@ public class DBDataStore implements IDataStore {
 
     public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, @Nullable String pType) {
         if (pType == null) {
-            return mHelper.getPosts(pLimit, pOffset);
+            return mHelper.getPostsPagination(pLimit, pOffset);
         } else {
             return mHelper.getPosts(pLimit, pOffset, pType);
         }

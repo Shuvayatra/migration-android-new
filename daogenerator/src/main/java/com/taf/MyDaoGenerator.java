@@ -13,6 +13,7 @@ public class MyDaoGenerator {
     }
 
     private static void createDB(Schema pSchema) {
+        pSchema.enableKeepSectionsByDefault();
         createPostTable(pSchema);
     }
 

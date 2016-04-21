@@ -116,6 +116,8 @@ public class DataMapper {
             post.setType(pPost.getType());
             post.setUpdatedAt(pPost.getUpdatedAt());
             post.setCreatedAt(pPost.getCreatedAt());
+            post.setTotalCount(pPost.getTotalCount());
+            post.setCurrentOffset(pPost.getCurrentOffset());
             return post;
         }
         return null;

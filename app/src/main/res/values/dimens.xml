@@ -42,7 +42,7 @@
 
     <dimen name="large_line_height">22sp</dimen>
 
-    <dimen name="thumbnail_height">92dp</dimen>
+    <dimen name="thumbnail_height">102dp</dimen>
     <dimen name="thumbnail_width">122dp</dimen>
     <dimen name="fab_size">32dp</dimen>
 
