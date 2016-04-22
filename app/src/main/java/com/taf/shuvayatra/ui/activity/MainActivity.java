@@ -3,11 +3,13 @@ package com.taf.shuvayatra.ui.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
 import butterknife.Bind;
 
@@ -30,6 +32,16 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
         setUpTabs();
         showFragment(4);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id==android.R.id.home){
+            showFragment(4);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setUpTabs(){
@@ -67,6 +79,8 @@ public class MainActivity extends BaseActivity {
     private void showFragment(int position){
         switch (position){
             case 0:
+                JourneyFragment journeyFragment = JourneyFragment.newInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, journeyFragment).commit();
                 break;
             case 1:
                 break;

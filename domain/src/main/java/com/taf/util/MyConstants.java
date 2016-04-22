@@ -111,6 +111,7 @@ public class MyConstants {
         public static final int TYPE_VIDEO = 2;
         public static final int TYPE_TEXT = 3;
         public static final int TYPE_NEWS = 4;
+        public static final int TYPE_JOURNEY_CATEGORY = 5;
     }
 
     public static final class VideoAdapterType {
@@ -350,5 +351,9 @@ public class MyConstants {
                     COLUMN_COUNTRY_ID + TYPE_INTEGER +
                     " );";
         }
+    }
+
+    public static class SECTION{
+        public static final String JOURNEY = "journey";
     }
 }

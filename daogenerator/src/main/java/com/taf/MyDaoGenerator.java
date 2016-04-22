@@ -15,6 +15,8 @@ public class MyDaoGenerator {
     private static void createDB(Schema pSchema) {
         pSchema.enableKeepSectionsByDefault();
         createPostTable(pSchema);
+        createCategories(pSchema);
+        createSectionTable(pSchema);
     }
 
     private static void createPostTable(Schema pSchema){
@@ -32,6 +34,27 @@ public class MyDaoGenerator {
         post.addIntProperty("shareCount");
         post.addBooleanProperty("isFavourite");
         post.addBooleanProperty("isSynced");
+    }
+
+    private static void createSectionTable(Schema pSchema){
+        Entity section = pSchema.addEntity("DbSection");
+        section.addIdProperty();
+        section.addLongProperty("sectionId");
+        section.addStringProperty("name");
+        section.addStringProperty("display_name");
+    }
+
+    private static void createCategories(Schema pSchema){
+        Entity category = pSchema.addEntity("DbCategory");
+        category.addIdProperty();
+        category.addStringProperty("name");
+        category.addStringProperty("icon");
+        category.addStringProperty("detailImage");
+        category.addStringProperty("detailIcon");
+        category.addLongProperty("parentId");
+        category.addLongProperty("position");
+        category.addLongProperty("categoryId");
+        category.addStringProperty("sectionName");
     }
 }
 

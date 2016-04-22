@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.taf.data.database.dao.DaoSession;
+import com.taf.data.database.dao.DbCategory;
+import com.taf.data.database.dao.DbCategoryDao;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.entity.LatestContentEntity;
@@ -32,7 +34,7 @@ public class DatabaseHelper {
         mDataMapper = pDataMapper;
     }
 
-    private DbPost mapCursorToPost(Cursor pCursor, int pOffset){
+    private DbPost mapCursorToPost(Cursor pCursor, int pOffset) {
         DbPost post = new DbPost(pCursor.getLong(pCursor.getColumnIndex(DbPostDao.Properties.Id.columnName)));
         post.setTitle(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Title.columnName)));
         post.setDescription(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties
@@ -60,7 +62,7 @@ public class DatabaseHelper {
         try {
             post.setCurrentOffset(pOffset);
             post.setTotalCount(pCursor.getInt(pCursor.getColumnIndexOrThrow("total_count")));
-        }catch (Exception e){
+        } catch (Exception e) {
             post.setTotalCount(0);
         }
         return post;
@@ -110,7 +112,7 @@ public class DatabaseHelper {
                 " by created_at desc limit " + pLimit + " offset " + (pOffset * pLimit);
         Logger.d("DatabaseHelper_getPostsPagination", "sql: " + sql);
         Cursor c = mDaoSession.getDatabase().rawQuery(sql, null);
-        try{
+        try {
             if (c.moveToFirst()) {
                 do {
                     dbPosts.add(mapCursorToPost(c, pOffset));
@@ -154,6 +156,13 @@ public class DatabaseHelper {
         dbPost.setIsFavourite(isFavourite);
         dbPost.setIsSynced(isSynced);
         return postDao.insertOrReplace(dbPost);
+    }
+
+    public Observable<List<DbCategory>> getCategoriesBySection(String section) {
+        DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
+        List<DbCategory> categories = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.SectionName.eq(section))
+                .orderAsc(DbCategoryDao.Properties.Position).list();
+        return Observable.defer(() -> Observable.just(categories));
     }
 
 }

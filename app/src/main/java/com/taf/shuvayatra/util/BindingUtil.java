@@ -6,6 +6,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.taf.data.utils.Logger;
 
 public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
@@ -19,6 +20,7 @@ public class BindingUtil {
                     .setOldController(pView.getController())
                     .build();
             pView.setController(controller);*/
+            Logger.e("BindingUtil", "url:"+url);
             pView.setImageURI(Uri.parse(url));
         }
     }

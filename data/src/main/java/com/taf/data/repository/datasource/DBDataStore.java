@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.database.dao.DbPost;
+import com.taf.data.database.dao.DbCategory;
 
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class DBDataStore implements IDataStore {
 
     public Observable<DbPost> getPost(Long pId) {
         return mHelper.getPost(pId);
+    }
+    public Observable<List<DbCategory>> getCategoriesBySection(String sectionName){
+        return mHelper.getCategoriesBySection(sectionName);
     }
 }
 

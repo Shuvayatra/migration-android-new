@@ -12,6 +12,7 @@
     <dimen name="spacing_xxsmall">5dp</dimen>
     <dimen name="spacing_xxxsmall">3dp</dimen>
 
+
     <dimen name="splash_icon_size">100dp</dimen>
 
     <dimen name="recent_question_section_height">203dp</dimen>
@@ -35,6 +36,7 @@
     <dimen name="icon_size">14dp</dimen>
     <dimen name="search_height">48dp</dimen>
     <dimen name="home_article_height">165dp</dimen>
+    <dimen name="category_height">85dp</dimen>
 
     <dimen name="text_large">18sp</dimen>
     <dimen name="text_default">14sp</dimen>
