@@ -45,4 +45,11 @@ public class PostRepository implements IPostRepository {
         return mDataStoreFactory.createRestDataStore()
                 .updateFavouriteState(pId, isFavourite);
     }
+
+    @Override
+    public Observable<List<Post>> getFavouriteList(int pLimit, int pOffset) {
+        return mDataStoreFactory.createDBDataStore()
+                .getFavouritePosts(pLimit, pOffset)
+                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+    }
 }

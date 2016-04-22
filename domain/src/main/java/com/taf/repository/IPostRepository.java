@@ -8,5 +8,6 @@ import rx.Observable;
 
 public interface IPostRepository extends IBaseRepository<Post>{
     Observable<List<Post>> getListByType(String pType, int pLimit, int pOffset);
+    Observable<List<Post>> getFavouriteList(int pLimit, int pOffset);
     Observable updateFavouriteState(Long pId, boolean isFavourite);
 }

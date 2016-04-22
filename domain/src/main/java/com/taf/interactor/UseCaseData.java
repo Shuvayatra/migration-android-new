@@ -10,6 +10,7 @@ public class UseCaseData implements Serializable {
     public static final String POST_TYPE = "post_type";
     public static final String ID = "id";
     public static final String FAVOURITE_STATE = "is_favourite";
+    public static final String FAVOURITE_ONLY = "favourite_only";
     public static final String LAST_UPDATED = "last_updated";
     public static final String SECTION_NAME = "section_name";
 

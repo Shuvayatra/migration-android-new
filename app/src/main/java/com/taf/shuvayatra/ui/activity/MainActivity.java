@@ -9,7 +9,9 @@ import android.widget.FrameLayout;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.fragment.UserFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -98,11 +100,12 @@ public class MainActivity extends BaseActivity {
             case 2:
                 break;
             case 3:
+                UserFragment userFragment = new UserFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, userFragment).commit();
                 break;
             case 4:
                 FeedFragment feedFragment = new FeedFragment();
-                FragmentManager manager = getSupportFragmentManager();
-                manager.beginTransaction().add(R.id.fragment_container, feedFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, feedFragment).commit();
                 break;
         }
     }
