@@ -3,7 +3,7 @@ package com.taf.shuvayatra.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.widget.RelativeLayout;
 
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
@@ -15,6 +15,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.JourneyFragmentPresenter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.custom.MarginItemDecoration;
 import com.taf.shuvayatra.ui.interfaces.JourneyView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
@@ -27,15 +28,15 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-/**
- * Created by Nirazan-PC on 4/20/2016.
- */
 public class JourneyFragment extends BaseFragment implements JourneyView, ListItemClickListener {
 
     @Inject
     JourneyFragmentPresenter mPresenter;
     @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
+    @Bind(R.id.empty_view)
+    RelativeLayout mEmptyView;
+
     private ListAdapter mAdapter;
     private List<Category> mCategories;
     private List<Category> mSubCategories;
@@ -64,6 +65,8 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new MarginItemDecoration(getContext(),R.dimen.spacing_xxsmall));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
+        mRecyclerView.setEmptyMessage(getString(R.string.empty_section));
     }
 
     void initialize(){

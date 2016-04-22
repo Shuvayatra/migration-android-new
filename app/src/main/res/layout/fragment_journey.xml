@@ -31,10 +31,20 @@
         android:text="@string/select_category"
         android:textColor="@color/text_main"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        tools:listitem="@layout/view_journey_category_list"/>
+        android:layout_height="match_parent">
+
+        <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            tools:listitem="@layout/view_journey_category_list"/>
+
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_list_view"
+            android:visibility="visible"/>
+    </RelativeLayout>
 </LinearLayout>
