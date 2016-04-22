@@ -1,26 +1,33 @@
 package com.taf.shuvayatra.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.taf.data.utils.Logger;
+import com.taf.model.Post;
+import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
+import com.taf.shuvayatra.databinding.PlaceDataBinding;
+import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
+import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
+import com.taf.util.MyConstants;
+
+import java.util.List;
 
 public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
-            /*ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
-                    .setProgressiveRenderingEnabled(true)
-                    .build();
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(request)
-                    .setOldController(pView.getController())
-                    .build();
-            pView.setController(controller);*/
-            Logger.e("BindingUtil", "url:"+url);
             pView.setImageURI(Uri.parse(url));
         }
     }
@@ -50,6 +57,68 @@ public class BindingUtil {
     @BindingAdapter("bind:elapsedTime")
     public static void setElapsedTime(TextView pView, Long millis) {
         pView.setText(getTimeAgo(millis));
+    }
+
+    @BindingAdapter("bind:similarPosts")
+    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts){
+        if (pPosts != null && pPosts.size() > 0) {
+            for (Post post : pPosts) {
+                if (post.getDataType() == MyConstants.Adapter.TYPE_AUDIO || post.getDataType() ==
+                        MyConstants.Adapter.TYPE_AUDIO) {
+                    showSimilarAudioVideo(pContainer.getContext(), pContainer, post);
+                }else if(post.getDataType() == MyConstants.Adapter.TYPE_PLACE){
+                    showSimilarPlace(pContainer.getContext(), pContainer, post);
+                }
+            }
+        }
+    }
+
+    public static void showSimilarAudioVideo(final Context pContext, LinearLayout pContainer, final Post
+            pPost) {
+        if (pPost != null) {
+            AudioVideoDataBinding audioDataBinding = DataBindingUtil.inflate
+                    (LayoutInflater.from(pContext), R.layout.view_audio_video_list, pContainer,
+                            false);
+            audioDataBinding.setContent(pPost);
+            View view = audioDataBinding.getRoot();
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            view.setLayoutParams(params);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent;
+                    intent = new Intent(pContext, (pPost.getDataType() == MyConstants.Adapter
+                            .TYPE_AUDIO) ? AudioDetailActivity.class : VideoDetailActivity.class);
+                    intent.putExtra((pPost.getDataType() == MyConstants.Adapter.TYPE_AUDIO) ?
+                            MyConstants.Extras.KEY_AUDIO : MyConstants.Extras.KEY_VIDEO, pPost);
+                    pContext.startActivity(intent);
+                }
+            });
+            pContainer.addView(view);
+        }
+    }
+
+    public static void showSimilarPlace(final Context pContext, LinearLayout pContainer, final Post
+            pPost) {
+        if (pPost != null) {
+            PlaceDataBinding placeDataBinding = DataBindingUtil.inflate(LayoutInflater.from
+                    (pContext), R.layout.view_place, pContainer, false);
+            placeDataBinding.setPlace(pPost);
+            View view = placeDataBinding.getRoot();
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            view.setLayoutParams(params);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(pContext, PlacesDetailActivity.class);
+                    intent.putExtra(MyConstants.Extras.KEY_PLACE, pPost);
+                    pContext.startActivity(intent);
+                }
+            });
+            pContainer.addView(view);
+        }
     }
 
     public static String getTimeAgo(long time) {

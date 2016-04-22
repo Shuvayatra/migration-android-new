@@ -25,7 +25,12 @@
         <item>user</item>
     </string-array>
 
+    <string name="label_description">Description</string>
+    <string name="label_other_places">other favourite places</string>
+    <string name="empty_section">No categories are available for this section.</string>
+    <string name="no_favourites">You have not favourited any posts yet.</string>
     <string name="query_hint">What you want to know?</string>
     <string name="similar_video">SIMILAR VIDEOS</string>
     <string name="select_category">JOURNEY - SELECT CATEGORY</string>
+    <string name="title_activity_places_detail">PlacesDetailActivity</string>
 </resources>

@@ -95,8 +95,10 @@ public class Post extends BaseModel {
             return MyConstants.Adapter.TYPE_VIDEO;
         } else if (getType().equalsIgnoreCase("text")) {
             return MyConstants.Adapter.TYPE_TEXT;
-        }else{
+        }else if(getType().equalsIgnoreCase("news")){
             return MyConstants.Adapter.TYPE_NEWS;
+        }else {
+            return MyConstants.Adapter.TYPE_PLACE;
         }
     }
 

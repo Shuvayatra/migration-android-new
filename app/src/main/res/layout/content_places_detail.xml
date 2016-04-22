@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="similarPlaces"
+            type="java.util.List&lt;com.taf.model.Post>"/>
+
+        <variable
+            name="place"
+            type="com.taf.model.Post"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.taf.shuvayatra.ui.activity.PlacesDetailActivity"
+        tools:showIn="@layout/activity_places_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{place.getTitle()}"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_large"
+                    tools:text="Nepal Embassy"/>
+
+                <TextView
+                    android:id="@+id/category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/title"
+                    android:layout_marginBottom="@dimen/spacing_standard"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:text=""
+                    android:textSize="@dimen/text_small"
+                    tools:text="Favourite Place in Nepal - 3 days ago"/>
+
+                <ImageView
+                    android:id="@+id/like"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_below="@id/category"
+                    android:layout_marginRight="@dimen/spacing_small"
+                    android:padding="@dimen/spacing_xxxsmall"
+                    app:srcCompat="@drawable/ic_like"/>
+
+                <TextView
+                    android:id="@+id/like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/like"
+                    android:layout_alignTop="@id/like"
+                    android:layout_below="@id/category"
+                    android:layout_marginRight="@dimen/spacing_xxxlarge"
+                    android:layout_toRightOf="@id/like"
+                    android:gravity="center_vertical"
+                    android:text="@{String.valueOf(place.likes)}"
+                    android:textSize="@dimen/text_small"
+                    tools:text="23 loves"/>
+
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_below="@id/category"
+                    android:layout_marginRight="@dimen/spacing_small"
+                    android:layout_toRightOf="@id/like_count"
+                    android:padding="@dimen/spacing_xxxsmall"
+                    app:srcCompat="@drawable/ic_share"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/share"
+                    android:layout_alignTop="@id/share"
+                    android:layout_below="@id/category"
+                    android:layout_toRightOf="@id/share"
+                    android:gravity="center_vertical"
+                    android:text="@{String.valueOf(place.likes)}"
+                    android:textSize="@dimen/text_small"
+                    tools:text="30 shares"/>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/like"
+                    android:layout_marginTop="@dimen/spacing_xlarge"
+                    android:background="@color/divider"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
+                android:paddingTop="@dimen/spacing_small">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ic_call"
+                        android:layout_width="@dimen/icon_size_big"
+                        android:layout_height="@dimen/icon_size_big"
+                        android:layout_marginRight="@dimen/spacing_small"
+                        android:padding="@dimen/spacing_small"
+                        app:srcCompat="@drawable/ic_call"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/ic_call"
+                        android:layout_alignTop="@id/ic_call"
+                        android:layout_marginLeft="@dimen/spacing_xxlarge"
+                        android:layout_toRightOf="@id/ic_call"
+                        android:gravity="center_vertical"
+                        android:text="+921 345 6777"
+                        android:textSize="@dimen/text_default"
+                        tools:text="+921 345 6777"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ic_location"
+                        android:layout_width="@dimen/icon_size_big"
+                        android:layout_height="@dimen/icon_size_big"
+                        android:layout_marginRight="@dimen/spacing_small"
+                        android:padding="@dimen/spacing_small"
+                        app:srcCompat="@drawable/ic_location"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/ic_location"
+                        android:layout_alignTop="@id/ic_location"
+                        android:layout_marginLeft="@dimen/spacing_xxlarge"
+                        android:layout_toRightOf="@id/ic_location"
+                        android:gravity="center_vertical"
+                        android:text="Home No.12, New Road. Selangor"
+                        android:textSize="@dimen/text_default"
+                        tools:text="Home No.12, New Road. Selangor"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:background="@color/divider"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_standard">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_description"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/text_default"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/spacing_standard"
+                    android:lineSpacingExtra="@dimen/default_line_height"
+                    android:text="@{place.getDescription()}"
+                    android:textSize="@dimen/text_default"
+                    tools:text="One of the ILO’s predominant concerns since its inception has been with the protection of migrant workers. In this interview, Binda Pandey, Member of governing council of the General Federation of Nepalese Trade Unions (GEFONT)) explains the challenges related to the implementation of the ILO Fair Migration Agenda. Ms. Pandey also highlights the experience from Nepal about the protection of migrant workers."/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/other_places_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:text="@string/label_other_places"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/text_default"/>
+
+                <LinearLayout
+                    android:id="@+id/places_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:similarPosts="@{similarPlaces}"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/spacing_standard"
+                    android:paddingTop="@dimen/spacing_standard"/>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

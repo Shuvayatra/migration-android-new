@@ -14,6 +14,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
+import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
@@ -75,8 +76,14 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 break;
             case Adapter.TYPE_JOURNEY_CATEGORY:
                 JourneyCategoryDataBinding jouneyBinding = DataBindingUtil.inflate(mLayoutInflater,
-                        R.layout.view_journey_category_list,parent,false);
+                        R.layout.view_journey_category_list, parent, false);
                 viewHolder = new JourneyCategoryViewHolder(jouneyBinding);
+                break;
+            case Adapter.TYPE_PLACE:
+                PlaceDataBinding  placeDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.view_place, parent, false);
+                viewHolder = new PlaceViewHolder(placeDataBinding);
+                break;
             default:
         }
         return viewHolder;
@@ -96,7 +103,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         (position));
                 break;
             case Adapter.TYPE_JOURNEY_CATEGORY:
-                ((JourneyCategoryViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position ));
+                ((JourneyCategoryViewHolder) holder).mBinding.setCategory((Category)
+                        mDataCollection.get(position));
+                break;
+            case Adapter.TYPE_PLACE:
+                ((PlaceViewHolder) holder).mBinding.setPlace((Post) mDataCollection.get(position));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -147,7 +158,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
         }
     }
 
-    public class JourneyCategoryViewHolder extends RecyclerView.ViewHolder{
+    public class JourneyCategoryViewHolder extends RecyclerView.ViewHolder {
 
         JourneyCategoryDataBinding mBinding;
 
@@ -159,6 +170,24 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 @Override
                 public void onClick(View view) {
                     mListener.onListItemSelected(mBinding.getCategory());
+                }
+            });
+        }
+
+    }
+
+    public class PlaceViewHolder extends RecyclerView.ViewHolder {
+
+        PlaceDataBinding mBinding;
+
+        public PlaceViewHolder(PlaceDataBinding pBinding) {
+            super(pBinding.getRoot());
+            mBinding = pBinding;
+            ButterKnife.bind(this, mBinding.getRoot());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onListItemSelected(mBinding.getPlace());
                 }
             });
         }

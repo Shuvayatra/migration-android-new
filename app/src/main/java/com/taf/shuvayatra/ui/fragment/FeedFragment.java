@@ -133,6 +133,9 @@ public class FeedFragment extends BaseFragment implements
         });
         mRecyclerView.setAdapter(mListAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
+        if(mFavouritesOnly){
+            mRecyclerView.setEmptyMessage(getString(R.string.no_favourites));
+        }
     }
 
     private void loadPostsList(Integer pOffset) {

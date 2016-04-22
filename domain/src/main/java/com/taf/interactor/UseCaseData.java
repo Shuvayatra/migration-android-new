@@ -13,6 +13,8 @@ public class UseCaseData implements Serializable {
     public static final String FAVOURITE_ONLY = "favourite_only";
     public static final String LAST_UPDATED = "last_updated";
     public static final String SECTION_NAME = "section_name";
+    public static final String PARENT_TYPE = "parent_type";
+    public static final String PARENT_ID = "parent_id";
 
     Map<String, Object> data = null;
 

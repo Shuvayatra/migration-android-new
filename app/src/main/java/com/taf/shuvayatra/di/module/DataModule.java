@@ -18,6 +18,7 @@ import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
+import com.taf.util.MyConstants;
 
 import javax.inject.Named;
 
@@ -27,13 +28,22 @@ import dagger.Provides;
 @Module
 public class DataModule {
 
-    private long mId = Long.MIN_VALUE;
+    Long mParentId = Long.MIN_VALUE;
+    MyConstants.DataParent mParentType;
+    String mPostType;
 
     public DataModule() {
     }
 
-    public DataModule(long pId) {
-        mId = pId;
+    public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
+        mParentId = pParentId;
+        mParentType = pParentType;
+    }
+
+    public DataModule(Long pParentId, MyConstants.DataParent pParentType, String pPostType) {
+        mParentId = pParentId;
+        mParentType = pParentType;
+        mPostType = pPostType;
     }
 
     @Provides
@@ -65,7 +75,9 @@ public class DataModule {
     @Named("postList")
     UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(pDataRepository, pThreadExecutor, pPostExecutionThread);
+        return new GetPostListUseCase(mParentType, mParentId, mPostType, pDataRepository,
+                pThreadExecutor,
+                pPostExecutionThread);
     }
 
     @Provides
