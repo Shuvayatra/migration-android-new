@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.model.BaseModel;
+import com.taf.model.Category;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
+import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
@@ -71,6 +73,10 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         .view_article, parent, false);
                 viewHolder = new ArticleViewHolder(articleBinding);
                 break;
+            case Adapter.TYPE_JOURNEY_CATEGORY:
+                JourneyCategoryDataBinding jouneyBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.view_journey_category_list,parent,false);
+                viewHolder = new JourneyCategoryViewHolder(jouneyBinding);
             default:
         }
         return viewHolder;
@@ -88,6 +94,9 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             case Adapter.TYPE_TEXT:
                 ((ArticleViewHolder) holder).mBinding.setArticle((Post) mDataCollection.get
                         (position));
+                break;
+            case Adapter.TYPE_JOURNEY_CATEGORY:
+                ((JourneyCategoryViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position ));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -136,5 +145,23 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 }
             });
         }
+    }
+
+    public class JourneyCategoryViewHolder extends RecyclerView.ViewHolder{
+
+        JourneyCategoryDataBinding mBinding;
+
+        public JourneyCategoryViewHolder(JourneyCategoryDataBinding pBinding) {
+            super(pBinding.getRoot());
+            mBinding = pBinding;
+            ButterKnife.bind(this, mBinding.getRoot());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onListItemSelected(mBinding.getCategory());
+                }
+            });
+        }
+
     }
 }

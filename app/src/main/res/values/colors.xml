@@ -27,4 +27,5 @@
 
     <!--- 8******* new**********-->
     <color name="main_background">#ededed</color>
+    <color name="text_main">#636363</color>
 </resources>

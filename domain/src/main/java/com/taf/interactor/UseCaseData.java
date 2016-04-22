@@ -11,6 +11,7 @@ public class UseCaseData implements Serializable {
     public static final String ID = "id";
     public static final String FAVOURITE_STATE = "is_favourite";
     public static final String LAST_UPDATED = "last_updated";
+    public static final String SECTION_NAME = "section_name";
 
     Map<String, Object> data = null;
 

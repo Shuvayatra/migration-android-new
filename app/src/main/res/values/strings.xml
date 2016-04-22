@@ -23,4 +23,5 @@
 
     <string name="query_hint">What you want to know?</string>
     <string name="similar_video">SIMILAR VIDEOS</string>
+    <string name="select_category">JOURNEY - SELECT CATEGORY</string>
 </resources>

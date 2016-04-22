@@ -5,16 +5,19 @@ import android.content.Context;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.GetSectionCategoryUseCase;
 import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IPostRepository;
+import com.taf.repository.ISectionRepository;
 
 import javax.inject.Named;
 
@@ -67,8 +70,23 @@ public class DataModule {
 
     @Provides
     @PerActivity
+    ISectionRepository provideSectionCategoryRepository(DataStoreFactory pDataStoreFactory, DataMapper pDataMapper){
+        return new SectionCategoryRepository(pDataStoreFactory, pDataMapper);
+    }
+
+    @Provides
+    @PerActivity
     IPostRepository providePostDataRepository(DataStoreFactory pDataStoreFactory, DataMapper
             pDataMapper) {
         return new PostRepository(pDataStoreFactory, pDataMapper);
     }
+
+    @Provides
+    @PerActivity
+    @Named("sectionCategory")
+    UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
+                                          ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
+        return new GetSectionCategoryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
 }

@@ -2,11 +2,13 @@ package com.taf.data.entity.mapper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.model.Category;
 import com.taf.model.LatestContent;
 import com.taf.model.Post;
 import com.taf.model.PostData;
@@ -119,6 +121,35 @@ public class DataMapper {
             post.setTotalCount(pPost.getTotalCount());
             post.setCurrentOffset(pPost.getCurrentOffset());
             return post;
+        }
+        return null;
+    }
+
+    public List<Category> transformCategory(List<DbCategory> pDbCategories) {
+        List<Category> categories = new ArrayList<>();
+        if (pDbCategories != null) {
+            for (DbCategory dbCategory : pDbCategories) {
+                Category category = transformCategory(dbCategory);
+                if (category != null)
+                    categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+
+    public Category transformCategory(DbCategory pDbCategories){
+        if(pDbCategories != null){
+            Category category = new Category();
+            category.setName(pDbCategories.getName());
+            category.setIconUrl(pDbCategories.getIcon());
+            category.setDetailImageUrl(pDbCategories.getDetailImage());
+            category.setDetailIconUrl(pDbCategories.getDetailIcon());
+            category.setParentId(pDbCategories.getParentId());
+            category.setPosition(pDbCategories.getPosition());
+            category.setCategoryId(pDbCategories.getCategoryId());
+            category.setSectionName(pDbCategories.getSectionName());
+            return category;
         }
         return null;
     }
