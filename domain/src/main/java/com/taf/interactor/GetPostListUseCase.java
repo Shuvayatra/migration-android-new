@@ -26,8 +26,12 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
     protected Observable<List<Post>> buildUseCaseObservable(UseCaseData pData) {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
         int limit = pData.getInteger(UseCaseData.LIMIT, -1);
+        boolean favouritesOnly = pData.getBoolean(UseCaseData.FAVOURITE_ONLY, false);
+
         String type = pData.getString(UseCaseData.POST_TYPE, null);
-        if(type == null) {
+        if(favouritesOnly){
+            return mRepository.getFavouriteList(limit, offset);
+        }else if(type == null) {
             return mRepository.getList(limit, offset);
         }else{
             return mRepository.getListByType(type, limit, offset);

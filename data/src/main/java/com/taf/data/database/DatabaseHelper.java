@@ -96,21 +96,32 @@ public class DatabaseHelper {
     }
 
     public Observable<List<DbPost>> getPosts(int pLimit, int pOffset) {
-        DbPostDao postDao = mDaoSession.getDbPostDao();
-        List<DbPost> dbPosts = postDao.queryBuilder()
-                .offset(pOffset)
-                .limit(pLimit)
-                .orderDesc(DbPostDao.Properties.CreatedAt)
-                .list();
-
-        return Observable.defer(() -> Observable.just(dbPosts));
+        return getPosts(pLimit, pOffset, null, false);
     }
 
-    public Observable<List<DbPost>> getPostsPagination(int pLimit, int pOffset) {
+    public Observable<List<DbPost>> getFavouritePosts(int pLimit, int pOffset) {
+        return getPosts(pLimit, pOffset, null, true);
+    }
+
+    public Observable<List<DbPost>> getPostsByType(int pLimit, int pOffset, @NonNull String pType) {
+        return getPosts(pLimit, pOffset, pType, false);
+    }
+
+    public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, String pType, boolean
+            pFavouritesOnly) {
         List<DbPost> dbPosts = new ArrayList<>();
-        String sql = "select (select count(*) from db_post) total_count, p.* from db_post p order" +
-                " by created_at desc limit " + pLimit + " offset " + (pOffset * pLimit);
-        Logger.d("DatabaseHelper_getPostsPagination", "sql: " + sql);
+        String where = " where 1 ";
+        if (pFavouritesOnly) {
+            where += " and is_favourite = 1 ";
+        }
+        if (pType != null) {
+            where += " and type = '" + pType + "' ";
+        }
+        String subQuery = " (select count(*) from db_post "+ where +" ) ";
+        String sql = "select "+ subQuery +" total_count, p.* from db_post p ";
+        sql += where + " order by created_at desc limit " + pLimit + " offset " + (pOffset *
+                pLimit);
+        Logger.d("DatabaseHelper_getPosts", "sql: " + sql);
         Cursor c = mDaoSession.getDatabase().rawQuery(sql, null);
         try {
             if (c.moveToFirst()) {
@@ -121,18 +132,6 @@ public class DatabaseHelper {
         } finally {
             c.close();
         }
-        return Observable.defer(() -> Observable.just(dbPosts));
-    }
-
-    public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, @NonNull String pType) {
-        DbPostDao postDao = mDaoSession.getDbPostDao();
-        List<DbPost> dbPosts = postDao.queryBuilder()
-                .offset(pOffset)
-                .limit(pLimit)
-                .where(DbPostDao.Properties.Type.eq(pType))
-                .orderDesc(DbPostDao.Properties.CreatedAt)
-                .list();
-
         return Observable.defer(() -> Observable.just(dbPosts));
     }
 

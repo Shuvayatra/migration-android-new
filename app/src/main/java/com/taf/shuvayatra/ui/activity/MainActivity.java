@@ -3,13 +3,16 @@ package com.taf.shuvayatra.ui.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.fragment.UserFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 
@@ -29,19 +32,29 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("");
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+
+        setUpToolbarLogo();
         setUpTabs();
         showFragment(4);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id==android.R.id.home){
-            showFragment(4);
-            return true;
+    private void setUpToolbarLogo(){
+        getToolbar().setLogo(R.mipmap.ic_launcher);
+        getToolbar().setLogoDescription("logo");
+        ArrayList<View> potentialViews = new ArrayList<>();
+        getToolbar().findViewsWithText(potentialViews, "logo", View
+                .FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+        View logoIcon = null;
+        if(potentialViews.size() > 0){
+            logoIcon = potentialViews.get(0);
         }
-        return super.onOptionsItemSelected(item);
+        getToolbar().setLogoDescription(null);
+        logoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment(4);
+            }
+        });
     }
 
     private void setUpTabs(){
@@ -87,11 +100,12 @@ public class MainActivity extends BaseActivity {
             case 2:
                 break;
             case 3:
+                UserFragment userFragment = new UserFragment();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, userFragment).commit();
                 break;
             case 4:
                 FeedFragment feedFragment = new FeedFragment();
-                FragmentManager manager = getSupportFragmentManager();
-                manager.beginTransaction().add(R.id.fragment_container, feedFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, feedFragment).commit();
                 break;
         }
     }

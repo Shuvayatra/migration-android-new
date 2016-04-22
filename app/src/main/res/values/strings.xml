@@ -14,6 +14,10 @@
     <string name="similar_audios">similar audios</string>
     <string name="audio_time">%1$s | %2$s</string>
 
+    <string-array name="user_section_tabs">
+        <item>Notification</item>
+        <item>Favourite</item>
+    </string-array>
     <string-array name="home_tabs">
         <item>journey</item>
         <item>destination</item>

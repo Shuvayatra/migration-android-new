@@ -132,29 +132,11 @@ public class MyConstants {
     }
 
     public static final class Extras {
-        public static final String KEY_DOWNLOAD_STATUS = "key_download_status";
-        public static final String KEY_QUESTION = "key_question";
-        public static final String KEY_Country = "key_country";
-        public static final String KEY_TYPE = "key_type";
         public static final String KEY_AUDIO = "key_audio";
         public static final String KEY_VIDEO = "key_video";
         public static final String KEY_ARTICLE = "key_article";
-        public static final String KEY_AUDIO_LIST = "key_audio_list";
-        public static final String KEY_AUDIO_SELECTION = "key_audio_selection";
         public static final String KEY_PLAY_STATUS = "key_play_status";
-        public static final String KEY_ID = "key_id";
-        public static final String KEY_STAGE = "key_stage";
-        public static final String KEY_TITLE = "key_title";
-        public static final String KEY_FILTERED_LIST = "key_filtered_list";
-        public static final String KEY_LIST = "key_list";
-        public static final String KEY_IS_FILTERED = "key_is_filtered";
-
-        public static final String KEY_PERSONALIZATION_LAUNCH = "key_personalization";
-
-        public static final String INTENT_FILTER = "filter_intent";
-        public static final String KEY_PDF_URL = "pdf_url";
-        public static final String KEY_INCLUDE_CHILD_CONTENTS = "key_include_child_contents";
-        public static final String KEY_IS_SUB_QUESTION = "key_is_sub_question";
+        public static final String KEY_FAVOURITES_ONLY = "key_favourites_only";
     }
 
     public static class DATABASE {

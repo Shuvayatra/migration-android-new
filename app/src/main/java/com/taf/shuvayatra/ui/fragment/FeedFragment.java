@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
@@ -19,6 +18,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
+import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.MainActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
@@ -52,6 +52,8 @@ public class FeedFragment extends BaseFragment implements
     ListAdapter<Post> mListAdapter;
     LinearLayoutManager mLayoutManager;
 
+    boolean mFavouritesOnly = false;
+
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
     Integer mOffset = 0;
@@ -62,9 +64,21 @@ public class FeedFragment extends BaseFragment implements
         return R.layout.fragment_feed;
     }
 
-    public static FeedFragment newInstance(){
+    public static FeedFragment newInstance(boolean favouritesOnly){
         FeedFragment feedFragment = new FeedFragment();
+        Bundle data = new Bundle();
+        data.putBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, favouritesOnly);
+        feedFragment.setArguments(data);
         return feedFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle data = getArguments();
+        if(data != null){
+            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
+        }
     }
 
     @Override
@@ -123,6 +137,7 @@ public class FeedFragment extends BaseFragment implements
 
     private void loadPostsList(Integer pOffset) {
         mUseCaseData.clearAll();
+        mUseCaseData.putBoolean(UseCaseData.FAVOURITE_ONLY, mFavouritesOnly);
         mUseCaseData.putInteger(UseCaseData.OFFSET, pOffset);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
         mPresenter.initialize(mUseCaseData);
@@ -144,6 +159,9 @@ public class FeedFragment extends BaseFragment implements
                 intent = new Intent(getContext(), ArticleDetailActivity.class);
                 intent.putExtra(MyConstants.Extras.KEY_ARTICLE, pModel);
                 break;
+            case MyConstants.Adapter.TYPE_AUDIO:
+                intent = new Intent(getContext(), AudioDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_AUDIO, pModel);
         }
         if(intent!=null)
             startActivity(intent);
@@ -155,8 +173,6 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void renderPostList(List<Post> pPosts, int pOffset, int pTotalCount) {
-        Logger.d("FeedFragment_renderPostList", "offset/total :" + pOffset +"/"+pTotalCount);
-
         if (mOffset == INITIAL_OFFSET)
             mListAdapter.setDataCollection(pPosts);
         else
