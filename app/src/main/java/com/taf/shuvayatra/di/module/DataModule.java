@@ -11,9 +11,10 @@ import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
-import com.taf.interactor.GetSectionCategoryUseCase;
 import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetPostListUseCase;
+import com.taf.interactor.GetSectionCategoryUseCase;
+import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IPostRepository;
@@ -31,8 +32,15 @@ public class DataModule {
     Long mParentId = Long.MIN_VALUE;
     MyConstants.DataParent mParentType;
     String mPostType;
+    boolean mFavouriteOnly = false;
+    boolean mUnSyncedOnly = false;
 
     public DataModule() {
+    }
+
+    public DataModule(boolean pFavouriteOnly, boolean pUnSyncedOnly) {
+        mFavouriteOnly = pFavouriteOnly;
+        mUnSyncedOnly = pUnSyncedOnly;
     }
 
     public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
@@ -64,6 +72,15 @@ public class DataModule {
 
     @Provides
     @PerActivity
+    @Named("favouritesSync")
+    UseCase provideFavouritesSyncUseCase(IPostRepository pDataRepository,
+                                         ThreadExecutor pThreadExecutor, PostExecutionThread
+                                                 pPostExecutionThread) {
+        return new SyncFavouritesUseCase(pThreadExecutor, pPostExecutionThread, pDataRepository);
+    }
+
+    @Provides
+    @PerActivity
     @Named("latest")
     IBaseRepository provideLatestContentDataRepository(DataStoreFactory pDataStoreFactory,
                                                        DataMapper pDataMapper) {
@@ -75,14 +92,14 @@ public class DataModule {
     @Named("postList")
     UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(mParentType, mParentId, mPostType, pDataRepository,
-                pThreadExecutor,
-                pPostExecutionThread);
+        return new GetPostListUseCase(mParentType, mParentId, mPostType, mFavouriteOnly,
+                mUnSyncedOnly, pDataRepository, pThreadExecutor, pPostExecutionThread);
     }
 
     @Provides
     @PerActivity
-    ISectionRepository provideSectionCategoryRepository(DataStoreFactory pDataStoreFactory, DataMapper pDataMapper){
+    ISectionRepository provideSectionCategoryRepository(DataStoreFactory pDataStoreFactory,
+                                                        DataMapper pDataMapper) {
         return new SectionCategoryRepository(pDataStoreFactory, pDataMapper);
     }
 
@@ -97,8 +114,9 @@ public class DataModule {
     @PerActivity
     @Named("sectionCategory")
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
-                                          ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
-        return new GetSectionCategoryUseCase(mParentType,pRepository, pThreadExecutor, pPostExecutionThread);
+                                          ThreadExecutor pThreadExecutor, PostExecutionThread
+                                                  pPostExecutionThread) {
+        return new GetSectionCategoryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
 }

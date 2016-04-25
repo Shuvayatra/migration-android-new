@@ -23,11 +23,6 @@ public class DbPost {
     private Boolean isFavourite;
     private Boolean isSynced;
 
-    // KEEP FIELDS - put your custom fields here
-    private Integer totalCount;
-    private Integer currentOffset;
-    // KEEP FIELDS END
-
     public DbPost() {
     }
 
@@ -154,25 +149,5 @@ public class DbPost {
     public void setIsSynced(Boolean isSynced) {
         this.isSynced = isSynced;
     }
-
-    // KEEP METHODS - put your custom methods here
-
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(Integer pTotalCount) {
-        totalCount = pTotalCount;
-    }
-
-    public Integer getCurrentOffset() {
-        return currentOffset;
-    }
-
-    public void setCurrentOffset(Integer pCurrentOffset) {
-        currentOffset = pCurrentOffset;
-    }
-
-    // KEEP METHODS END
 
 }

@@ -18,9 +18,11 @@ public class Post extends BaseModel {
     Integer share;
     String category;
 
+    Boolean isFavourite;
+    Boolean isSynced;
+
     // for pagination purpose
     Integer mTotalCount;
-    Integer mCurrentOffset;
 
 
     public Long getCreatedAt() {
@@ -134,11 +136,19 @@ public class Post extends BaseModel {
         mTotalCount = pTotalCount;
     }
 
-    public Integer getCurrentOffset() {
-        return mCurrentOffset;
+    public Boolean isFavourite() {
+        return isFavourite;
     }
 
-    public void setCurrentOffset(Integer pCurrentOffset) {
-        mCurrentOffset = pCurrentOffset;
+    public void setIsFavourite(Boolean pFavourite) {
+        isFavourite = pFavourite;
+    }
+
+    public Boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setIsSynced(Boolean pSynced) {
+        isSynced = pSynced;
     }
 }

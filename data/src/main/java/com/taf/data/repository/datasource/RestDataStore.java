@@ -8,7 +8,11 @@ import android.net.NetworkInfo;
 import com.taf.data.api.ApiRequest;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.exception.NetworkConnectionException;
+import com.taf.data.utils.Logger;
+
+import java.util.List;
 
 import rx.Observable;
 import rx.schedulers.Schedulers;
@@ -30,6 +34,7 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getLatestContents(pLastUpdatedStamp)
                     .doOnNext(pLatestContentEntity -> {
+                        Logger.d("RestDataStore_getLatestContents", "insert/update");
                         Observable.create(pSubscriber -> {
                             mDBHelper.insertUpdate(pLatestContentEntity);
                             pSubscriber.onCompleted();
@@ -40,27 +45,22 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    //// TODO: 4/20/16
-    public Observable updateFavouriteState(Long pId, boolean isFavourite) {
+    public Observable<Boolean> syncFavourites(List<SyncDataEntity> pSyncData) {
+        Logger.d("RestDataStore_syncFavourites", "test test");
         if (isThereInternetConnection()) {
-            return mApiRequest.updateFavouriteState(pId, isFavourite)
-                    .doOnNext(pO -> {
+            return mApiRequest.updateFavouriteState(pSyncData)
+                    .doOnNext(pResponseEntity -> {
+                        Logger.d("RestDataStore_syncFavourites", "insert/update");
                         Observable.create(pSubscriber -> {
-                            mDBHelper.updateFavouriteState(pId, isFavourite, true);
+                            mDBHelper.updateFavouriteState(pResponseEntity.getSuccessIdList(),
+                                    true);
+                            mDBHelper.updateFavouriteState(pResponseEntity.getFailedIdList(),
+                                    false);
                             pSubscriber.onCompleted();
                         }).subscribeOn(Schedulers.computation()).subscribe();
                     })
-                    .doOnError(pThrowable -> {
-                        Observable.create(pSubscriber -> {
-                            mDBHelper.updateFavouriteState(pId, isFavourite, false);
-                            pSubscriber.onCompleted();
-                        }).subscribeOn(Schedulers.computation()).subscribe();
-                    });
+                    .map(pResponseEntity -> true);
         } else {
-            Observable.create(pSubscriber -> {
-                mDBHelper.updateFavouriteState(pId, isFavourite, false);
-                pSubscriber.onCompleted();
-            }).subscribeOn(Schedulers.computation()).subscribe();
             return Observable.error(new NetworkConnectionException());
         }
     }

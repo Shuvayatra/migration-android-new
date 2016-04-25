@@ -4,10 +4,11 @@ package com.taf.data.repository.datasource;
 import android.support.annotation.Nullable;
 
 import com.taf.data.database.DatabaseHelper;
-import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbCategory;
+import com.taf.data.database.dao.DbPost;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,8 @@ public class DBDataStore implements IDataStore {
         mHelper = pHelper;
     }
 
-    public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, @Nullable String pType) {
+    public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, @Nullable String
+            pType) {
         if (pType == null) {
             return mHelper.getPosts(pLimit, pOffset);
         } else {
@@ -30,18 +32,27 @@ public class DBDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<DbPost>> getFavouritePosts(int pLimit, int pOffset) {
+    public void updateFavouriteState(Long pId, boolean isFavourite) {
+        mHelper.updateFavouriteState(pId, isFavourite, false);
+    }
+
+    public Observable<List<DbPost>> getPostWithUnSyncedFavourites(){
+        return mHelper.getPostsWithUnSyncedFavourites();
+    }
+
+    public Observable<Map<String, Object>> getFavouritePosts(int pLimit, int pOffset) {
         return mHelper.getFavouritePosts(pLimit, pOffset);
     }
 
     public Observable<DbPost> getPost(Long pId) {
         return mHelper.getPost(pId);
     }
-    public Observable<List<DbCategory>> getCategoriesBySection(String sectionName){
+
+    public Observable<List<DbCategory>> getCategoriesBySection(String sectionName) {
         return mHelper.getCategoriesBySection(sectionName);
     }
 
-    public Observable<List<DbPost>> getPostByCategory(Long pId, int pLimit, int pOffset){
+    public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset){
         return mHelper.getPostByCategory(pId, pLimit, pOffset);
     }
 }

@@ -73,8 +73,7 @@ public class PostListPresenter implements Presenter {
 
         @Override
         public void onNext(List<Post> pPosts) {
-            mView.renderPostList(pPosts, pPosts.isEmpty() ? 0 : pPosts.get(0).getCurrentOffset(),
-                    pPosts.isEmpty() ? 0 : pPosts.get(0).getTotalCount());
+            mView.renderPostList(pPosts, pPosts.isEmpty() ? 0 : pPosts.get(0).getTotalCount());
             onCompleted();
         }
     }

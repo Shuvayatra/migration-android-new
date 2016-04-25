@@ -26,6 +26,7 @@ import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.JourneyCategoryDetailActivity;
+import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
@@ -66,7 +67,7 @@ public class FeedFragment extends BaseFragment implements
 
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
-    Integer mOffset = 0;
+    Integer mPage = 0;
     UseCaseData mUseCaseData = new UseCaseData();
     private Long mCategoryId;
 
@@ -123,7 +124,9 @@ public class FeedFragment extends BaseFragment implements
 
     private void initialize() {
         DataModule dataModule;
-        if(mFromCategory){
+        if (mFavouritesOnly) {
+            dataModule = new DataModule(mFavouritesOnly, false);
+        } else if (mFromCategory) {
             dataModule = new DataModule(mCategoryId, MyConstants.DataParent.JOURNEY);
         }else{
             dataModule = new DataModule();
@@ -162,7 +165,7 @@ public class FeedFragment extends BaseFragment implements
                 if (!mIsLoading && !mIsLastPage) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
                             firstVisibleItemPosition >= 0 && totalItemCount >= PAGE_LIMIT) {
-                        loadPostsList(mOffset);
+                        loadPostsList(mPage);
                     }
                 }
             }
@@ -174,10 +177,9 @@ public class FeedFragment extends BaseFragment implements
         }
     }
 
-    private void loadPostsList(Integer pOffset) {
+    private void loadPostsList(Integer pPage) {
         mUseCaseData.clearAll();
-        mUseCaseData.putBoolean(UseCaseData.FAVOURITE_ONLY, mFavouritesOnly);
-        mUseCaseData.putInteger(UseCaseData.OFFSET, pOffset);
+        mUseCaseData.putInteger(UseCaseData.OFFSET, pPage * PAGE_LIMIT);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
         mPresenter.initialize(mUseCaseData);
     }
@@ -201,6 +203,11 @@ public class FeedFragment extends BaseFragment implements
             case MyConstants.Adapter.TYPE_AUDIO:
                 intent = new Intent(getContext(), AudioDetailActivity.class);
                 intent.putExtra(MyConstants.Extras.KEY_AUDIO, pModel);
+                break;
+            case MyConstants.Adapter.TYPE_PLACE:
+                intent = new Intent(getContext(), PlacesDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_PLACE, pModel);
+                break;
         }
         if (intent != null)
             startActivity(intent);
@@ -211,15 +218,15 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public void renderPostList(List<Post> pPosts, int pOffset, int pTotalCount) {
-        if (mOffset == INITIAL_OFFSET)
+    public void renderPostList(List<Post> pPosts, int pTotalCount) {
+        if (mPage == INITIAL_OFFSET)
             mListAdapter.setDataCollection(pPosts);
         else
             mListAdapter.addDataCollection(pPosts);
 
         mTotalDataCount = pTotalCount;
-        mOffset = pOffset + 1;
-        mIsLastPage = (mOffset * PAGE_LIMIT >= pTotalCount);
+        mPage++;
+        mIsLastPage = (mPage * PAGE_LIMIT >= pTotalCount);
     }
 
     @Override

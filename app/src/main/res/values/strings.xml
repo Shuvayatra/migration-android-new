@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Shuvayatra</string>
 
+    <string name="message_search_un_synced_favourites">Searching for un-synced favourites.</string>
+    <string name="message_no_un_synced_favourites">No un-synced favourites found.</string>
+    <string name="message_syncing_favourites">Syncing favourites  to server.</string>
+    <string name="message_favourites_synced">All favourites synced to server.</string>
+    <string name="message_not_all_favourites_synced">Could not sync all favourites to
+        server.</string>
     <string name="message_fetching_latest_content">नयाँ सामग्री खोज्दै...</string>
     <string name="message_content_available">नयाँ सामग्री उपलब्ध...</string>
     <string name="error_message_no_metadata">डाटा प्राप्त गर्न असमर्थ</string>

@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -51,9 +50,10 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
             mPlace = (Post )bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
         }
         if(mPlace == null) throw new IllegalStateException("Place must be provided.");
-        ((PlaceDataBinding) mBinding).setPlace(mPlace);
+        ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
 
         initialize();
+        mPresenter.initialize(null);
     }
 
     private void initialize(){

@@ -106,9 +106,6 @@ public class AudioDetailActivity extends BaseActivity implements
                     mSeekbarMini.setProgress(0);
                     mSeekbarMini.removeCallbacks(updateSeekTime);
                 }
-            } else {
-                mSeekbar.setProgress(0);
-                mSeekbarMini.setProgress(0);
             }
         }
     };

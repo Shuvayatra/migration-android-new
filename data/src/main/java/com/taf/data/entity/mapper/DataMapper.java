@@ -8,13 +8,16 @@ import com.taf.data.di.PerActivity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.SyncDataEntity;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
 import com.taf.model.Post;
 import com.taf.model.PostData;
+import com.taf.model.SyncData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -92,11 +95,13 @@ public class DataMapper {
         return null;
     }
 
-    public List<Post> transformPostFromDb(List<DbPost> dbPosts) {
+    public List<Post> transformPostFromDb(Map<String, Object> pObjectMap) {
         List<Post> postList = new ArrayList<>();
-        if (dbPosts != null) {
-            for (DbPost dbPost : dbPosts) {
-                Post post = transformPostFromDb(dbPost);
+        int totalCount = (int) pObjectMap.get("total_count");
+        List<DbPost> data = ((List<DbPost>) pObjectMap.get("data"));
+        if (data != null) {
+            for (DbPost dbPost : data) {
+                Post post = transformPostFromDb(dbPost, totalCount);
                 if (post != null) {
                     postList.add(post);
                 }
@@ -105,7 +110,18 @@ public class DataMapper {
         return postList;
     }
 
-    public Post transformPostFromDb(DbPost pPost) {
+    public List<Post> transformPostFromDb(List<DbPost> pData) {
+        List<Post> postList = new ArrayList<>();
+        for (DbPost dbPost : pData) {
+            Post post = transformPostFromDb(dbPost, 0);
+            if (post != null) {
+                postList.add(post);
+            }
+        }
+        return postList;
+    }
+
+    public Post transformPostFromDb(DbPost pPost, int totalCount) {
         if (pPost != null) {
             Gson gson = new Gson();
             Post post = new Post();
@@ -114,12 +130,14 @@ public class DataMapper {
             post.setDescription(pPost.getDescription());
             post.setType(pPost.getType());
             post.setData(transformPostData(gson.fromJson(pPost.getData(), PostDataEntity.class)));
-            post.setTags(gson.fromJson(pPost.getTags(), new TypeToken<List<String>>(){}.getType()));
+            post.setTags(gson.fromJson(pPost.getTags(), new TypeToken<List<String>>() {
+            }.getType()));
             post.setType(pPost.getType());
             post.setUpdatedAt(pPost.getUpdatedAt());
             post.setCreatedAt(pPost.getCreatedAt());
-            post.setTotalCount(pPost.getTotalCount());
-            post.setCurrentOffset(pPost.getCurrentOffset());
+            post.setIsFavourite(pPost.getIsFavourite());
+            post.setIsSynced(pPost.getIsSynced());
+            post.setTotalCount(totalCount);
             return post;
         }
         return null;
@@ -138,8 +156,8 @@ public class DataMapper {
     }
 
 
-    public Category transformCategory(DbCategory pDbCategories){
-        if(pDbCategories != null){
+    public Category transformCategory(DbCategory pDbCategories) {
+        if (pDbCategories != null) {
             Category category = new Category();
             category.setId(pDbCategories.getId());
             category.setName(pDbCategories.getName());
@@ -151,6 +169,48 @@ public class DataMapper {
             category.setCategoryId(pDbCategories.getCategoryId());
             category.setSectionName(pDbCategories.getSectionName());
             return category;
+        }
+        return null;
+    }
+
+    public List<SyncDataEntity> transformSyncData(List<SyncData> pDataList) {
+        List<SyncDataEntity> list = new ArrayList<>();
+        if (pDataList != null) {
+            for (SyncData data : pDataList) {
+                SyncDataEntity entity = transformSyncData(data);
+                if (entity != null) {
+                    list.add(entity);
+                }
+            }
+        }
+        return list;
+    }
+
+    public SyncDataEntity transformSyncData(SyncData pSyncData) {
+        if (pSyncData != null) {
+            return new SyncDataEntity(pSyncData.getId(), pSyncData.getStatus());
+        }
+        return null;
+    }
+
+    public List<SyncDataEntity> transformPostForSync(List<DbPost> pDataList) {
+        List<SyncDataEntity> list = new ArrayList<>();
+        if (pDataList != null) {
+            for (DbPost data : pDataList) {
+                SyncDataEntity entity = transformPostForSync(data);
+                if (entity != null) {
+                    list.add(entity);
+                }
+            }
+        }
+        return list;
+    }
+
+    public SyncDataEntity transformPostForSync(DbPost pPost) {
+        if (pPost != null) {
+            return new SyncDataEntity(pPost.getId(), pPost.getIsFavourite()
+                    ? SyncData.STATUS_LIKE
+                    : SyncData.STATUS_DISLIKE);
         }
         return null;
     }

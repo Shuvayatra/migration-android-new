@@ -1,10 +1,13 @@
 package com.taf.data.repository;
 
+import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.model.Post;
+import com.taf.model.SyncData;
 import com.taf.repository.IPostRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -23,7 +26,35 @@ public class PostRepository implements IPostRepository {
     public Observable<List<Post>> getListByType(String pType, int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getPosts(pLimit, pOffset, pType)
+                .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
+    }
+
+    @Override
+    public Observable<List<Post>> getFavouriteList(int pLimit, int pOffset) {
+        return mDataStoreFactory.createDBDataStore()
+                .getFavouritePosts(pLimit, pOffset)
                 .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+    }
+
+    @Override
+    public Observable<List<Post>> getPostWithUnSyncedFavourites() {
+        return mDataStoreFactory.createDBDataStore()
+                .getPostWithUnSyncedFavourites()
+                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+    }
+
+    @Override
+    public Observable<Boolean> syncFavourites(SyncData pSyncData) {
+        List<SyncDataEntity> syncList = new ArrayList<>();
+        syncList.add(mDataMapper.transformSyncData(pSyncData));
+        return mDataStoreFactory.createRestDataStore()
+                .syncFavourites(syncList);
+    }
+
+    @Override
+    public Observable<Boolean> syncFavourites(List<SyncData> pSyncDataList) {
+        return mDataStoreFactory.createRestDataStore()
+                .syncFavourites(mDataMapper.transformSyncData(pSyncDataList));
     }
 
     @Override
@@ -37,26 +68,30 @@ public class PostRepository implements IPostRepository {
     public Observable<Post> getSingle(Long pId) {
         return mDataStoreFactory.createDBDataStore()
                 .getPost(pId)
-                .map(pPost -> mDataMapper.transformPostFromDb(pPost));
-    }
-
-    @Override
-    public Observable updateFavouriteState(Long pId, boolean isFavourite) {
-        return mDataStoreFactory.createRestDataStore()
-                .updateFavouriteState(pId, isFavourite);
+                .map(pPost -> mDataMapper.transformPostFromDb(pPost, 0));
     }
 
     @Override
     public Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getPostByCategory(pId, pLimit, pOffset)
-                .map(pDbPosts -> mDataMapper.transformPostFromDb(pDbPosts));
+                .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
     }
 
-    @Override
-    public Observable<List<Post>> getFavouriteList(int pLimit, int pOffset) {
-        return mDataStoreFactory.createDBDataStore()
-                .getFavouritePosts(pLimit, pOffset)
-                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
-    }
+    /*
+    return localDataStore.getPostWithUnSyncedFavourites()
+                .map(pPosts -> {
+                    Logger.d("PostRepository_syncFavourites", "map post to sync data");
+                    return mDataMapper.transformPostForSync(pPosts);
+                })
+                .doOnNext(pSyncDataList -> {
+                    Logger.d("PostRepository_syncFavourites", "sync to server");
+                    restDataStore.syncFavourites(pSyncDataList)
+                    .doOnNext(pStatus -> {
+                        Logger.d("PostRepository_syncFavourites", "respponse from server");
+                        status[0] = pStatus;
+                    });
+                })
+                .map(pSyncDataList -> status[0]);
+    */
 }

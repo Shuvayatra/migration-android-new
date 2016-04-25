@@ -2,11 +2,16 @@ package com.taf.interactor;
 
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.model.Post;
+import com.taf.model.SyncData;
 import com.taf.repository.IPostRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 
-public class SyncFavouritesUseCase extends UseCase{
+public class SyncFavouritesUseCase extends UseCase<Boolean> {
 
     private final IPostRepository mRepository;
 
@@ -17,12 +22,17 @@ public class SyncFavouritesUseCase extends UseCase{
     }
 
     @Override
-    protected Observable buildUseCaseObservable(UseCaseData pData) {
-        Long id = pData.getLong(UseCaseData.ID, null);
-        boolean isFavourite = pData.getBoolean(UseCaseData.FAVOURITE_STATE, false);
-        if(id == null){
-            throw new IllegalStateException("Post id must be provided.");
+    protected Observable<Boolean> buildUseCaseObservable(UseCaseData pData) {
+        List<Post> postList = (List<Post>) pData.getSerializable(UseCaseData.SYNC_LIST);
+        if (postList == null) {
+            throw new IllegalStateException("sync data must be provided.");
         }
-        return mRepository.updateFavouriteState(id, isFavourite);
+        List<SyncData> syncDataList = new ArrayList<>();
+        for (Post post : postList) {
+            syncDataList.add(new SyncData(post.getId(), post.isFavourite()
+                    ? SyncData.STATUS_LIKE
+                    : SyncData.STATUS_DISLIKE));
+        }
+        return mRepository.syncFavourites(syncDataList);
     }
 }
