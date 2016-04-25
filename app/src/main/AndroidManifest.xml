@@ -60,6 +60,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.MainActivity"/>
         </activity>
+        <activity
+            android:name=".ui.activity.JourneyCategoryDetailActivity"
+            android:label="@string/title_activity_journey_category_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

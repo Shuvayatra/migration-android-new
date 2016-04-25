@@ -141,6 +141,7 @@ public class DataMapper {
     public Category transformCategory(DbCategory pDbCategories){
         if(pDbCategories != null){
             Category category = new Category();
+            category.setId(pDbCategories.getId());
             category.setName(pDbCategories.getName());
             category.setIconUrl(pDbCategories.getIcon());
             category.setDetailImageUrl(pDbCategories.getDetailImage());

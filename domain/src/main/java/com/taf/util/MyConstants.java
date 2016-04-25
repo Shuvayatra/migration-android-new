@@ -58,6 +58,9 @@ public class MyConstants {
         public static final String KEY_PLACE = "key_place";
         public static final String KEY_PLAY_STATUS = "key_play_status";
         public static final String KEY_FAVOURITES_ONLY = "key_favourites_only";
+        public static final String KEY_SUBCATEGORY = "key_subcategory";
+        public static final String KEY_CATEGORY = "key_category";
+        public static final String KEY_FROM_CATEGORY = "key_from_category";
     }
 
     public static class SECTION{

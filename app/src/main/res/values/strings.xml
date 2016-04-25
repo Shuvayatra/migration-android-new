@@ -33,4 +33,5 @@
     <string name="similar_video">SIMILAR VIDEOS</string>
     <string name="select_category">JOURNEY - SELECT CATEGORY</string>
     <string name="title_activity_places_detail">PlacesDetailActivity</string>
+    <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
 </resources>

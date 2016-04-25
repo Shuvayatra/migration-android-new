@@ -15,6 +15,8 @@ public class UseCaseData implements Serializable {
     public static final String SECTION_NAME = "section_name";
     public static final String PARENT_TYPE = "parent_type";
     public static final String PARENT_ID = "parent_id";
+    public static final String FROM_CATEGORY = "from_category";
+    public static final String CATEGORY_ID = "category_id";
 
     Map<String, Object> data = null;
 

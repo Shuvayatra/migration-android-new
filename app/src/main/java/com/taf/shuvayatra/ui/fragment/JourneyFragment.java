@@ -1,10 +1,12 @@
 package com.taf.shuvayatra.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.widget.RelativeLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
@@ -14,6 +16,7 @@ import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.JourneyFragmentPresenter;
+import com.taf.shuvayatra.ui.activity.JourneyCategoryDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.custom.MarginItemDecoration;
@@ -21,6 +24,7 @@ import com.taf.shuvayatra.ui.interfaces.JourneyView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,9 +106,12 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
             else
                 mSubCategories.add(category);
         }
+        Logger.e("JourneyFragment", "all subcatagories: "+mSubCategories);
+
     }
 
     private List<Category> getSubCategoriesByParent(Long id){
+        Logger.e("JourneyFragment", "parnet id" + id);
         List<Category> categories = new ArrayList<>();
         for (Category subCategory : mSubCategories) {
             if(subCategory.getParentId() == id){
@@ -131,7 +138,13 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
 
     @Override
     public void onListItemSelected(BaseModel pModel) {
-        getSubCategoriesByParent(((Category) pModel).getCategoryId());
+        Category category  = ((Category) pModel);
+        List<Category> subCategories = getSubCategoriesByParent(((Category) pModel).getCategoryId());
+        Intent i = new Intent(getContext(), JourneyCategoryDetailActivity.class);
+        i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
+        i.putExtra(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) subCategories);
+        Logger.e("JourneyFragment", "subcatagories: "+subCategories);
+        startActivity(i);
     }
 
     @Override

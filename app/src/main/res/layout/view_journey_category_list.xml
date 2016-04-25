@@ -40,6 +40,7 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:gravity="center"
             android:textSize="@dimen/text_large"
+            android:textColor="@android:color/black"
             android:text="@{category.name}"
             tools:text="Passport Process"/>
     </LinearLayout>
