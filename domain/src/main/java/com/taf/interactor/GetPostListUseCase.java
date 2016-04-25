@@ -36,15 +36,23 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
         int limit = pData.getInteger(UseCaseData.LIMIT, -1);
         boolean favouritesOnly = pData.getBoolean(UseCaseData.FAVOURITE_ONLY, false);
+        boolean fromCategory = pData.getBoolean(UseCaseData.FROM_CATEGORY,false);
+
+        long categoryId = pData.getLong(UseCaseData.CATEGORY_ID,-1l);
+        String type = pData.getString(UseCaseData.POST_TYPE, null);
 
         if(mParentType != null){
             switch(mParentType){
                 default:
                 case COUNTRY:
                     return mRepository.getList(3, offset);
+                case JOURNEY:
+                    return mRepository.getPostByCategory(mParentId, limit, offset);
             }
         }else if(favouritesOnly){
             return mRepository.getFavouriteList(limit, offset);
+        }else if(fromCategory){
+            return mRepository.getPostByCategory(categoryId,limit,offset);
         }else {
             return mRepository.getList(limit, offset);
         }

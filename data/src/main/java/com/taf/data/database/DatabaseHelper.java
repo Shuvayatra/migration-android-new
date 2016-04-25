@@ -107,6 +107,10 @@ public class DatabaseHelper {
         return getPosts(pLimit, pOffset, pType, false);
     }
 
+    public Observable<List<DbPost>> getPostByCategory(Long categoryId,int pLimit, int pOffset){
+        return getPosts(pLimit,pOffset, null,false);
+    }
+
     public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
         List<DbPost> dbPosts = new ArrayList<>();
@@ -161,6 +165,7 @@ public class DatabaseHelper {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         List<DbCategory> categories = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.SectionName.eq(section))
                 .orderAsc(DbCategoryDao.Properties.Position).list();
+        Logger.e("DatabaseHelper", "categories: "+categories);
         return Observable.defer(() -> Observable.just(categories));
     }
 

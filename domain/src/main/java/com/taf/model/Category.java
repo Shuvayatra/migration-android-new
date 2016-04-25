@@ -86,4 +86,8 @@ public class Category extends BaseModel {
         sectionName = pSectionName;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

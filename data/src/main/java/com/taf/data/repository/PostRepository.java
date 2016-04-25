@@ -47,6 +47,13 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset) {
+        return mDataStoreFactory.createDBDataStore()
+                .getPostByCategory(pId, pLimit, pOffset)
+                .map(pDbPosts -> mDataMapper.transformPostFromDb(pDbPosts));
+    }
+
+    @Override
     public Observable<List<Post>> getFavouriteList(int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getFavouritePosts(pLimit, pOffset)

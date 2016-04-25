@@ -24,6 +24,7 @@
             android:layout_height="@dimen/search_height"
             app:iconifiedByDefault="false"
             app:queryHint="@string/query_hint"
+
             />
     </android.support.v7.widget.CardView>
 
@@ -34,8 +35,11 @@
         app:cardElevation="3dp">
 
         <Spinner
+            android:id="@+id/filterSpinner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/search_height"/>
+            android:layout_height="@dimen/search_height"
+            android:dropDownWidth="match_parent"
+            style="@style/Spinner"/>
     </android.support.v7.widget.CardView>
     <RelativeLayout
         android:layout_width="match_parent"
