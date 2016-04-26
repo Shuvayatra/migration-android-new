@@ -34,4 +34,6 @@
     <string name="select_category">JOURNEY - SELECT CATEGORY</string>
     <string name="title_activity_places_detail">PlacesDetailActivity</string>
     <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
+    <string name="query_hint_destination">Search Destination</string>
+    <string name="title_activity_country_detail">CountryDetailActivity</string>
 </resources>

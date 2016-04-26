@@ -16,16 +16,23 @@ import rx.Observable;
 public class GetSectionCategoryUseCase extends UseCase{
 
     private final ISectionRepository mRepository;
+    private final MyConstants.DataParent mParent;
 
     @Inject
-    public GetSectionCategoryUseCase(ISectionRepository pRepository, ThreadExecutor
+    public GetSectionCategoryUseCase(MyConstants.DataParent pParent,ISectionRepository pRepository, ThreadExecutor
             pThreadExecutor, PostExecutionThread pPostExecutionThread){
         super(pThreadExecutor,pPostExecutionThread);
         mRepository = pRepository;
+        mParent = pParent;
     }
 
     @Override
     protected Observable buildUseCaseObservable(UseCaseData pData) {
-        return mRepository.getListBySectionName(pData.getString(UseCaseData.SECTION_NAME));
+        if(mParent == MyConstants.DataParent.JOURNEY)
+            return mRepository.getListBySectionName(MyConstants.SECTION.JOURNEY);
+        else if(mParent == MyConstants.DataParent.COUNTRY)
+            return mRepository.getListBySectionName(MyConstants.SECTION.COUNTRY);
+        else
+            return Observable.error(new IllegalArgumentException());
     }
 }

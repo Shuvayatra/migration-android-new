@@ -98,7 +98,7 @@ public class DataModule {
     @Named("sectionCategory")
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
-        return new GetSectionCategoryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+        return new GetSectionCategoryUseCase(mParentType,pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
 }

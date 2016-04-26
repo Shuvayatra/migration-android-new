@@ -63,7 +63,14 @@
         <activity
             android:name=".ui.activity.JourneyCategoryDetailActivity"
             android:label="@string/title_activity_journey_category_detail"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity
+            android:name=".ui.activity.CountryDetailActivity"
+            android:label="@string/title_activity_country_detail"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
         </activity>
     </application>
 

@@ -70,18 +70,11 @@
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="ExpandedToolbarTextAppearance" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">@dimen/text_xxlarge</item>
+        <item name="android:textSize">0dp</item>
     </style>
 
     <style name="CollapsedToolbarTextAppearance" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/text_xlarge</item>
-    </style>
-
-    <style name="Spinner" parent="Base.Widget.AppCompat.Spinner">
-        <item name="android:dropDownWidth">match_parent</item>
-        <item name="android:dropDownSelector">@drawable/ic_play</item>
-        <item name="android:navigationMode">listMode</item>
     </style>
 </resources>

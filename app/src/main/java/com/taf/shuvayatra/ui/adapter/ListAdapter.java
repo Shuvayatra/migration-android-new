@@ -7,14 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
+import com.taf.shuvayatra.databinding.DestinationDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
+import com.taf.shuvayatra.ui.interfaces.DestinationView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
@@ -75,15 +78,19 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 viewHolder = new ArticleViewHolder(articleBinding);
                 break;
             case Adapter.TYPE_JOURNEY_CATEGORY:
-                JourneyCategoryDataBinding jouneyBinding = DataBindingUtil.inflate(mLayoutInflater,
+                JourneyCategoryDataBinding journeyBinding = DataBindingUtil.inflate(mLayoutInflater,
                         R.layout.view_journey_category_list, parent, false);
-                viewHolder = new JourneyCategoryViewHolder(jouneyBinding);
+                viewHolder = new JourneyCategoryViewHolder(journeyBinding);
                 break;
             case Adapter.TYPE_PLACE:
                 PlaceDataBinding  placeDataBinding = DataBindingUtil.inflate(mLayoutInflater,
                         R.layout.view_place, parent, false);
                 viewHolder = new PlaceViewHolder(placeDataBinding);
                 break;
+            case Adapter.TYPE_COUNTRY:
+                DestinationDataBinding destinationDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.view_destination_list,parent, false);
+                viewHolder = new DestinationViewHolder(destinationDataBinding);
             default:
         }
         return viewHolder;
@@ -108,6 +115,9 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 break;
             case Adapter.TYPE_PLACE:
                 ((PlaceViewHolder) holder).mBinding.setPlace((Post) mDataCollection.get(position));
+                break;
+            case Adapter.TYPE_COUNTRY:
+                ((DestinationViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -192,5 +202,21 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             });
         }
 
+    }
+
+    public class DestinationViewHolder extends RecyclerView.ViewHolder{
+
+        DestinationDataBinding mBinding;
+        public DestinationViewHolder(DestinationDataBinding pBinding){
+            super(pBinding.getRoot());
+            mBinding = pBinding;
+            ButterKnife.bind(this, mBinding.getRoot());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onListItemSelected(mBinding.getCategory());
+                }
+            });
+        }
     }
 }
