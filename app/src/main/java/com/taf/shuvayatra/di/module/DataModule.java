@@ -5,9 +5,9 @@ import android.content.Context;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
-import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.PostRepository;
+import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
@@ -17,6 +17,7 @@ import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
+import com.taf.interactor.UpdateFavouriteStateUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IPostRepository;
@@ -88,6 +89,16 @@ public class DataModule {
 
     @Provides
     @PerActivity
+    @Named("favouriteUpdate")
+    UseCase provideFavouriteUpdateUseCase(IPostRepository pDataRepository,
+                                          ThreadExecutor pThreadExecutor, PostExecutionThread
+                                                  pPostExecutionThread) {
+        return new UpdateFavouriteStateUseCase(mId, pThreadExecutor, pPostExecutionThread,
+                pDataRepository);
+    }
+
+    @Provides
+    @PerActivity
     @Named("latest")
     IBaseRepository provideLatestContentDataRepository(DataStoreFactory pDataStoreFactory,
                                                        DataMapper pDataMapper) {
@@ -123,7 +134,8 @@ public class DataModule {
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread
                                                   pPostExecutionThread) {
-        return new GetSectionCategoryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+        return new GetSectionCategoryUseCase(mParentType, pRepository, pThreadExecutor,
+                pPostExecutionThread);
     }
 
     @Provides

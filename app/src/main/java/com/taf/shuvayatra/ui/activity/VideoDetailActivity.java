@@ -1,6 +1,8 @@
 package com.taf.shuvayatra.ui.activity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -10,14 +12,26 @@ import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.databinding.VideoDetailDataBinding;
+import com.taf.shuvayatra.di.component.DaggerDataComponent;
+import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.PostFavouritePresenter;
+import com.taf.shuvayatra.ui.interfaces.PostDetailView;
 import com.taf.util.MyConstants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.OnInitializedListener {
+import javax.inject.Inject;
+
+public class VideoDetailActivity extends BaseActivity implements
+        YouTubePlayer.OnInitializedListener,
+        PostDetailView{
+
+    @Inject
+    PostFavouritePresenter mFavouritePresenter;
 
     Post mPost;
+    boolean mOldFavouriteState;
     private YouTubePlayerSupportFragment mYouTubePlayerFragment;
 
     @Override
@@ -31,6 +45,11 @@ public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.O
     }
 
     @Override
+    public boolean containsFavouriteOption() {
+        return true;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -38,11 +57,39 @@ public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.O
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
-
         }
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
+        mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
+        initialize();
+
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
+    }
+
+    private void initialize() {
+        DaggerDataComponent.builder()
+                .activityModule(getActivityModule())
+                .applicationComponent(getApplicationComponent())
+                .dataModule(new DataModule(mPost.getId()))
+                .build()
+                .inject(this);
+        mFavouritePresenter.attachView(this);
+    }
+
+    @Override
+    public void onPostFavouriteStateUpdated(Boolean status) {
+        mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showErrorView(String pErrorMessage) {
+        Snackbar.make(mBinding.getRoot(), pErrorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override

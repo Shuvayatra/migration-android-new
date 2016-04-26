@@ -21,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.taf.data.utils.Logger;
+import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -31,6 +32,7 @@ import com.taf.shuvayatra.media.MediaHelper;
 import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.presenter.AudioDetailPresenter;
+import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
 import com.taf.util.MyConstants;
 
@@ -51,6 +53,8 @@ public class AudioDetailActivity extends BaseActivity implements
 
     @Inject
     AudioDetailPresenter mPresenter;
+    @Inject
+    PostFavouritePresenter mFavouritePresenter;
 
     @Bind(R.id.audio_time)
     TextView mAudioTime;
@@ -80,6 +84,7 @@ public class AudioDetailActivity extends BaseActivity implements
     private IntentFilter receiverFilter;
 
     private Post mAudio;
+    private boolean mOldFavouriteState;
 
     //connect to the service
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -132,6 +137,11 @@ public class AudioDetailActivity extends BaseActivity implements
 
     @Override
     public boolean isDataBindingEnabled() {
+        return true;
+    }
+
+    @Override
+    public boolean containsShareOption() {
         return true;
     }
 
@@ -201,17 +211,6 @@ public class AudioDetailActivity extends BaseActivity implements
         registerReceiver(mediaReceiver, receiverFilter);
     }
 
-    private void initialize() {
-        DaggerDataComponent.builder()
-                .activityModule(getActivityModule())
-                .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(mAudio.getId()))
-                .build()
-                .inject(this);
-        mPresenter.attachView(this);
-        mPresenter.initialize(null);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -226,6 +225,7 @@ public class AudioDetailActivity extends BaseActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -246,7 +246,39 @@ public class AudioDetailActivity extends BaseActivity implements
                 break;
 
         }
-        return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public void updateFavouriteState() {
+        UseCaseData data = new UseCaseData();
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
+                .isFavourite()));
+        mFavouritePresenter.initialize(data);
+    }
+
+    private void initialize() {
+        DaggerDataComponent.builder()
+                .activityModule(getActivityModule())
+                .applicationComponent(getApplicationComponent())
+                .dataModule(new DataModule(mAudio.getId()))
+                .build()
+                .inject(this);
+        mPresenter.attachView(this);
+        mFavouritePresenter.attachView(this);
+        mPresenter.initialize(null);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mAudio != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mAudio.isFavourite() != null && mAudio
+                    .isFavourite())
+                    ? R.drawable.icon_favourite
+                    : R.drawable.icon_not_favourite);
+        }
+        return true;
     }
 
     private void shareViaBluetooth() {
@@ -368,8 +400,21 @@ public class AudioDetailActivity extends BaseActivity implements
         return this;
     }
 
+    @Override
+    public void onPostFavouriteStateUpdated(Boolean status) {
+        mAudio.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void showErrorView(String pErrorMessage) {
+        Snackbar.make(mMiniPlayer, pErrorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
     private void updateView(Post pAudio) {
         ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
+        mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
+        invalidateOptionsMenu();
     }
 
     private void updateSeekBar() {

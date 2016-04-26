@@ -162,20 +162,21 @@ public class DatabaseHelper {
         postDao.insertOrReplaceInTx(postList);
     }
 
-    public void updateFavouriteState(Long pId, Boolean isFavourite, boolean isSynced) {
+    public Long updateFavouriteState(Long pId, Boolean isFavourite, boolean isSynced) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         DbPost post = postDao.queryBuilder()
                 .where(DbPostDao.Properties.Id.eq(pId))
                 .unique();
         if (isFavourite != null) {
             post.setIsFavourite(isFavourite);
+            int count = (post.getFavouriteCount() != null) ? post.getFavouriteCount() : 0;
             post.setFavouriteCount(isFavourite
-                    ? post.getFavouriteCount() + 1
-                    : post.getFavouriteCount() - 1
+                    ? count + 1
+                    : count - 1
             );
         }
         post.setIsSynced(isSynced);
-        postDao.insertOrReplace(post);
+        return postDao.insertOrReplace(post);
     }
 
     public Observable<List<DbCategory>> getCategoriesBySection(String section) {

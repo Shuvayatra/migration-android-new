@@ -18,8 +18,8 @@ public class GetSectionCategoryUseCase extends UseCase {
     private final MyConstants.DataParent mParent;
 
     @Inject
-    public GetSectionCategoryUseCase(MyConstants.DataParent pParent, ISectionRepository pRepository, ThreadExecutor
-            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+    public GetSectionCategoryUseCase(MyConstants.DataParent pParent, ISectionRepository
+            pRepository, ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mRepository = pRepository;
         mParent = pParent;

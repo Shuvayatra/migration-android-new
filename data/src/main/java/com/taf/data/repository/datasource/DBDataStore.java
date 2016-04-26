@@ -32,8 +32,8 @@ public class DBDataStore implements IDataStore {
         }
     }
 
-    public void updateFavouriteState(Long pId, boolean isFavourite) {
-        mHelper.updateFavouriteState(pId, isFavourite, false);
+    public Long updateFavouriteState(Long pId, boolean isFavourite) {
+        return mHelper.updateFavouriteState(pId, isFavourite, false);
     }
 
     public Observable<List<DbPost>> getPostWithUnSyncedFavourites(){

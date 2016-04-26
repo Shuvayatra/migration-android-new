@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
@@ -29,6 +31,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     public abstract int getLayout();
 
     public boolean isDataBindingEnabled() {
+        return false;
+    }
+
+    public boolean containsShareOption() {
+        return false;
+    }
+
+    public boolean containsFavouriteOption() {
         return false;
     }
 
@@ -59,6 +69,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initLanguage();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (containsShareOption()) {
+            getMenuInflater().inflate(R.menu.share, menu);
+        }
+        if (containsShareOption()) {
+            getMenuInflater().inflate(R.menu.favourite, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_favourite:
+                updateFavouriteState();
+                break;
+        }
+        return true;
+    }
+
+    public void updateFavouriteState() {
     }
 
     private void initLanguage() {

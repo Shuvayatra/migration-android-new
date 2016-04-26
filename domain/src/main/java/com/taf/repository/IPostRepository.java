@@ -14,6 +14,8 @@ public interface IPostRepository extends IBaseRepository<Post> {
 
     Observable<List<Post>> getPostWithUnSyncedFavourites();
 
+    Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus);
+
     Observable<Boolean> syncFavourites(SyncData pSyncData);
 
     Observable<Boolean> syncFavourites(List<SyncData> pSyncDataList);

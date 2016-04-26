@@ -94,6 +94,14 @@ public class PostRepository implements IPostRepository {
         );
     }
 
+    @Override
+    public Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore()
+                        .updateFavouriteState(pId, pStatus) != -1
+        );
+    }
+
     /*
     return localDataStore.getPostWithUnSyncedFavourites()
                 .map(pPosts -> {
