@@ -11,10 +11,12 @@ import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.DownloadAudioUseCase;
 import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
+import com.taf.interactor.UpdateDownloadStatusUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IPostRepository;
@@ -29,6 +31,7 @@ import dagger.Provides;
 @Module
 public class DataModule {
 
+    Long mId = Long.MIN_VALUE;
     Long mParentId = Long.MIN_VALUE;
     MyConstants.DataParent mParentType;
     String mPostType;
@@ -36,6 +39,10 @@ public class DataModule {
     boolean mUnSyncedOnly = false;
 
     public DataModule() {
+    }
+
+    public DataModule(Long pId) {
+        mId = pId;
     }
 
     public DataModule(boolean pFavouriteOnly, boolean pUnSyncedOnly) {
@@ -119,4 +126,22 @@ public class DataModule {
         return new GetSectionCategoryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
+    @Provides
+    @PerActivity
+    @Named("download_start")
+    UseCase provideDownloadStartUseCase(IPostRepository pDataRepository, ThreadExecutor
+            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new DownloadAudioUseCase(mId, pDataRepository, pThreadExecutor,
+                pPostExecutionThread);
+
+    }
+
+    @Provides
+    @PerActivity
+    @Named("download_complete")
+    UseCase provideDownloadCompleteUseCase(IPostRepository pDataRepository, ThreadExecutor
+            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new UpdateDownloadStatusUseCase(pDataRepository, pThreadExecutor,
+                pPostExecutionThread);
+    }
 }

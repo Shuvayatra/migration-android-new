@@ -60,13 +60,13 @@ public class BindingUtil {
     }
 
     @BindingAdapter("bind:similarPosts")
-    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts){
+    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts) {
         if (pPosts != null && pPosts.size() > 0) {
             for (Post post : pPosts) {
                 if (post.getDataType() == MyConstants.Adapter.TYPE_AUDIO || post.getDataType() ==
                         MyConstants.Adapter.TYPE_AUDIO) {
                     showSimilarAudioVideo(pContainer.getContext(), pContainer, post);
-                }else if(post.getDataType() == MyConstants.Adapter.TYPE_PLACE){
+                } else if (post.getDataType() == MyConstants.Adapter.TYPE_PLACE) {
                     showSimilarPlace(pContainer.getContext(), pContainer, post);
                 }
             }

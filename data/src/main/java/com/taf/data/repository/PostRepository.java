@@ -78,6 +78,22 @@ public class PostRepository implements IPostRepository {
                 .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
     }
 
+    @Override
+    public Observable<Boolean> updateDownloadStatus(long pReference, boolean pDownloadStatus) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore()
+                        .updateDownloadStatus(pReference, pDownloadStatus) != -1
+        );
+    }
+
+    @Override
+    public Observable<Boolean> setDownloadReference(long pId, long pReference) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore()
+                        .setDownloadReference(pId, pReference) != -1
+        );
+    }
+
     /*
     return localDataStore.getPostWithUnSyncedFavourites()
                 .map(pPosts -> {

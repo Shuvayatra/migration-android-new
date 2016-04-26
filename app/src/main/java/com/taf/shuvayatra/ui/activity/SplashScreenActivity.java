@@ -58,16 +58,16 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.resume();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.destroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.resume();
     }
 
     @Override

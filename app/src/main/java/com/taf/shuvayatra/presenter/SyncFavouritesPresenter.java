@@ -46,9 +46,9 @@ public class SyncFavouritesPresenter implements Presenter {
     @Override
     public void initialize(UseCaseData pData) {
         mView.showLoadingView();
-        if(pData.getBoolean(UseCaseData.SEARCH_UN_SYNCED_DATA, false)){
+        if (pData.getBoolean(UseCaseData.SEARCH_UN_SYNCED_DATA, false)) {
             searchUnSyncedData(pData);
-        }else {
+        } else {
             syncLikes(pData);
         }
     }
@@ -58,7 +58,7 @@ public class SyncFavouritesPresenter implements Presenter {
         mView = (SplashScreenView) pView;
     }
 
-    private void searchUnSyncedData(UseCaseData pData){
+    private void searchUnSyncedData(UseCaseData pData) {
         this.mFetchUseCase.execute(new FetchUnSyncedSubscriber(), pData);
     }
 

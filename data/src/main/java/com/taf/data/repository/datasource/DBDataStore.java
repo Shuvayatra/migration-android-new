@@ -55,5 +55,13 @@ public class DBDataStore implements IDataStore {
     public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset){
         return mHelper.getPostByCategory(pId, pLimit, pOffset);
     }
+
+    public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
+        return mHelper.updateDownloadStatus(pReference, pDownloadStatus);
+    }
+
+    public long setDownloadReference(Long pId, long pReference) {
+        return mHelper.setDownloadReference(pId, pReference);
+    }
 }
 

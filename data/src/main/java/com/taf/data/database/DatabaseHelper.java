@@ -102,8 +102,8 @@ public class DatabaseHelper {
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit,
-                                                                    int pOffset){
-        return getPosts(pLimit,pOffset, null,false);
+                                                             int pOffset) {
+        return getPosts(pLimit, pOffset, null, false);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
@@ -143,33 +143,35 @@ public class DatabaseHelper {
     public void updateFavouriteState(List<Long> pIds, boolean isSynced) {
         updateFavouriteState(pIds, null, isSynced);
     }
+
     public void updateFavouriteState(List<Long> pIds, Boolean isFavourite, boolean isSynced) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         List<DbPost> postList = postDao.queryBuilder()
                 .where(DbPostDao.Properties.Id.in(pIds))
                 .list();
         for (DbPost dbPost : postList) {
-            if(isFavourite != null){
+            if (isFavourite != null) {
                 dbPost.setIsFavourite(isFavourite);
                 dbPost.setFavouriteCount(isFavourite
                         ? dbPost.getFavouriteCount() + 1
-                        :  dbPost.getFavouriteCount() - 1
+                        : dbPost.getFavouriteCount() - 1
                 );
             }
             dbPost.setIsSynced(isSynced);
         }
         postDao.insertOrReplaceInTx(postList);
     }
+
     public void updateFavouriteState(Long pId, Boolean isFavourite, boolean isSynced) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         DbPost post = postDao.queryBuilder()
                 .where(DbPostDao.Properties.Id.eq(pId))
                 .unique();
-        if(isFavourite != null){
+        if (isFavourite != null) {
             post.setIsFavourite(isFavourite);
             post.setFavouriteCount(isFavourite
                     ? post.getFavouriteCount() + 1
-                    :  post.getFavouriteCount() - 1
+                    : post.getFavouriteCount() - 1
             );
         }
         post.setIsSynced(isSynced);
@@ -181,6 +183,24 @@ public class DatabaseHelper {
         List<DbCategory> categories = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.SectionName.eq(section))
                 .orderAsc(DbCategoryDao.Properties.Position).list();
         return Observable.defer(() -> Observable.just(categories));
+    }
+
+    public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder()
+                .where(DbPostDao.Properties.DownloadReference.eq(pReference))
+                .unique();
+        post.setIsDownloaded(pDownloadStatus);
+        return postDao.insertOrReplace(post);
+    }
+
+    public long setDownloadReference(Long pId, long pReference) {
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder()
+                .where(DbPostDao.Properties.Id.eq(pId))
+                .unique();
+        post.setDownloadReference(pReference);
+        return postDao.insertOrReplace(post);
     }
 
 }

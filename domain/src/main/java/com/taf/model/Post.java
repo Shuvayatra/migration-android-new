@@ -20,6 +20,8 @@ public class Post extends BaseModel {
 
     Boolean isFavourite;
     Boolean isSynced;
+    Boolean downloadStatus;
+    Long downloadReference;
 
     // for pagination purpose
     Integer mTotalCount;
@@ -97,9 +99,9 @@ public class Post extends BaseModel {
             return MyConstants.Adapter.TYPE_VIDEO;
         } else if (getType().equalsIgnoreCase("text")) {
             return MyConstants.Adapter.TYPE_TEXT;
-        }else if(getType().equalsIgnoreCase("news")){
+        } else if (getType().equalsIgnoreCase("news")) {
             return MyConstants.Adapter.TYPE_NEWS;
-        }else {
+        } else {
             return MyConstants.Adapter.TYPE_PLACE;
         }
     }
@@ -150,5 +152,21 @@ public class Post extends BaseModel {
 
     public void setIsSynced(Boolean pSynced) {
         isSynced = pSynced;
+    }
+
+    public Boolean getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(Boolean pDownloadStatus) {
+        downloadStatus = pDownloadStatus;
+    }
+
+    public Long getDownloadReference() {
+        return downloadReference;
+    }
+
+    public void setDownloadReference(Long pDownloadReference) {
+        downloadReference = pDownloadReference;
     }
 }

@@ -14,6 +14,8 @@ public class UseCaseData implements Serializable {
     public static final String SEARCH_UN_SYNCED_DATA = "searchUnSyncedData";
     public static final String LAST_UPDATED = "last_updated";
     public static final String SECTION_NAME = "section_name";
+    public static final String DOWNLOAD_REFERENCE = "download_reference";
+    public static final String DOWNLOAD_STATUS = "download_status";
 
     Map<String, Object> data = null;
 
@@ -126,5 +128,14 @@ public class UseCaseData implements Serializable {
         } catch (ClassCastException e) {
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        String value = "";
+        for (String key : data.keySet()) {
+            value += key + " : " + data.get(key) + "\n";
+        }
+        return value;
     }
 }

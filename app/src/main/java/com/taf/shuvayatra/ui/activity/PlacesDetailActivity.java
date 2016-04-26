@@ -46,17 +46,17 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-            mPlace = (Post )bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
+        if (bundle != null) {
+            mPlace = (Post) bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
         }
-        if(mPlace == null) throw new IllegalStateException("Place must be provided.");
+        if (mPlace == null) throw new IllegalStateException("Place must be provided.");
         ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
 
         initialize();
         mPresenter.initialize(null);
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .dataModule(new DataModule(1L, MyConstants.DataParent.COUNTRY, "place"))

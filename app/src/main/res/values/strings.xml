@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Shuvayatra</string>
 
+    <string name="message_downloading">Downloading...</string>
+    <string name="message_download_start">Downloading %1$s</string>
+    <string name="message_download_success">%1$s downloaded successfully</string>
+    <string name="message_already_downloaded">%1$s already downloaded</string>
+
     <string name="message_search_un_synced_favourites">Searching for un-synced favourites.</string>
     <string name="message_no_un_synced_favourites">No un-synced favourites found.</string>
     <string name="message_syncing_favourites">Syncing favourites  to server.</string>
@@ -14,7 +19,13 @@
     <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
 
     <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_share_facebook">Share On Facebook</string>
+    <string name="action_share_bluetooth">Share via Bluetooth</string>
     <string name="action_settings">Settings</string>
+
+    <string name="share_audio">Share Audio Post</string>
+    <string name="error_bluetooth_share">You need to download the audio in order to share</string>
 
     <string name="default_empty_message">No feeds available currently.</string>
     <string name="similar_audios">similar audios</string>

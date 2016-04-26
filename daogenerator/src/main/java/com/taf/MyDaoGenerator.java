@@ -35,6 +35,8 @@ public class MyDaoGenerator {
         post.addIntProperty("shareCount");
         post.addBooleanProperty("isFavourite");
         post.addBooleanProperty("isSynced");
+        post.addBooleanProperty("isDownloaded");
+        post.addLongProperty("downloadReference");
     }
 
     private static void createPostCategoryTable(Schema pSchema){
