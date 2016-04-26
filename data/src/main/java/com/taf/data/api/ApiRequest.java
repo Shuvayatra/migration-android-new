@@ -1,6 +1,10 @@
 package com.taf.data.api;
 
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.SyncDataEntity;
+import com.taf.data.entity.SyncResponseEntity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,9 +22,7 @@ public class ApiRequest {
         return mApiService.getLatestContent(pLatestUpdateStamp);
     }
 
-    // TODO: 4/20/16
-    public Observable updateFavouriteState(Long pId, boolean isFavourite){
-        //return mApiService.
-        return null;
+    public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList){
+        return mApiService.syncLikes(pSyncDataList);
     }
 }

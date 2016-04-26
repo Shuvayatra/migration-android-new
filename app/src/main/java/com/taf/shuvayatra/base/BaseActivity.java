@@ -20,15 +20,15 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    public ViewDataBinding mBinding;
     @Nullable
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-
     AppPreferences mPreferences;
-    public ViewDataBinding mBinding;
 
     public abstract int getLayout();
-    public boolean isDataBindingEnabled(){
+
+    public boolean isDataBindingEnabled() {
         return false;
     }
 
@@ -37,10 +37,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         initLanguage();
         super.onCreate(savedInstanceState);
         getApplicationComponent().inject(this);
-        if(!isDataBindingEnabled()) {
+        if (!isDataBindingEnabled()) {
             setContentView(getLayout());
             ButterKnife.bind(this);
-        }else{
+        } else {
             mBinding = DataBindingUtil.setContentView(this, getLayout());
             ButterKnife.bind(this, mBinding.getRoot());
         }
@@ -50,15 +50,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initLanguage();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initLanguage();
     }
 
     private void initLanguage() {

@@ -36,6 +36,8 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         public final static Property ShareCount = new Property(10, Integer.class, "shareCount", false, "SHARE_COUNT");
         public final static Property IsFavourite = new Property(11, Boolean.class, "isFavourite", false, "IS_FAVOURITE");
         public final static Property IsSynced = new Property(12, Boolean.class, "isSynced", false, "IS_SYNCED");
+        public final static Property IsDownloaded = new Property(13, Boolean.class, "isDownloaded", false, "IS_DOWNLOADED");
+        public final static Property DownloadReference = new Property(14, Long.class, "downloadReference", false, "DOWNLOAD_REFERENCE");
     };
 
 
@@ -63,7 +65,9 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
                 "\"FAVOURITE_COUNT\" INTEGER," + // 9: favouriteCount
                 "\"SHARE_COUNT\" INTEGER," + // 10: shareCount
                 "\"IS_FAVOURITE\" INTEGER," + // 11: isFavourite
-                "\"IS_SYNCED\" INTEGER);"); // 12: isSynced
+                "\"IS_SYNCED\" INTEGER," + // 12: isSynced
+                "\"IS_DOWNLOADED\" INTEGER," + // 13: isDownloaded
+                "\"DOWNLOAD_REFERENCE\" INTEGER);"); // 14: downloadReference
     }
 
     /** Drops the underlying database table. */
@@ -141,6 +145,16 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         if (isSynced != null) {
             stmt.bindLong(13, isSynced ? 1L: 0L);
         }
+ 
+        Boolean isDownloaded = entity.getIsDownloaded();
+        if (isDownloaded != null) {
+            stmt.bindLong(14, isDownloaded ? 1L: 0L);
+        }
+ 
+        Long downloadReference = entity.getDownloadReference();
+        if (downloadReference != null) {
+            stmt.bindLong(15, downloadReference);
+        }
     }
 
     /** @inheritdoc */
@@ -165,7 +179,9 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // favouriteCount
             cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // shareCount
             cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFavourite
-            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0 // isSynced
+            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isSynced
+            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0, // isDownloaded
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14) // downloadReference
         );
         return entity;
     }
@@ -186,6 +202,8 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         entity.setShareCount(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
         entity.setIsFavourite(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
         entity.setIsSynced(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
+        entity.setIsDownloaded(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
+        entity.setDownloadReference(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
      }
     
     /** @inheritdoc */

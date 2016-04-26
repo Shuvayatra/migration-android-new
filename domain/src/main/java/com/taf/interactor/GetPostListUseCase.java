@@ -18,16 +18,20 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
     private final MyConstants.DataParent mParentType;
     private final Long mParentId;
     private final String mPostType;
+    private final boolean mFavouriteOnly;
+    private final boolean mUnSyncedOnly;
 
     @Inject
     public GetPostListUseCase(MyConstants.DataParent pParentType, Long pParentId,
-                              String pPostType, IPostRepository pRepository, ThreadExecutor
-                                          pThreadExecutor, PostExecutionThread
-                                          pPostExecutionThread) {
+                              String pPostType, boolean pFavouriteOnly, boolean pUnSyncedOnly,
+                              IPostRepository pRepository, ThreadExecutor pThreadExecutor,
+                              PostExecutionThread pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mParentType = pParentType;
         mParentId = pParentId;
         mPostType = pPostType;
+        mFavouriteOnly = pFavouriteOnly;
+        mUnSyncedOnly = pUnSyncedOnly;
         mRepository = pRepository;
     }
 
@@ -35,23 +39,20 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
     protected Observable<List<Post>> buildUseCaseObservable(UseCaseData pData) {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
         int limit = pData.getInteger(UseCaseData.LIMIT, -1);
-        boolean favouritesOnly = pData.getBoolean(UseCaseData.FAVOURITE_ONLY, false);
-        boolean fromCategory = pData.getBoolean(UseCaseData.FROM_CATEGORY,false);
 
-        long categoryId = pData.getLong(UseCaseData.CATEGORY_ID,-1l);
-        String type = pData.getString(UseCaseData.POST_TYPE, null);
-
-        if(mParentType != null){
-            switch(mParentType){
+        if (mUnSyncedOnly) {
+            return mRepository.getPostWithUnSyncedFavourites();
+        } else if (mParentType != null) {
+            switch (mParentType) {
                 default:
                 case COUNTRY:
-                    return mRepository.getPostByCategory(mParentId,limit,offset);
+                    return mRepository.getListByType(mPostType, limit, offset);
                 case JOURNEY:
                     return mRepository.getPostByCategory(mParentId, limit, offset);
             }
-        }else if(favouritesOnly){
+        } else if (mFavouriteOnly) {
             return mRepository.getFavouriteList(limit, offset);
-        }else {
+        } else {
             return mRepository.getList(limit, offset);
         }
     }

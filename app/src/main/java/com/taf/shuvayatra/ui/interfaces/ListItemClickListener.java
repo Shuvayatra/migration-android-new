@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface ListItemClickListener {
     void onListItemSelected(BaseModel pModel);
+
     void onListItemSelected(List<BaseModel> pCollection, int pIndex);
 }

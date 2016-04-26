@@ -22,10 +22,10 @@ public class DbPost {
     private Integer shareCount;
     private Boolean isFavourite;
     private Boolean isSynced;
+    private Boolean isDownloaded;
+    private Long downloadReference;
 
     // KEEP FIELDS - put your custom fields here
-    private Integer totalCount;
-    private Integer currentOffset;
     // KEEP FIELDS END
 
     public DbPost() {
@@ -35,7 +35,7 @@ public class DbPost {
         this.id = id;
     }
 
-    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced) {
+    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -49,6 +49,8 @@ public class DbPost {
         this.shareCount = shareCount;
         this.isFavourite = isFavourite;
         this.isSynced = isSynced;
+        this.isDownloaded = isDownloaded;
+        this.downloadReference = downloadReference;
     }
 
     public Long getId() {
@@ -155,24 +157,23 @@ public class DbPost {
         this.isSynced = isSynced;
     }
 
+    public Boolean getIsDownloaded() {
+        return isDownloaded;
+    }
+
+    public void setIsDownloaded(Boolean isDownloaded) {
+        this.isDownloaded = isDownloaded;
+    }
+
+    public Long getDownloadReference() {
+        return downloadReference;
+    }
+
+    public void setDownloadReference(Long downloadReference) {
+        this.downloadReference = downloadReference;
+    }
+
     // KEEP METHODS - put your custom methods here
-
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    public void setTotalCount(Integer pTotalCount) {
-        totalCount = pTotalCount;
-    }
-
-    public Integer getCurrentOffset() {
-        return currentOffset;
-    }
-
-    public void setCurrentOffset(Integer pCurrentOffset) {
-        currentOffset = pCurrentOffset;
-    }
-
     // KEEP METHODS END
 
 }

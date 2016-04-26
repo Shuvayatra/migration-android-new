@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,11 +25,18 @@ import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.databinding.ActivityAudioDetailBinding;
+import com.taf.shuvayatra.di.component.DaggerDataComponent;
+import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.media.MediaHelper;
 import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.media.MediaService;
+import com.taf.shuvayatra.presenter.AudioDetailPresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
 import com.taf.util.MyConstants;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 
@@ -36,6 +44,13 @@ public class AudioDetailActivity extends BaseActivity implements
         AudioDetailView,
         View.OnClickListener,
         SeekBar.OnSeekBarChangeListener {
+
+    private static final int GROUP1 = 101;
+    private static final int SUBMENU_BLUETOOTH = 1001;
+    private static final int SUBMENU_FACEBOOK = 1002;
+
+    @Inject
+    AudioDetailPresenter mPresenter;
 
     @Bind(R.id.audio_time)
     TextView mAudioTime;
@@ -106,9 +121,6 @@ public class AudioDetailActivity extends BaseActivity implements
                     mSeekbarMini.setProgress(0);
                     mSeekbarMini.removeCallbacks(updateSeekTime);
                 }
-            } else {
-                mSeekbar.setProgress(0);
-                mSeekbarMini.setProgress(0);
             }
         }
     };
@@ -136,6 +148,8 @@ public class AudioDetailActivity extends BaseActivity implements
         getToolbar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        initialize();
+
         mediaReceiver = new MediaReceiver(this);
         receiverFilter = new IntentFilter();
 
@@ -147,7 +161,7 @@ public class AudioDetailActivity extends BaseActivity implements
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
+                if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
                         .getMinimumHeight(mCollapsingToolbar)) {
                     mMiniPlayer.animate().alpha(1).setDuration(300);
                 } else {
@@ -155,6 +169,18 @@ public class AudioDetailActivity extends BaseActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(mPlayIntent);
+        // Unbind from the service
+        if (mMusicBound) {
+            unbindService(mConnection);
+            mMusicBound = false;
+        }
+        mService = null;
+        super.onDestroy();
     }
 
     @Override
@@ -175,22 +201,26 @@ public class AudioDetailActivity extends BaseActivity implements
         registerReceiver(mediaReceiver, receiverFilter);
     }
 
-    @Override
-    protected void onDestroy() {
-        stopService(mPlayIntent);
-        // Unbind from the service
-        if (mMusicBound) {
-            unbindService(mConnection);
-            mMusicBound = false;
-        }
-        mService = null;
-        super.onDestroy();
+    private void initialize() {
+        DaggerDataComponent.builder()
+                .activityModule(getActivityModule())
+                .applicationComponent(getApplicationComponent())
+                .dataModule(new DataModule(mAudio.getId()))
+                .build()
+                .inject(this);
+        mPresenter.attachView(this);
+        mPresenter.initialize(null);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.audio_detail, menu);
+
+        menu.findItem(R.id.action_share).getSubMenu().add(GROUP1, SUBMENU_BLUETOOTH, 1,
+                getString(R.string.action_share_bluetooth));
+        menu.findItem(R.id.action_share).getSubMenu().add(GROUP1, SUBMENU_FACEBOOK, 2, getString
+                (R.string.action_share_facebook));
         return true;
     }
 
@@ -201,9 +231,26 @@ public class AudioDetailActivity extends BaseActivity implements
                 finish();
                 break;
             case R.id.action_download:
+                try {
+                    if (!getPreferences().getDownloadReferences().contains(mAudio
+                            .getDownloadReference())) {
+                        mPresenter.downloadAudioPost(mAudio);
+                    }
+                } catch (IOException e) {
+                    Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
+                            .getLocalizedMessage());
+                }
                 break;
+            case SUBMENU_BLUETOOTH:
+                shareViaBluetooth();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareViaBluetooth() {
+        mPresenter.shareViaBluetooth(mAudio);
     }
 
     @Override
@@ -271,7 +318,7 @@ public class AudioDetailActivity extends BaseActivity implements
 
     @Override
     public void onBufferStarted() {
-        // TODO: 4/19/16  
+        // TODO: 4/19/16
         Logger.d("AudioDetailActivity_onBufferStarted", "buffering start");
     }
 
@@ -303,6 +350,17 @@ public class AudioDetailActivity extends BaseActivity implements
             mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
             mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
         }
+    }
+
+    @Override
+    public void onAudioDownloadStarted(String pMessage) {
+        Snackbar.make(mMiniPlayer, pMessage, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onAudioFileNotFoundToShare() {
+        Snackbar.make(mMiniPlayer, getString(R.string.error_bluetooth_share), Snackbar
+                .LENGTH_SHORT).show();
     }
 
     @Override

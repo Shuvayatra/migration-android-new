@@ -17,5 +17,9 @@ public interface AudioDetailView extends MvpView {
 
     void playStatusChanged(boolean isPlaying);
 
+    void onAudioDownloadStarted(String pMessage);
+
+    void onAudioFileNotFoundToShare();
+
     Context getContext();
 }

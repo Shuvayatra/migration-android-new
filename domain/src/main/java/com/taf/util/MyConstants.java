@@ -16,6 +16,7 @@ public class MyConstants {
     public static final class Preferences {
         public static final String PREF_NAME = "nrna_app_preferences";
         public static final String LAST_UPDATE_STAMP = "last_update_stamp";
+        public static final String DOWNLOAD_REFERENCES = "download_references";
     }
 
     public static final class Language {
@@ -25,6 +26,7 @@ public class MyConstants {
 
     public static final class API {
         public static final String LATEST_CONTENT = "api/latest";
+        public static final String SYNC_LIKES = "api/likes";
         public static final String DELETED_CONTENT = "api/trash";
 
     }
@@ -64,7 +66,7 @@ public class MyConstants {
         public static final String KEY_FROM_CATEGORY = "key_from_category";
     }
 
-    public static class SECTION{
+    public static class SECTION {
         public static final String JOURNEY = "journey";
         public static final String COUNTRY = "country";
     }

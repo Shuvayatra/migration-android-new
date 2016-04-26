@@ -68,9 +68,9 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
 
     private void setupAdapter() {
         mAdapter = new ListAdapter(getContext(), this);
-        GridLayoutManager manager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.addItemDecoration(new MarginItemDecoration(getContext(),R.dimen.spacing_xxsmall));
+        mRecyclerView.addItemDecoration(new MarginItemDecoration(getContext(), R.dimen.spacing_xxsmall));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
         mRecyclerView.setEmptyMessage(getString(R.string.empty_section));
@@ -100,7 +100,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
         mAdapter.setDataCollection(mCategories);
     }
 
-    private void separateCategories(List<Category> pCategories){
+    private void separateCategories(List<Category> pCategories) {
         for (Category category : pCategories) {
             if(category.getParentId() == null)
                 mCategories.add(category);

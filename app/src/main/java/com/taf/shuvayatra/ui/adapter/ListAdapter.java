@@ -83,7 +83,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 viewHolder = new JourneyCategoryViewHolder(journeyBinding);
                 break;
             case Adapter.TYPE_PLACE:
-                PlaceDataBinding  placeDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                PlaceDataBinding placeDataBinding = DataBindingUtil.inflate(mLayoutInflater,
                         R.layout.view_place, parent, false);
                 viewHolder = new PlaceViewHolder(placeDataBinding);
                 break;

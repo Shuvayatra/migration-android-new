@@ -24,7 +24,7 @@ public class JourneyFragmentPresenter implements Presenter {
     UseCase mUseCase;
 
     @Inject
-    public JourneyFragmentPresenter(@Named("sectionCategory") UseCase pUseCase){
+    public JourneyFragmentPresenter(@Named("sectionCategory") UseCase pUseCase) {
         mUseCase = pUseCase;
     }
 
@@ -49,13 +49,13 @@ public class JourneyFragmentPresenter implements Presenter {
         getJourneyCategories(pData);
     }
 
-    private void getJourneyCategories(UseCaseData pData) {
-        mUseCase.execute(new JourneySubscriber(),pData);
-    }
-
     @Override
     public void attachView(MvpView view) {
         mView = (JourneyView) view;
+    }
+
+    private void getJourneyCategories(UseCaseData pData) {
+        mUseCase.execute(new JourneySubscriber(), pData);
     }
 
     private final class JourneySubscriber extends DefaultSubscriber<List<Category>> {

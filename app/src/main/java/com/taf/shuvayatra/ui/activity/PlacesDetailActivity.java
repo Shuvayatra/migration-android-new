@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -47,16 +46,17 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-            mPlace = (Post )bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
+        if (bundle != null) {
+            mPlace = (Post) bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
         }
-        if(mPlace == null) throw new IllegalStateException("Place must be provided.");
-        ((PlaceDataBinding) mBinding).setPlace(mPlace);
+        if (mPlace == null) throw new IllegalStateException("Place must be provided.");
+        ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
 
         initialize();
+        mPresenter.initialize(null);
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .dataModule(new DataModule(1L, MyConstants.DataParent.COUNTRY, "place"))

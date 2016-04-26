@@ -1,8 +1,6 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -28,23 +26,23 @@ public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.O
     }
 
     @Override
+    public boolean isDataBindingEnabled() {
+        return true;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
+        if (bundle != null) {
             mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
 
         }
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
-    }
-
-    @Override
-    public boolean isDataBindingEnabled() {
-        return true;
     }
 
     @Override
@@ -60,10 +58,14 @@ public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.O
         if (!isRestored) {
             if (!videoId.isEmpty())
                 pYouTubePlayer.loadVideo(videoId);
-        }
-        else{
+        } else {
             pYouTubePlayer.play();
         }
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider pProvider, YouTubeInitializationResult pYouTubeInitializationResult) {
+        Logger.e("VideoDetailActivity", "error initializing error");
     }
 
     public String getYoutubeIdFromUrl(String url) {
@@ -76,10 +78,5 @@ public class VideoDetailActivity extends BaseActivity implements YouTubePlayer.O
             return matcher.group();
         }
         return "";
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider pProvider, YouTubeInitializationResult pYouTubeInitializationResult) {
-        Logger.e("VideoDetailActivity", "error initializing error");
     }
 }

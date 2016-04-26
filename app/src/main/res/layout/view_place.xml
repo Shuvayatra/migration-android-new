@@ -12,97 +12,106 @@
             type="com.taf.model.Post"/>
     </data>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/thumbnail_width"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginLeft="@dimen/spacing_xsmall"
+        android:layout_marginRight="@dimen/spacing_xsmall"
+        android:background="@android:color/white">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/thumbnail"
-            android:layout_width="@dimen/thumbnail_width"
-            android:layout_height="@dimen/thumbnail_width"
-            app:imageUrl="@{place.getData().getThumbnail()}"
-            fresco:actualImageScaleType="centerCrop"
-            fresco:backgroundImage="@color/colorAccent"
-            fresco:progressBarImageScaleType="centerInside"/>
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/spacing_standard"
-            android:paddingRight="@dimen/spacing_standard"
-            android:paddingTop="@dimen/spacing_small">
+            android:layout_height="@dimen/thumbnail_width"
+            android:orientation="horizontal">
 
-            <TextView
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/thumbnail"
+                android:layout_width="@dimen/thumbnail_width"
+                android:layout_height="@dimen/thumbnail_width"
+                app:imageUrl="@{place.getData().getThumbnail()}"
+                fresco:actualImageScaleType="centerCrop"
+                fresco:backgroundImage="@color/colorAccent"
+                fresco:progressBarImageScaleType="centerInside"/>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{place.getTitle()}"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/text_default"
-                tools:text="Dharahara"/>
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
+                android:paddingTop="@dimen/spacing_small">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="vertical">
-
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="@{place.getTitle()}"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_default"
+                    tools:text="Dharahara"/>
 
-                    <ImageView
-                        android:id="@+id/ic_call"
-                        android:layout_width="@dimen/icon_size_mid"
-                        android:layout_height="@dimen/icon_size_mid"
-                        android:layout_below="@id/category"
-                        android:layout_marginRight="@dimen/spacing_small"
-                        android:layout_toRightOf="@id/like_count"
-                        android:padding="@dimen/spacing_xxsmall"
-                        app:srcCompat="@drawable/ic_call"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/ic_call"
-                        android:layout_alignTop="@id/ic_call"
-                        android:layout_marginLeft="@dimen/spacing_xsmall"
-                        android:layout_toRightOf="@id/ic_call"
-                        android:gravity="center_vertical"
-                        android:text="+921 345 6777"
-                        android:textSize="@dimen/text_default"
-                        tools:text="+921 345 6777"/>
-                </RelativeLayout>
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/ic_location"
-                        android:layout_width="@dimen/icon_size_mid"
-                        android:layout_height="@dimen/icon_size_mid"
-                        android:layout_below="@id/category"
-                        android:layout_marginRight="@dimen/spacing_small"
-                        android:layout_toRightOf="@id/like_count"
-                        android:padding="@dimen/spacing_xxsmall"
-                        app:srcCompat="@drawable/ic_location"/>
-
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/ic_location"
-                        android:layout_alignTop="@id/ic_location"
-                        android:layout_marginLeft="@dimen/spacing_xsmall"
-                        android:layout_toRightOf="@id/ic_location"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:ellipsize="end"
-                        android:text="Home No.12, New Road. Selangor"
-                        android:textSize="@dimen/text_default"
-                        tools:text="Home No.12, New Road. Selangor"/>
-                </RelativeLayout>
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/ic_call"
+                            android:layout_width="@dimen/icon_size_mid"
+                            android:layout_height="@dimen/icon_size_mid"
+                            android:layout_below="@id/category"
+                            android:layout_marginRight="@dimen/spacing_small"
+                            android:layout_toRightOf="@id/like_count"
+                            android:padding="@dimen/spacing_xxsmall"
+                            app:srcCompat="@drawable/ic_call"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/ic_call"
+                            android:layout_alignTop="@id/ic_call"
+                            android:layout_marginLeft="@dimen/spacing_xsmall"
+                            android:layout_toRightOf="@id/ic_call"
+                            android:gravity="center_vertical"
+                            android:text="+921 345 6777"
+                            android:textSize="@dimen/text_default"
+                            tools:text="+921 345 6777"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/ic_location"
+                            android:layout_width="@dimen/icon_size_mid"
+                            android:layout_height="@dimen/icon_size_mid"
+                            android:layout_below="@id/category"
+                            android:layout_marginRight="@dimen/spacing_small"
+                            android:layout_toRightOf="@id/like_count"
+                            android:padding="@dimen/spacing_xxsmall"
+                            app:srcCompat="@drawable/ic_location"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/ic_location"
+                            android:layout_alignTop="@id/ic_location"
+                            android:layout_marginLeft="@dimen/spacing_xsmall"
+                            android:layout_toRightOf="@id/ic_location"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:lines="1"
+                            android:text="Home No.12, New Road. Selangor"
+                            android:textSize="@dimen/text_default"
+                            tools:text="Home No.12, New Road. Selangor"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </layout>

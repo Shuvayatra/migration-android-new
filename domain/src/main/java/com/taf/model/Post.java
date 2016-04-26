@@ -18,9 +18,13 @@ public class Post extends BaseModel {
     Integer share;
     String category;
 
+    Boolean isFavourite;
+    Boolean isSynced;
+    Boolean downloadStatus;
+    Long downloadReference;
+
     // for pagination purpose
     Integer mTotalCount;
-    Integer mCurrentOffset;
 
 
     public Long getCreatedAt() {
@@ -95,9 +99,9 @@ public class Post extends BaseModel {
             return MyConstants.Adapter.TYPE_VIDEO;
         } else if (getType().equalsIgnoreCase("text")) {
             return MyConstants.Adapter.TYPE_TEXT;
-        }else if(getType().equalsIgnoreCase("news")){
+        } else if (getType().equalsIgnoreCase("news")) {
             return MyConstants.Adapter.TYPE_NEWS;
-        }else {
+        } else {
             return MyConstants.Adapter.TYPE_PLACE;
         }
     }
@@ -134,11 +138,35 @@ public class Post extends BaseModel {
         mTotalCount = pTotalCount;
     }
 
-    public Integer getCurrentOffset() {
-        return mCurrentOffset;
+    public Boolean isFavourite() {
+        return isFavourite;
     }
 
-    public void setCurrentOffset(Integer pCurrentOffset) {
-        mCurrentOffset = pCurrentOffset;
+    public void setIsFavourite(Boolean pFavourite) {
+        isFavourite = pFavourite;
+    }
+
+    public Boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setIsSynced(Boolean pSynced) {
+        isSynced = pSynced;
+    }
+
+    public Boolean getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(Boolean pDownloadStatus) {
+        downloadStatus = pDownloadStatus;
+    }
+
+    public Long getDownloadReference() {
+        return downloadReference;
+    }
+
+    public void setDownloadReference(Long pDownloadReference) {
+        downloadReference = pDownloadReference;
     }
 }

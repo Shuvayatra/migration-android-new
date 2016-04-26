@@ -2,7 +2,6 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -10,8 +9,8 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
-import com.taf.shuvayatra.ui.fragment.UserFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
+import com.taf.shuvayatra.ui.fragment.UserFragment;
 
 import java.util.ArrayList;
 
@@ -39,14 +38,14 @@ public class MainActivity extends BaseActivity {
         showFragment(4);
     }
 
-    private void setUpToolbarLogo(){
+    private void setUpToolbarLogo() {
         getToolbar().setLogo(R.mipmap.ic_launcher);
         getToolbar().setLogoDescription("logo");
         ArrayList<View> potentialViews = new ArrayList<>();
         getToolbar().findViewsWithText(potentialViews, "logo", View
                 .FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
         View logoIcon = null;
-        if(potentialViews.size() > 0){
+        if (potentialViews.size() > 0) {
             logoIcon = potentialViews.get(0);
         }
         getToolbar().setLogoDescription(null);
@@ -58,7 +57,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void setUpTabs(){
+    private void setUpTabs() {
         String[] tabTitles = getResources().getStringArray(R.array.home_tabs);
         int[] tabIcons = {
                 R.mipmap.ic_launcher,
@@ -90,8 +89,8 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void showFragment(int position){
-        switch (position){
+    private void showFragment(int position) {
+        switch (position) {
             case 0:
                 JourneyFragment journeyFragment = JourneyFragment.newInstance();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, journeyFragment).commit();

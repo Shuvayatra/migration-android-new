@@ -2,8 +2,6 @@ package com.taf.model;
 
 import com.taf.util.MyConstants;
 
-import java.util.List;
-
 /**
  * Created by Nirazan-PC on 4/21/2016.
  */
@@ -19,7 +17,7 @@ public class Category extends BaseModel {
 
     @Override
     public int getDataType() {
-        if(sectionName.equals(MyConstants.SECTION.JOURNEY))
+        if (sectionName.equals(MyConstants.SECTION.JOURNEY))
             return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
         else
             return MyConstants.Adapter.TYPE_COUNTRY;

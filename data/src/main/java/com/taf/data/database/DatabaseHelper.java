@@ -11,10 +11,10 @@ import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
-import com.taf.data.utils.Logger;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -59,12 +59,6 @@ public class DatabaseHelper {
                 .IsFavourite.columnName)) == 1);
         post.setIsSynced(pCursor.getInt(pCursor.getColumnIndex(DbPostDao.Properties.IsSynced
                 .columnName)) == 1);
-        try {
-            post.setCurrentOffset(pOffset);
-            post.setTotalCount(pCursor.getInt(pCursor.getColumnIndexOrThrow("total_count")));
-        } catch (Exception e) {
-            post.setTotalCount(0);
-        }
         return post;
     }
 
@@ -95,78 +89,118 @@ public class DatabaseHelper {
         return Observable.defer(() -> Observable.just(dbPost));
     }
 
-    public Observable<List<DbPost>> getPosts(int pLimit, int pOffset) {
+    public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset) {
         return getPosts(pLimit, pOffset, null, false);
     }
 
-    public Observable<List<DbPost>> getFavouritePosts(int pLimit, int pOffset) {
+    public Observable<Map<String, Object>> getFavouritePosts(int pLimit, int pOffset) {
         return getPosts(pLimit, pOffset, null, true);
     }
 
-    public Observable<List<DbPost>> getPostsByType(int pLimit, int pOffset, @NonNull String pType) {
+    public Observable<Map<String, Object>> getPostsByType(int pLimit, int pOffset, @NonNull String pType) {
         return getPosts(pLimit, pOffset, pType, false);
     }
 
-    public Observable<List<DbPost>> getPostByCategory(Long categoryId,int pLimit, int pOffset){
-        return getPosts(pLimit,pOffset, null,false);
+    public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit,
+                                                             int pOffset) {
+        return getPosts(pLimit, pOffset, null, false);
     }
 
-    public Observable<List<DbPost>> getPosts(int pLimit, int pOffset, String pType, boolean
+    public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
-        List<DbPost> dbPosts = new ArrayList<>();
-        String where = " where 1 ";
-        if (pFavouritesOnly) {
-            where += " and is_favourite = 1 ";
-        }
+        Map<String, Object> map = new HashMap<>();
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+
+        QueryBuilder<DbPost> queryBuilder = postDao.queryBuilder();
         if (pType != null) {
-            where += " and type = '" + pType + "' ";
+            queryBuilder.where(DbPostDao.Properties.Type.eq(pType));
         }
-        String subQuery = " (select count(*) from db_post "+ where +" ) ";
-        String sql = "select "+ subQuery +" total_count, p.* from db_post p ";
-        sql += where + " order by created_at desc limit " + pLimit + " offset " + (pOffset *
-                pLimit);
-        Logger.d("DatabaseHelper_getPosts", "sql: " + sql);
-        Cursor c = mDaoSession.getDatabase().rawQuery(sql, null);
-        try {
-            if (c.moveToFirst()) {
-                do {
-                    dbPosts.add(mapCursorToPost(c, pOffset));
-                } while (c.moveToNext());
-            }
-        } finally {
-            c.close();
+        if (pFavouritesOnly) {
+            queryBuilder.where(DbPostDao.Properties.IsFavourite.eq(true));
         }
-        return Observable.defer(() -> Observable.just(dbPosts));
+
+        map.put("total_count", queryBuilder.list().size());
+        map.put("data", queryBuilder
+                .limit(pLimit)
+                .offset(pOffset)
+                .orderDesc(DbPostDao.Properties.CreatedAt)
+                .list()
+        );
+
+        return Observable.defer(() -> Observable.just(map));
     }
 
-    public Observable<List<DbPost>> getUnSyncedPosts() {
+    public Observable<List<DbPost>> getPostsWithUnSyncedFavourites() {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         List<DbPost> dbPosts = postDao.queryBuilder()
                 .where(DbPostDao.Properties.IsSynced.eq(false))
-                .where(DbPostDao.Properties.IsFavourite.eq(true))
                 .orderDesc(DbPostDao.Properties.CreatedAt)
                 .list();
 
         return Observable.defer(() -> Observable.just(dbPosts));
     }
 
-    public Long updateFavouriteState(Long pId, boolean isFavourite, boolean isSynced) {
+    public void updateFavouriteState(List<Long> pIds, boolean isSynced) {
+        updateFavouriteState(pIds, null, isSynced);
+    }
+
+    public void updateFavouriteState(List<Long> pIds, Boolean isFavourite, boolean isSynced) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
-        DbPost dbPost = postDao.queryBuilder()
+        List<DbPost> postList = postDao.queryBuilder()
+                .where(DbPostDao.Properties.Id.in(pIds))
+                .list();
+        for (DbPost dbPost : postList) {
+            if (isFavourite != null) {
+                dbPost.setIsFavourite(isFavourite);
+                dbPost.setFavouriteCount(isFavourite
+                        ? dbPost.getFavouriteCount() + 1
+                        : dbPost.getFavouriteCount() - 1
+                );
+            }
+            dbPost.setIsSynced(isSynced);
+        }
+        postDao.insertOrReplaceInTx(postList);
+    }
+
+    public void updateFavouriteState(Long pId, Boolean isFavourite, boolean isSynced) {
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder()
                 .where(DbPostDao.Properties.Id.eq(pId))
-                .orderDesc(DbPostDao.Properties.CreatedAt)
                 .unique();
-        dbPost.setIsFavourite(isFavourite);
-        dbPost.setIsSynced(isSynced);
-        return postDao.insertOrReplace(dbPost);
+        if (isFavourite != null) {
+            post.setIsFavourite(isFavourite);
+            post.setFavouriteCount(isFavourite
+                    ? post.getFavouriteCount() + 1
+                    : post.getFavouriteCount() - 1
+            );
+        }
+        post.setIsSynced(isSynced);
+        postDao.insertOrReplace(post);
     }
 
     public Observable<List<DbCategory>> getCategoriesBySection(String section) {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         List<DbCategory> categories = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.SectionName.eq(section))
                 .orderAsc(DbCategoryDao.Properties.Position).list();
-        Logger.e("DatabaseHelper", "categories: "+categories);
         return Observable.defer(() -> Observable.just(categories));
+    }
+
+    public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder()
+                .where(DbPostDao.Properties.DownloadReference.eq(pReference))
+                .unique();
+        post.setIsDownloaded(pDownloadStatus);
+        return postDao.insertOrReplace(post);
+    }
+
+    public long setDownloadReference(Long pId, long pReference) {
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder()
+                .where(DbPostDao.Properties.Id.eq(pId))
+                .unique();
+        post.setDownloadReference(pReference);
+        return postDao.insertOrReplace(post);
     }
 
 }
