@@ -2,33 +2,34 @@ package com.taf.model;
 
 import com.taf.util.MyConstants;
 
-/**
- * Created by Nirazan-PC on 4/21/2016.
- */
 public class Category extends BaseModel {
-    String name;
+    String title;
+    String coverImageUrl;
     String iconUrl;
-    String detailImageUrl;
-    String detailIconUrl;
+    String smallIconUrl;
     Long parentId;
     Long position;
-    Long categoryId;
-    String sectionName;
+
+    Long updatedAt;
+    Long createdAt;
+
+    Section section;
 
     @Override
     public int getDataType() {
-        if (sectionName.equals(MyConstants.SECTION.JOURNEY))
+        if (section.getAlias().equals(MyConstants.SECTION.JOURNEY)) {
             return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
-        else
+        } else {
             return MyConstants.Adapter.TYPE_COUNTRY;
+        }
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String pName) {
-        name = pName;
+    public void setTitle(String pName) {
+        title = pName;
     }
 
     public String getIconUrl() {
@@ -39,20 +40,20 @@ public class Category extends BaseModel {
         iconUrl = pIconUrl;
     }
 
-    public String getDetailImageUrl() {
-        return detailImageUrl;
+    public String getCoverImageUrl() {
+        return coverImageUrl;
     }
 
-    public void setDetailImageUrl(String pDetailImageUrl) {
-        detailImageUrl = pDetailImageUrl;
+    public void setCoverImageUrl(String pDetailImageUrl) {
+        coverImageUrl = pDetailImageUrl;
     }
 
-    public String getDetailIconUrl() {
-        return detailIconUrl;
+    public String getSmallIconUrl() {
+        return smallIconUrl;
     }
 
-    public void setDetailIconUrl(String pDetailIconUrl) {
-        detailIconUrl = pDetailIconUrl;
+    public void setSmallIconUrl(String pDetailIconUrl) {
+        smallIconUrl = pDetailIconUrl;
     }
 
     public Long getParentId() {
@@ -71,24 +72,32 @@ public class Category extends BaseModel {
         position = pPosition;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setCategoryId(Long pCategoryId) {
-        categoryId = pCategoryId;
+    public void setUpdatedAt(Long pUpdatedAt) {
+        updatedAt = pUpdatedAt;
     }
 
-    public String getSectionName() {
-        return sectionName;
+    public Long getCreatedAt() {
+        return createdAt;
     }
 
-    public void setSectionName(String pSectionName) {
-        sectionName = pSectionName;
+    public void setCreatedAt(Long pCreatedAt) {
+        createdAt = pCreatedAt;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section pSection) {
+        section = pSection;
     }
 
     @Override
     public String toString() {
-        return name;
+        return title;
     }
 }

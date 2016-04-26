@@ -34,7 +34,7 @@ public abstract class CategoryDetailActivity extends BaseActivity{
     }
 
     public void addFeedFragment(){
-        FeedFragment fragment = FeedFragment.newInstance(true,mCategory.getCategoryId());
+        FeedFragment fragment = FeedFragment.newInstance(true,mCategory.getId());
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
     }
 

@@ -38,6 +38,7 @@ public class DataModule {
     String mPostType;
     boolean mFavouriteOnly = false;
     boolean mUnSyncedOnly = false;
+    boolean mIsCategory = false;
 
     public DataModule() {
     }
@@ -49,6 +50,11 @@ public class DataModule {
     public DataModule(boolean pFavouriteOnly, boolean pUnSyncedOnly) {
         mFavouriteOnly = pFavouriteOnly;
         mUnSyncedOnly = pUnSyncedOnly;
+    }
+
+    public DataModule(MyConstants.DataParent pParentType, boolean pIsCategory) {
+        mParentType = pParentType;
+        mIsCategory = pIsCategory;
     }
 
     public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
@@ -134,7 +140,7 @@ public class DataModule {
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread
                                                   pPostExecutionThread) {
-        return new GetSectionCategoryUseCase(mParentType, pRepository, pThreadExecutor,
+        return new GetSectionCategoryUseCase(mIsCategory, mParentType, pRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 

@@ -4,7 +4,6 @@ import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DBDataStore;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.model.Category;
-import com.taf.repository.IBaseRepository;
 import com.taf.repository.ISectionRepository;
 
 import java.util.List;
@@ -35,9 +34,9 @@ public class SectionCategoryRepository implements ISectionRepository {
     }
 
     @Override
-    public Observable<List<Category>> getListBySectionName(String section) {
+    public Observable<List<Category>> getListBySectionName(String section, boolean isCategory) {
         DBDataStore dataStore = mDataStoreFactory.createDBDataStore();
-        return dataStore.getCategoriesBySection(section)
-                .map(pDbCategories -> mDataMapper.transformCategory(pDbCategories));
+        return dataStore.getCategoriesBySection(section, isCategory)
+                .map(pDbCategories -> mDataMapper.transformCategoryFromDb(pDbCategories));
     }
 }

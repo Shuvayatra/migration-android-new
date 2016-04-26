@@ -39,6 +39,7 @@ public class MyConstants {
         public static final int TYPE_JOURNEY_CATEGORY = 5;
         public static final int TYPE_PLACE = 6;
         public static final int TYPE_COUNTRY = 7;
+        public static final int TYPE_SECTION = 8;
     }
 
 

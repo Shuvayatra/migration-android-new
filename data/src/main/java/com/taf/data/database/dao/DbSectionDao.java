@@ -24,10 +24,13 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property SectionId = new Property(1, Long.class, "sectionId", false, "SECTION_ID");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Display_name = new Property(3, String.class, "display_name", false, "DISPLAY_NAME");
+        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
+        public final static Property Alias = new Property(2, String.class, "alias", false, "ALIAS");
+        public final static Property CreatedAt = new Property(3, Long.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(4, Long.class, "updatedAt", false, "UPDATED_AT");
     };
+
+    private DaoSession daoSession;
 
 
     public DbSectionDao(DaoConfig config) {
@@ -36,6 +39,7 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
     
     public DbSectionDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -43,9 +47,10 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DB_SECTION\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"SECTION_ID\" INTEGER," + // 1: sectionId
-                "\"NAME\" TEXT," + // 2: name
-                "\"DISPLAY_NAME\" TEXT);"); // 3: display_name
+                "\"TITLE\" TEXT," + // 1: title
+                "\"ALIAS\" TEXT," + // 2: alias
+                "\"CREATED_AT\" INTEGER," + // 3: createdAt
+                "\"UPDATED_AT\" INTEGER);"); // 4: updatedAt
     }
 
     /** Drops the underlying database table. */
@@ -64,20 +69,31 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
             stmt.bindLong(1, id);
         }
  
-        Long sectionId = entity.getSectionId();
-        if (sectionId != null) {
-            stmt.bindLong(2, sectionId);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(3, name);
+        String alias = entity.getAlias();
+        if (alias != null) {
+            stmt.bindString(3, alias);
         }
  
-        String display_name = entity.getDisplay_name();
-        if (display_name != null) {
-            stmt.bindString(4, display_name);
+        Long createdAt = entity.getCreatedAt();
+        if (createdAt != null) {
+            stmt.bindLong(4, createdAt);
         }
+ 
+        Long updatedAt = entity.getUpdatedAt();
+        if (updatedAt != null) {
+            stmt.bindLong(5, updatedAt);
+        }
+    }
+
+    @Override
+    protected void attachEntity(DbSection entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -91,9 +107,10 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
     public DbSection readEntity(Cursor cursor, int offset) {
         DbSection entity = new DbSection( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // sectionId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // display_name
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // alias
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // createdAt
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // updatedAt
         );
         return entity;
     }
@@ -102,9 +119,10 @@ public class DbSectionDao extends AbstractDao<DbSection, Long> {
     @Override
     public void readEntity(Cursor cursor, DbSection entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setSectionId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setDisplay_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setAlias(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setCreatedAt(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setUpdatedAt(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */

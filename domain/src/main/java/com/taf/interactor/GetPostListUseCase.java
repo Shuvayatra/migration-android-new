@@ -39,6 +39,7 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
     protected Observable<List<Post>> buildUseCaseObservable(UseCaseData pData) {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
         int limit = pData.getInteger(UseCaseData.LIMIT, -1);
+        List<Long> excludeList = (List<Long>) pData.getSerializable(UseCaseData.EXCLUDE_LIST);
 
         if (mUnSyncedOnly) {
             return mRepository.getPostWithUnSyncedFavourites();
@@ -46,9 +47,9 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
             switch (mParentType) {
                 default:
                 case COUNTRY:
-                    return mRepository.getListByType(mPostType, limit, offset);
                 case JOURNEY:
-                    return mRepository.getPostByCategory(mParentId, limit, offset);
+                    return mRepository.getPostByCategory(mParentId, limit, offset, mPostType,
+                            excludeList);
             }
         } else if (mFavouriteOnly) {
             return mRepository.getFavouriteList(limit, offset);

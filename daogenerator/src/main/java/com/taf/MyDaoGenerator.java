@@ -2,7 +2,9 @@ package com.taf;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
+import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.greenrobot.daogenerator.ToMany;
 
 public class MyDaoGenerator {
 
@@ -14,13 +16,21 @@ public class MyDaoGenerator {
 
     private static void createDB(Schema pSchema) {
         pSchema.enableKeepSectionsByDefault();
-        createPostTable(pSchema);
-        createSectionTable(pSchema);
-        createCategories(pSchema);
+        Entity post = createPostTable(pSchema);
+        Entity section = createSectionTable(pSchema);
+        Entity category = createCategoryTable(pSchema);
+
+        // define one-to-many for section-category
+        Property sectionId = category.addLongProperty("sectionId").notNull().getProperty();
+        category.addToOne(section, sectionId).setName("section");
+        ToMany sectionToCategories = section.addToMany(category, sectionId);
+        sectionToCategories.setName("categoryList");
+        sectionToCategories.orderAsc(category.getProperties().get(6));
+
         createPostCategoryTable(pSchema);
     }
 
-    private static void createPostTable(Schema pSchema){
+    private static Entity createPostTable(Schema pSchema){
         Entity post = pSchema.addEntity("DbPost");
         post.addIdProperty();
         post.addStringProperty("title");
@@ -37,34 +47,39 @@ public class MyDaoGenerator {
         post.addBooleanProperty("isSynced");
         post.addBooleanProperty("isDownloaded");
         post.addLongProperty("downloadReference");
+        return post;
     }
 
-    private static void createPostCategoryTable(Schema pSchema){
+    private static Entity createPostCategoryTable(Schema pSchema){
         Entity postCategory = pSchema.addEntity("DbPostCategory");
         postCategory.addIdProperty();
         postCategory.addLongProperty("postId");
         postCategory.addLongProperty("categoryId");
+        return postCategory;
     }
 
-    private static void createSectionTable(Schema pSchema){
+    private static Entity createSectionTable(Schema pSchema){
         Entity section = pSchema.addEntity("DbSection");
         section.addIdProperty();
-        section.addLongProperty("sectionId");
-        section.addStringProperty("name");
-        section.addStringProperty("display_name");
+        section.addStringProperty("title");
+        section.addStringProperty("alias");
+        section.addLongProperty("createdAt");
+        section.addLongProperty("updatedAt");
+        return section;
     }
 
-    private static void createCategories(Schema pSchema){
+    private static Entity createCategoryTable(Schema pSchema){
         Entity category = pSchema.addEntity("DbCategory");
         category.addIdProperty();
-        category.addStringProperty("name");
-        category.addStringProperty("icon");
-        category.addStringProperty("detailImage");
-        category.addStringProperty("detailIcon");
+        category.addStringProperty("title");
+        category.addStringProperty("iconUrl");
+        category.addStringProperty("smallIconUrl");
+        category.addStringProperty("coverImageUrl");
         category.addLongProperty("parentId");
         category.addLongProperty("position");
-        category.addLongProperty("categoryId");
-        category.addStringProperty("sectionName");
+        category.addLongProperty("createdAt");
+        category.addLongProperty("updatedAt");
+        return category;
     }
 }
 

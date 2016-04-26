@@ -34,7 +34,7 @@
             android:shadowRadius="2"
             android:textColor="@android:color/white"
             android:textSize="@dimen/spacing_xxlarge"
-            android:text="@{category.name}"
+            android:text="@{category.title}"
             tools:text="Qatar"/>
     </RelativeLayout>
 </layout>

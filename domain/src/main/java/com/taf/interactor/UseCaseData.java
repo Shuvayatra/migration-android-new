@@ -9,13 +9,12 @@ public class UseCaseData implements Serializable {
     public static final String OFFSET = "offset";
     public static final String ID = "id";
     public static final String FAVOURITE_STATE = "is_favourite";
-    public static final String IS_BULK = "is_bulk";
     public static final String SYNC_LIST = "sync_list";
     public static final String SEARCH_UN_SYNCED_DATA = "searchUnSyncedData";
     public static final String LAST_UPDATED = "last_updated";
-    public static final String SECTION_NAME = "section_name";
     public static final String DOWNLOAD_REFERENCE = "download_reference";
     public static final String DOWNLOAD_STATUS = "download_status";
+    public static final String EXCLUDE_LIST = "exclude_list";
 
     Map<String, Object> data = null;
 

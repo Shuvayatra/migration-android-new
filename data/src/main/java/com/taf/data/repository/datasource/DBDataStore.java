@@ -36,7 +36,7 @@ public class DBDataStore implements IDataStore {
         return mHelper.updateFavouriteState(pId, isFavourite, false);
     }
 
-    public Observable<List<DbPost>> getPostWithUnSyncedFavourites(){
+    public Observable<List<DbPost>> getPostWithUnSyncedFavourites() {
         return mHelper.getPostsWithUnSyncedFavourites();
     }
 
@@ -48,12 +48,14 @@ public class DBDataStore implements IDataStore {
         return mHelper.getPost(pId);
     }
 
-    public Observable<List<DbCategory>> getCategoriesBySection(String sectionName) {
-        return mHelper.getCategoriesBySection(sectionName);
+    public Observable<List<DbCategory>> getCategoriesBySection(String sectionName, boolean
+            isCategory) {
+        return mHelper.getCategoriesBySection(sectionName, isCategory);
     }
 
-    public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset){
-        return mHelper.getPostByCategory(pId, pLimit, pOffset);
+    public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset,
+                                                             String pType, List<Long> excludeIds) {
+        return mHelper.getPostByCategory(pId, pLimit, pOffset, pType, excludeIds);
     }
 
     public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {

@@ -20,7 +20,8 @@ public interface IPostRepository extends IBaseRepository<Post> {
 
     Observable<Boolean> syncFavourites(List<SyncData> pSyncDataList);
 
-    Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset);
+    Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset, String pType,
+                                             List<Long> excludeList);
 
     Observable<Boolean> updateDownloadStatus(long pReference, boolean pDownloadStatus);
 

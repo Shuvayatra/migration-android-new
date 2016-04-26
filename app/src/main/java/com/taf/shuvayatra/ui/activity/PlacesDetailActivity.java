@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.widget.LinearLayout;
 
+import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -17,6 +18,8 @@ import com.taf.shuvayatra.ui.interfaces.PlacesListView;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,7 +68,12 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
         mOldFavouriteState = mPlace.isFavourite() != null ? mPlace.isFavourite() : false;
 
         initialize();
-        mPresenter.initialize(null);
+
+        UseCaseData data = new UseCaseData();
+        List<Long> excludeList = new ArrayList<>();
+        excludeList.add(mPlace.getId());
+        data.putSerializable(UseCaseData.EXCLUDE_LIST, (Serializable) excludeList);
+        mPresenter.initialize(data);
     }
 
     private void initialize() {

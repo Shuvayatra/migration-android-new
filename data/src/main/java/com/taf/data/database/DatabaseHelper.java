@@ -1,6 +1,5 @@
 package com.taf.data.database;
 
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.taf.data.database.dao.DaoSession;
@@ -8,8 +7,12 @@ import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbCategoryDao;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbPostDao;
+import com.taf.data.database.dao.DbSection;
+import com.taf.data.database.dao.DbSectionDao;
+import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
 
 import java.util.HashMap;
@@ -18,6 +21,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import de.greenrobot.dao.query.Join;
 import de.greenrobot.dao.query.QueryBuilder;
 import rx.Observable;
 
@@ -34,48 +38,44 @@ public class DatabaseHelper {
         mDataMapper = pDataMapper;
     }
 
-    private DbPost mapCursorToPost(Cursor pCursor, int pOffset) {
-        DbPost post = new DbPost(pCursor.getLong(pCursor.getColumnIndex(DbPostDao.Properties.Id.columnName)));
-        post.setTitle(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Title.columnName)));
-        post.setDescription(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties
-                .Description.columnName)));
-        post.setType(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Type
-                .columnName)));
-        post.setData(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Data
-                .columnName)));
-        post.setSource(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Source
-                .columnName)));
-        post.setTags(pCursor.getString(pCursor.getColumnIndex(DbPostDao.Properties.Tags
-                .columnName)));
-        post.setCreatedAt(pCursor.getLong(pCursor.getColumnIndex(DbPostDao.Properties.CreatedAt
-                .columnName)));
-        post.setUpdatedAt(pCursor.getLong(pCursor.getColumnIndex(DbPostDao.Properties.UpdatedAt
-                .columnName)));
-        post.setFavouriteCount(pCursor.getInt(pCursor.getColumnIndex(DbPostDao.Properties
-                .FavouriteCount.columnName)));
-        post.setShareCount(pCursor.getInt(pCursor.getColumnIndex(DbPostDao.Properties.ShareCount
-                .columnName)));
-        post.setIsFavourite(pCursor.getInt(pCursor.getColumnIndex(DbPostDao.Properties
-                .IsFavourite.columnName)) == 1);
-        post.setIsSynced(pCursor.getInt(pCursor.getColumnIndex(DbPostDao.Properties.IsSynced
-                .columnName)) == 1);
-        return post;
-    }
-
     public void clearCache(DaoSession pDaoSession) {
         pDaoSession.clear();
     }
 
     public void insertUpdate(LatestContentEntity pEntity) {
-        insertUpdate(pEntity.getPosts());
+        insertUpdatePosts(pEntity.getPosts());
+        insertUpdateSections(pEntity.getSections());
     }
 
-    public void insertUpdate(List<PostEntity> pEntities) {
+    public void insertUpdatePosts(List<PostEntity> pEntities) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         for (PostEntity entity : pEntities) {
             DbPost post = mDataMapper.transformPostForDB(entity);
             if (post != null) {
                 postDao.insertOrReplace(post);
+            }
+        }
+    }
+
+    public void insertUpdateSections(List<SectionEntity> pEntities) {
+        DbSectionDao sectionDao = mDaoSession.getDbSectionDao();
+        for (SectionEntity entity : pEntities) {
+            DbSection section = mDataMapper.transformSectionForDB(entity);
+            if (section != null) {
+                sectionDao.insertOrReplace(section);
+            }
+            insertUpdateCategories(entity.getCategoryList(), entity.getId());
+            insertUpdateCategories(entity.getSubCategoryList(), entity.getId());
+        }
+    }
+
+    public void insertUpdateCategories(List<CategoryEntity> pEntities, Long pSectionId) {
+        DbCategoryDao categoryDao = mDaoSession.getDbCategoryDao();
+        for (CategoryEntity entity : pEntities) {
+            DbCategory category = mDataMapper.transformCategoryForDB(entity);
+            category.setSectionId(pSectionId);
+            if (category != null) {
+                categoryDao.insertOrReplace(category);
             }
         }
     }
@@ -101,13 +101,18 @@ public class DatabaseHelper {
         return getPosts(pLimit, pOffset, pType, false);
     }
 
-    public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit,
-                                                             int pOffset) {
-        return getPosts(pLimit, pOffset, null, false);
+    public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
+            pOffset, String pType, List<Long> excludeIds) {
+        return getPosts(pLimit, pOffset, pType, false, categoryId, excludeIds);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
+        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null);
+    }
+
+    public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
+            pFavouritesOnly, Long pCategoryId, List<Long> pExcludeIds) {
         Map<String, Object> map = new HashMap<>();
         DbPostDao postDao = mDaoSession.getDbPostDao();
 
@@ -118,6 +123,17 @@ public class DatabaseHelper {
         if (pFavouritesOnly) {
             queryBuilder.where(DbPostDao.Properties.IsFavourite.eq(true));
         }
+        if (pExcludeIds != null) {
+            queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
+        }
+
+        /*Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
+                DbPostCategoryDao.Properties.PostId);
+        Join categoryJoin = queryBuilder.join(DbPostCategoryDao.Properties.CategoryId, DbCategory
+                .class, DbCategoryDao.Properties.Id);
+        if (pCategoryId != null) {
+            categoryJoin.where(DbCategoryDao.Properties.Id.eq(pCategoryId));
+        }*/
 
         map.put("total_count", queryBuilder.list().size());
         map.put("data", queryBuilder
@@ -179,10 +195,24 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
-    public Observable<List<DbCategory>> getCategoriesBySection(String section) {
+    public Observable<List<DbCategory>> getCategoriesBySection(String section, boolean isCategory) {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
-        List<DbCategory> categories = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.SectionName.eq(section))
-                .orderAsc(DbCategoryDao.Properties.Position).list();
+        QueryBuilder queryBuilder = categoriesDao.queryBuilder();
+
+        Join sectionJoin = queryBuilder.join(DbCategoryDao.Properties.SectionId, DbSection.class,
+                DbSectionDao.Properties.Id);
+        sectionJoin.where(DbSectionDao.Properties.Alias.eq(section));
+
+        if (isCategory) {
+            queryBuilder.whereOr(DbCategoryDao.Properties.ParentId.isNull(), DbCategoryDao
+                    .Properties.ParentId.eq(0L));
+        }else{
+            queryBuilder.where(DbCategoryDao.Properties.ParentId.isNotNull());
+            queryBuilder.where(DbCategoryDao.Properties.ParentId.notEq(0L));
+        }
+
+        List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.Position)
+                .list();
         return Observable.defer(() -> Observable.just(categories));
     }
 

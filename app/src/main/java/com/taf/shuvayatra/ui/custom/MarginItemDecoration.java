@@ -25,7 +25,7 @@ public class MarginItemDecoration extends RecyclerView.ItemDecoration {
 
         int size = parent.getChildCount();
         for (int i = 0; i < size; i++) {
-            if (i % 2 == 0) {
+            if (i % 2 == 0 || i == 0) {
                 outRect.right = margin;
                 outRect.left = 0;
             } else {
