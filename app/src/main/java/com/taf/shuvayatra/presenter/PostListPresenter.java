@@ -1,5 +1,6 @@
 package com.taf.shuvayatra.presenter;
 
+import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -64,6 +65,7 @@ public class PostListPresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+//            Logger.e("PostSubscriber", "error message: "+e.getMessage());
             mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));

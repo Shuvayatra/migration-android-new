@@ -45,14 +45,12 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
             switch(mParentType){
                 default:
                 case COUNTRY:
-                    return mRepository.getList(3, offset);
+                    return mRepository.getPostByCategory(mParentId,limit,offset);
                 case JOURNEY:
                     return mRepository.getPostByCategory(mParentId, limit, offset);
             }
         }else if(favouritesOnly){
             return mRepository.getFavouriteList(limit, offset);
-        }else if(fromCategory){
-            return mRepository.getPostByCategory(categoryId,limit,offset);
         }else {
             return mRepository.getList(limit, offset);
         }

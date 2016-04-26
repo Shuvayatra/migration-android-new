@@ -19,6 +19,7 @@ import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
@@ -109,6 +110,7 @@ public class FeedFragment extends BaseFragment implements
 
         initialize();
         setUpAdapter();
+        loadFilterOptions();
 
         loadPostsList(INITIAL_OFFSET);
     }
@@ -218,7 +220,6 @@ public class FeedFragment extends BaseFragment implements
         mTotalDataCount = pTotalCount;
         mOffset = pOffset + 1;
         mIsLastPage = (mOffset * PAGE_LIMIT >= pTotalCount);
-        loadFilterOptions();
     }
 
     @Override
@@ -238,13 +239,15 @@ public class FeedFragment extends BaseFragment implements
 
     void loadFilterOptions() {
         if (mFromCategory) {
-            List<Category> categories = ((JourneyCategoryDetailActivity) getActivity()).getSubCategories();
-            Category category = new Category();
-            category.setName("All");
-            categories.add(0,category);
+            List<Category> categories = ((CategoryDetailActivity) getActivity()).getSubCategories();
+            if(!categories.isEmpty()&&!categories.get(0).getName().equals("All")) {
+                Category category = new Category();
+                category.setName("All");
+                categories.add(0, category);
+            }
             Logger.e("FeedFragment", "showing filterlist" + categories);
-            ArrayAdapter adaper = new ArrayAdapter(getContext(), R.layout.view_filter_spinner,R.id.filterText,categories);
-            mFilterSpinner.setAdapter(adaper);
+            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(),categories);
+            mFilterSpinner.setAdapter(adapter);
         }
     }
 }

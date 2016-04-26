@@ -19,7 +19,10 @@ public class Category extends BaseModel {
 
     @Override
     public int getDataType() {
-        return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
+        if(sectionName.equals(MyConstants.SECTION.JOURNEY))
+            return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
+        else
+            return MyConstants.Adapter.TYPE_COUNTRY;
     }
 
     public String getName() {

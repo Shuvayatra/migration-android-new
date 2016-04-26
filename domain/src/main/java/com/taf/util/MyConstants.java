@@ -36,6 +36,7 @@ public class MyConstants {
         public static final int TYPE_NEWS = 4;
         public static final int TYPE_JOURNEY_CATEGORY = 5;
         public static final int TYPE_PLACE = 6;
+        public static final int TYPE_COUNTRY = 7;
     }
 
 
@@ -65,5 +66,6 @@ public class MyConstants {
 
     public static class SECTION{
         public static final String JOURNEY = "journey";
+        public static final String COUNTRY = "country";
     }
 }
