@@ -32,4 +32,8 @@ public class CountryDetailActivity extends CategoryDetailActivity {
         ((CountryDetailDataBinding) mBinding).setCountry(mCategory);
     }
 
+    @Override
+    public MyConstants.DataParent getDataParent() {
+        return MyConstants.DataParent.COUNTRY;
+    }
 }

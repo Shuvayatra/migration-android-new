@@ -15,12 +15,12 @@ import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.presenter.JourneyFragmentPresenter;
+import com.taf.shuvayatra.presenter.CategoryPresenter;
 import com.taf.shuvayatra.ui.activity.JourneyCategoryDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.custom.MarginItemDecoration;
-import com.taf.shuvayatra.ui.interfaces.JourneyView;
+import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
@@ -32,10 +32,10 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class JourneyFragment extends BaseFragment implements JourneyView, ListItemClickListener, SearchView.OnQueryTextListener {
+public class JourneyFragment extends BaseFragment implements CategoryView, ListItemClickListener, SearchView.OnQueryTextListener {
 
     @Inject
-    JourneyFragmentPresenter mPresenter;
+    CategoryPresenter mPresenter;
     @Bind(R.id.recyclerView)
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
@@ -95,29 +95,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
 
     @Override
     public void renderCategories(List<Category> pCategories) {
-        separateCategories(pCategories);
-        mAdapter.setDataCollection(mCategories);
-    }
-
-    private void separateCategories(List<Category> pCategories) {
-        for (Category category : pCategories) {
-            if(category.getParentId() == null)
-                mCategories.add(category);
-            else
-                mSubCategories.add(category);
-        }
-        Logger.e("JourneyFragment", "all subcatagories: "+mSubCategories);
-    }
-
-    private List<Category> getSubCategoriesByParent(Long id){
-        Logger.e("JourneyFragment", "parnet id" + id);
-        List<Category> categories = new ArrayList<>();
-        for (Category subCategory : mSubCategories) {
-            if(subCategory.getParentId() == id){
-                categories.add(subCategory);
-            }
-        }
-        return categories;
+        mAdapter.setDataCollection(pCategories);
     }
 
     @Override
@@ -138,11 +116,8 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
     @Override
     public void onListItemSelected(BaseModel pModel) {
         Category category  = ((Category) pModel);
-        List<Category> subCategories = getSubCategoriesByParent(((Category) pModel).getId());
         Intent i = new Intent(getContext(), JourneyCategoryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
-        i.putExtra(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) subCategories);
-        Logger.e("JourneyFragment", "subcatagories: "+subCategories);
         startActivity(i);
     }
 
