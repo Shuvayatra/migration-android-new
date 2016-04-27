@@ -170,6 +170,7 @@ public class DataMapper {
             post.setIsFavourite(pPost.getIsFavourite());
             post.setIsSynced(pPost.getIsSynced());
             post.setTotalCount(totalCount);
+            post.setCategoryList(transformCategoryFromDb(pPost.getCategoryList()));
             return post;
         }
         return null;
