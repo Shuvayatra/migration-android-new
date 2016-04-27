@@ -4,15 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbPost;
+import com.taf.data.database.dao.DbSection;
 import com.taf.data.di.PerActivity;
+import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
 import com.taf.model.Post;
 import com.taf.model.PostData;
+import com.taf.model.Section;
 import com.taf.model.SyncData;
 
 import java.util.ArrayList;
@@ -95,6 +99,34 @@ public class DataMapper {
         return null;
     }
 
+    public DbSection transformSectionForDB(SectionEntity pEntity) {
+        if (pEntity != null) {
+            DbSection section = new DbSection(pEntity.getId());
+            section.setTitle(pEntity.getTitle());
+            section.setAlias(pEntity.getAlias());
+            section.setCreatedAt(pEntity.getCreatedAt());
+            section.setUpdatedAt(pEntity.getUpdatedAt());
+            return section;
+        }
+        return null;
+    }
+
+    public DbCategory transformCategoryForDB(CategoryEntity pEntity) {
+        if (pEntity != null) {
+            DbCategory category = new DbCategory(pEntity.getId());
+            category.setParentId(pEntity.getParentId());
+            category.setTitle(pEntity.getTitle());
+            category.setCoverImageUrl(pEntity.getCoverImageUrl());
+            category.setIconUrl(pEntity.getIconUrl());
+            category.setSmallIconUrl(pEntity.getSmallIconUrl());
+            category.setPosition(pEntity.getPosition());
+            category.setCreatedAt(pEntity.getCreatedAt());
+            category.setUpdatedAt(pEntity.getUpdatedAt());
+            return category;
+        }
+        return null;
+    }
+
     public List<Post> transformPostFromDb(Map<String, Object> pObjectMap) {
         List<Post> postList = new ArrayList<>();
         int totalCount = (int) pObjectMap.get("total_count");
@@ -143,11 +175,11 @@ public class DataMapper {
         return null;
     }
 
-    public List<Category> transformCategory(List<DbCategory> pDbCategories) {
+    public List<Category> transformCategoryFromDb(List<DbCategory> pDbCategories) {
         List<Category> categories = new ArrayList<>();
         if (pDbCategories != null) {
             for (DbCategory dbCategory : pDbCategories) {
-                Category category = transformCategory(dbCategory);
+                Category category = transformCategoryFromDb(dbCategory);
                 if (category != null)
                     categories.add(category);
             }
@@ -156,19 +188,30 @@ public class DataMapper {
     }
 
 
-    public Category transformCategory(DbCategory pDbCategories) {
-        if (pDbCategories != null) {
+    public Category transformCategoryFromDb(DbCategory pDbCategory) {
+        if (pDbCategory != null) {
             Category category = new Category();
-            category.setId(pDbCategories.getId());
-            category.setName(pDbCategories.getName());
-            category.setIconUrl(pDbCategories.getIcon());
-            category.setDetailImageUrl(pDbCategories.getDetailImage());
-            category.setDetailIconUrl(pDbCategories.getDetailIcon());
-            category.setParentId(pDbCategories.getParentId());
-            category.setPosition(pDbCategories.getPosition());
-            category.setCategoryId(pDbCategories.getCategoryId());
-            category.setSectionName(pDbCategories.getSectionName());
+            category.setId(pDbCategory.getId());
+            category.setTitle(pDbCategory.getTitle());
+            category.setIconUrl(pDbCategory.getIconUrl());
+            category.setCoverImageUrl(pDbCategory.getCoverImageUrl());
+            category.setSmallIconUrl(pDbCategory.getSmallIconUrl());
+            category.setParentId(pDbCategory.getParentId());
+            category.setPosition(pDbCategory.getPosition());
+            category.setSection(transformSectionFromDB(pDbCategory.getSection()));
             return category;
+        }
+        return null;
+    }
+
+    public Section transformSectionFromDB(DbSection pDbSection){
+        if(pDbSection != null){
+            Section section = new Section();
+            section.setTitle(pDbSection.getTitle());
+            section.setAlias(pDbSection.getAlias());
+            section.setUpdatedAt(pDbSection.getUpdatedAt());
+            section.setCreatedAt(pDbSection.getCreatedAt());
+            return section;
         }
         return null;
     }

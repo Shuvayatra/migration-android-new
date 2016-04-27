@@ -2,7 +2,7 @@ package com.taf.shuvayatra.ui.interfaces;
 
 import android.content.Context;
 
-public interface AudioDetailView extends MvpView {
+public interface AudioDetailView extends PostDetailView {
     void onMediaPlayPause();
 
     void onSeekTo(int progress);

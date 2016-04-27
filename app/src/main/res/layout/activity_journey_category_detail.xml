@@ -19,6 +19,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.design.widget.CollapsingToolbarLayout
@@ -31,7 +32,7 @@
                 app:expandedTitleMarginStart="@dimen/spacing_large"
                 app:expandedTitleTextAppearance="@style/ExpandedToolbarTextAppearance"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:title="@{category.name}">
+                app:title="@{category.title}">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -42,7 +43,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        app:imageUrl="@{category.detailImageUrl}"
+                        app:imageUrl="@{category.coverImageUrl}"
                         app:layout_collapseMode="parallax"
                         app:overlayImage="@drawable/transparent_gradient"
                         tools:src="@mipmap/ic_launcher"/>
@@ -53,7 +54,7 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="@dimen/spacing_large"
                         android:layout_marginTop="@dimen/detail_icon_top_offset"
-                        app:imageUrl="@{category.detailIconUrl}"
+                        app:imageUrl="@{category.smallIconUrl}"
                         tools:src="@mipmap/ic_launcher"/>
 
                     <TextView
@@ -64,7 +65,7 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:layout_below="@+id/icon"
                         android:textColor="@android:color/white"
-                        android:text="@{category.name}"
+                        android:text="@{category.title}"
                         android:shadowRadius="2"
                         android:shadowDx="0"
                         android:shadowDy="2"

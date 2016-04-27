@@ -72,9 +72,10 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset) {
+    public Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset, String
+            pType, List<Long> excludeList) {
         return mDataStoreFactory.createDBDataStore()
-                .getPostByCategory(pId, pLimit, pOffset)
+                .getPostByCategory(pId, pLimit, pOffset, pType, excludeList)
                 .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
     }
 
@@ -91,6 +92,14 @@ public class PostRepository implements IPostRepository {
         return Observable.just(
                 mDataStoreFactory.createDBDataStore()
                         .setDownloadReference(pId, pReference) != -1
+        );
+    }
+
+    @Override
+    public Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore()
+                        .updateFavouriteState(pId, pStatus) != -1
         );
     }
 

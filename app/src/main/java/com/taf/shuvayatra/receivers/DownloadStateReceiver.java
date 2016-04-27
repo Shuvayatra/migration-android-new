@@ -114,4 +114,13 @@ public class DownloadStateReceiver extends BroadcastReceiver implements MvpView 
             mPresenter.initialize(data);
         }
     }
+
+    @Override
+    public void showErrorView(String pErrorMessage) {
+    }
+
+    @Override
+    public Context getContext() {
+        return mContext;
+    }
 }

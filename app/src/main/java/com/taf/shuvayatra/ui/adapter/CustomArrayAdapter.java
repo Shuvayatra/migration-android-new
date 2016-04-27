@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,7 +55,7 @@ public class CustomArrayAdapter extends BaseAdapter {
     public View getCustomView(ViewGroup parent, int position, boolean dropdown){
         View spinner = mInflater.inflate(R.layout.view_filter_spinner, parent, false);
         TextView textView = (TextView) spinner.findViewById(R.id.filterText);
-        textView.setText(mCategories.get(position).getName());
+        textView.setText(mCategories.get(position).getTitle());
         ImageView imageView = (ImageView) spinner.findViewById(R.id.drop_arrow);
         if(!dropdown) {
             imageView.setImageResource(R.drawable.ic_arrow_drop_down);

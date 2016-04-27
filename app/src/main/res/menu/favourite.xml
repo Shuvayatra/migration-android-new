@@ -4,8 +4,8 @@
       tools:context="com.yipl.nrna.ui.activity.QuestionDetailActivity">
 
     <item
-        android:id="@+id/action_download"
-        android:icon="@drawable/icon_download"
+        android:id="@+id/action_favourite"
+        android:icon="@drawable/icon_not_favourite"
         android:orderInCategory="10"
         android:title="@string/action_download"
         app:showAsAction="always"/>

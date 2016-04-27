@@ -10,6 +10,6 @@ import rx.Observable;
  * Created by Nirazan-PC on 4/21/2016.
  */
 public interface ISectionRepository extends IBaseRepository<Category> {
-    Observable<List<Category>> getListBySectionName(String name);
+    Observable<List<Category>> getListBySectionName(String name, boolean onlyParent);
 
 }

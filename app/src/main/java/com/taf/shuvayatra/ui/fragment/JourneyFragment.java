@@ -8,7 +8,6 @@ import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
-import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
@@ -77,7 +76,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
     }
 
     void initialize(){
-        DataModule dataModule = new DataModule(-1L, MyConstants.DataParent.JOURNEY);
+        DataModule dataModule = new DataModule(MyConstants.DataParent.JOURNEY, true);
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .dataModule(dataModule)
@@ -139,7 +138,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
     @Override
     public void onListItemSelected(BaseModel pModel) {
         Category category  = ((Category) pModel);
-        List<Category> subCategories = getSubCategoriesByParent(((Category) pModel).getCategoryId());
+        List<Category> subCategories = getSubCategoriesByParent(((Category) pModel).getId());
         Intent i = new Intent(getContext(), JourneyCategoryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
         i.putExtra(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) subCategories);
@@ -156,7 +155,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, ListIt
         List<Category> filterCountreis = new ArrayList<>();
         if(mCategories!=null) {
             for (Category country : mCategories) {
-                if (country.getName().toLowerCase().contains(query.toLowerCase()))
+                if (country.getTitle().toLowerCase().contains(query.toLowerCase()))
                     filterCountreis.add(country);
             }
         }

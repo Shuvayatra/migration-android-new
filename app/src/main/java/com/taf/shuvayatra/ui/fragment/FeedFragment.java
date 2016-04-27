@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -25,7 +24,6 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
-import com.taf.shuvayatra.ui.activity.JourneyCategoryDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
@@ -247,9 +245,9 @@ public class FeedFragment extends BaseFragment implements
     void loadFilterOptions() {
         if (mFromCategory) {
             List<Category> categories = ((CategoryDetailActivity) getActivity()).getSubCategories();
-            if(!categories.isEmpty()&&!categories.get(0).getName().equals("All")) {
+            if(!categories.isEmpty()&&!categories.get(0).getTitle().equals("All")) {
                 Category category = new Category();
-                category.setName("All");
+                category.setTitle("All");
                 categories.add(0, category);
             }
             Logger.e("FeedFragment", "showing filterlist" + categories);
