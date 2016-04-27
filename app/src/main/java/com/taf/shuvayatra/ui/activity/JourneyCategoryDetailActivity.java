@@ -4,7 +4,7 @@ import android.os.Bundle;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.databinding.JourneyCategoryDetailDataBinding;
-
+import com.taf.util.MyConstants;
 
 public class JourneyCategoryDetailActivity extends CategoryDetailActivity {
 
@@ -20,4 +20,8 @@ public class JourneyCategoryDetailActivity extends CategoryDetailActivity {
         ((JourneyCategoryDetailDataBinding) mBinding).setCategory(mCategory);
     }
 
+    @Override
+    public MyConstants.DataParent getDataParent() {
+        return MyConstants.DataParent.JOURNEY;
+    }
 }

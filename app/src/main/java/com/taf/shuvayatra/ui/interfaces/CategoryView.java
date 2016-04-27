@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by Nirazan-PC on 4/21/2016.
  */
-public interface JourneyView extends LoadDataView {
+public interface CategoryView extends LoadDataView {
     public void renderCategories(List<Category> pCategories);
 }

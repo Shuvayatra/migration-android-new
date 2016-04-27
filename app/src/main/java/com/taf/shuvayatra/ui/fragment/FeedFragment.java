@@ -33,6 +33,7 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class FeedFragment extends BaseFragment implements
 
     boolean mFavouritesOnly = false;
     boolean mFromCategory = false;
+    List<Category> mSubCategories;
 
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
@@ -82,12 +84,13 @@ public class FeedFragment extends BaseFragment implements
         return feedFragment;
     }
 
-    public static FeedFragment newInstance(boolean fromCategory, long categoryId) {
+    public static FeedFragment newInstance(boolean fromCategory, long categoryId, List<Category> pCategories) {
         FeedFragment feedFragment = new FeedFragment();
 
         Bundle data = new Bundle();
         data.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, fromCategory);
         data.putLong(MyConstants.Extras.KEY_CATEGORY, categoryId);
+        data.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) pCategories);
         feedFragment.setArguments(data);
         return feedFragment;
     }
@@ -100,6 +103,7 @@ public class FeedFragment extends BaseFragment implements
             mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
             mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
             mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
         }
     }
 
@@ -244,14 +248,13 @@ public class FeedFragment extends BaseFragment implements
 
     void loadFilterOptions() {
         if (mFromCategory) {
-            List<Category> categories = ((CategoryDetailActivity) getActivity()).getSubCategories();
-            if(!categories.isEmpty()&&!categories.get(0).getTitle().equals("All")) {
+            if(!mSubCategories.isEmpty()&&!mSubCategories.get(0).getTitle().equals("All")) {
                 Category category = new Category();
                 category.setTitle("All");
-                categories.add(0, category);
+                mSubCategories.add(0, category);
             }
-            Logger.e("FeedFragment", "showing filterlist" + categories);
-            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(),categories);
+            Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
+            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(),mSubCategories);
             mFilterSpinner.setAdapter(adapter);
         }
     }

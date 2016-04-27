@@ -7,7 +7,7 @@ import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Category;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
-import com.taf.shuvayatra.ui.interfaces.DestinationView;
+import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.shuvayatra.ui.interfaces.MvpView;
 
 import java.util.List;
@@ -16,15 +16,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * Created by Nirazan-PC on 4/25/2016.
+ * Created by Nirazan-PC on 4/21/2016.
  */
-public class DestinationFragmentPresenter implements Presenter {
+public class CategoryPresenter implements Presenter {
 
-    DestinationView mView;
+    CategoryView mView;
     UseCase mUseCase;
 
     @Inject
-    public DestinationFragmentPresenter(@Named("sectionCategory") UseCase pUseCase){
+    public CategoryPresenter(@Named("sectionCategory") UseCase pUseCase) {
         mUseCase = pUseCase;
     }
 
@@ -45,15 +45,20 @@ public class DestinationFragmentPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
-        mUseCase.execute(new DestinationSubscriber(),pData);
+        mView.showLoadingView();
+        getJourneyCategories(pData);
     }
 
     @Override
     public void attachView(MvpView view) {
-        mView = (DestinationView) view;
+        mView = (CategoryView) view;
     }
 
-    private final class DestinationSubscriber extends DefaultSubscriber<List<Category>> {
+    private void getJourneyCategories(UseCaseData pData) {
+        mUseCase.execute(new JourneySubscriber(), pData);
+    }
+
+    private final class JourneySubscriber extends DefaultSubscriber<List<Category>> {
 
         @Override
         public void onCompleted() {
@@ -70,11 +75,8 @@ public class DestinationFragmentPresenter implements Presenter {
         }
 
         @Override
-        public void onNext(List<Category> pCountries) {
-            Logger.e("DestinationSubscriber", "coutnreis: "+ pCountries);
-            if(pCountries!=null) {
-                mView.renderCountries(pCountries);
-            }
+        public void onNext(List<Category> pCategories) {
+            mView.renderCategories(pCategories);
             onCompleted();
         }
     }

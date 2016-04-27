@@ -17,7 +17,6 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.DestinationDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
-import com.taf.shuvayatra.ui.interfaces.DestinationView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
