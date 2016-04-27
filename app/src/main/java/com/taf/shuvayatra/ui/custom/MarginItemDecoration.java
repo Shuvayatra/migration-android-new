@@ -20,21 +20,20 @@ public class MarginItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State
+            state) {
         super.getItemOffsets(outRect, view, parent, state);
 
-        int size = parent.getChildCount();
-        for (int i = 0; i < size; i++) {
-            if (i % 2 == 0 || i == 0) {
-                outRect.right = margin;
-                outRect.left = 0;
-            } else {
-                outRect.left = margin;
-                outRect.right = 0;
-            }
-            outRect.bottom = margin;
-        }
+        int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
 
+        if (i % 2 == 0) {
+            outRect.right = margin;
+            outRect.left = 0;
+        } else {
+            outRect.left = margin;
+            outRect.right = 0;
+        }
+        outRect.bottom = margin;
     }
 
 }

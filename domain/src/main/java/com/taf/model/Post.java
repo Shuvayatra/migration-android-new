@@ -16,13 +16,13 @@ public class Post extends BaseModel {
     Long mUpdatedAt;
     Integer likes;
     Integer share;
-    String category;
 
     Boolean isFavourite;
     Boolean isSynced;
     Boolean downloadStatus;
     Long downloadReference;
 
+    List<Category> mCategoryList;
     // for pagination purpose
     Integer mTotalCount;
 
@@ -123,11 +123,13 @@ public class Post extends BaseModel {
     }
 
     public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String pCategory) {
-        category = pCategory;
+        for (Category category : getCategoryList()) {
+            if (category.getSection().getAlias().equals(MyConstants.SECTION.JOURNEY) && (category
+                    .getParentId() == null || category.getParentId() == 0)) {
+                return category.getTitle();
+            }
+        }
+        return "";
     }
 
     public Integer getTotalCount() {
@@ -168,5 +170,13 @@ public class Post extends BaseModel {
 
     public void setDownloadReference(Long pDownloadReference) {
         downloadReference = pDownloadReference;
+    }
+
+    public List<Category> getCategoryList() {
+        return mCategoryList;
+    }
+
+    public void setCategoryList(List<Category> pCategoryList) {
+        mCategoryList = pCategoryList;
     }
 }

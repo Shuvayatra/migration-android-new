@@ -168,7 +168,7 @@ public class SplashScreenActivity extends BaseActivity implements SplashScreenVi
                         startActivity(intent);
                         finish();
                     }
-                }, 600
+                }, 400
         );
     }
 }

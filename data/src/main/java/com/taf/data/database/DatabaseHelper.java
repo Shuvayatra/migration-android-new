@@ -6,6 +6,8 @@ import com.taf.data.database.dao.DaoSession;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbCategoryDao;
 import com.taf.data.database.dao.DbPost;
+import com.taf.data.database.dao.DbPostCategory;
+import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.database.dao.DbSection;
 import com.taf.data.database.dao.DbSectionDao;
@@ -127,21 +129,33 @@ public class DatabaseHelper {
             queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
         }
 
-        /*Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
+        Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
                 DbPostCategoryDao.Properties.PostId);
-        Join categoryJoin = queryBuilder.join(DbPostCategoryDao.Properties.CategoryId, DbCategory
-                .class, DbCategoryDao.Properties.Id);
+        Join categoryJoin = queryBuilder.join(postJoin, DbPostCategoryDao.Properties.CategoryId,
+                DbCategory.class, DbCategoryDao.Properties.Id);
         if (pCategoryId != null) {
             categoryJoin.where(DbCategoryDao.Properties.Id.eq(pCategoryId));
-        }*/
+        }
 
-        map.put("total_count", queryBuilder.list().size());
-        map.put("data", queryBuilder
+        List<DbPost> dbPosts = queryBuilder
                 .limit(pLimit)
                 .offset(pOffset)
                 .orderDesc(DbPostDao.Properties.CreatedAt)
-                .list()
-        );
+                .list();
+
+        for (DbPost dbPost : dbPosts) {
+            QueryBuilder<DbCategory> queryBuilder1 = mDaoSession.getDbCategoryDao().queryBuilder();
+            queryBuilder1.join(DbCategoryDao.Properties.Id, DbPostCategory.class,
+                    DbPostCategoryDao.Properties.CategoryId)
+                    .where(DbPostCategoryDao.Properties.PostId.eq(dbPost.getId()));
+            dbPost.setCategoryList(
+                    queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
+                            .list()
+            );
+        }
+
+        map.put("total_count", queryBuilder.list().size());
+        map.put("data", dbPosts);
 
         return Observable.defer(() -> Observable.just(map));
     }
@@ -206,7 +220,7 @@ public class DatabaseHelper {
         if (isCategory) {
             queryBuilder.whereOr(DbCategoryDao.Properties.ParentId.isNull(), DbCategoryDao
                     .Properties.ParentId.eq(0L));
-        }else{
+        } else {
             queryBuilder.where(DbCategoryDao.Properties.ParentId.isNotNull());
             queryBuilder.where(DbCategoryDao.Properties.ParentId.notEq(0L));
         }
