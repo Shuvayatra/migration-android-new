@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
+import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
@@ -22,7 +22,6 @@ import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,8 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
 
     @Bind(R.id.recyclerView)
     EmptyStateRecyclerView mRecyclerView;
+    @Bind(R.id.empty_view)
+    RelativeLayout mEmptyView;
     @Bind(R.id.searchView)
     SearchView mSearchView;
     List<Category> mCountries;
@@ -63,9 +64,11 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     }
 
     private void setUpAdapter() {
-        mAdapter = new ListAdapter<Category>(getContext(),this);
+        mAdapter = new ListAdapter<>(getContext(),this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
+        mRecyclerView.setEmptyMessage(getString(R.string.empty_section));
     }
 
     private void initialize() {
@@ -104,7 +107,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     }
 
     @Override
-    public void onListItemSelected(BaseModel pModel) {
+    public void onListItemSelected(BaseModel pModel, int pIndex) {
         Category category  = ((Category) pModel);
         Intent i = new Intent(getContext(), CountryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);

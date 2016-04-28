@@ -55,7 +55,7 @@
         <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabTextColor">@color/white_alpha_70</item>
-        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorHeight">0dp</item>
     </style>
 
     <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">

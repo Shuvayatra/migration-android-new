@@ -15,6 +15,7 @@ public class UseCaseData implements Serializable {
     public static final String DOWNLOAD_REFERENCE = "download_reference";
     public static final String DOWNLOAD_STATUS = "download_status";
     public static final String EXCLUDE_LIST = "exclude_list";
+    public static final String SUBMISSION_DATA = "submission_data";
 
     Map<String, Object> data = null;
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/spacing_xsmall"
+    android:paddingRight="@dimen/spacing_xsmall"
+    android:paddingTop="@dimen/spacing_small">
+
+    <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        tools:listitem="@layout/view_audio_video_list"/>
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_list_view"
+        android:visibility="gone"/>
+</RelativeLayout>

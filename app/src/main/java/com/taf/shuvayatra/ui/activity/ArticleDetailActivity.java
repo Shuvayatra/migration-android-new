@@ -1,11 +1,13 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.FacebookActivity;
@@ -23,6 +25,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Inject
     PostFavouritePresenter mFavouritePresenter;
 
+    Post mPost;
     private boolean mOldFavouriteState;
 
     @Override
@@ -36,8 +39,34 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
+    public boolean containsShareOption() {
+        return true;
+    }
+
+    @Override
     public boolean containsFavouriteOption() {
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_share) {
+            showShareDialog(mPost);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void updateFavouriteState() {
+        UseCaseData data = new UseCaseData();
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPost.isFavourite() != null && mPost
+                .isFavourite()));
+        mFavouritePresenter.initialize(data);
     }
 
     @Override
@@ -58,8 +87,23 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
-    public void updateFavouriteState() {
-        super.updateFavouriteState();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finishWithResult();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void finishWithResult() {
+        Intent data = new Intent();
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     private void initialize() {
@@ -75,6 +119,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
         mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        mOldFavouriteState = mPost.isFavourite();
         invalidateOptionsMenu();
     }
 
@@ -86,28 +131,5 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Override
     public Context getContext() {
         return this;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean containsShareOption() {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }else if (item.getItemId() == R.id.action_share) {
-            showShareDialog(mPost);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

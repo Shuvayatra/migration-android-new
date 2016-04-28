@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
@@ -24,7 +23,6 @@ import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +112,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
     }
 
     @Override
-    public void onListItemSelected(BaseModel pModel) {
+    public void onListItemSelected(BaseModel pModel, int pIndex) {
         Category category  = ((Category) pModel);
         Intent i = new Intent(getContext(), JourneyCategoryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);

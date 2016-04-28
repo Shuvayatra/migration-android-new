@@ -40,6 +40,7 @@ public class MyConstants {
         public static final int TYPE_PLACE = 6;
         public static final int TYPE_COUNTRY = 7;
         public static final int TYPE_SECTION = 8;
+        public static final int TYPE_NOTIFICATION = 9;
     }
 
 
@@ -62,9 +63,14 @@ public class MyConstants {
         public static final String KEY_PLACE = "key_place";
         public static final String KEY_PLAY_STATUS = "key_play_status";
         public static final String KEY_FAVOURITES_ONLY = "key_favourites_only";
+        public static final String KEY_FAVOURITE_STATUS = "key_favourite_status";
         public static final String KEY_SUBCATEGORY = "key_subcategory";
         public static final String KEY_CATEGORY = "key_category";
         public static final String KEY_FROM_CATEGORY = "key_from_category";
+    }
+
+    public static final class Intent {
+        public static final String GCM_REGISTRATION_COMPLETE = "gcm_registration_complete";
     }
 
     public static class SECTION {

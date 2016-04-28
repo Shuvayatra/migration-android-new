@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "569264745263",
+    "project_id": "shuvayatra-1293"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569264745263:android:710df081737c8e00",
+        "android_client_info": {
+          "package_name": "com.taf.shuvayatra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgl06jhf3dUUnREvDfUQiMPyTp-lbxwWE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

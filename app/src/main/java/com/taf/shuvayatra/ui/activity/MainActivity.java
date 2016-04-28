@@ -52,6 +52,7 @@ public class MainActivity extends BaseActivity {
         logoIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setUpTabs();
                 showFragment(4);
             }
         });
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity {
                 R.mipmap.ic_launcher
         };
 
+        mTabLayout.removeAllTabs();
         for (int i = 0; i < tabTitles.length; i++) {
             TabLayout.Tab tab = mTabLayout.newTab()
                     .setIcon(tabIcons[i])
