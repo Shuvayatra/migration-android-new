@@ -77,7 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (containsShareOption()) {
             getMenuInflater().inflate(R.menu.share, menu);
         }
-        if (containsShareOption()) {
+        if (containsFavouriteOption()) {
             getMenuInflater().inflate(R.menu.favourite, menu);
         }
         return true;
