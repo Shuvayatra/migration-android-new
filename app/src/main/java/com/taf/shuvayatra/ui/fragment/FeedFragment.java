@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -35,6 +37,7 @@ import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,7 +46,7 @@ import butterknife.Bind;
 
 public class FeedFragment extends BaseFragment implements
         ListItemClickListener,
-        PostListView {
+        PostListView, AdapterView.OnItemSelectedListener {
 
     public static final Integer PAGE_LIMIT = 12;
     public static final Integer INITIAL_OFFSET = 0;
@@ -61,12 +64,16 @@ public class FeedFragment extends BaseFragment implements
     SearchView mSearchView;
     @Bind(R.id.filterSpinner)
     Spinner mFilterSpinner;
+    @Bind(R.id.filterContainer)
+    CardView mFilterContainer;
     ListAdapter<Post> mListAdapter;
     LinearLayoutManager mLayoutManager;
 
     boolean mFavouritesOnly = false;
     boolean mFromCategory = false;
     List<Category> mSubCategories;
+    List<Post> mPosts;
+    String[] mFilters;
 
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
@@ -107,8 +114,13 @@ public class FeedFragment extends BaseFragment implements
 
         initialize();
         setUpAdapter();
-        loadFilterOptions();
-
+        if(mFavouritesOnly) {
+            mFilterContainer.setVisibility(View.GONE);
+        }else{
+            mFilterContainer.setVisibility(View.VISIBLE);
+            loadFilterOptions();
+            mFilterSpinner.setOnItemSelectedListener(this);
+        }
         loadPostsList(INITIAL_OFFSET);
     }
 
@@ -241,10 +253,13 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
-        if (mPage == INITIAL_OFFSET)
+        if (mPage == INITIAL_OFFSET) {
             mListAdapter.setDataCollection(pPosts);
-        else
+            mPosts = pPosts;
+        } else {
             mListAdapter.addDataCollection(pPosts);
+            mPosts.addAll(pPosts);
+        }
 
         mTotalDataCount = pTotalCount;
         mPage++;
@@ -276,6 +291,68 @@ public class FeedFragment extends BaseFragment implements
             Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
             CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
             mFilterSpinner.setAdapter(adapter);
+        } else {
+            mFilters = getResources().getStringArray(R.array.home_filter_options);
+            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mFilters);
+            mFilterSpinner.setAdapter(adapter);
         }
+    }
+
+    void filterPost(int position) {
+        if (mPosts != null) {
+            if (position == 0) {
+                mListAdapter.setDataCollection(mPosts);
+            } else {
+                List<Post> filteredPost = new ArrayList<>();
+                if (mFromCategory) {
+                    for (Post post : mPosts) {
+                        Category category = mSubCategories.get(position);
+                        Logger.e("FeedFragment", "category list: " + post.getCategoryList());
+                        List<Category> postCategories = post.getCategoryList();
+                        for (Category postCategory : postCategories) {
+                            if (postCategory.getId() == category.getId())
+                                filteredPost.add(post);
+                        }
+                    }
+                } else {
+                    String option = mFilters[position];
+                    if (option.equals(getString(R.string.favourite))) {
+                        for (Post post : mPosts) {
+                            if (post.isFavourite() != null && post.isFavourite())
+                                filteredPost.add(post);
+                        }
+                    } else {
+                        if (option.equals(getString(R.string.article))) {
+                            filteredPost = filterByType("text");
+                        } else {
+                            filteredPost = filterByType(option);
+                        }
+                    }
+                }
+                mListAdapter.setDataCollection(filteredPost);
+            }
+        }
+    }
+
+    List<Post> filterByType(String type) {
+        List<Post> filteredPost = new ArrayList<>();
+        for (Post post : mPosts) {
+            if (post.getType().toLowerCase().equals(type.toLowerCase()))
+                filteredPost.add(post);
+        }
+        return filteredPost;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.filterSpinner:
+                filterPost(position);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

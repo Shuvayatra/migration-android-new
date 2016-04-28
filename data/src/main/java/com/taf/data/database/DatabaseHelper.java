@@ -230,7 +230,7 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
-    public Observable<List<DbCategory>> getCategoriesBySection(String section, boolean isCategory) {
+    public Observable<List<DbCategory>> getCategoriesBySection(String section, boolean isCategory, Long pParentId) {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         QueryBuilder queryBuilder = categoriesDao.queryBuilder();
 
@@ -244,6 +244,7 @@ public class DatabaseHelper {
         } else {
             queryBuilder.where(DbCategoryDao.Properties.ParentId.isNotNull());
             queryBuilder.where(DbCategoryDao.Properties.ParentId.notEq(0L));
+            queryBuilder.where(DbCategoryDao.Properties.ParentId.eq(pParentId));
         }
 
         List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.Position)

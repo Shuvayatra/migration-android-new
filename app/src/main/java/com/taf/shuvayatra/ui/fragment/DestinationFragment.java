@@ -74,7 +74,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     private void initialize() {
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
-                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true))
+                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true,0L))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);

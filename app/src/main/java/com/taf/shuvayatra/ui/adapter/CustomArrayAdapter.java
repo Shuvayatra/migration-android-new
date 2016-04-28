@@ -20,20 +20,33 @@ public class CustomArrayAdapter extends BaseAdapter {
 
     List<Category> mCategories;
     LayoutInflater mInflater;
+    String[] mFilters;
 
     public CustomArrayAdapter(Context context, List<Category> pCategories) {
         mInflater = LayoutInflater.from(context);
         mCategories = pCategories;
     }
 
+    public CustomArrayAdapter(Context pContext, String[] pFilters){
+        mInflater = LayoutInflater.from(pContext);
+        mFilters = pFilters;
+    }
+
     @Override
     public int getCount() {
-        return mCategories.size();
+        if(mCategories != null)
+            return mCategories.size();
+        else
+            return mFilters.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return mCategories.get(position);
+        if(mCategories != null) {
+            return mCategories.get(position);
+        }else{
+            return mFilters[position];
+        }
     }
 
     @Override
@@ -55,7 +68,12 @@ public class CustomArrayAdapter extends BaseAdapter {
     public View getCustomView(ViewGroup parent, int position, boolean dropdown){
         View spinner = mInflater.inflate(R.layout.view_filter_spinner, parent, false);
         TextView textView = (TextView) spinner.findViewById(R.id.filterText);
-        textView.setText(mCategories.get(position).getTitle());
+
+        if(mCategories != null)
+            textView.setText(mCategories.get(position).getTitle());
+        else
+            textView.setText(mFilters[position]);
+
         ImageView imageView = (ImageView) spinner.findViewById(R.id.drop_arrow);
         if(!dropdown) {
             imageView.setImageResource(R.drawable.ic_arrow_drop_down);

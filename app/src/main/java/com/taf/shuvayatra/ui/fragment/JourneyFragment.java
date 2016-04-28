@@ -74,7 +74,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
     }
 
     void initialize(){
-        DataModule dataModule = new DataModule(MyConstants.DataParent.JOURNEY, true);
+        DataModule dataModule = new DataModule(MyConstants.DataParent.JOURNEY, true, 0L);
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .dataModule(dataModule)

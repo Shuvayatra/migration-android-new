@@ -51,8 +51,8 @@ public class DBDataStore implements IDataStore {
     }
 
     public Observable<List<DbCategory>> getCategoriesBySection(String sectionName, boolean
-            isCategory) {
-        return mHelper.getCategoriesBySection(sectionName, isCategory);
+            isCategory, Long pParentId) {
+        return mHelper.getCategoriesBySection(sectionName, isCategory, pParentId);
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset,

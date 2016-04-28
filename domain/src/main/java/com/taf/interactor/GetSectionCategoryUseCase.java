@@ -17,23 +17,25 @@ public class GetSectionCategoryUseCase extends UseCase {
     private final ISectionRepository mRepository;
     private final MyConstants.DataParent mParent;
     private final boolean mIsCategory;
+    private final Long mParentId;
 
     @Inject
-    public GetSectionCategoryUseCase(boolean pIsCategory, MyConstants.DataParent pParent,
+    public GetSectionCategoryUseCase(boolean pIsCategory,Long pParentId, MyConstants.DataParent pParent,
                                      ISectionRepository
             pRepository, ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mRepository = pRepository;
         mParent = pParent;
         mIsCategory = pIsCategory;
+        mParentId = pParentId;
     }
 
     @Override
     protected Observable buildUseCaseObservable(UseCaseData pData) {
         if (mParent == MyConstants.DataParent.JOURNEY)
-            return mRepository.getListBySectionName(MyConstants.SECTION.JOURNEY, mIsCategory);
+            return mRepository.getListBySectionName(MyConstants.SECTION.JOURNEY, mIsCategory,mParentId);
         else if (mParent == MyConstants.DataParent.COUNTRY)
-            return mRepository.getListBySectionName(MyConstants.SECTION.COUNTRY, mIsCategory);
+            return mRepository.getListBySectionName(MyConstants.SECTION.COUNTRY, mIsCategory,mParentId);
         else
             return Observable.error(new IllegalArgumentException());
     }

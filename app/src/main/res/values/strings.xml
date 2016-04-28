@@ -44,6 +44,21 @@
         <item>user</item>
     </string-array>
 
+    <string-array name="home_filter_options">
+        <item>@string/all</item>
+        <item>@string/favourite</item>
+        <item>@string/article</item>
+        <item>@string/audio</item>
+        <item>@string/video</item>
+        <item>@string/news</item>
+    </string-array>
+    <string name="all">All</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="article">Article</string>
+    <string name="news">News</string>
+    <string name="favourite">Favourite</string>
+
     <string name="label_description">Description</string>
     <string name="label_other_places">other favourite places</string>
     <string name="empty_section">No categories are available for this section.</string>
