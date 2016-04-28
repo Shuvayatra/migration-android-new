@@ -24,7 +24,7 @@ import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.ActivityAudioDetailBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -42,7 +42,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class AudioDetailActivity extends BaseActivity implements
+public class AudioDetailActivity extends FacebookActivity implements
         AudioDetailView,
         View.OnClickListener,
         SeekBar.OnSeekBarChangeListener {
@@ -83,7 +83,7 @@ public class AudioDetailActivity extends BaseActivity implements
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
 
-    private Post mAudio;
+    private Post mPost;
     private boolean mOldFavouriteState;
 
     //connect to the service
@@ -92,7 +92,7 @@ public class AudioDetailActivity extends BaseActivity implements
         public void onServiceConnected(ComponentName name, IBinder service) {
             MediaService.MusicBinder binder = (MediaService.MusicBinder) service;
             mService = binder.getService();
-            mService.setTrack(mAudio);
+            mService.setTrack(mPost);
             mService.startStreaming();
             mMusicBound = true;
         }
@@ -146,13 +146,18 @@ public class AudioDetailActivity extends BaseActivity implements
     }
 
     @Override
+    public boolean containsFavouriteOption() {
+        return true;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
-            updateView(mAudio);
+            mPost = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+            updateView(mPost);
         }
 
         getToolbar().setTitle("");
@@ -232,9 +237,9 @@ public class AudioDetailActivity extends BaseActivity implements
                 break;
             case R.id.action_download:
                 try {
-                    if (!getPreferences().getDownloadReferences().contains(mAudio
+                    if (!getPreferences().getDownloadReferences().contains(mPost
                             .getDownloadReference())) {
-                        mPresenter.downloadAudioPost(mAudio);
+                        mPresenter.downloadAudioPost(mPost);
                     }
                 } catch (IOException e) {
                     Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
@@ -244,6 +249,9 @@ public class AudioDetailActivity extends BaseActivity implements
             case SUBMENU_BLUETOOTH:
                 shareViaBluetooth();
                 break;
+            case SUBMENU_FACEBOOK:
+                showShareDialog(mPost);
+                break;
 
         }
         return true;
@@ -252,7 +260,7 @@ public class AudioDetailActivity extends BaseActivity implements
     @Override
     public void updateFavouriteState() {
         UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPost.isFavourite() != null && mPost
                 .isFavourite()));
         mFavouritePresenter.initialize(data);
     }
@@ -261,7 +269,7 @@ public class AudioDetailActivity extends BaseActivity implements
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(mAudio.getId()))
+                .dataModule(new DataModule(mPost.getId()))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
@@ -272,8 +280,8 @@ public class AudioDetailActivity extends BaseActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mAudio != null) {
-            menu.findItem(R.id.action_favourite).setIcon((mAudio.isFavourite() != null && mAudio
+        if (mPost != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
                     .isFavourite())
                     ? R.drawable.icon_favourite
                     : R.drawable.icon_not_favourite);
@@ -282,7 +290,7 @@ public class AudioDetailActivity extends BaseActivity implements
     }
 
     private void shareViaBluetooth() {
-        mPresenter.shareViaBluetooth(mAudio);
+        mPresenter.shareViaBluetooth(mPost);
     }
 
     @Override
@@ -402,7 +410,7 @@ public class AudioDetailActivity extends BaseActivity implements
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        mAudio.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
         invalidateOptionsMenu();
     }
 
@@ -413,7 +421,7 @@ public class AudioDetailActivity extends BaseActivity implements
 
     private void updateView(Post pAudio) {
         ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
-        mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
+        mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         invalidateOptionsMenu();
     }
 

@@ -3,11 +3,12 @@ package com.taf.shuvayatra.ui.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.view.MenuItem;
 
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.ArticleDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -17,12 +18,11 @@ import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
-public class ArticleDetailActivity extends BaseActivity implements PostDetailView {
+public class ArticleDetailActivity extends FacebookActivity implements PostDetailView {
 
     @Inject
     PostFavouritePresenter mFavouritePresenter;
 
-    Post mPost;
     private boolean mOldFavouriteState;
 
     @Override
@@ -58,16 +58,6 @@ public class ArticleDetailActivity extends BaseActivity implements PostDetailVie
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void updateFavouriteState() {
         super.updateFavouriteState();
     }
@@ -80,7 +70,6 @@ public class ArticleDetailActivity extends BaseActivity implements PostDetailVie
                 .build()
                 .inject(this);
         mFavouritePresenter.attachView(this);
-        mFavouritePresenter.initialize(null);
     }
 
     @Override
@@ -97,5 +86,28 @@ public class ArticleDetailActivity extends BaseActivity implements PostDetailVie
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean containsShareOption() {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }else if (item.getItemId() == R.id.action_share) {
+            showShareDialog(mPost);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

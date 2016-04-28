@@ -3,6 +3,7 @@ package com.taf.shuvayatra.ui.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.view.MenuItem;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -11,6 +12,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.VideoDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -23,7 +25,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-public class VideoDetailActivity extends BaseActivity implements
+public class VideoDetailActivity extends FacebookActivity implements
         YouTubePlayer.OnInitializedListener,
         PostDetailView{
 
@@ -125,5 +127,23 @@ public class VideoDetailActivity extends BaseActivity implements
             return matcher.group();
         }
         return "";
+    }
+
+    @Override
+    public boolean containsShareOption() {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }else if (item.getItemId() == R.id.action_share) {
+            showShareDialog(mPost);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
