@@ -56,9 +56,10 @@ public class DataModule {
         mUnSyncedOnly = pUnSyncedOnly;
     }
 
-    public DataModule(MyConstants.DataParent pParentType, boolean pIsCategory) {
+    public DataModule(MyConstants.DataParent pParentType, boolean pIsCategory, Long pParentId) {
         mParentType = pParentType;
         mIsCategory = pIsCategory;
+        mParentId = pParentId;
     }
 
     public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
@@ -144,7 +145,7 @@ public class DataModule {
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread
                                                   pPostExecutionThread) {
-        return new GetSectionCategoryUseCase(mIsCategory, mParentType, pRepository, pThreadExecutor,
+        return new GetSectionCategoryUseCase(mIsCategory,mParentId, mParentType, pRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 

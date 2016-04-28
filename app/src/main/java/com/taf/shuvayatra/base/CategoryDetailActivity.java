@@ -54,7 +54,7 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
     }
 
     void initialize(){
-        DataModule dataModule = new DataModule(getDataParent(), false);
+        DataModule dataModule = new DataModule(getDataParent(), false,mCategory.getId());
         DaggerDataComponent.builder().activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
                 .dataModule(dataModule)

@@ -34,9 +34,9 @@ public class SectionCategoryRepository implements ISectionRepository {
     }
 
     @Override
-    public Observable<List<Category>> getListBySectionName(String section, boolean isCategory) {
+    public Observable<List<Category>> getListBySectionName(String section, boolean isCategory, Long pParentId) {
         DBDataStore dataStore = mDataStoreFactory.createDBDataStore();
-        return dataStore.getCategoriesBySection(section, isCategory)
+        return dataStore.getCategoriesBySection(section, isCategory, pParentId)
                 .map(pDbCategories -> mDataMapper.transformCategoryFromDb(pDbCategories));
     }
 }

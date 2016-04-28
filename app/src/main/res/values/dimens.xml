@@ -44,6 +44,7 @@
     <dimen name="category_height">85dp</dimen>
     <dimen name="detail_icon_top_offset">113dp</dimen>
     <dimen name="category_title_top_offset">141dp</dimen>
+    <dimen name="searchTopOverlay">34dp</dimen>
 
     <dimen name="text_xxlarge">26sp</dimen>
     <dimen name="text_xlarge">20sp</dimen>

@@ -105,11 +105,11 @@ public class MainActivity extends BaseActivity {
                 break;
             case 3:
                 UserFragment userFragment = new UserFragment();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, userFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, userFragment).commit();
                 break;
             case 4:
                 FeedFragment feedFragment = new FeedFragment();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, feedFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
                 break;
         }
     }
