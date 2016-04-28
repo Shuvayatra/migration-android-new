@@ -1,8 +1,11 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.taf.interactor.UseCaseData;
@@ -88,6 +91,39 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finishWithResult();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finishWithResult();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void finishWithResult(){
+        Intent data = new Intent();
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPlace.isFavourite());
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
+    @Override
+    public void updateFavouriteState() {
+        UseCaseData data = new UseCaseData();
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPlace.isFavourite() != null && mPlace
+                .isFavourite()));
+        mFavouritePresenter.initialize(data);
+    }
+
+    @Override
     public void renderPlaces(List<Post> pPlaces) {
         ((PlaceDetailDataBinding) mBinding).setSimilarPlaces(pPlaces);
     }
@@ -105,6 +141,7 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
         mPlace.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        mOldFavouriteState = mPlace.isFavourite();
         invalidateOptionsMenu();
     }
 

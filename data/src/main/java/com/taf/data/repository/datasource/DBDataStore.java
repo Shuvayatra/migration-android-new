@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.database.dao.DbCategory;
+import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
+import com.taf.model.Notification;
 
 import java.util.List;
 import java.util.Map;
@@ -64,6 +66,14 @@ public class DBDataStore implements IDataStore {
 
     public long setDownloadReference(Long pId, long pReference) {
         return mHelper.setDownloadReference(pId, pReference);
+    }
+
+    public Observable<List<DbNotification>> getNotifications(){
+        return mHelper.getNotifications();
+    }
+
+    public Observable<Boolean> saveNotification(Notification pNotification){
+        return mHelper.saveNotification(pNotification);
     }
 }
 

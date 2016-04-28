@@ -2,6 +2,7 @@
     <string name="app_name">Shuvayatra</string>
     <string name="facebook_app_id">902864043138819</string>
 
+    <string name="message_play_services_not_found">Play services must be installed.</string>
     <string name="message_downloading">Downloading...</string>
     <string name="message_download_start">Downloading %1$s</string>
     <string name="message_download_success">%1$s downloaded successfully</string>

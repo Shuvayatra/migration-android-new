@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -18,7 +20,6 @@ import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
-import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
@@ -54,6 +55,8 @@ public class FeedFragment extends BaseFragment implements
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
     RelativeLayout mEmptyView;
+    @Bind(R.id.search_filter)
+    LinearLayout mSearchFilterSection;
     @Bind(R.id.search)
     SearchView mSearchView;
     @Bind(R.id.filterSpinner)
@@ -70,11 +73,7 @@ public class FeedFragment extends BaseFragment implements
     Integer mPage = 0;
     UseCaseData mUseCaseData = new UseCaseData();
     private Long mCategoryId;
-
-    @Override
-    public int getLayout() {
-        return R.layout.fragment_feed;
-    }
+    private int mCurrentSelection;
 
     public static FeedFragment newInstance(boolean favouritesOnly) {
         FeedFragment feedFragment = new FeedFragment();
@@ -96,20 +95,15 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle data = getArguments();
-        if (data != null) {
-            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
-            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
-            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
-            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
-        }
+    public int getLayout() {
+        return R.layout.fragment_feed;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mSearchFilterSection.setVisibility(mFavouritesOnly ? View.GONE : View.VISIBLE);
 
         initialize();
         setUpAdapter();
@@ -118,19 +112,13 @@ public class FeedFragment extends BaseFragment implements
         loadPostsList(INITIAL_OFFSET);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mSearchView.clearFocus();
-    }
-
     private void initialize() {
         DataModule dataModule;
         if (mFavouritesOnly) {
             dataModule = new DataModule(mFavouritesOnly, false);
         } else if (mFromCategory) {
             dataModule = new DataModule(mCategoryId, MyConstants.DataParent.JOURNEY);
-        }else{
+        } else {
             dataModule = new DataModule();
         }
         DaggerDataComponent.builder()
@@ -187,8 +175,9 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public void onListItemSelected(BaseModel pModel) {
+    public void onListItemSelected(BaseModel pModel, int pIndex) {
         Intent intent = null;
+        mCurrentSelection = pIndex;
         switch (pModel.getDataType()) {
             case MyConstants.Adapter.TYPE_VIDEO:
                 intent = new Intent(getContext(), VideoDetailActivity.class);
@@ -212,11 +201,42 @@ public class FeedFragment extends BaseFragment implements
                 break;
         }
         if (intent != null)
-            startActivity(intent);
+            startActivityForResult(intent, 3209);
     }
 
     @Override
     public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle data = getArguments();
+        if (data != null) {
+            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
+            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
+            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSearchView.clearFocus();
     }
 
     @Override
@@ -248,13 +268,13 @@ public class FeedFragment extends BaseFragment implements
 
     void loadFilterOptions() {
         if (mFromCategory) {
-            if(!mSubCategories.isEmpty()&&!mSubCategories.get(0).getTitle().equals("All")) {
+            if (!mSubCategories.isEmpty() && !mSubCategories.get(0).getTitle().equals("All")) {
                 Category category = new Category();
                 category.setTitle("All");
                 mSubCategories.add(0, category);
             }
             Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
-            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(),mSubCategories);
+            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
             mFilterSpinner.setAdapter(adapter);
         }
     }

@@ -12,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,7 +84,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
 
-    private Post mPost;
+    private Post mAudio;
     private boolean mOldFavouriteState;
 
     //connect to the service
@@ -92,7 +93,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         public void onServiceConnected(ComponentName name, IBinder service) {
             MediaService.MusicBinder binder = (MediaService.MusicBinder) service;
             mService = binder.getService();
-            mService.setTrack(mPost);
+            mService.setTrack(mAudio);
             mService.startStreaming();
             mMusicBound = true;
         }
@@ -156,8 +157,8 @@ public class AudioDetailActivity extends FacebookActivity implements
 
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            mPost = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
-            updateView(mPost);
+            mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+            updateView(mAudio);
         }
 
         getToolbar().setTitle("");
@@ -233,13 +234,13 @@ public class AudioDetailActivity extends FacebookActivity implements
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                finishWithResult();
                 break;
             case R.id.action_download:
                 try {
-                    if (!getPreferences().getDownloadReferences().contains(mPost
+                    if (!getPreferences().getDownloadReferences().contains(mAudio
                             .getDownloadReference())) {
-                        mPresenter.downloadAudioPost(mPost);
+                        mPresenter.downloadAudioPost(mAudio);
                     }
                 } catch (IOException e) {
                     Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
@@ -258,9 +259,24 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finishWithResult();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void finishWithResult(){
+        Intent data = new Intent();
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
+    @Override
     public void updateFavouriteState() {
         UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPost.isFavourite() != null && mPost
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
                 .isFavourite()));
         mFavouritePresenter.initialize(data);
     }
@@ -269,7 +285,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(mPost.getId()))
+                .dataModule(new DataModule(mAudio.getId()))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
@@ -280,8 +296,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (mPost != null) {
-            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
+        if (mAudio != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mAudio.isFavourite() != null && mAudio
                     .isFavourite())
                     ? R.drawable.icon_favourite
                     : R.drawable.icon_not_favourite);
@@ -290,7 +306,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     private void shareViaBluetooth() {
-        mPresenter.shareViaBluetooth(mPost);
+        mPresenter.shareViaBluetooth(mAudio);
     }
 
     @Override
@@ -410,7 +426,8 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        mAudio.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        mOldFavouriteState = mAudio.isFavourite();
         invalidateOptionsMenu();
     }
 
@@ -421,7 +438,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     private void updateView(Post pAudio) {
         ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
-        mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
+        mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
         invalidateOptionsMenu();
     }
 

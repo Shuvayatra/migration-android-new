@@ -28,9 +28,10 @@ public class MyDaoGenerator {
         sectionToCategories.orderAsc(category.getProperties().get(6));
 
         createPostCategoryTable(pSchema);
+        createNotificationTable(pSchema);
     }
 
-    private static Entity createPostTable(Schema pSchema){
+    private static Entity createPostTable(Schema pSchema) {
         Entity post = pSchema.addEntity("DbPost");
         post.addIdProperty();
         post.addStringProperty("title");
@@ -50,7 +51,7 @@ public class MyDaoGenerator {
         return post;
     }
 
-    private static Entity createPostCategoryTable(Schema pSchema){
+    private static Entity createPostCategoryTable(Schema pSchema) {
         Entity postCategory = pSchema.addEntity("DbPostCategory");
         postCategory.addIdProperty();
         postCategory.addLongProperty("postId");
@@ -58,7 +59,7 @@ public class MyDaoGenerator {
         return postCategory;
     }
 
-    private static Entity createSectionTable(Schema pSchema){
+    private static Entity createSectionTable(Schema pSchema) {
         Entity section = pSchema.addEntity("DbSection");
         section.addIdProperty();
         section.addStringProperty("title");
@@ -68,7 +69,7 @@ public class MyDaoGenerator {
         return section;
     }
 
-    private static Entity createCategoryTable(Schema pSchema){
+    private static Entity createCategoryTable(Schema pSchema) {
         Entity category = pSchema.addEntity("DbCategory");
         category.addIdProperty();
         category.addStringProperty("title");
@@ -81,6 +82,17 @@ public class MyDaoGenerator {
         category.addLongProperty("updatedAt");
         return category;
     }
+
+    private static Entity createNotificationTable(Schema pSchema) {
+        Entity notification = pSchema.addEntity("DbNotification");
+        notification.addIdProperty();
+        notification.addStringProperty("title");
+        notification.addStringProperty("description");
+        notification.addLongProperty("createdAt");
+        notification.addLongProperty("updatedAt");
+        return notification;
+    }
+
 }
 
 

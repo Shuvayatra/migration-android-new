@@ -3,6 +3,7 @@ package com.taf.data.entity.mapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.database.dao.DbCategory;
+import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbSection;
 import com.taf.data.di.PerActivity;
@@ -14,6 +15,7 @@ import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
+import com.taf.model.Notification;
 import com.taf.model.Post;
 import com.taf.model.PostData;
 import com.taf.model.Section;
@@ -205,14 +207,53 @@ public class DataMapper {
         return null;
     }
 
-    public Section transformSectionFromDB(DbSection pDbSection){
-        if(pDbSection != null){
+    public Section transformSectionFromDB(DbSection pDbSection) {
+        if (pDbSection != null) {
             Section section = new Section();
             section.setTitle(pDbSection.getTitle());
             section.setAlias(pDbSection.getAlias());
             section.setUpdatedAt(pDbSection.getUpdatedAt());
             section.setCreatedAt(pDbSection.getCreatedAt());
             return section;
+        }
+        return null;
+    }
+
+    public List<Notification> transformNotificationFromDb(List<DbNotification> pData) {
+        List<Notification> notificationList = new ArrayList<>();
+        if (pData != null) {
+            for (DbNotification dbNotification : pData) {
+                Notification notification = transformNotificationFromDb(dbNotification);
+                if (notification != null) {
+                    notificationList.add(notification);
+                }
+            }
+        }
+        return notificationList;
+    }
+
+    public Notification transformNotificationFromDb(DbNotification pData) {
+        if (pData != null) {
+            Notification notification = new Notification();
+            notification.setId(pData.getId());
+            notification.setTitle(pData.getTitle());
+            notification.setDescription(pData.getDescription());
+            notification.setCreatedAt(pData.getCreatedAt());
+            notification.setUpdatedAt(pData.getUpdatedAt());
+            return notification;
+        }
+        return null;
+    }
+
+    public DbNotification transformNotificationForDb(Notification pData) {
+        if (pData != null) {
+            DbNotification notification = new DbNotification();
+            notification.setId(pData.getId());
+            notification.setTitle(pData.getTitle());
+            notification.setDescription(pData.getDescription());
+            notification.setCreatedAt(pData.getCreatedAt());
+            notification.setUpdatedAt(pData.getUpdatedAt());
+            return notification;
         }
         return null;
     }

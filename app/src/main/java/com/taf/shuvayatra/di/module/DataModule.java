@@ -6,6 +6,7 @@ import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.LatestContentRepository;
+import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
@@ -13,13 +14,16 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.DownloadAudioUseCase;
 import com.taf.interactor.GetLatestContentUseCase;
+import com.taf.interactor.GetNotificationListUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
+import com.taf.interactor.SaveNotificationListUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
 import com.taf.interactor.UpdateFavouriteStateUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
+import com.taf.repository.INotificationRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
 import com.taf.util.MyConstants;
@@ -161,5 +165,28 @@ public class DataModule {
             pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         return new UpdateDownloadStatusUseCase(pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    INotificationRepository provideNotificationRepository(DataStoreFactory pDataStoreFactory, DataMapper
+            pDataMapper) {
+        return new NotificationRepository(pDataStoreFactory, pDataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("notification")
+    UseCase provideNotificationUseCase(INotificationRepository pRepository,
+                                       ThreadExecutor pExecutor, PostExecutionThread pThread){
+        return new GetNotificationListUseCase(pRepository, pExecutor, pThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("notification_received")
+    UseCase provideSaveNotificationUseCase(INotificationRepository pRepository,
+                                       ThreadExecutor pExecutor, PostExecutionThread pThread){
+        return new SaveNotificationListUseCase(pRepository, pExecutor, pThread);
     }
 }

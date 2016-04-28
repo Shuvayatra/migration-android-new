@@ -7,15 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
+import com.taf.model.Notification;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.DestinationDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
+import com.taf.shuvayatra.databinding.NotificationDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
@@ -72,8 +73,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 break;
             case Adapter.TYPE_NEWS:
             case Adapter.TYPE_TEXT:
-                ArticleDataBinding articleBinding = DataBindingUtil.inflate(mLayoutInflater, R.layout
-                        .view_article, parent, false);
+                ArticleDataBinding articleBinding = DataBindingUtil.inflate(mLayoutInflater, R
+                        .layout.view_article, parent, false);
                 viewHolder = new ArticleViewHolder(articleBinding);
                 break;
             case Adapter.TYPE_JOURNEY_CATEGORY:
@@ -87,9 +88,15 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 viewHolder = new PlaceViewHolder(placeDataBinding);
                 break;
             case Adapter.TYPE_COUNTRY:
-                DestinationDataBinding destinationDataBinding = DataBindingUtil.inflate(mLayoutInflater,
-                        R.layout.view_destination_list,parent, false);
+                DestinationDataBinding destinationDataBinding = DataBindingUtil.inflate
+                        (mLayoutInflater, R.layout.view_destination_list, parent, false);
                 viewHolder = new DestinationViewHolder(destinationDataBinding);
+                break;
+            case Adapter.TYPE_NOTIFICATION:
+                NotificationDataBinding notificationDataBinding = DataBindingUtil.inflate
+                        (mLayoutInflater, R.layout.view_notification_list, parent, false);
+                viewHolder = new NotificationViewHolder(notificationDataBinding);
+                break;
             default:
         }
         return viewHolder;
@@ -116,7 +123,12 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 ((PlaceViewHolder) holder).mBinding.setPlace((Post) mDataCollection.get(position));
                 break;
             case Adapter.TYPE_COUNTRY:
-                ((DestinationViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position));
+                ((DestinationViewHolder) holder).mBinding.setCategory((Category) mDataCollection
+                        .get(position));
+                break;
+            case Adapter.TYPE_NOTIFICATION:
+                ((NotificationViewHolder) holder).mBinding.setNotification((Notification)
+                        mDataCollection.get(position));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -144,7 +156,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onListItemSelected(mBinding.getContent());
+                    mListener.onListItemSelected(mBinding.getContent(), getDataCollection()
+                            .indexOf(mBinding.getContent()));
                 }
             });
         }
@@ -161,7 +174,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onListItemSelected(mBinding.getArticle());
+                    mListener.onListItemSelected(mBinding.getArticle(), getDataCollection()
+                            .indexOf(mBinding.getArticle()));
                 }
             });
         }
@@ -178,7 +192,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onListItemSelected(mBinding.getCategory());
+                    mListener.onListItemSelected(mBinding.getCategory(), getDataCollection()
+                            .indexOf(mBinding.getCategory()));
                 }
             });
         }
@@ -196,26 +211,40 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onListItemSelected(mBinding.getPlace());
+                    mListener.onListItemSelected(mBinding.getPlace(), getDataCollection()
+                            .indexOf(mBinding.getPlace()));
                 }
             });
         }
 
     }
 
-    public class DestinationViewHolder extends RecyclerView.ViewHolder{
+    public class DestinationViewHolder extends RecyclerView.ViewHolder {
 
         DestinationDataBinding mBinding;
-        public DestinationViewHolder(DestinationDataBinding pBinding){
+
+        public DestinationViewHolder(DestinationDataBinding pBinding) {
             super(pBinding.getRoot());
             mBinding = pBinding;
             ButterKnife.bind(this, mBinding.getRoot());
             mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onListItemSelected(mBinding.getCategory());
+                    mListener.onListItemSelected(mBinding.getCategory(), getDataCollection()
+                            .indexOf(mBinding.getCategory()));
                 }
             });
+        }
+    }
+
+    public class NotificationViewHolder extends RecyclerView.ViewHolder {
+
+        NotificationDataBinding mBinding;
+
+        public NotificationViewHolder(NotificationDataBinding pBinding) {
+            super(pBinding.getRoot());
+            mBinding = pBinding;
+            ButterKnife.bind(this, mBinding.getRoot());
         }
     }
 }

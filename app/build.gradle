@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
@@ -47,7 +48,7 @@ dependencies {
     compile appDependencies.palette
     compile appDependencies.designSupport
     compile appDependencies.cardView
-    compile appDependencies.analytics
+    compile appDependencies.gcm
 
     compile appDependencies.butterKnife
     apt appDependencies.daggerCompiler

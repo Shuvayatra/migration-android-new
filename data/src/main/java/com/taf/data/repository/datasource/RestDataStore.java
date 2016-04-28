@@ -46,11 +46,9 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<Boolean> syncFavourites(List<SyncDataEntity> pSyncData) {
-        Logger.d("RestDataStore_syncFavourites", "test test");
         if (isThereInternetConnection()) {
             return mApiRequest.updateFavouriteState(pSyncData)
                     .doOnNext(pResponseEntity -> {
-                        Logger.d("RestDataStore_syncFavourites", "insert/update");
                         Observable.create(pSubscriber -> {
                             mDBHelper.updateFavouriteState(pResponseEntity.getSuccessIdList(),
                                     true);

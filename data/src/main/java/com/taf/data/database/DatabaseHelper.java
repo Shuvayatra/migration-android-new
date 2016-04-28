@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.taf.data.database.dao.DaoSession;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbCategoryDao;
+import com.taf.data.database.dao.DbNotification;
+import com.taf.data.database.dao.DbNotificationDao;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbPostCategory;
 import com.taf.data.database.dao.DbPostCategoryDao;
@@ -16,6 +18,7 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.model.Notification;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +37,8 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DaoSession pDaoSession, DataMapper pDataMapper) {
-        QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;
+        /*QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;*/
         mDaoSession = pDaoSession;
         mDataMapper = pDataMapper;
     }
@@ -141,6 +144,7 @@ public class DatabaseHelper {
                 .limit(pLimit)
                 .offset(pOffset)
                 .orderDesc(DbPostDao.Properties.CreatedAt)
+                .distinct()
                 .list();
 
         for (DbPost dbPost : dbPosts) {
@@ -168,6 +172,23 @@ public class DatabaseHelper {
                 .list();
 
         return Observable.defer(() -> Observable.just(dbPosts));
+    }
+
+    public Observable<List<DbNotification>> getNotifications() {
+        return Observable.defer(() -> Observable.just(
+                mDaoSession.getDbNotificationDao().queryBuilder()
+                        .orderDesc(DbNotificationDao.Properties.CreatedAt)
+                        .list()
+                )
+        );
+    }
+
+    public Observable<Boolean> saveNotification(Notification pNotification){
+        return Observable.defer(() -> Observable.just(
+                mDaoSession.getDbNotificationDao()
+                .insert(mDataMapper.transformNotificationForDb(pNotification)) != -1
+            )
+        );
     }
 
     public void updateFavouriteState(List<Long> pIds, boolean isSynced) {
