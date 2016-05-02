@@ -21,7 +21,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
         <activity
             android:name=".ui.activity.SplashScreenActivity"
             android:label="@string/app_name">
@@ -39,10 +42,14 @@
             android:name=".ui.activity.ArticleDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="shuvayatra" android:host="path" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="path"
+                    android:scheme="shuvayatra"/>
             </intent-filter>
         </activity>
         <activity
@@ -122,6 +129,19 @@
         <service
             android:name=".gcm.GcmRegistrationIntentService"
             android:exported="false"/>
+
+        <activity
+            android:name=".ui.activity.InfoDetailActivity"
+            android:label="@string/title_activity_info_detail"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
     </application>
 
 </manifest>

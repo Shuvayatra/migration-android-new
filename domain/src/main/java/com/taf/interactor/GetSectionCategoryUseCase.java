@@ -36,6 +36,8 @@ public class GetSectionCategoryUseCase extends UseCase {
             return mRepository.getListBySectionName(MyConstants.SECTION.JOURNEY, mIsCategory,mParentId);
         else if (mParent == MyConstants.DataParent.COUNTRY)
             return mRepository.getListBySectionName(MyConstants.SECTION.COUNTRY, mIsCategory,mParentId);
+        else if(mParent == MyConstants.DataParent.INFO)
+            return mRepository.getListBySectionName(MyConstants.SECTION.INFO, mIsCategory,mParentId);
         else
             return Observable.error(new IllegalArgumentException());
     }

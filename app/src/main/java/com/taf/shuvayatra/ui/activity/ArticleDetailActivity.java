@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.taf.interactor.UseCaseData;
@@ -52,7 +53,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
             showShareDialog(mPost);
@@ -129,7 +130,22 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(mPost != null){
+            menu.findItem(R.id.action_favourite).setIcon(mPost.isFavourite()? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
+        }
+        return true;
+    }
+
 }

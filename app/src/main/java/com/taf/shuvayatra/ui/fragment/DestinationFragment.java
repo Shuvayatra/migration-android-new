@@ -88,6 +88,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
 
     @Override
     public void renderCategories(List<Category> pCountries) {
+        mCountries = pCountries;
         mAdapter.setDataCollection(pCountries);
     }
 

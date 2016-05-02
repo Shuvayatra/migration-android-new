@@ -10,7 +10,8 @@ public class MyConstants {
     public enum DataParent {
         COUNTRY,
         JOURNEY,
-        POST
+        POST,
+        INFO
     }
 
     public static final class Preferences {
@@ -41,6 +42,7 @@ public class MyConstants {
         public static final int TYPE_COUNTRY = 7;
         public static final int TYPE_SECTION = 8;
         public static final int TYPE_NOTIFICATION = 9;
+        public static final int TYPE_INFO = 10;
     }
 
 
@@ -76,5 +78,6 @@ public class MyConstants {
     public static class SECTION {
         public static final String JOURNEY = "journey";
         public static final String COUNTRY = "country";
+        public static final String INFO = "info";
     }
 }

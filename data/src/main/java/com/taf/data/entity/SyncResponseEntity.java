@@ -6,9 +6,9 @@ import java.util.List;
 
 public class SyncResponseEntity {
     String status;
-    @SerializedName("failed_ids")
+    @SerializedName("failure")
     List<Long> failedIdList;
-    @SerializedName("success_ids")
+    @SerializedName("success")
     List<Long> successIdList;
 
     public String getStatus() {

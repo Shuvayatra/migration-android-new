@@ -15,6 +15,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.DestinationDataBinding;
+import com.taf.shuvayatra.databinding.InfoListDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.NotificationDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
@@ -28,14 +29,21 @@ import butterknife.ButterKnife;
 public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
+    private Boolean mFromInfo = false;
     List<T> mDataCollection;
     ListItemClickListener mListener;
-    Boolean mIsGrid = false;
 
     public ListAdapter(Context pContext, ListItemClickListener pListener) {
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
         this.mListener = pListener;
+    }
+
+    public ListAdapter(Context pContext, ListItemClickListener pListener,Boolean fromInfo){
+        this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
+                .LAYOUT_INFLATER_SERVICE);
+        this.mListener = pListener;
+         mFromInfo = fromInfo;
     }
 
     public ListAdapter(Context pContext, List<T> pDataCollection, ListItemClickListener pListener) {
@@ -64,6 +72,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
+        if(mFromInfo){
+            InfoListDataBinding infoListDataBinding  = DataBindingUtil.inflate
+                    (mLayoutInflater,R.layout.view_info_list, parent, false);
+            return new InfoViewHolder(infoListDataBinding);
+        }
         switch (viewType) {
             case Adapter.TYPE_AUDIO:
             case Adapter.TYPE_VIDEO:
@@ -104,6 +117,10 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(mFromInfo){
+            ((InfoViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position));
+            return;
+        }
         switch (holder.getItemViewType()) {
             case Adapter.TYPE_AUDIO:
             case Adapter.TYPE_VIDEO:
@@ -245,6 +262,24 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             super(pBinding.getRoot());
             mBinding = pBinding;
             ButterKnife.bind(this, mBinding.getRoot());
+        }
+    }
+
+    public class InfoViewHolder extends RecyclerView.ViewHolder{
+
+        InfoListDataBinding mBinding;
+
+        public InfoViewHolder(InfoListDataBinding pBinding) {
+            super(pBinding.getRoot());
+            mBinding = pBinding;
+            ButterKnife.bind(this, mBinding.getRoot());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onListItemSelected(mBinding.getCategory(),
+                            getDataCollection().indexOf(mBinding.getCategory()));
+                }
+            });
         }
     }
 }

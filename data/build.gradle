@@ -24,7 +24,7 @@ android {
         versionName "1.0"
 
         buildConfigField("String", "BASE_URL", "\"http://nrna.yipl.com.np/\"")
-        buildConfigField("String", "API_KEY", "\"d55ab20438fed07bdf58433a86af28bdbbf1d05a\"")
+        buildConfigField("String", "API_KEY", "\"670125552cb74cb09d7b53da59e0fc6907dd3478\"")
     }
 
     compileOptions {

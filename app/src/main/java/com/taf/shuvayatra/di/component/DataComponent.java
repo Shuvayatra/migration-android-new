@@ -13,6 +13,7 @@ import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NotificationsFragment;
 
@@ -36,4 +37,5 @@ public interface DataComponent extends ActivityComponent {
     void inject(CategoryDetailActivity pActivity);
     void inject(MyGcmListenerService pService);
     void inject(NotificationsFragment pFragment);
+    void inject(InfoFragment pFragment);
 }
