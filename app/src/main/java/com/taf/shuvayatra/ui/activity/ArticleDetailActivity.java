@@ -50,6 +50,11 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -130,11 +135,6 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public Context getContext() {
         return this;
     }
@@ -142,8 +142,9 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(mPost != null){
-            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite()!=null &&mPost.isFavourite())? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
+        if (mPost != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
+                    .isFavourite()) ? R.drawable.icon_favourite : R.drawable.icon_not_favourite);
         }
         return true;
     }

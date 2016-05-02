@@ -1,16 +1,18 @@
 package com.taf.shuvayatra.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
@@ -24,6 +26,7 @@ import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.LatestContentPresenter;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
@@ -33,6 +36,7 @@ import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
+import com.taf.shuvayatra.ui.interfaces.LatestContentView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.util.MyConstants;
@@ -47,14 +51,22 @@ import butterknife.Bind;
 
 public class FeedFragment extends BaseFragment implements
         ListItemClickListener,
-        PostListView, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
+        PostListView,
+        LatestContentView,
+        AdapterView.OnItemSelectedListener,
+        SearchView.OnQueryTextListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     public static final Integer PAGE_LIMIT = 12;
     public static final Integer INITIAL_OFFSET = 0;
 
     @Inject
+    LatestContentPresenter mLatestPresenter;
+    @Inject
     PostListPresenter mPresenter;
 
+    @Bind(R.id.swipe_container)
+    SwipeRefreshLayout mSwipeContainer;
     @Bind(R.id.recyclerView)
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
@@ -115,9 +127,9 @@ public class FeedFragment extends BaseFragment implements
 
         initialize();
         setUpAdapter();
-        if(mFavouritesOnly|| getContext() instanceof InfoDetailActivity) {
+        if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
             mFilterContainer.setVisibility(View.GONE);
-        }else{
+        } else {
             mFilterContainer.setVisibility(View.VISIBLE);
             loadFilterOptions();
             mFilterSpinner.setOnItemSelectedListener(this);
@@ -141,6 +153,7 @@ public class FeedFragment extends BaseFragment implements
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
+        mLatestPresenter.attachView(this);
         mSearchView.setOnQueryTextListener(this);
     }
 
@@ -148,6 +161,7 @@ public class FeedFragment extends BaseFragment implements
         mListAdapter = new ListAdapter(getContext(), this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mSwipeContainer.setOnRefreshListener(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -160,7 +174,7 @@ public class FeedFragment extends BaseFragment implements
 
                 int topRowVerticalPosition = (mRecyclerView == null || mRecyclerView
                         .getChildCount() == 0) ? 0 : mRecyclerView.getChildAt(0).getTop();
-                //mSwipeContainer.setEnabled(topRowVerticalPosition >= 0);
+                mSwipeContainer.setEnabled(topRowVerticalPosition >= 0);
 
                 int visibleItemCount = mLayoutManager.getChildCount();
                 int totalItemCount = mLayoutManager.getItemCount();
@@ -182,10 +196,20 @@ public class FeedFragment extends BaseFragment implements
     }
 
     private void loadPostsList(Integer pPage) {
+        mPage = pPage;
+        mSwipeContainer.setRefreshing(true);
         mUseCaseData.clearAll();
         mUseCaseData.putInteger(UseCaseData.OFFSET, pPage * PAGE_LIMIT);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
         mPresenter.initialize(mUseCaseData);
+    }
+
+    @Override
+    public void onRefresh() {
+        UseCaseData data = new UseCaseData();
+        data.putLong(UseCaseData.LAST_UPDATED, ((BaseActivity) getActivity()).getPreferences()
+                .getLastUpdateStamp());
+        mLatestPresenter.initialize(data);
     }
 
     @Override
@@ -248,6 +272,11 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
+    public void latestContentFetched(boolean hasNewContent) {
+        loadPostsList(INITIAL_OFFSET);
+    }
+
+    @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
         if (mPage == INITIAL_OFFSET) {
             mListAdapter.setDataCollection(pPosts);
@@ -265,11 +294,13 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void showLoadingView() {
         mIsLoading = true;
+        mSwipeContainer.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingView() {
         mIsLoading = false;
+        mSwipeContainer.setRefreshing(false);
     }
 
     @Override
@@ -371,8 +402,8 @@ public class FeedFragment extends BaseFragment implements
         return true;
     }
 
-    void filterBySearchView(String query){
-        if(mPosts!=null) {
+    void filterBySearchView(String query) {
+        if (mPosts != null) {
             List<Post> filteredPost = new ArrayList<>();
 
             for (Post post : mPosts) {
@@ -381,5 +412,10 @@ public class FeedFragment extends BaseFragment implements
             }
             mListAdapter.setDataCollection(filteredPost);
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
     }
 }

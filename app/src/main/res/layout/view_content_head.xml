@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="content"
             type="com.taf.model.Post"/>
@@ -28,6 +30,7 @@
             android:text="@{content.title}"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_large"
+            android:visibility="@{(content.dataType == 1) ? View.GONE : View.VISIBLE}"
             tools:text="How migrants control over world and this is just another "/>
 
         <TextView
@@ -37,7 +40,7 @@
             android:layout_below="@id/title"
             android:layout_marginBottom="@dimen/spacing_standard"
             android:layout_marginTop="@dimen/spacing_xsmall"
-            android:text="@{content.category}"
+            android:text="@{content.getCategory()}"
             android:textSize="@dimen/text_small"
             tools:text="Work Permit - 3 days ago"/>
 

@@ -27,7 +27,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SplashScreenActivity extends BaseActivity implements SplashScreenView {
+public class SplashScreenActivity extends BaseActivity implements
+        SplashScreenView {
 
     @Inject
     LatestContentPresenter mPresenter;

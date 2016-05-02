@@ -122,10 +122,11 @@ public class BindingUtil {
     }
 
     public static String getTimeAgo(long time) {
-        final int SECOND_MILLIS = 1000;
-        final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-        final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-        final int DAY_MILLIS = 24 * HOUR_MILLIS;
+        final long SECOND_MILLIS = 1000;
+        final long MINUTE_MILLIS = 60 * SECOND_MILLIS;
+        final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
+        final long DAY_MILLIS = 24 * HOUR_MILLIS;
+        final long MONTH_MILLIS = 30 * DAY_MILLIS;
 
         if (time < 1000000000000L) {
             // if timestamp given in seconds, convert to millis
@@ -151,8 +152,10 @@ public class BindingUtil {
             return diff / HOUR_MILLIS + " hours ago";
         } else if (diff < 48 * HOUR_MILLIS) {
             return "yesterday";
-        } else {
+        } else if (diff < MONTH_MILLIS) {
             return diff / DAY_MILLIS + " days ago";
+        } else {
+            return diff / MONTH_MILLIS + " months ago";
         }
     }
 }

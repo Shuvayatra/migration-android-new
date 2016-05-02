@@ -8,9 +8,8 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.LatestContent;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
+import com.taf.shuvayatra.ui.interfaces.LatestContentView;
 import com.taf.shuvayatra.ui.interfaces.MvpView;
-import com.taf.shuvayatra.ui.interfaces.SplashScreenView;
-import com.taf.shuvayatra.util.AppPreferences;
 
 import java.util.Calendar;
 
@@ -21,13 +20,11 @@ import javax.inject.Named;
 public class LatestContentPresenter implements Presenter {
 
     private final UseCase mUseCase;
-    private final AppPreferences mPref;
-    SplashScreenView mView;
+    LatestContentView mView;
 
     @Inject
-    public LatestContentPresenter(@Named("latest") UseCase pUseCase, AppPreferences pref) {
+    public LatestContentPresenter(@Named("latest") UseCase pUseCase) {
         mUseCase = pUseCase;
-        mPref = pref;
     }
 
     @Override
@@ -51,7 +48,7 @@ public class LatestContentPresenter implements Presenter {
 
     @Override
     public void attachView(MvpView pView) {
-        mView = (SplashScreenView) pView;
+        mView = (LatestContentView) pView;
     }
 
     private void getLatestContent(UseCaseData pData) {
@@ -77,7 +74,8 @@ public class LatestContentPresenter implements Presenter {
         public void onNext(LatestContent pLatestContent) {
             if (pLatestContent != null) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                ((BaseActivity) mView).getPreferences().setLastUpdateStamp((timestamp / 1000L));
+                ((BaseActivity) mView.getContext()).getPreferences().setLastUpdateStamp(
+                        (timestamp / 1000L));
             }
             mView.latestContentFetched(pLatestContent != null && !pLatestContent.getPosts()
                     .isEmpty());

@@ -4,9 +4,6 @@ import com.taf.model.BaseModel;
 
 import java.util.List;
 
-/**
- * Created by julian on 4/19/16.
- */
 public interface ListItemClickListener {
     void onListItemSelected(BaseModel pModel, int pIndex);
 

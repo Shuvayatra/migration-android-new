@@ -75,6 +75,10 @@ public class AudioDetailActivity extends FacebookActivity implements
     AppBarLayout mAppBar;
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
+    @Bind(R.id.buffering)
+    TextView bufferingText;
+    @Bind(R.id.buffering_mini)
+    TextView bufferingTextMini;
 
     private MediaService mService;
     private Intent mPlayIntent;
@@ -152,42 +156,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        Bundle data = getIntent().getExtras();
-        if (data != null) {
-            mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
-            updateView(mAudio);
-        }
-
-        getToolbar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        initialize();
-
-        mediaReceiver = new MediaReceiver(this);
-        receiverFilter = new IntentFilter();
-
-        mPlayBtn.setOnClickListener(this);
-        mPlayBtnMini.setOnClickListener(this);
-        mSeekbar.setOnSeekBarChangeListener(this);
-        mSeekbarMini.setOnSeekBarChangeListener(this);
-
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
-                        .getMinimumHeight(mCollapsingToolbar)) {
-                    mMiniPlayer.animate().alpha(1).setDuration(300);
-                } else {
-                    mMiniPlayer.animate().alpha(0).setDuration(300);
-                }
-            }
-        });
-    }
-
-    @Override
     protected void onDestroy() {
         stopService(mPlayIntent);
         // Unbind from the service
@@ -259,6 +227,50 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void updateFavouriteState() {
+        UseCaseData data = new UseCaseData();
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
+                .isFavourite()));
+        mFavouritePresenter.initialize(data);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle data = getIntent().getExtras();
+        if (data != null) {
+            mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+            updateView(mAudio);
+        }
+
+        getToolbar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        initialize();
+
+        mediaReceiver = new MediaReceiver(this);
+        receiverFilter = new IntentFilter();
+
+        mPlayBtn.setOnClickListener(this);
+        mPlayBtnMini.setOnClickListener(this);
+        mSeekbar.setOnSeekBarChangeListener(this);
+        mSeekbarMini.setOnSeekBarChangeListener(this);
+
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
+                        .getMinimumHeight(mCollapsingToolbar)) {
+                    mMiniPlayer.animate().alpha(1).setDuration(300);
+                } else {
+                    mMiniPlayer.animate().alpha(0).setDuration(300);
+                }
+            }
+        });
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             finishWithResult();
@@ -266,19 +278,21 @@ public class AudioDetailActivity extends FacebookActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-    private void finishWithResult(){
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mPlayIntent == null) {
+            mPlayIntent = new Intent(this, MediaService.class);
+            bindService(mPlayIntent, mConnection, Context.BIND_AUTO_CREATE);
+            startService(mPlayIntent);
+        }
+    }
+
+    private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
         setResult(RESULT_OK, data);
         finish();
-    }
-
-    @Override
-    public void updateFavouriteState() {
-        UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
-                .isFavourite()));
-        mFavouritePresenter.initialize(data);
     }
 
     private void initialize() {
@@ -324,16 +338,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mPlayIntent == null) {
-            mPlayIntent = new Intent(this, MediaService.class);
-            bindService(mPlayIntent, mConnection, Context.BIND_AUTO_CREATE);
-            startService(mPlayIntent);
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.play:
@@ -374,14 +378,14 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void onBufferStarted() {
-        // TODO: 4/19/16
-        Logger.d("AudioDetailActivity_onBufferStarted", "buffering start");
+        bufferingText.setVisibility(View.VISIBLE);
+        bufferingTextMini.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onBufferStopped() {
-        // TODO: 4/19/16
-        Logger.d("AudioDetailActivity_onBufferStopped", "buffering stop");
+        bufferingText.setVisibility(View.GONE);
+        bufferingTextMini.setVisibility(View.GONE);
     }
 
     @Override

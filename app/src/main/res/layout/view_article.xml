@@ -29,9 +29,11 @@
                 android:layout_height="@dimen/home_article_height"
                 android:layout_marginBottom="@dimen/spacing_xxsmall"
                 app:imageUrl="@{article.getData().getThumbnail()}"
-                fresco:actualImageScaleType="centerCrop"
-                fresco:backgroundImage="@color/colorAccent"
-                fresco:progressBarImageScaleType="centerInside"/>
+                app:placeholderImage="@drawable/default_gradient"
+                app:progressBarAutoRotateInterval="1000"
+                app:progressBarImage="@drawable/ic_refresh"
+                app:progressBarImageScaleType="centerInside"
+                fresco:actualImageScaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="match_parent"

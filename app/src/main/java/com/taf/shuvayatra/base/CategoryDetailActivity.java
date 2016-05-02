@@ -14,24 +14,19 @@ import com.taf.shuvayatra.ui.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.util.MyConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import butterknife.Bind;
 
 /**
  * Created by Nirazan-PC on 4/25/2016.
  */
 public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView{
-
     public Category mCategory;
     public List<Category> mSubCategories;
 
     @Inject
     CategoryPresenter mPresenter;
-
     public abstract MyConstants.DataParent getDataParent();
 
     @Override
