@@ -55,12 +55,27 @@ public class DatabaseHelper {
 
     public void insertUpdatePosts(List<PostEntity> pEntities) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPostCategoryDao postCategoryDao = mDaoSession.getDbPostCategoryDao();
         for (PostEntity entity : pEntities) {
             DbPost post = mDataMapper.transformPostForDB(entity);
             if (post != null) {
-                postDao.insertOrReplace(post);
+                Long insertId = postDao.insertOrReplace(post);
+                deleteAllPostCategoryRelations(insertId);
+                for (Long catId : entity.getCategoryIds()) {
+                    DbPostCategory item = new DbPostCategory();
+                    item.setCategoryId(catId);
+                    item.setPostId(insertId);
+                    postCategoryDao.insertOrReplace(item);
+                }
             }
         }
+    }
+
+    public void deleteAllPostCategoryRelations(Long postId){
+        DbPostCategoryDao postCategoryDao = mDaoSession.getDbPostCategoryDao();
+        postCategoryDao.queryBuilder()
+                .where(DbPostCategoryDao.Properties.PostId.eq(postId))
+                .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
     public void insertUpdateSections(List<SectionEntity> pEntities) {

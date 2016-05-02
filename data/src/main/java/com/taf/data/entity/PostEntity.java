@@ -12,6 +12,8 @@ public class PostEntity {
     PostDataEntity data;
     String source;
     List<String> tags;
+    @SerializedName("section_category")
+    List<Long> categoryIds;
     @SerializedName("created_at")
     Long createdAt;
     @SerializedName("updated_at")
@@ -87,5 +89,13 @@ public class PostEntity {
 
     public void setUpdatedAt(Long pUpdatedAt) {
         updatedAt = pUpdatedAt;
+    }
+
+    public List<Long> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Long> pCategoryIds) {
+        categoryIds = pCategoryIds;
     }
 }
