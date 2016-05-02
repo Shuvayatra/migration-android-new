@@ -12,8 +12,8 @@ public class HeaderInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         request = request.newBuilder()
-                .addHeader("accept", "application/json")
-                .addHeader("token", BuildConfig.API_KEY)
+                .addHeader("Accept", "application/json")
+                .addHeader("Token", BuildConfig.API_KEY)
                 .build();
         Response response = chain.proceed(request);
         return response;

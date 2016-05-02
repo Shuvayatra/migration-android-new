@@ -251,7 +251,7 @@ public class AudioDetailActivity extends FacebookActivity implements
                 shareViaBluetooth();
                 break;
             case SUBMENU_FACEBOOK:
-                showShareDialog(mPost);
+                showShareDialog(mAudio);
                 break;
 
         }

@@ -27,6 +27,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
@@ -46,7 +47,7 @@ import butterknife.Bind;
 
 public class FeedFragment extends BaseFragment implements
         ListItemClickListener,
-        PostListView, AdapterView.OnItemSelectedListener {
+        PostListView, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     public static final Integer PAGE_LIMIT = 12;
     public static final Integer INITIAL_OFFSET = 0;
@@ -114,7 +115,7 @@ public class FeedFragment extends BaseFragment implements
 
         initialize();
         setUpAdapter();
-        if(mFavouritesOnly) {
+        if(mFavouritesOnly|| getContext() instanceof InfoDetailActivity) {
             mFilterContainer.setVisibility(View.GONE);
         }else{
             mFilterContainer.setVisibility(View.VISIBLE);
@@ -140,6 +141,7 @@ public class FeedFragment extends BaseFragment implements
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     private void setUpAdapter() {
@@ -246,12 +248,6 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mSearchView.clearFocus();
-    }
-
-    @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
         if (mPage == INITIAL_OFFSET) {
             mListAdapter.setDataCollection(pPosts);
@@ -354,5 +350,29 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        filterBySearchView(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filterBySearchView(newText);
+        return true;
+    }
+
+    void filterBySearchView(String query){
+        if(mPosts!=null) {
+            List<Post> filteredPost = new ArrayList<>();
+
+            for (Post post : mPosts) {
+                if (post.getTitle().toLowerCase().contains(query.toLowerCase()))
+                    filteredPost.add(post);
+            }
+            mListAdapter.setDataCollection(filteredPost);
+        }
     }
 }

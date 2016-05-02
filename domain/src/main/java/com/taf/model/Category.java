@@ -19,8 +19,10 @@ public class Category extends BaseModel {
     public int getDataType() {
         if (section.getAlias().equals(MyConstants.SECTION.JOURNEY)) {
             return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
-        } else {
+        } else if(section.getAlias().equals(MyConstants.SECTION.COUNTRY)){
             return MyConstants.Adapter.TYPE_COUNTRY;
+        }else{
+            return MyConstants.Adapter.TYPE_INFO;
         }
     }
 

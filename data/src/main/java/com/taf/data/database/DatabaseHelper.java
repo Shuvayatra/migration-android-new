@@ -19,6 +19,7 @@ import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.model.Notification;
+import com.taf.util.MyConstants;
 
 import java.util.HashMap;
 import java.util.List;
@@ -137,7 +138,7 @@ public class DatabaseHelper {
         Join categoryJoin = queryBuilder.join(postJoin, DbPostCategoryDao.Properties.CategoryId,
                 DbCategory.class, DbCategoryDao.Properties.Id);
         if (pCategoryId != null) {
-            categoryJoin.where(DbCategoryDao.Properties.Id.eq(pCategoryId));
+            categoryJoin.whereOr(DbCategoryDao.Properties.Id.eq(pCategoryId), DbCategoryDao.Properties.ParentId.eq(pCategoryId));
         }
 
         List<DbPost> dbPosts = queryBuilder
@@ -234,9 +235,11 @@ public class DatabaseHelper {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         QueryBuilder queryBuilder = categoriesDao.queryBuilder();
 
-        Join sectionJoin = queryBuilder.join(DbCategoryDao.Properties.SectionId, DbSection.class,
-                DbSectionDao.Properties.Id);
-        sectionJoin.where(DbSectionDao.Properties.Alias.eq(section));
+        if(!section.equals(MyConstants.SECTION.INFO)) {
+            Join sectionJoin = queryBuilder.join(DbCategoryDao.Properties.SectionId, DbSection.class,
+                    DbSectionDao.Properties.Id);
+            sectionJoin.where(DbSectionDao.Properties.Alias.eq(section));
+        }
 
         if (isCategory) {
             queryBuilder.whereOr(DbCategoryDao.Properties.ParentId.isNull(), DbCategoryDao

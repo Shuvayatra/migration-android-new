@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
-import android.view.MenuItem;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -34,7 +33,6 @@ public abstract class FacebookActivity extends BaseActivity {
     private CallbackManager mCallback;
     private FacebookCallback<Sharer.Result> mFbCallBack;
     private ShareDialog mShareDialog;
-    protected Post mPost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

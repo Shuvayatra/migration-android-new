@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.ui.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
@@ -102,6 +103,8 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, destinationFragment).commit();
                 break;
             case 2:
+                InfoFragment infoFragment = InfoFragment.getInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,infoFragment).commit();
                 break;
             case 3:
                 UserFragment userFragment = new UserFragment();

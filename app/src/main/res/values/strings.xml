@@ -70,4 +70,5 @@
     <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
     <string name="query_hint_destination">Search Destination</string>
     <string name="title_activity_country_detail">CountryDetailActivity</string>
+    <string name="title_activity_info_detail">InfoDetailActivity</string>
 </resources>

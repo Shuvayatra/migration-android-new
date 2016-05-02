@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -62,7 +63,7 @@ public class VideoDetailActivity extends FacebookActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
             showShareDialog(mPost);
@@ -171,5 +172,14 @@ public class VideoDetailActivity extends FacebookActivity implements
             return matcher.group();
         }
         return "";
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(containsFavouriteOption()){
+            menu.findItem(R.id.action_favourite).setIcon(mPost.isFavourite()? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
+            return true;
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 }

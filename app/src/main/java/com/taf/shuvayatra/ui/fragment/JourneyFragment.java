@@ -93,6 +93,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
 
     @Override
     public void renderCategories(List<Category> pCategories) {
+        mCategories = pCategories;
         mAdapter.setDataCollection(pCategories);
     }
 
@@ -127,9 +128,9 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
     void filterCountries(String query){
         List<Category> filterCountreis = new ArrayList<>();
         if(mCategories!=null) {
-            for (Category country : mCategories) {
-                if (country.getTitle().toLowerCase().contains(query.toLowerCase()))
-                    filterCountreis.add(country);
+            for (Category category : mCategories) {
+                if (category.getTitle().toLowerCase().contains(query.toLowerCase()))
+                    filterCountreis.add(category);
             }
         }
         mAdapter.setDataCollection(filterCountreis);
