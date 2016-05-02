@@ -45,9 +45,9 @@ dependencies {
     compile appDependencies.supportv4
     compile appDependencies.appCompatv7
     compile appDependencies.cardView
-    compile appDependencies.palette
     compile appDependencies.designSupport
     compile appDependencies.cardView
+    compile appDependencies.analytics
     compile appDependencies.gcm
 
     compile appDependencies.butterKnife
@@ -56,12 +56,8 @@ dependencies {
     compile appDependencies.rxJava
     compile appDependencies.rxAndroid
     provided appDependencies.javaxAnnotation
-    compile appDependencies.pagerIndicator
     compile appDependencies.stetho
     compile appDependencies.fresco
     compile appDependencies.facebookSdk
-    compile appDependencies.iconics
-    compile appDependencies.iconicsGoogle
     compile files('libs/YouTubeAndroidPlayerApi.jar')
-    compile appDependencies.showCase
 }

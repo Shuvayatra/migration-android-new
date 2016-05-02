@@ -71,7 +71,7 @@ public class DatabaseHelper {
         }
     }
 
-    public void deleteAllPostCategoryRelations(Long postId){
+    public void deleteAllPostCategoryRelations(Long postId) {
         DbPostCategoryDao postCategoryDao = mDaoSession.getDbPostCategoryDao();
         postCategoryDao.queryBuilder()
                 .where(DbPostCategoryDao.Properties.PostId.eq(postId))
@@ -123,17 +123,17 @@ public class DatabaseHelper {
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
-            pOffset, String pType, List<Long> excludeIds) {
-        return getPosts(pLimit, pOffset, pType, false, categoryId, excludeIds);
+            pOffset, String pType, List<String> excludeTypes, List<Long> excludeIds) {
+        return getPosts(pLimit, pOffset, pType, false, categoryId, excludeTypes, excludeIds);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
-        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null);
+        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
-            pFavouritesOnly, Long pCategoryId, List<Long> pExcludeIds) {
+            pFavouritesOnly, Long pCategoryId, List<String> pExcludeTypes, List<Long> pExcludeIds) {
         Map<String, Object> map = new HashMap<>();
         DbPostDao postDao = mDaoSession.getDbPostDao();
 
@@ -147,6 +147,9 @@ public class DatabaseHelper {
         if (pExcludeIds != null) {
             queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
         }
+        /*if (pExcludeTypes != null) {
+            queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
+        }*/
 
         Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
                 DbPostCategoryDao.Properties.PostId);
@@ -199,11 +202,11 @@ public class DatabaseHelper {
         );
     }
 
-    public Observable<Boolean> saveNotification(Notification pNotification){
+    public Observable<Boolean> saveNotification(Notification pNotification) {
         return Observable.defer(() -> Observable.just(
                 mDaoSession.getDbNotificationDao()
-                .insert(mDataMapper.transformNotificationForDb(pNotification)) != -1
-            )
+                        .insert(mDataMapper.transformNotificationForDb(pNotification)) != -1
+                )
         );
     }
 
@@ -241,7 +244,7 @@ public class DatabaseHelper {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         QueryBuilder queryBuilder = categoriesDao.queryBuilder();
 
-        if(!section.equals(MyConstants.SECTION.INFO)) {
+        if (!section.equals(MyConstants.SECTION.INFO)) {
             Join sectionJoin = queryBuilder.join(DbCategoryDao.Properties.SectionId, DbSection.class,
                     DbSectionDao.Properties.Id);
             sectionJoin.where(DbSectionDao.Properties.Alias.eq(section));

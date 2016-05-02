@@ -84,6 +84,8 @@ public class DataMapper {
             data.setMediaUrl(pEntity.getMediaUrl());
             data.setDuration(pEntity.getDuration());
             data.setThumbnail(pEntity.getThumbnail());
+            data.setPhoneNumbers(pEntity.getPhoneNumbers());
+            data.setAddress(pEntity.getAddress());
         }
         return data;
     }

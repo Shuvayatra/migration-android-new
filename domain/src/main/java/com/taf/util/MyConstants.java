@@ -66,10 +66,12 @@ public class MyConstants {
         public static final String KEY_PLAY_STATUS = "key_play_status";
         public static final String KEY_FAVOURITES_ONLY = "key_favourites_only";
         public static final String KEY_FAVOURITE_STATUS = "key_favourite_status";
+        public static final String KEY_FAVOURITE_COUNT = "key_favourite_count";
         public static final String KEY_SUBCATEGORY = "key_subcategory";
         public static final String KEY_CATEGORY = "key_category";
         public static final String KEY_FROM_CATEGORY = "key_from_category";
         public static final String KEY_VIEW_COUNT = "key_view_count";
+        public static final String KEY_EXCLUDE_LIST = "key_exclude";
     }
 
     public static final class Intent {

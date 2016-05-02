@@ -56,8 +56,10 @@ public class DBDataStore implements IDataStore {
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long pId, int pLimit, int pOffset,
-                                                             String pType, List<Long> excludeIds) {
-        return mHelper.getPostByCategory(pId, pLimit, pOffset, pType, excludeIds);
+                                                             String pType, List<String>
+                                                                     excludeTypes, List<Long>
+                                                                     excludeIds) {
+        return mHelper.getPostByCategory(pId, pLimit, pOffset, pType, excludeTypes, excludeIds);
     }
 
     public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
@@ -68,11 +70,11 @@ public class DBDataStore implements IDataStore {
         return mHelper.setDownloadReference(pId, pReference);
     }
 
-    public Observable<List<DbNotification>> getNotifications(){
+    public Observable<List<DbNotification>> getNotifications() {
         return mHelper.getNotifications();
     }
 
-    public Observable<Boolean> saveNotification(Notification pNotification){
+    public Observable<Boolean> saveNotification(Notification pNotification) {
         return mHelper.saveNotification(pNotification);
     }
 

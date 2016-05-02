@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
+import com.taf.shuvayatra.databinding.PhoneNumberDataBinding;
+import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
@@ -54,6 +57,25 @@ public class BindingUtil {
                 "utf-8", null);
     }
 
+    @BindingAdapter("bind:address")
+    public static void setAddress(final TextView pView, final String pAddress) {
+        if (pAddress == null || pAddress.isEmpty()) {
+            pView.setText("");
+        } else {
+            pView.setText(pAddress);
+            pView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("geo:0,0?q=" + pAddress));
+                    if (intent.resolveActivity(pView.getContext().getPackageManager()) != null) {
+                        pView.getContext().startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+
     @BindingAdapter("bind:elapsedTime")
     public static void setElapsedTime(TextView pView, Long millis) {
         pView.setText(getTimeAgo(millis));
@@ -73,6 +95,55 @@ public class BindingUtil {
         }
     }
 
+    @BindingAdapter("bind:phoneNumbers")
+    public static void setPhoneNumbers(LinearLayout pContainer, List<String> pNumbers) {
+        pContainer.removeAllViews();
+        if (pNumbers != null && !pNumbers.isEmpty()) {
+            for (String number : pNumbers) {
+                showPhoneNumber(pContainer.getContext(), pContainer, number, false);
+            }
+        }
+    }
+
+    @BindingAdapter("bind:phoneNumbersBig")
+    public static void setPhoneNumbersBig(LinearLayout pContainer, List<String> pNumbers) {
+        pContainer.removeAllViews();
+        if (pNumbers != null && !pNumbers.isEmpty()) {
+            for (String number : pNumbers) {
+                showPhoneNumber(pContainer.getContext(), pContainer, number, true);
+            }
+        }
+    }
+
+    public static void showPhoneNumber(final Context pContext, final LinearLayout pContainer,
+                                       final String pNumber, boolean isBig) {
+        if (pNumber != null && !pNumber.isEmpty()) {
+            ViewDataBinding dataBinding;
+            if (isBig) {
+                dataBinding = DataBindingUtil.inflate(LayoutInflater.from
+                        (pContext), R.layout.view_phone_numbers_large, pContainer, false);
+                ((PhoneNumberLargeDataBinding) dataBinding).setNumber(pNumber);
+            } else {
+                dataBinding = DataBindingUtil.inflate(LayoutInflater.from
+                        (pContext), R.layout.view_phone_numbers, pContainer, false);
+                ((PhoneNumberDataBinding) dataBinding).setNumber(pNumber);
+            }
+            View view = dataBinding.getRoot();
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            view.setLayoutParams(params);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + pNumber));
+                    pContext.startActivity(callIntent);
+                }
+            });
+            pContainer.addView(view);
+        }
+    }
+
     public static void showSimilarAudioVideo(final Context pContext, LinearLayout pContainer, final Post
             pPost) {
         if (pPost != null) {
@@ -83,6 +154,8 @@ public class BindingUtil {
             View view = audioDataBinding.getRoot();
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup
                     .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, pContext.getResources().getDimensionPixelOffset(R.dimen
+                    .spacing_small));
             view.setLayoutParams(params);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,6 +181,8 @@ public class BindingUtil {
             View view = placeDataBinding.getRoot();
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup
                     .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, pContext.getResources().getDimensionPixelOffset(R.dimen
+                    .spacing_small));
             view.setLayoutParams(params);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

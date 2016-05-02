@@ -65,7 +65,6 @@ ext {
             facebookSdk:        "com.facebook.android:facebook-android-sdk:${facebookSdkVersion}",
             iconics:            "com.mikepenz:iconics-core:${iconicsVersion}",
             iconicsGoogle:      "com.mikepenz:google-material-typeface:${iconicsGoogleVersion}",
-            showCase:           "com.github.amlcurran.showcaseview:library:${showCaseVersion}",
             pdfViewer:          "com.joanzapata.pdfview:android-pdfview:${pdfViewerVersion}",
             analytics:          "com.google.android.gms:play-services-analytics:${playServicesVersion}"
     ]

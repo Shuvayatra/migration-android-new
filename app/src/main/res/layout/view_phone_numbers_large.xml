@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="PhoneNumberLargeDataBinding">
+
+        <variable
+            name="number"
+            type="java.lang.String"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ic_call"
+            android:layout_width="@dimen/icon_size_big"
+            android:layout_height="@dimen/icon_size_big"
+            android:layout_marginRight="@dimen/spacing_small"
+            android:padding="@dimen/spacing_small"
+            app:srcCompat="@drawable/ic_call"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ic_call"
+            android:layout_alignTop="@id/ic_call"
+            android:layout_marginLeft="@dimen/spacing_xxlarge"
+            android:layout_toRightOf="@id/ic_call"
+            android:gravity="center_vertical"
+            android:text="@{number}"
+            android:textSize="@dimen/text_default"
+            tools:text="+921 345 6777"/>
+    </RelativeLayout>
+</layout>

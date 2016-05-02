@@ -36,6 +36,7 @@ import com.taf.shuvayatra.presenter.AudioDetailPresenter;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
@@ -211,6 +212,9 @@ public class AudioDetailActivity extends FacebookActivity implements
                 try {
                     if (!getPreferences().getDownloadReferences().contains(mAudio
                             .getDownloadReference())) {
+                        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_DOWNLOAD,
+                                AnalyticsUtil.ACTION_AUDIO_DOWNLOAD, AnalyticsUtil.LABEL_ID,
+                                mAudio.getId());
                         mPresenter.downloadAudioPost(mAudio);
                     }
                 } catch (IOException e) {
@@ -222,7 +226,11 @@ public class AudioDetailActivity extends FacebookActivity implements
                 shareViaBluetooth();
                 break;
             case SUBMENU_FACEBOOK:
-                showShareDialog(mAudio);
+                if (showShareDialog(mAudio)) {
+                    AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_SHARE,
+                            AnalyticsUtil.ACTION_FACEBOOK, AnalyticsUtil.LABEL_ID, mService
+                                    .getCurrentTrack().getId());
+                }
                 break;
 
         }
@@ -232,8 +240,12 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void updateFavouriteState() {
         UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mAudio.isFavourite() != null && mAudio
-                .isFavourite()));
+        boolean status = !(mAudio.isFavourite() != null && mAudio.isFavourite());
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
+
+        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
+                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
+                AnalyticsUtil.LABEL_ID, mAudio.getId());
         mFavouritePresenter.initialize(data);
     }
 
@@ -295,6 +307,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mAudio.getLikes());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mAudio.getUnSyncedViewCount());
         setResult(RESULT_OK, data);
         finish();
@@ -326,6 +339,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     private void shareViaBluetooth() {
+        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_SHARE, AnalyticsUtil
+                .ACTION_BLUETOOTH, AnalyticsUtil.LABEL_ID, mAudio.getId());
         mPresenter.shareViaBluetooth(mAudio);
     }
 
@@ -436,14 +451,20 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        mAudio.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
+        mAudio.setIsFavourite(newFavouriteState);
+        int likes = mAudio.getLikes() == null ? 0 : mAudio.getLikes();
+        mAudio.setLikes(newFavouriteState == mOldFavouriteState
+                ? likes
+                : newFavouriteState ? likes + 1 : likes - 1);
+        ((ActivityAudioDetailBinding) mBinding).setAudio(mAudio);
         mOldFavouriteState = mAudio.isFavourite();
         invalidateOptionsMenu();
     }
 
     @Override
     public void onViewCountUpdated() {
-        mAudio.setUnSyncedViewCount(mAudio.getUnSyncedViewCount()+1);
+        mAudio.setUnSyncedViewCount(mAudio.getUnSyncedViewCount() + 1);
     }
 
     @Override

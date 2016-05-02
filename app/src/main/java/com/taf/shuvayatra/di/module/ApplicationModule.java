@@ -3,6 +3,8 @@ package com.taf.shuvayatra.di.module;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.taf.data.database.MyOpenHelper;
 import com.taf.data.database.dao.DaoMaster;
 import com.taf.data.database.dao.DaoSession;
@@ -10,6 +12,7 @@ import com.taf.data.executor.JobExecutor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.MyApplication;
+import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.util.AppPreferences;
 import com.taf.shuvayatra.util.UIThread;
 
@@ -57,5 +60,14 @@ public class ApplicationModule {
     @Singleton
     AppPreferences provideAppPreferences(Context pContext) {
         return new AppPreferences(pContext);
+    }
+
+    @Provides
+    @Singleton
+    synchronized Tracker provideTracker(Context pContext) {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(pContext);
+        Tracker tracker = analytics.newTracker(R.xml.my_global_tracker);
+        tracker.enableExceptionReporting(true);
+        return tracker;
     }
 }

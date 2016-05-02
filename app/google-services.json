@@ -19,7 +19,10 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-74795701-2"
+          }
         },
         "appinvite_service": {
           "status": 1,
