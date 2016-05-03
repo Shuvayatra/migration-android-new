@@ -143,7 +143,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if(mPost != null){
-            menu.findItem(R.id.action_favourite).setIcon(mPost.isFavourite()? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite()!=null &&mPost.isFavourite())? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
         }
         return true;
     }

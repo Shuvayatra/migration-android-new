@@ -283,10 +283,13 @@ public class FeedFragment extends BaseFragment implements
                 Category category = new Category();
                 category.setTitle("All");
                 mSubCategories.add(0, category);
+                Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
+                CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
+                mFilterSpinner.setAdapter(adapter);
             }
-            Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
-            CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
-            mFilterSpinner.setAdapter(adapter);
+            else{
+                mFilterContainer.setVisibility(View.GONE);
+            }
         } else {
             mFilters = getResources().getStringArray(R.array.home_filter_options);
             CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mFilters);
@@ -319,9 +322,13 @@ public class FeedFragment extends BaseFragment implements
                         }
                     } else {
                         if (option.equals(getString(R.string.article))) {
-                            filteredPost = filterByType("text");
-                        } else {
-                            filteredPost = filterByType(option);
+                            filteredPost = filterByType(getString(R.string.filter_article));
+                        } else if(option.equals(getString(R.string.audio))){
+                            filteredPost = filterByType(getString(R.string.filter_audio));
+                        } else if(option.equals(getString(R.string.video))){
+                            filteredPost = filterByType(getString(R.string.filter_video));
+                        } else if(option.equals(getString(R.string.news))){
+                            filteredPost = filterByType(getString(R.string.filter_news));
                         }
                     }
                 }

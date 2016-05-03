@@ -59,6 +59,14 @@
     <string name="news">News</string>
     <string name="favourite">Favourite</string>
 
+    <string name="filter_audio">audio</string>
+    <string name="filter_video">video</string>
+    <string name="filter_article">article</string>
+    <string name="filter_news">news</string>
+
+    <string name="like">Likes</string>
+    <string name="share">Shared</string>
+
     <string name="label_description">Description</string>
     <string name="label_other_places">other favourite places</string>
     <string name="empty_section">No categories are available for this section.</string>

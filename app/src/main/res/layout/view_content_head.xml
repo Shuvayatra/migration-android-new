@@ -60,7 +60,7 @@
             android:layout_marginRight="@dimen/spacing_xxxlarge"
             android:layout_toRightOf="@id/like"
             android:gravity="center_vertical"
-            android:text="@{String.valueOf(content.likes)}"
+            android:text='@{(content.likes == null?String.valueOf(0) :String.valueOf(content.likes)) + " "+@string/like }'
             android:textSize="@dimen/text_small"
             tools:text="23 loves"/>
 
@@ -82,7 +82,7 @@
             android:layout_below="@id/category"
             android:layout_toRightOf="@id/share"
             android:gravity="center_vertical"
-            android:text="@{String.valueOf(content.likes)}"
+            android:text='@{(content.share == null?String.valueOf(0) :String.valueOf(content.share)) + " "+@string/share }'
             android:textSize="@dimen/text_small"
             tools:text="30 shares"/>
 
