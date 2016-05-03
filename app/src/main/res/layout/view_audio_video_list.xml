@@ -51,8 +51,8 @@
                 android:layout_marginLeft="-25dp"
                 android:layout_toRightOf="@+id/thumbnail"
                 android:src="@{content.dataType == 2?@drawable/ic_video:@drawable/ic_audio}"
-                app:backgroundTint="@android:color/white"
                 app:elevation="3dp"
+                app:backgroundTint="@android:color/white"
                 app:fabSize="mini"
                 tools:src="@drawable/ic_video"/>
 
@@ -63,8 +63,7 @@
                 android:layout_marginLeft="@dimen/spacing_small"
                 android:layout_toRightOf="@id/type"
                 android:paddingRight="@dimen/spacing_standard"
-                android:paddingTop="@dimen/spacing_small"
-                android:paddingBottom="@dimen/spacing_small">
+                android:paddingTop="@dimen/spacing_small">
 
                 <TextView
                     android:id="@+id/title"
@@ -76,6 +75,7 @@
                     android:lines="2"
                     android:text="@{content.getTitle()}"
                     android:textSize="@dimen/text_default"
+                    android:textColor="@android:color/black"
                     tools:text="How migrants control over world the  ajdshjasd  jasd sdfj wer sdf sjdf wer"/>
 
                 <TextView
@@ -85,6 +85,7 @@
                     android:layout_below="@id/title"
                     android:layout_marginBottom="@dimen/spacing_xxsmall"
                     android:text="@{content.getCategory()}"
+                    android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     tools:text="Work Permit"/>
 
@@ -95,6 +96,7 @@
                     android:layout_below="@id/category"
                     app:elapsedTime="@{content.getCreatedAt()}"
                     android:textSize="@dimen/text_small"
+                    android:textColor="@color/text_main"
                     tools:text="3 days ago - 100 views"/>
             </RelativeLayout>
         </RelativeLayout>
