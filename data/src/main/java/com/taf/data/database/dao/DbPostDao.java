@@ -38,6 +38,9 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         public final static Property IsSynced = new Property(12, Boolean.class, "isSynced", false, "IS_SYNCED");
         public final static Property IsDownloaded = new Property(13, Boolean.class, "isDownloaded", false, "IS_DOWNLOADED");
         public final static Property DownloadReference = new Property(14, Long.class, "downloadReference", false, "DOWNLOAD_REFERENCE");
+        public final static Property ViewCount = new Property(15, Integer.class, "viewCount", false, "VIEW_COUNT");
+        public final static Property UnsyncedViewCount = new Property(16, Integer.class, "unsyncedViewCount", false, "UNSYNCED_VIEW_COUNT");
+        public final static Property FeaturedImage = new Property(17, String.class, "featuredImage", false, "FEATURED_IMAGE");
     };
 
 
@@ -67,7 +70,10 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
                 "\"IS_FAVOURITE\" INTEGER," + // 11: isFavourite
                 "\"IS_SYNCED\" INTEGER," + // 12: isSynced
                 "\"IS_DOWNLOADED\" INTEGER," + // 13: isDownloaded
-                "\"DOWNLOAD_REFERENCE\" INTEGER);"); // 14: downloadReference
+                "\"DOWNLOAD_REFERENCE\" INTEGER," + // 14: downloadReference
+                "\"VIEW_COUNT\" INTEGER," + // 15: viewCount
+                "\"UNSYNCED_VIEW_COUNT\" INTEGER," + // 16: unsyncedViewCount
+                "\"FEATURED_IMAGE\" TEXT);"); // 17: featuredImage
     }
 
     /** Drops the underlying database table. */
@@ -155,6 +161,21 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         if (downloadReference != null) {
             stmt.bindLong(15, downloadReference);
         }
+ 
+        Integer viewCount = entity.getViewCount();
+        if (viewCount != null) {
+            stmt.bindLong(16, viewCount);
+        }
+ 
+        Integer unsyncedViewCount = entity.getUnsyncedViewCount();
+        if (unsyncedViewCount != null) {
+            stmt.bindLong(17, unsyncedViewCount);
+        }
+ 
+        String featuredImage = entity.getFeaturedImage();
+        if (featuredImage != null) {
+            stmt.bindString(18, featuredImage);
+        }
     }
 
     /** @inheritdoc */
@@ -181,7 +202,10 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFavourite
             cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isSynced
             cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0, // isDownloaded
-            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14) // downloadReference
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // downloadReference
+            cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15), // viewCount
+            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // unsyncedViewCount
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17) // featuredImage
         );
         return entity;
     }
@@ -204,6 +228,9 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         entity.setIsSynced(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
         entity.setIsDownloaded(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
         entity.setDownloadReference(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
+        entity.setViewCount(cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15));
+        entity.setUnsyncedViewCount(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
+        entity.setFeaturedImage(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
      }
     
     /** @inheritdoc */

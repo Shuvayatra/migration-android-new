@@ -20,6 +20,7 @@ import com.taf.shuvayatra.databinding.VideoDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
+import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
 import com.taf.util.MyConstants;
 
@@ -34,6 +35,8 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     @Inject
     PostFavouritePresenter mFavouritePresenter;
+    @Inject
+    PostViewCountPresenter mPostViewCountPresenter;
 
     Post mPost;
     boolean mOldFavouriteState;
@@ -92,7 +95,7 @@ public class VideoDetailActivity extends FacebookActivity implements
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         initialize();
-
+        mPostViewCountPresenter.initialize(null);
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
     }
@@ -105,6 +108,7 @@ public class VideoDetailActivity extends FacebookActivity implements
                 .build()
                 .inject(this);
         mFavouritePresenter.attachView(this);
+        mPostViewCountPresenter.attachView(this);
     }
 
     @Override
@@ -118,6 +122,7 @@ public class VideoDetailActivity extends FacebookActivity implements
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -127,6 +132,11 @@ public class VideoDetailActivity extends FacebookActivity implements
         mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
         mOldFavouriteState = mPost.isFavourite();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onViewCountUpdated() {
+        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
     }
 
     @Override
@@ -148,7 +158,7 @@ public class VideoDetailActivity extends FacebookActivity implements
 //        pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
 
 
-        String videoId = getYoutubeIdFromUrl("https://www.youtube.com/watch?v=BiP4BxYjH08");
+        String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
         if (!isRestored) {
             if (!videoId.isEmpty())
                 pYouTubePlayer.loadVideo(videoId);
@@ -177,7 +187,8 @@ public class VideoDetailActivity extends FacebookActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(containsFavouriteOption()){
-            menu.findItem(R.id.action_favourite).setIcon(mPost.isFavourite()? R.drawable.icon_favourite: R.drawable.icon_not_favourite);
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite()!= null &&mPost.isFavourite()?
+                    R.drawable.icon_favourite: R.drawable.icon_not_favourite));
             return true;
         }
         return super.onPrepareOptionsMenu(menu);

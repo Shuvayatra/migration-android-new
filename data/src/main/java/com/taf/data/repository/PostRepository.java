@@ -96,6 +96,13 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<Long> updateUnSyncedViewCount(long pId) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore().updateUnSyncedViewCount(pId)
+        );
+    }
+
+    @Override
     public Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus) {
         return Observable.just(
                 mDataStoreFactory.createDBDataStore()

@@ -75,5 +75,9 @@ public class DBDataStore implements IDataStore {
     public Observable<Boolean> saveNotification(Notification pNotification){
         return mHelper.saveNotification(pNotification);
     }
+
+    public long updateUnSyncedViewCount(Long pId){
+        return mHelper.updateUnSyncedViewCount(pId);
+    }
 }
 

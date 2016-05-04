@@ -29,12 +29,10 @@
         layout="@layout/view_content_head"
         app:content="@{video}"/>
 
-    <TextView
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:text="@{video.description}"
-        android:padding="@dimen/spacing_standard"
+        app:htmlContent="@{video.description}"
         tools:text="This is the description of the video."/>
     <TextView
         android:layout_width="match_parent"

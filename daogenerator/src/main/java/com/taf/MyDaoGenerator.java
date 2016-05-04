@@ -48,6 +48,9 @@ public class MyDaoGenerator {
         post.addBooleanProperty("isSynced");
         post.addBooleanProperty("isDownloaded");
         post.addLongProperty("downloadReference");
+        post.addIntProperty("viewCount");
+        post.addIntProperty("unsyncedViewCount");
+        post.addStringProperty("featuredImage");
         return post;
     }
 

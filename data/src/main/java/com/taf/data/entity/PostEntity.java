@@ -18,6 +18,12 @@ public class PostEntity {
     Long createdAt;
     @SerializedName("updated_at")
     Long updatedAt;
+    @SerializedName("featured_image")
+    String featuredImage;
+    @SerializedName("likes_count")
+    Integer favouriteCount;
+    Integer shareCount;
+    Integer viewCount;
 
     public Long getId() {
         return id;
@@ -97,5 +103,37 @@ public class PostEntity {
 
     public void setCategoryIds(List<Long> pCategoryIds) {
         categoryIds = pCategoryIds;
+    }
+
+    public String getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(String pFeaturedImage) {
+        featuredImage = pFeaturedImage;
+    }
+
+    public Integer getFavouriteCount() {
+        return favouriteCount;
+    }
+
+    public void setFavouriteCount(Integer pFavouriteCount) {
+        favouriteCount = pFavouriteCount;
+    }
+
+    public Integer getShareCount() {
+        return shareCount;
+    }
+
+    public void setShareCount(Integer pShareCount) {
+        shareCount = pShareCount;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer pViewCount) {
+        viewCount = pViewCount;
     }
 }

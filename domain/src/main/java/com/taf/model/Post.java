@@ -16,11 +16,14 @@ public class Post extends BaseModel {
     Long mUpdatedAt;
     Integer likes;
     Integer share;
+    String featuredImage;
 
     Boolean isFavourite;
     Boolean isSynced;
     Boolean downloadStatus;
     Long downloadReference;
+    Integer mViewCount;
+    Integer mUnSyncedViewCount;
 
     List<Category> mCategoryList;
     // for pagination purpose
@@ -178,5 +181,38 @@ public class Post extends BaseModel {
 
     public void setCategoryList(List<Category> pCategoryList) {
         mCategoryList = pCategoryList;
+    }
+
+    public void setViewCount(Integer pViewCount) {
+        mViewCount = pViewCount;
+    }
+
+    public void setUnSyncedViewCount(Integer pUnSyncedViewCount) {
+        mUnSyncedViewCount = pUnSyncedViewCount;
+    }
+
+    public Integer getViewCount() {
+        return mViewCount;
+    }
+
+    public Integer getUnSyncedViewCount() {
+        return mUnSyncedViewCount!=null?mUnSyncedViewCount:0;
+    }
+
+    public String getTotalViews(){
+        Integer total = ( mViewCount != null? mViewCount :0) + (mUnSyncedViewCount!=null?mUnSyncedViewCount :0);
+        if(total<1000){
+            return total.toString();
+        }else {
+            return total/1000 + "K";
+        }
+    }
+
+    public String getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(String pFeaturedImage) {
+        featuredImage = pFeaturedImage;
     }
 }

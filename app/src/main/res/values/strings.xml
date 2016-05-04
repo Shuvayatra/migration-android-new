@@ -4,7 +4,7 @@
 
     <string name="filter_audio">audio</string>
     <string name="filter_video">video</string>
-    <string name="filter_article">article</string>
+    <string name="filter_article">text</string>
     <string name="filter_news">news</string>
 
     <string name="title_activity_places_detail">PlacesDetailActivity</string>

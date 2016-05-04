@@ -208,23 +208,14 @@ public class DatabaseHelper {
     }
 
     public void updateFavouriteState(List<Long> pIds, boolean isSynced) {
-        updateFavouriteState(pIds, null, isSynced);
-    }
-
-    public void updateFavouriteState(List<Long> pIds, Boolean isFavourite, boolean isSynced) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         List<DbPost> postList = postDao.queryBuilder()
                 .where(DbPostDao.Properties.Id.in(pIds))
                 .list();
         for (DbPost dbPost : postList) {
-            if (isFavourite != null) {
-                dbPost.setIsFavourite(isFavourite);
-                dbPost.setFavouriteCount(isFavourite
-                        ? dbPost.getFavouriteCount() + 1
-                        : dbPost.getFavouriteCount() - 1
-                );
-            }
             dbPost.setIsSynced(isSynced);
+            if(isSynced)
+                dbPost.setUnsyncedViewCount(0);
         }
         postDao.insertOrReplaceInTx(postList);
     }
@@ -288,4 +279,11 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
+    public long updateUnSyncedViewCount(Long pId){
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder().where(DbPostDao.Properties.Id.eq(pId)).unique();
+        post.setUnsyncedViewCount((post.getUnsyncedViewCount()!=null? post.getUnsyncedViewCount():0)+1);
+        post.setIsSynced(false);
+        return postDao.insertOrReplace(post);
+    }
 }

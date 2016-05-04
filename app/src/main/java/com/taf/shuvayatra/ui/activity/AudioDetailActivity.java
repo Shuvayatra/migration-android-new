@@ -34,6 +34,7 @@ import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.presenter.AudioDetailPresenter;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
+import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
 import com.taf.util.MyConstants;
 
@@ -56,6 +57,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     AudioDetailPresenter mPresenter;
     @Inject
     PostFavouritePresenter mFavouritePresenter;
+    @Inject
+    PostViewCountPresenter mPostViewCountPresenter;
 
     @Bind(R.id.audio_time)
     TextView mAudioTime;
@@ -248,6 +251,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initialize();
+        mPostViewCountPresenter.initialize(null);
 
         mediaReceiver = new MediaReceiver(this);
         receiverFilter = new IntentFilter();
@@ -291,6 +295,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mAudio.getUnSyncedViewCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -305,6 +310,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         mPresenter.attachView(this);
         mFavouritePresenter.attachView(this);
         mPresenter.initialize(null);
+        mPostViewCountPresenter.attachView(this);
     }
 
     @Override
@@ -433,6 +439,11 @@ public class AudioDetailActivity extends FacebookActivity implements
         mAudio.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
         mOldFavouriteState = mAudio.isFavourite();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onViewCountUpdated() {
+        mAudio.setUnSyncedViewCount(mAudio.getUnSyncedViewCount()+1);
     }
 
     @Override
