@@ -41,6 +41,11 @@
                 app:overlayImage="@drawable/transparent_gradient"
                 app:layout_collapseMode="parallax"
                 app:imageUrl="@{country.coverImageUrl}"
+                app:actualImageScaleType="centerCrop"
+                app:placeholderImage="@drawable/default_gradient"
+                app:progressBarImage="@drawable/ic_refresh"
+                app:progressBarAutoRotateInterval="1000"
+                app:progressBarImageScaleType="centerInside"
                 tools:src="@mipmap/ic_launcher"/>
             <TextView
                 android:layout_width="wrap_content"

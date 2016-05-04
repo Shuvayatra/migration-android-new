@@ -1,3 +1,72 @@
 <resources>
+    <string name="message_play_services_not_found">Play services must be installed.</string>
+    <string name="message_downloading">Downloading...</string>
+    <string name="message_download_start">Downloading %1$s</string>
+    <string name="message_download_success">%1$s downloaded successfully</string>
+    <string name="message_already_downloaded">%1$s already downloaded</string>
 
+    <string name="message_search_un_synced_favourites">Searching for un-synced favourites.</string>
+    <string name="message_no_un_synced_favourites">No un-synced favourites found.</string>
+    <string name="message_syncing_favourites">Syncing favourites  to server.</string>
+    <string name="message_favourites_synced">All favourites synced to server.</string>
+    <string name="message_not_all_favourites_synced">Could not sync all favourites to server</string>
+
+    <string name="message_fetching_latest_content">नयाँ सामग्री खोज्दै...</string>
+    <string name="message_content_available">नयाँ सामग्री उपलब्ध...</string>
+    <string name="error_message_no_metadata">डाटा प्राप्त गर्न असमर्थ</string>
+    <string name="exception_message_generic">त्रुटि फेला पर्यो</string>
+    <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
+
+    <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_share_facebook">Share On Facebook</string>
+    <string name="action_share_bluetooth">Share via Bluetooth</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="share_audio">Share Audio Post</string>
+    <string name="error_bluetooth_share">You need to download the audio in order to share</string>
+
+    <string name="default_empty_message">No feeds available currently.</string>
+    <string name="similar_audios">similar audios</string>
+    <string name="audio_time">%1$s | %2$s</string>
+
+    <string-array name="user_section_tabs">
+        <item>सुचना</item>
+        <item>@string/favourite</item>
+    </string-array>
+
+    <string-array name="home_tabs">
+        <item>यात्रा</item>
+        <item>गन्तब्य</item>
+        <item>जानकारी</item>
+        <item>प्रयोगकर्ता</item>
+    </string-array>
+
+    <string-array name="home_filter_options">
+        <item>@string/all</item>
+        <item>@string/favourite</item>
+        <item>@string/article</item>
+        <item>@string/audio</item>
+        <item>@string/video</item>
+        <item>@string/news</item>
+    </string-array>
+
+    <string name="all">सबै</string>
+    <string name="audio">अडियो</string>
+    <string name="video">भिडियो</string>
+    <string name="article">लेख</string>
+    <string name="news">समाचार</string>
+    <string name="favourite">मलाई मनपर्न</string>
+
+    <string name="like">Likes</string>
+    <string name="share">Shared</string>
+    <string name="label_description">Description</string>
+    <string name="label_other_places">other favourite places</string>
+    <string name="empty_section">No categories are available for this section.</string>
+    <string name="no_favourites">You have not favourited any posts yet.</string>
+    <string name="query_hint">What you want to know?</string>
+    <string name="similar_video">SIMILAR VIDEOS</string>
+    <string name="select_category">यात्रा( रोजाइ छान्नु होस्)</string>
+    <string name="query_hint_destination">Search Destination</string>
+    <string name="message_buffering">(buffering...)</string>
 </resources>
