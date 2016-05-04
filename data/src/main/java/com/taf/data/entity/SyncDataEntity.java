@@ -3,10 +3,12 @@ package com.taf.data.entity;
 public class SyncDataEntity {
     Long id;
     String status;
+    Integer views;
 
-    public SyncDataEntity(Long pId, String pStatus) {
+    public SyncDataEntity(Long pId, String pStatus, Integer viewCount) {
         id = pId;
         status = pStatus;
+        views = viewCount;
     }
 
     public Long getId() {
@@ -23,5 +25,13 @@ public class SyncDataEntity {
 
     public void setStatus(String pStatus) {
         status = pStatus;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer pViews) {
+        views = pViews;
     }
 }

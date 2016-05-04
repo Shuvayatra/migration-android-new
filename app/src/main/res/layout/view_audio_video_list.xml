@@ -100,7 +100,16 @@
                     app:elapsedTime="@{content.getCreatedAt()}"
                     android:textSize="@dimen/text_small"
                     android:textColor="@color/text_main"
-                    tools:text="3 days ago - 100 views"/>
+                    tools:text="3 days ago"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/category"
+                    android:layout_toRightOf="@id/time"
+                    android:text='@{" - " + content.totalViews + " Views"}'
+                    android:textSize="@dimen/text_small"
+                    android:textColor="@color/text_main"
+                    tools:text=" - 100 views"/>
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

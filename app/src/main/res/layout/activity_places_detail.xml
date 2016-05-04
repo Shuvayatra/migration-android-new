@@ -42,12 +42,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
-                    app:imageUrl="@{place.getData().getThumbnail()}"
+                    app:imageUrl="@{place.featuredImage}"
                     app:layout_collapseMode="parallax"
                     fresco:actualImageScaleType="focusCrop"
                     fresco:fadeDuration="300"
                     fresco:failureImageScaleType="centerInside"
-                    fresco:overlayImage="@drawable/audio_toolbar_gradient"/>
+                    fresco:overlayImage="@drawable/transparent_gradient"
+                    app:placeholderImage="@drawable/default_gradient"/>
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"

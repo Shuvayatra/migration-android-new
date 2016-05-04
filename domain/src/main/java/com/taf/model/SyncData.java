@@ -6,10 +6,12 @@ public class SyncData {
 
     Long id;
     String status;
+    Integer viewCount;
 
-    public SyncData(Long pId, String pStatus) {
+    public SyncData(Long pId, String pStatus,Integer pViewCount) {
         id = pId;
         status = pStatus;
+        viewCount = pViewCount;
     }
 
     public Long getId() {
@@ -26,5 +28,13 @@ public class SyncData {
 
     public void setStatus(String pStatus) {
         status = pStatus;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer pViewCount) {
+        viewCount = pViewCount;
     }
 }

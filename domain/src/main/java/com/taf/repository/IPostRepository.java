@@ -26,4 +26,6 @@ public interface IPostRepository extends IBaseRepository<Post> {
     Observable<Boolean> updateDownloadStatus(long pReference, boolean pDownloadStatus);
 
     Observable<Boolean> setDownloadReference(long pId, long pReference);
+
+    Observable<Long> updateUnSyncedViewCount(long pId);
 }

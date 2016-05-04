@@ -67,6 +67,10 @@ public class DataMapper {
             post.setCreatedAt(pEntity.getCreatedAt());
             post.setTags(pEntity.getTags());
             post.setData(transformPostData(pEntity.getData()));
+            post.setFeaturedImage(pEntity.getFeaturedImage());
+            post.setShare(pEntity.getShareCount());
+            post.setLikes(pEntity.getFavouriteCount());
+            post.setViewCount(pEntity.getViewCount());
             return post;
         }
         return null;
@@ -96,6 +100,10 @@ public class DataMapper {
             post.setType(pEntity.getType());
             post.setUpdatedAt(pEntity.getUpdatedAt());
             post.setCreatedAt(pEntity.getCreatedAt());
+            post.setFavouriteCount(pEntity.getFavouriteCount());
+            post.setFeaturedImage(pEntity.getFeaturedImage());
+            post.setShareCount(pEntity.getShareCount());
+            post.setViewCount(pEntity.getViewCount());
             return post;
         }
         return null;
@@ -173,6 +181,11 @@ public class DataMapper {
             post.setIsSynced(pPost.getIsSynced());
             post.setTotalCount(totalCount);
             post.setCategoryList(transformCategoryFromDb(pPost.getCategoryList()));
+            post.setViewCount(pPost.getViewCount());
+            post.setUnSyncedViewCount(pPost.getUnsyncedViewCount());
+            post.setFeaturedImage(pPost.getFeaturedImage());
+            post.setLikes(pPost.getFavouriteCount());
+            post.setShare(pPost.getShareCount());
             return post;
         }
         return null;
@@ -273,7 +286,7 @@ public class DataMapper {
 
     public SyncDataEntity transformSyncData(SyncData pSyncData) {
         if (pSyncData != null) {
-            return new SyncDataEntity(pSyncData.getId(), pSyncData.getStatus());
+            return new SyncDataEntity(pSyncData.getId(), pSyncData.getStatus(), pSyncData.getViewCount());
         }
         return null;
     }
@@ -293,9 +306,9 @@ public class DataMapper {
 
     public SyncDataEntity transformPostForSync(DbPost pPost) {
         if (pPost != null) {
-            return new SyncDataEntity(pPost.getId(), pPost.getIsFavourite()
+            return new SyncDataEntity(pPost.getId(),pPost.getIsFavourite()==null?null:(pPost.getIsFavourite()
                     ? SyncData.STATUS_LIKE
-                    : SyncData.STATUS_DISLIKE);
+                    : SyncData.STATUS_DISLIKE),pPost.getUnsyncedViewCount());
         }
         return null;
     }

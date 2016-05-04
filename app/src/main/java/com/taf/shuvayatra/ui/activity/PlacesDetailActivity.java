@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
@@ -12,6 +13,7 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.PlaceDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -29,7 +31,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class PlacesDetailActivity extends BaseActivity implements PlacesListView, PostDetailView {
+public class PlacesDetailActivity extends FacebookActivity implements PlacesListView, PostDetailView {
 
     @Inject
     PlacesListPresenter mPresenter;
@@ -54,6 +56,11 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
 
     @Override
     public boolean containsFavouriteOption() {
+        return true;
+    }
+
+    @Override
+    public boolean containsShareOption() {
         return true;
     }
 
@@ -96,6 +103,10 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
             case android.R.id.home:
                 finishWithResult();
                 break;
+            case R.id.action_share:
+                showShareDialog(mPlace);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -143,6 +154,11 @@ public class PlacesDetailActivity extends BaseActivity implements PlacesListView
         mPlace.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
         mOldFavouriteState = mPlace.isFavourite();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onViewCountUpdated() {
+
     }
 
     @Override

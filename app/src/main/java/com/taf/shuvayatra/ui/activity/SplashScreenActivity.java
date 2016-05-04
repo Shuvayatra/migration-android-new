@@ -151,7 +151,7 @@ public class SplashScreenActivity extends BaseActivity implements
 
     @Override
     public void showErrorView(String pErrorMessage) {
-        Snackbar.make(messageView, pErrorMessage, Snackbar.LENGTH_LONG).show();
+//        Snackbar.make(messageView, pErrorMessage, Snackbar.LENGTH_LONG).show();
         exitSplashScreen();
     }
 

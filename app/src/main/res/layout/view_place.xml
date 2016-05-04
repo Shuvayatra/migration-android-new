@@ -29,7 +29,7 @@
                 android:id="@+id/thumbnail"
                 android:layout_width="@dimen/thumbnail_width"
                 android:layout_height="@dimen/thumbnail_width"
-                app:imageUrl="@{place.getData().getThumbnail()}"
+                app:imageUrl="@{place.featuredImage}"
                 app:placeholderImage="@drawable/default_gradient"
                 app:progressBarAutoRotateInterval="1000"
                 app:progressBarImage="@drawable/ic_refresh"

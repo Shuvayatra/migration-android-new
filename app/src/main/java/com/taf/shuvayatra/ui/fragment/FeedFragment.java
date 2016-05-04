@@ -253,6 +253,11 @@ public class FeedFragment extends BaseFragment implements
             if (requestCode == 3209) {
                 boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
                         false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT,0);
+                Logger.e("FeedFragment", "view count = "+viewCount);
+                if(viewCount!=0){
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
+                }
                 mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
                 mListAdapter.notifyDataSetChanged();
             }

@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -16,6 +17,7 @@ import com.taf.shuvayatra.databinding.ArticleDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
+import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
 import com.taf.util.MyConstants;
 
@@ -25,6 +27,9 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     @Inject
     PostFavouritePresenter mFavouritePresenter;
+
+    @Inject
+    PostViewCountPresenter mPostViewCountPresenter;
 
     Post mPost;
     private boolean mOldFavouriteState;
@@ -87,9 +92,10 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
 
         initialize();
-
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mPostViewCountPresenter.initialize(null);
     }
 
     @Override
@@ -108,6 +114,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -119,6 +126,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
                 .dataModule(new DataModule(mPost.getId()))
                 .build()
                 .inject(this);
+        mPostViewCountPresenter.attachView(this);
         mFavouritePresenter.attachView(this);
     }
 
@@ -127,6 +135,12 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
         mOldFavouriteState = mPost.isFavourite();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onViewCountUpdated() {
+        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
+
     }
 
     @Override

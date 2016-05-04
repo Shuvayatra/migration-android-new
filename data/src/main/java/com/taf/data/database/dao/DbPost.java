@@ -25,6 +25,9 @@ public class DbPost {
     private Boolean isSynced;
     private Boolean isDownloaded;
     private Long downloadReference;
+    private Integer viewCount;
+    private Integer unsyncedViewCount;
+    private String featuredImage;
 
     // KEEP FIELDS - put your custom fields here
     List<DbCategory> categoryList;
@@ -37,7 +40,7 @@ public class DbPost {
         this.id = id;
     }
 
-    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference) {
+    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference, Integer viewCount, Integer unsyncedViewCount, String featuredImage) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -53,6 +56,9 @@ public class DbPost {
         this.isSynced = isSynced;
         this.isDownloaded = isDownloaded;
         this.downloadReference = downloadReference;
+        this.viewCount = viewCount;
+        this.unsyncedViewCount = unsyncedViewCount;
+        this.featuredImage = featuredImage;
     }
 
     public Long getId() {
@@ -173,6 +179,30 @@ public class DbPost {
 
     public void setDownloadReference(Long downloadReference) {
         this.downloadReference = downloadReference;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Integer getUnsyncedViewCount() {
+        return unsyncedViewCount;
+    }
+
+    public void setUnsyncedViewCount(Integer unsyncedViewCount) {
+        this.unsyncedViewCount = unsyncedViewCount;
+    }
+
+    public String getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(String featuredImage) {
+        this.featuredImage = featuredImage;
     }
 
     // KEEP METHODS - put your custom methods here

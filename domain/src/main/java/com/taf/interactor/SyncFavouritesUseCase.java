@@ -29,9 +29,11 @@ public class SyncFavouritesUseCase extends UseCase<Boolean> {
         }
         List<SyncData> syncDataList = new ArrayList<>();
         for (Post post : postList) {
-            syncDataList.add(new SyncData(post.getId(), post.isFavourite()
+            syncDataList.add(new SyncData(post.getId(),post.isFavourite()==null?null:(post.isFavourite()
                     ? SyncData.STATUS_LIKE
-                    : SyncData.STATUS_DISLIKE));
+                    : SyncData.STATUS_DISLIKE),
+                    post.getUnSyncedViewCount()));
+            System.out.println("SyncFavouritesUseCase " + ""+post.getTitle() + " view count "+ post.getUnSyncedViewCount());
         }
         return mRepository.syncFavourites(syncDataList);
     }

@@ -75,7 +75,7 @@
                     android:layout_marginRight="@dimen/spacing_xxxlarge"
                     android:layout_toRightOf="@id/like"
                     android:gravity="center_vertical"
-                    android:text="@{String.valueOf(place.likes)}"
+                    android:text='@{(place.likes == null?String.valueOf(0) :String.valueOf(place.likes)) + " "+@string/like }'
                     android:textSize="@dimen/text_small"
                     tools:text="23 loves"/>
 
@@ -97,7 +97,7 @@
                     android:layout_below="@id/category"
                     android:layout_toRightOf="@id/share"
                     android:gravity="center_vertical"
-                    android:text="@{String.valueOf(place.likes)}"
+                    android:text='@{(place.share == null?String.valueOf(0) :String.valueOf(place.share)) + " "+@string/share }'
                     android:textSize="@dimen/text_small"
                     tools:text="30 shares"/>
 
@@ -190,14 +190,12 @@
                     android:textAllCaps="true"
                     android:textSize="@dimen/text_default"/>
 
-                <TextView
+                <WebView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_large"
                     android:layout_marginTop="@dimen/spacing_standard"
-                    android:lineSpacingExtra="@dimen/default_line_height"
-                    android:text="@{place.getDescription()}"
-                    android:textSize="@dimen/text_default"
+                    app:htmlContent="@{place.getDescription()}"
                     tools:text="One of the ILO’s predominant concerns since its inception has been with the protection of migrant workers. In this interview, Binda Pandey, Member of governing council of the General Federation of Nepalese Trade Unions (GEFONT)) explains the challenges related to the implementation of the ILO Fair Migration Agenda. Ms. Pandey also highlights the experience from Nepal about the protection of migrant workers."/>
             </LinearLayout>
 
