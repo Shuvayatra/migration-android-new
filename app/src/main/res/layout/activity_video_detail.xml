@@ -5,6 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="VideoDetailDataBinding">
+
+        <variable
+            name="similarVideos"
+            type="java.util.List&lt;com.taf.model.Post>"/>
+
         <variable
             name="video"
             type="com.taf.model.Post"/>
@@ -28,7 +33,9 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
         </android.support.design.widget.AppBarLayout>
 
-        <include layout="@layout/content_video_detail"
+        <include
+            layout="@layout/content_video_detail"
+            app:similarVideos="@{similarVideos}"
             app:video="@{video}"/>
 
     </android.support.design.widget.CoordinatorLayout>

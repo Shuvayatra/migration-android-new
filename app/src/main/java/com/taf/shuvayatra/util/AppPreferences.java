@@ -23,7 +23,7 @@ public class AppPreferences {
         mContext = pContext;
     }
 
-    public long getLastUpdateStamp() {
+    public Long getLastUpdateStamp() {
         return pref.getLong(LAST_UPDATE_STAMP, -1);
     }
 

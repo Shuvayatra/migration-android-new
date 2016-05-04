@@ -43,14 +43,14 @@ public class DestinationFragment extends BaseFragment implements
     CategoryPresenter mPresenter;
     private ListAdapter<Category> mAdapter;
 
-    public static DestinationFragment newInstance() {
-        DestinationFragment fragment = new DestinationFragment();
-        return fragment;
-    }
-
     @Override
     public int getLayout() {
         return R.layout.fragment_destination;
+    }
+
+    public static DestinationFragment newInstance() {
+        DestinationFragment fragment = new DestinationFragment();
+        return fragment;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DestinationFragment extends BaseFragment implements
     }
 
     private void setUpAdapter() {
-        mAdapter = new ListAdapter<>(getContext(), this);
+        mAdapter = new ListAdapter<>(getContext(),this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
@@ -72,7 +72,7 @@ public class DestinationFragment extends BaseFragment implements
     private void initialize() {
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
-                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true, 0L))
+                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true, null))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);

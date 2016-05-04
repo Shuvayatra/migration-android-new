@@ -81,13 +81,18 @@ public class BindingUtil {
         pView.setText(getTimeAgo(millis));
     }
 
+    @BindingAdapter("bind:similarPosts")
+    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts) {
+        setSimilarPosts(pContainer, pPosts, null);
+    }
+
     @BindingAdapter({"bind:similarPosts", "bind:countryId"})
     public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts, Long
             countryId) {
         if (pPosts != null && pPosts.size() > 0) {
             for (Post post : pPosts) {
                 if (post.getDataType() == MyConstants.Adapter.TYPE_AUDIO || post.getDataType() ==
-                        MyConstants.Adapter.TYPE_AUDIO) {
+                        MyConstants.Adapter.TYPE_VIDEO) {
                     showSimilarAudioVideo(pContainer.getContext(), pContainer, post);
                 } else if (post.getDataType() == MyConstants.Adapter.TYPE_PLACE) {
                     showSimilarPlace(pContainer.getContext(), pContainer, post, countryId);

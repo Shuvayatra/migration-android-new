@@ -18,8 +18,9 @@ import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetNotificationListUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
-import com.taf.interactor.GetTagListUseCase;
+import com.taf.interactor.GetSimilarPostsUseCase;
 import com.taf.interactor.GetSinglePostUseCase;
+import com.taf.interactor.GetTagListUseCase;
 import com.taf.interactor.SaveNotificationListUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
@@ -49,6 +50,7 @@ public class DataModule {
     MyConstants.DataParent mParentType;
     String mPostType;
     List<String> mExcludeTypes = null;
+    List<String> mTags = null;
     boolean mFavouriteOnly = false;
     boolean mUnSyncedOnly = false;
     boolean mIsCategory = false;
@@ -58,6 +60,12 @@ public class DataModule {
 
     public DataModule(Long pId) {
         mId = pId;
+    }
+
+    public DataModule(Long pId, String pPostType, List<String> pTags) {
+        mId = pId;
+        mPostType = pPostType;
+        mTags = pTags;
     }
 
     public DataModule(boolean pFavouriteOnly, boolean pUnSyncedOnly) {
@@ -137,6 +145,15 @@ public class DataModule {
     IBaseRepository provideLatestContentDataRepository(DataStoreFactory pDataStoreFactory,
                                                        DataMapper pDataMapper) {
         return new LatestContentRepository(pDataStoreFactory, pDataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("similarPostList")
+    UseCase provideSimilarPostListUseCase(IPostRepository pDataRepository, ThreadExecutor
+            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new GetSimilarPostsUseCase(mPostType, mTags, mId, pDataRepository, pThreadExecutor,
+                pPostExecutionThread);
     }
 
     @Provides
@@ -228,8 +245,8 @@ public class DataModule {
     @PerActivity
     @Named("share_count_update")
     UseCase providePostShareCountUseCase(IPostRepository pRepository,
-                                         ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
-        return new UpdatePostShareCountUseCase(mId,pRepository,pThreadExecutor,pPostExecutionThread);
+                                         ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new UpdatePostShareCountUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
     @Provides
@@ -251,7 +268,7 @@ public class DataModule {
     @PerActivity
     @Named("single_post")
     UseCase provideSinglePostUseCase(IPostRepository pRepository, ThreadExecutor pThreadExecutor,
-                                     PostExecutionThread pPostExecutionThread){
-        return new GetSinglePostUseCase(mId,pRepository, pThreadExecutor, pPostExecutionThread);
+                                     PostExecutionThread pPostExecutionThread) {
+        return new GetSinglePostUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
     }
 }

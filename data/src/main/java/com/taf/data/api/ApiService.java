@@ -15,7 +15,7 @@ import rx.Observable;
 
 public interface ApiService {
     @GET(MyConstants.API.LATEST_CONTENT)
-    Observable<LatestContentEntity> getLatestContent(@Query("last_updated") long pLastUpdateStamp);
+    Observable<LatestContentEntity> getLatestContent(@Query("last_updated") Long pLastUpdateStamp);
 
     @POST(MyConstants.API.SYNC_LIKES)
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);

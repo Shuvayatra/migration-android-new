@@ -128,8 +128,8 @@ public class Post extends BaseModel {
 
     public String getCategory() {
         for (Category category : getCategoryList()) {
-            if (category.getSection().getAlias().equals(MyConstants.SECTION.JOURNEY) && (category
-                    .getParentId() == null || category.getParentId() == 0)) {
+            if (category.getAlias() != null && category.getAlias().equals(MyConstants.SECTION
+                    .JOURNEY)) {
                 return category.getTitle();
             }
         }
@@ -184,23 +184,23 @@ public class Post extends BaseModel {
         mCategoryList = pCategoryList;
     }
 
+    public Integer getViewCount() {
+        return mViewCount;
+    }
+
     public void setViewCount(Integer pViewCount) {
         mViewCount = pViewCount;
+    }
+
+    public Integer getUnSyncedViewCount() {
+        return mUnSyncedViewCount != null ? mUnSyncedViewCount : 0;
     }
 
     public void setUnSyncedViewCount(Integer pUnSyncedViewCount) {
         mUnSyncedViewCount = pUnSyncedViewCount;
     }
 
-    public Integer getViewCount() {
-        return mViewCount;
-    }
-
-    public Integer getUnSyncedViewCount() {
-        return mUnSyncedViewCount!=null?mUnSyncedViewCount:0;
-    }
-
-    public String getTotalViews(){
+    public String getTotalViews() {
         return getInTermOfK(mViewCount, mUnSyncedViewCount);
     }
 
@@ -213,27 +213,32 @@ public class Post extends BaseModel {
     }
 
     public Integer getUnSyncedShareCount() {
-        return mUnSyncedShareCount!=null?mUnSyncedShareCount:0;
+        return mUnSyncedShareCount != null ? mUnSyncedShareCount : 0;
     }
 
     public void setUnSyncedShareCount(Integer pUnSyncedShareCount) {
         mUnSyncedShareCount = pUnSyncedShareCount;
     }
 
-    public String getTotalShare(){
+    public String getTotalShare() {
         return getInTermOfK(share, mUnSyncedShareCount);
     }
 
-    public String getTotalLikes(){
-        return getInTermOfK(likes,0);
+    public String getTotalLikes() {
+        return getInTermOfK(likes, 0);
     }
 
-    public String getInTermOfK(Integer num1, Integer num2){
+    public String getInTermOfK(Integer num1, Integer num2) {
         Integer total = ((num1 != null ? num1 : 0) + (num2 != null ? num2 : 0));
-        if(total<1000){
+        if (total < 1000) {
             return total.toString();
-        }else {
-            return total/1000 + "K";
+        } else {
+            return total / 1000 + "K";
         }
+    }
+
+    @Override
+    public String toString() {
+        return getTitle();
     }
 }

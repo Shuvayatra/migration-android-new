@@ -46,14 +46,14 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
     private List<Category> mCategories;
     private List<Category> mSubCategories;
 
+    public static JourneyFragment newInstance() {
+        JourneyFragment fragment = new JourneyFragment();
+        return fragment;
+    }
+
     @Override
     public int getLayout() {
         return R.layout.fragment_journey;
-    }
-
-    public static JourneyFragment newInstance(){
-        JourneyFragment fragment = new JourneyFragment();
-        return fragment;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
         mRecyclerView.setEmptyMessage(getString(R.string.empty_section));
     }
 
-    void initialize(){
-        DataModule dataModule = new DataModule(MyConstants.DataParent.JOURNEY, true, 0L);
+    void initialize() {
+        DataModule dataModule = new DataModule(MyConstants.DataParent.JOURNEY, true, null);
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .dataModule(dataModule)
@@ -88,7 +88,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
         mSearchView.setOnQueryTextListener(this);
     }
 
-    private void loadCategories(){
+    private void loadCategories() {
         mPresenter.initialize(null);
     }
 
@@ -116,7 +116,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        Category category  = ((Category) pModel);
+        Category category = ((Category) pModel);
         Intent i = new Intent(getContext(), JourneyCategoryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
         startActivity(i);
@@ -127,9 +127,9 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
 
     }
 
-    void filterCountries(String query){
+    void filterCountries(String query) {
         List<Category> filterCountreis = new ArrayList<>();
-        if(mCategories!=null) {
+        if (mCategories != null) {
             for (Category category : mCategories) {
                 if (category.getTitle().toLowerCase().contains(query.toLowerCase()))
                     filterCountreis.add(category);

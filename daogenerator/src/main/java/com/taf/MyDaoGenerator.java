@@ -2,9 +2,7 @@ package com.taf;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-import de.greenrobot.daogenerator.ToMany;
 
 public class MyDaoGenerator {
 
@@ -17,15 +15,7 @@ public class MyDaoGenerator {
     private static void createDB(Schema pSchema) {
         pSchema.enableKeepSectionsByDefault();
         Entity post = createPostTable(pSchema);
-        Entity section = createSectionTable(pSchema);
-        Entity category = createCategoryTable(pSchema);
-
-        // define one-to-many for section-category
-        Property sectionId = category.addLongProperty("sectionId").notNull().getProperty();
-        category.addToOne(section, sectionId).setName("section");
-        ToMany sectionToCategories = section.addToMany(category, sectionId);
-        sectionToCategories.setName("categoryList");
-        sectionToCategories.orderAsc(category.getProperties().get(6));
+        createCategoryTable(pSchema);
 
         createPostCategoryTable(pSchema);
         createNotificationTable(pSchema);
@@ -64,23 +54,17 @@ public class MyDaoGenerator {
         return postCategory;
     }
 
-    private static Entity createSectionTable(Schema pSchema) {
-        Entity section = pSchema.addEntity("DbSection");
-        section.addIdProperty();
-        section.addStringProperty("title");
-        section.addStringProperty("alias");
-        section.addLongProperty("createdAt");
-        section.addLongProperty("updatedAt");
-        return section;
-    }
-
     private static Entity createCategoryTable(Schema pSchema) {
         Entity category = pSchema.addEntity("DbCategory");
         category.addIdProperty();
         category.addStringProperty("title");
+        category.addStringProperty("alias");
         category.addStringProperty("iconUrl");
         category.addStringProperty("smallIconUrl");
         category.addStringProperty("coverImageUrl");
+        category.addIntProperty("leftIndex");
+        category.addIntProperty("rightIndex");
+        category.addIntProperty("depth");
         category.addLongProperty("parentId");
         category.addLongProperty("position");
         category.addLongProperty("createdAt");

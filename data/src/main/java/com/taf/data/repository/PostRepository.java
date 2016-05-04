@@ -30,6 +30,14 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<List<Post>> getSimilarPost(String pType, List<String> pTags, List<Long>
+            excludeIds, int pLimit, int pOffset) {
+        return mDataStoreFactory.createDBDataStore()
+                .getSimilarPosts(pLimit, pOffset, pType, pTags, excludeIds)
+                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+    }
+
+    @Override
     public Observable<List<Post>> getFavouriteList(int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getFavouritePosts(pLimit, pOffset)
@@ -105,6 +113,11 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<Long> updateUnSyncedShareCount(long pId) {
+        return Observable.just(mDataStoreFactory.createDBDataStore().updateUnSyncedShareCount(pId));
+    }
+
+    @Override
     public Observable<List<Post>> getList(int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getPosts(pLimit, pOffset, null)
@@ -116,11 +129,6 @@ public class PostRepository implements IPostRepository {
         return mDataStoreFactory.createDBDataStore()
                 .getPost(pId)
                 .map(pPost -> mDataMapper.transformPostFromDb(pPost, 0));
-    }
-
-    @Override
-    public Observable<Long> updateUnSyncedShareCount(long pId) {
-        return Observable.just(mDataStoreFactory.createDBDataStore().updateUnSyncedShareCount(pId));
     }
 
     /*

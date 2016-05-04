@@ -30,7 +30,7 @@ public class RestDataStore implements IDataStore {
         mContext = pContext;
     }
 
-    public Observable<LatestContentEntity> getLatestContents(long pLastUpdatedStamp) {
+    public Observable<LatestContentEntity> getLatestContents(Long pLastUpdatedStamp) {
         if (isThereInternetConnection()) {
             return mApiRequest.getLatestContents(pLastUpdatedStamp)
                     .doOnNext(pLatestContentEntity -> {

@@ -5,21 +5,18 @@ import com.google.gson.reflect.TypeToken;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
-import com.taf.data.database.dao.DbSection;
 import com.taf.data.database.dao.DbTag;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
-import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
 import com.taf.model.Notification;
 import com.taf.model.Post;
 import com.taf.model.PostData;
-import com.taf.model.Section;
 import com.taf.model.SyncData;
 
 import java.util.ArrayList;
@@ -112,22 +109,10 @@ public class DataMapper {
         return null;
     }
 
-    public DbSection transformSectionForDB(SectionEntity pEntity) {
-        if (pEntity != null) {
-            DbSection section = new DbSection(pEntity.getId());
-            section.setTitle(pEntity.getTitle());
-            section.setAlias(pEntity.getAlias());
-            section.setCreatedAt(pEntity.getCreatedAt());
-            section.setUpdatedAt(pEntity.getUpdatedAt());
-            return section;
-        }
-        return null;
-    }
-
     public DbCategory transformCategoryForDB(CategoryEntity pEntity) {
         if (pEntity != null) {
             DbCategory category = new DbCategory(pEntity.getId());
-            category.setParentId(pEntity.getParentId());
+            category.setParentId(pEntity.getParentId() == null ? 0 : pEntity.getParentId());
             category.setTitle(pEntity.getTitle());
             category.setCoverImageUrl(pEntity.getCoverImageUrl());
             category.setIconUrl(pEntity.getIconUrl());
@@ -135,6 +120,10 @@ public class DataMapper {
             category.setPosition(pEntity.getPosition());
             category.setCreatedAt(pEntity.getCreatedAt());
             category.setUpdatedAt(pEntity.getUpdatedAt());
+            category.setLeftIndex(pEntity.getLeftIndex());
+            category.setRightIndex(pEntity.getRightIndex());
+            category.setDepth(pEntity.getDepth());
+            category.setAlias(pEntity.getAlias());
             return category;
         }
         return null;
@@ -218,20 +207,9 @@ public class DataMapper {
             category.setSmallIconUrl(pDbCategory.getSmallIconUrl());
             category.setParentId(pDbCategory.getParentId());
             category.setPosition(pDbCategory.getPosition());
-            category.setSection(transformSectionFromDB(pDbCategory.getSection()));
+            category.setAlias(pDbCategory.getAlias());
+            category.setParentAlias(pDbCategory.getParentAlias());
             return category;
-        }
-        return null;
-    }
-
-    public Section transformSectionFromDB(DbSection pDbSection) {
-        if (pDbSection != null) {
-            Section section = new Section();
-            section.setTitle(pDbSection.getTitle());
-            section.setAlias(pDbSection.getAlias());
-            section.setUpdatedAt(pDbSection.getUpdatedAt());
-            section.setCreatedAt(pDbSection.getCreatedAt());
-            return section;
         }
         return null;
     }
@@ -310,17 +288,17 @@ public class DataMapper {
 
     public SyncDataEntity transformPostForSync(DbPost pPost) {
         if (pPost != null) {
-            return new SyncDataEntity(pPost.getId(),pPost.getIsFavourite()==null?null:(pPost.getIsFavourite()
+            return new SyncDataEntity(pPost.getId(), pPost.getIsFavourite() == null ? null : (pPost.getIsFavourite()
                     ? SyncData.STATUS_LIKE
-                    : SyncData.STATUS_DISLIKE),pPost.getUnsyncedViewCount());
+                    : SyncData.STATUS_DISLIKE), pPost.getUnsyncedViewCount());
         }
         return null;
     }
 
-    public List<String> transformTags(List<DbTag> data){
+    public List<String> transformTags(List<DbTag> data) {
         List<String> tags = new ArrayList<>();
         for (DbTag dbTag : data) {
-            if(dbTag != null && dbTag.getTitle() != null && !dbTag.getTitle().isEmpty()){
+            if (dbTag != null && dbTag.getTitle() != null && !dbTag.getTitle().isEmpty()) {
                 tags.add(dbTag.getTitle());
             }
         }

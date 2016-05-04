@@ -57,7 +57,7 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
     }
 
     void initialize(){
-        DataModule dataModule = new DataModule(MyConstants.DataParent.INFO, true, 0L);
+        DataModule dataModule = new DataModule(MyConstants.DataParent.INFO, true, null);
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .dataModule(dataModule)

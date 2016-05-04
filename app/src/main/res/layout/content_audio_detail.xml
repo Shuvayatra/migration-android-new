@@ -4,6 +4,12 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
+        <variable
+            name="similarAudios"
+            type="java.util.List&lt;com.taf.model.Post>"/>
+
         <variable
             name="audio"
             type="com.taf.model.Post"/>
@@ -44,7 +50,9 @@
             <RelativeLayout
                 android:id="@+id/similar_audio_section"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/player_control_section_height"
+                android:visibility="@{(similarAudios == null || similarAudios.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
 
                 <TextView
                     android:id="@+id/label"
@@ -61,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/label"
                     android:orientation="vertical"
-                    android:padding="@dimen/spacing_xsmall"/>
+                    android:padding="@dimen/spacing_xsmall"
+                    app:similarPosts="@{similarAudios}"/>
             </RelativeLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

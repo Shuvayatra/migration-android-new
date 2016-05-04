@@ -6,6 +6,7 @@ public class Category extends BaseModel {
     String title;
     String coverImageUrl;
     String iconUrl;
+    String alias;
     String smallIconUrl;
     Long parentId;
     Long position;
@@ -13,15 +14,15 @@ public class Category extends BaseModel {
     Long updatedAt;
     Long createdAt;
 
-    Section section;
+    String parentAlias;
 
     @Override
     public int getDataType() {
-        if (section.getAlias().equals(MyConstants.SECTION.JOURNEY)) {
+        if (getParentAlias().equals(MyConstants.SECTION.JOURNEY)) {
             return MyConstants.Adapter.TYPE_JOURNEY_CATEGORY;
-        } else if(section.getAlias().equals(MyConstants.SECTION.COUNTRY)){
+        } else if (getParentAlias().equals(MyConstants.SECTION.COUNTRY)) {
             return MyConstants.Adapter.TYPE_COUNTRY;
-        }else{
+        } else {
             return MyConstants.Adapter.TYPE_INFO;
         }
     }
@@ -90,12 +91,20 @@ public class Category extends BaseModel {
         createdAt = pCreatedAt;
     }
 
-    public Section getSection() {
-        return section;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setSection(Section pSection) {
-        section = pSection;
+    public void setAlias(String pAlias) {
+        alias = pAlias;
+    }
+
+    public String getParentAlias() {
+        return parentAlias;
+    }
+
+    public void setParentAlias(String pParentAlias) {
+        parentAlias = pParentAlias;
     }
 
     @Override

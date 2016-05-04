@@ -31,7 +31,7 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
 
     public void addFeedFragment(List<Category> pCategories) {
         List<String> excludeTypes = null;
-        if (!mCategory.getSection().getAlias().equals(MyConstants.SECTION.COUNTRY)) {
+        if (!mCategory.getParentAlias().equals(MyConstants.SECTION.COUNTRY)) {
             excludeTypes = new ArrayList<>();
             excludeTypes.add("place");
         }

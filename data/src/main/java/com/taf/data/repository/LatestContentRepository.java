@@ -28,7 +28,7 @@ public class LatestContentRepository implements IBaseRepository<LatestContent> {
     @Override
     public Observable<LatestContent> getSingle(Long pLastUpdateStamp) {
         RestDataStore restDataStore = mDataStoreFactory.createRestDataStore();
-        return restDataStore.getLatestContents(pLastUpdateStamp)
+        return restDataStore.getLatestContents(pLastUpdateStamp == -1 ? null : pLastUpdateStamp)
                 .map(pLatestContentEntity -> mDataMapper.transformLatestContent
                         (pLatestContentEntity));
     }

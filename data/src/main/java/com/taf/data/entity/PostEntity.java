@@ -20,9 +20,11 @@ public class PostEntity {
     Long updatedAt;
     @SerializedName("featured_image")
     String featuredImage;
-    @SerializedName("likes_count")
+    @SerializedName("like_count")
     Integer favouriteCount;
+    @SerializedName("share_count")
     Integer shareCount;
+    @SerializedName("view_count")
     Integer viewCount;
 
     public Long getId() {
