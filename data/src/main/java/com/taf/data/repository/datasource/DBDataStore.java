@@ -62,6 +62,11 @@ public class DBDataStore implements IDataStore {
         return mHelper.getPostByCategory(pId, pLimit, pOffset, pType, excludeTypes, excludeIds);
     }
 
+    public Observable<Map<String, Object>> getPostWithExcludes(int pLimit, int pOffset,
+                                                               List<String> excludeTypes) {
+        return mHelper.getPostWithExcludes(pLimit, pOffset, excludeTypes);
+    }
+
     public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
         return mHelper.updateDownloadStatus(pReference, pDownloadStatus);
     }

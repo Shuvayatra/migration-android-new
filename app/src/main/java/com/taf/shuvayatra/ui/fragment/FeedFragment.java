@@ -96,6 +96,9 @@ public class FeedFragment extends BaseFragment implements
     private Long mCategoryId;
     private int mCurrentSelection;
 
+    public FeedFragment() {
+    }
+
     public static FeedFragment newInstance(boolean favouritesOnly) {
         FeedFragment feedFragment = new FeedFragment();
         Bundle data = new Bundle();
@@ -117,6 +120,14 @@ public class FeedFragment extends BaseFragment implements
         return feedFragment;
     }
 
+    public static FeedFragment newInstance(List<String> pExcludeTypes) {
+        Bundle args = new Bundle();
+        args.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) pExcludeTypes);
+        FeedFragment fragment = new FeedFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public int getLayout() {
         return R.layout.fragment_feed;
@@ -128,6 +139,7 @@ public class FeedFragment extends BaseFragment implements
 
         mSearchFilterSection.setVisibility(mFavouritesOnly ? View.GONE : View.VISIBLE);
 
+        Logger.d("FeedFragment_onActivityCreated", "excludeTypes:" + mExcludeTypes);
         initialize();
         setUpAdapter();
         if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
@@ -145,9 +157,9 @@ public class FeedFragment extends BaseFragment implements
         if (mFavouritesOnly) {
             dataModule = new DataModule(mFavouritesOnly, false);
         } else if (mFromCategory) {
-            dataModule = new DataModule(mCategoryId, MyConstants.DataParent.JOURNEY);
+            dataModule = new DataModule(mCategoryId, mExcludeTypes);
         } else {
-            dataModule = new DataModule();
+            dataModule = new DataModule(mExcludeTypes);
         }
         DaggerDataComponent.builder()
                 .dataModule(dataModule)
@@ -247,37 +259,6 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == BaseActivity.RESULT_OK) {
-            if (requestCode == 3209) {
-                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
-                        false);
-                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT,0);
-                Logger.e("FeedFragment", "view count = "+viewCount);
-                if(viewCount!=0){
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
-                }
-                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
-                mListAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle data = getArguments();
-        if (data != null) {
-            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
-            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
-            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
-            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
-	    mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
-        }
     }
 
     @Override
@@ -425,5 +406,36 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public Context getContext() {
         return getActivity();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
+                Logger.e("FeedFragment", "view count = " + viewCount);
+                if (viewCount != 0) {
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
+                }
+                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle data = getArguments();
+        if (data != null) {
+            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
+            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
+            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
+            mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
+        }
     }
 }

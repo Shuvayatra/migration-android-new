@@ -23,6 +23,8 @@ public interface IPostRepository extends IBaseRepository<Post> {
     Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset, String pType,
                                              List<String> excludeTypes, List<Long> excludeIds);
 
+    Observable<List<Post>> getPostWithExcludes(int pLimit, int pOffset, List<String> excludeTypes);
+
     Observable<Boolean> updateDownloadStatus(long pReference, boolean pDownloadStatus);
 
     Observable<Boolean> setDownloadReference(long pId, long pReference);

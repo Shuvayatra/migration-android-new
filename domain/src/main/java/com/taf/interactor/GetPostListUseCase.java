@@ -27,7 +27,7 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
                               String pPostType, boolean pFavouriteOnly, boolean pUnSyncedOnly,
                               List<String> pExcludeTypes, IPostRepository pRepository,
                               ThreadExecutor pThreadExecutor, PostExecutionThread
-                                          pPostExecutionThread) {
+                                      pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mParentType = pParentType;
         mParentId = pParentId;
@@ -46,16 +46,13 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
 
         if (mUnSyncedOnly) {
             return mRepository.getPostWithUnSyncedFavourites();
-        } else if (mParentType != null) {
-            switch (mParentType) {
-                default:
-                case COUNTRY:
-                case JOURNEY:
-                    return mRepository.getPostByCategory(mParentId, limit, offset, mPostType,
-                            mExcludeTypes, excludeIdList);
-            }
+        } else if (mParentId != null) {
+            return mRepository.getPostByCategory(mParentId, limit, offset, mPostType,
+                    mExcludeTypes, excludeIdList);
         } else if (mFavouriteOnly) {
             return mRepository.getFavouriteList(limit, offset);
+        } else if (mExcludeTypes != null) {
+            return mRepository.getPostWithExcludes(limit, offset, mExcludeTypes);
         } else {
             return mRepository.getList(limit, offset);
         }

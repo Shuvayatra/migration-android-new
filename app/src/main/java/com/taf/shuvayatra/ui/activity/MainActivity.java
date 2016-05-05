@@ -14,6 +14,7 @@ import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.UserFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -126,7 +127,9 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, userFragment).commit();
                 break;
             case 4:
-                FeedFragment feedFragment = new FeedFragment();
+                List<String> excludes = new ArrayList<>();
+                excludes.add("place");
+                FeedFragment feedFragment = FeedFragment.newInstance(excludes);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
                 break;
         }

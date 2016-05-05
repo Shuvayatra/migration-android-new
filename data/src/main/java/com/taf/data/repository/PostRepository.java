@@ -74,6 +74,14 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<List<Post>> getPostWithExcludes(int pLimit, int pOffset, List<String>
+            excludeTypes) {
+        return mDataStoreFactory.createDBDataStore()
+                .getPostWithExcludes(pLimit, pOffset, excludeTypes)
+                .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
+    }
+
+    @Override
     public Observable<Boolean> updateDownloadStatus(long pReference, boolean pDownloadStatus) {
         return Observable.just(
                 mDataStoreFactory.createDBDataStore()
