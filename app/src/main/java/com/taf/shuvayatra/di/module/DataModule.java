@@ -21,6 +21,7 @@ import com.taf.interactor.SaveNotificationListUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
 import com.taf.interactor.UpdateFavouriteStateUseCase;
+import com.taf.interactor.UpdatePostShareCountUseCase;
 import com.taf.interactor.UpdatePostViewCountUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
@@ -217,5 +218,13 @@ public class DataModule {
                                         ThreadExecutor pThreadExecutor, PostExecutionThread
                                                 pPostExecutionThread) {
         return new UpdatePostViewCountUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("share_count_update")
+    UseCase providePostShareCountUseCase(IPostRepository pRepository,
+                                         ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
+        return new UpdatePostShareCountUseCase(mId,pRepository,pThreadExecutor,pPostExecutionThread);
     }
 }

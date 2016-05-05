@@ -188,6 +188,7 @@ public class DataMapper {
             post.setFeaturedImage(pPost.getFeaturedImage());
             post.setLikes(pPost.getFavouriteCount());
             post.setShare(pPost.getShareCount());
+            post.setUnSyncedShareCount(pPost.getUnsyncedShareCount());
             return post;
         }
         return null;

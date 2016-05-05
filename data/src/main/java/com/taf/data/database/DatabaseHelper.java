@@ -296,4 +296,12 @@ public class DatabaseHelper {
         post.setIsSynced(false);
         return postDao.insertOrReplace(post);
     }
+
+    public long updateUnSyncedShareCount(Long pId){
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+        DbPost post = postDao.queryBuilder().where(DbPostDao.Properties.Id.eq(pId)).unique();
+        post.setUnsyncedShareCount((post.getUnsyncedShareCount()!=null?post.getUnsyncedShareCount():0)+1);
+        post.setIsSynced(false);
+        return postDao.insertOrReplace(post);
+    }
 }

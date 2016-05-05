@@ -309,6 +309,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mAudio.getLikes());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mAudio.getUnSyncedViewCount());
+        data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mAudio.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -324,6 +325,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         mFavouritePresenter.attachView(this);
         mPresenter.initialize(null);
         mPostViewCountPresenter.attachView(this);
+        mPostShareCountPresenter.attachView(this);
     }
 
     @Override
@@ -465,6 +467,12 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void onViewCountUpdated() {
         mAudio.setUnSyncedViewCount(mAudio.getUnSyncedViewCount() + 1);
+    }
+
+    @Override
+    public void onShareCountUpdate() {
+        mAudio.setUnSyncedShareCount(mAudio.getUnSyncedShareCount()+1);
+        ((ActivityAudioDetailBinding) mBinding).setAudio(mAudio);
     }
 
     @Override

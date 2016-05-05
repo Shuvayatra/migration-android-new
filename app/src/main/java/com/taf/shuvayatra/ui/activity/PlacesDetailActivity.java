@@ -133,6 +133,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
                 .inject(this);
         mPresenter.attachView(this);
         mFavouritePresenter.attachView(this);
+        mPostShareCountPresenter.attachView(this);
     }
 
     @Override
@@ -147,6 +148,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPlace.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPlace.getLikes());
+        data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mPlace.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -182,6 +184,12 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     @Override
     public void onViewCountUpdated() {
         mPlace.setUnSyncedViewCount(mPlace.getUnSyncedViewCount() + 1);
+    }
+
+    @Override
+    public void onShareCountUpdate() {
+        mPlace.setUnSyncedShareCount(mPlace.getUnSyncedShareCount()+1);
+        ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
     }
 
     @Override

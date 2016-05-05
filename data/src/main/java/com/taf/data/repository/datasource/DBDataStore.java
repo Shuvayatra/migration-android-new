@@ -86,5 +86,9 @@ public class DBDataStore implements IDataStore {
     public long updateUnSyncedViewCount(Long pId){
         return mHelper.updateUnSyncedViewCount(pId);
     }
+
+    public long updateUnSyncedShareCount(Long pId){
+        return mHelper.updateUnSyncedShareCount(pId);
+    }
 }
 

@@ -41,6 +41,7 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         public final static Property ViewCount = new Property(15, Integer.class, "viewCount", false, "VIEW_COUNT");
         public final static Property UnsyncedViewCount = new Property(16, Integer.class, "unsyncedViewCount", false, "UNSYNCED_VIEW_COUNT");
         public final static Property FeaturedImage = new Property(17, String.class, "featuredImage", false, "FEATURED_IMAGE");
+        public final static Property UnsyncedShareCount = new Property(18, Integer.class, "unsyncedShareCount", false, "UNSYNCED_SHARE_COUNT");
     };
 
 
@@ -73,7 +74,8 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
                 "\"DOWNLOAD_REFERENCE\" INTEGER," + // 14: downloadReference
                 "\"VIEW_COUNT\" INTEGER," + // 15: viewCount
                 "\"UNSYNCED_VIEW_COUNT\" INTEGER," + // 16: unsyncedViewCount
-                "\"FEATURED_IMAGE\" TEXT);"); // 17: featuredImage
+                "\"FEATURED_IMAGE\" TEXT," + // 17: featuredImage
+                "\"UNSYNCED_SHARE_COUNT\" INTEGER);"); // 18: unsyncedShareCount
     }
 
     /** Drops the underlying database table. */
@@ -176,6 +178,11 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         if (featuredImage != null) {
             stmt.bindString(18, featuredImage);
         }
+ 
+        Integer unsyncedShareCount = entity.getUnsyncedShareCount();
+        if (unsyncedShareCount != null) {
+            stmt.bindLong(19, unsyncedShareCount);
+        }
     }
 
     /** @inheritdoc */
@@ -205,7 +212,8 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // downloadReference
             cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15), // viewCount
             cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // unsyncedViewCount
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17) // featuredImage
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // featuredImage
+            cursor.isNull(offset + 18) ? null : cursor.getInt(offset + 18) // unsyncedShareCount
         );
         return entity;
     }
@@ -231,6 +239,7 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         entity.setViewCount(cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15));
         entity.setUnsyncedViewCount(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
         entity.setFeaturedImage(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setUnsyncedShareCount(cursor.isNull(offset + 18) ? null : cursor.getInt(offset + 18));
      }
     
     /** @inheritdoc */
