@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string
+        name="ga_trackingId"
+        translatable="false">UA-74795701-2
+    </string>
+
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- The screen names that will appear in reports -->
+    <!-- Activities -->
+    <screenName name="com.taf.shuvayatra.ui.activity.ArticleDetailActivity">
+        Article / News Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.AudioDetailActivity">
+        Audio Player Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.CountryDetailActivity">
+        Feeds - Country
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.InfoDetailActivity">
+        Feeds - Info Detail
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.JourneyCategoryDetailActivity">
+        Feeds - Journey
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.VideoDetailActivity">
+        Video Player Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.activity.PlacesDetailActivity">
+        Place Detail Screen
+    </screenName>
+
+    <!-- Fragments -->
+    <screenName name="com.taf.shuvayatra.ui.fragment.DestinationFragment">
+        Destination List Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.fragment.InfoFragment">
+        Info Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.fragment.JourneyFragment">
+        Journey Category List Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.fragment.UserFragment">
+        User Screen
+    </screenName>
+    <screenName name="com.taf.shuvayatra.ui.fragment.FeedFragment">
+        Feeds Section
+    </screenName>
+</resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

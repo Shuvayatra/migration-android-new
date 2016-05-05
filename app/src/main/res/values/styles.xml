@@ -10,15 +10,6 @@
         <item name="android:dialogTheme">@style/AppTheme.Dialog</item>
     </style>
 
-    <!--<style name="AppTheme.AudioDetail" parent="AppTheme.NoActionBar">
-        &lt;!&ndash; Customize your theme here. &ndash;&gt;
-        <item name="colorPrimary">#F3F3F3</item>
-    </style>-->
-
-    <style name="AppTheme.Personalization" parent="AppTheme.NoActionBar">
-        <item name="colorAccent">@color/colorPrimary</item>
-    </style>
-
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -27,21 +18,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
-    <style name="showcase" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">@color/black_alpha_55</item>
-        <item name="sv_showcaseColor">@color/colorPrimary</item>
-        <item name="sv_buttonText">@string/ok</item>
-        <item name="sv_detailTextAppearance">@style/showcase_description</item>
-        <item name="sv_titleTextAppearance">@style/showcase_title</item>
-    </style>
-
-    <style name="showcase_title" parent="TextAppearance.ShowcaseView.Title">
-    </style>
-
-    <style name="showcase_description" parent="TextAppearance.ShowcaseView.Detail.Light">
-        <item name="android:textColor">@color/divider</item>
-    </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowNoTitle">true</item>

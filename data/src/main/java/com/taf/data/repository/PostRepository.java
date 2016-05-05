@@ -44,6 +44,14 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus) {
+        return Observable.just(
+                mDataStoreFactory.createDBDataStore()
+                        .updateFavouriteState(pId, pStatus) != -1
+        );
+    }
+
+    @Override
     public Observable<Boolean> syncFavourites(SyncData pSyncData) {
         List<SyncDataEntity> syncList = new ArrayList<>();
         syncList.add(mDataMapper.transformSyncData(pSyncData));
@@ -58,24 +66,10 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<List<Post>> getList(int pLimit, int pOffset) {
-        return mDataStoreFactory.createDBDataStore()
-                .getPosts(pLimit, pOffset, null)
-                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
-    }
-
-    @Override
-    public Observable<Post> getSingle(Long pId) {
-        return mDataStoreFactory.createDBDataStore()
-                .getPost(pId)
-                .map(pPost -> mDataMapper.transformPostFromDb(pPost, 0));
-    }
-
-    @Override
     public Observable<List<Post>> getPostByCategory(Long pId, int pLimit, int pOffset, String
-            pType, List<Long> excludeList) {
+            pType, List<String> excludeTypes, List<Long> excludeIds) {
         return mDataStoreFactory.createDBDataStore()
-                .getPostByCategory(pId, pLimit, pOffset, pType, excludeList)
+                .getPostByCategory(pId, pLimit, pOffset, pType, excludeTypes, excludeIds)
                 .map(pObjectMap -> mDataMapper.transformPostFromDb(pObjectMap));
     }
 
@@ -103,11 +97,17 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<Boolean> updateFavouriteState(Long pId, Boolean pStatus) {
-        return Observable.just(
-                mDataStoreFactory.createDBDataStore()
-                        .updateFavouriteState(pId, pStatus) != -1
-        );
+    public Observable<List<Post>> getList(int pLimit, int pOffset) {
+        return mDataStoreFactory.createDBDataStore()
+                .getPosts(pLimit, pOffset, null)
+                .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+    }
+
+    @Override
+    public Observable<Post> getSingle(Long pId) {
+        return mDataStoreFactory.createDBDataStore()
+                .getPost(pId)
+                .map(pPost -> mDataMapper.transformPostFromDb(pPost, 0));
     }
 
     /*

@@ -16,8 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_small"
-        android:layout_marginLeft="@dimen/spacing_xsmall"
-        android:layout_marginRight="@dimen/spacing_xsmall"
         android:background="@android:color/white">
 
         <LinearLayout
@@ -38,12 +36,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingLeft="@dimen/spacing_standard"
                 android:paddingRight="@dimen/spacing_standard"
                 android:paddingTop="@dimen/spacing_small">
 
                 <TextView
+                    android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{place.getTitle()}"
@@ -55,34 +54,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_below="@id/title"
+                    android:gravity="bottom"
                     android:orientation="vertical">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/ic_call"
-                            android:layout_width="@dimen/icon_size_mid"
-                            android:layout_height="@dimen/icon_size_mid"
-                            android:layout_below="@id/category"
-                            android:layout_marginRight="@dimen/spacing_small"
-                            android:layout_toRightOf="@id/like_count"
-                            android:padding="@dimen/spacing_xxsmall"
-                            app:srcCompat="@drawable/ic_call"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/ic_call"
-                            android:layout_alignTop="@id/ic_call"
-                            android:layout_marginLeft="@dimen/spacing_xsmall"
-                            android:layout_toRightOf="@id/ic_call"
-                            android:gravity="center_vertical"
-                            android:text="+921 345 6777"
-                            android:textSize="@dimen/text_default"
-                            tools:text="+921 345 6777"/>
-                    </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:phoneNumbers="@{place.getData().getPhoneNumbers()}"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -108,7 +88,7 @@
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:lines="1"
-                            android:text="Home No.12, New Road. Selangor"
+                            app:address='@{place.getData().getAddress()}'
                             android:textSize="@dimen/text_default"
                             tools:text="Home No.12, New Road. Selangor"/>
                     </RelativeLayout>

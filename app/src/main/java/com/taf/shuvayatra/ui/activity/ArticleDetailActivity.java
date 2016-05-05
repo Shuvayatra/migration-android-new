@@ -19,6 +19,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
@@ -75,8 +76,12 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Override
     public void updateFavouriteState() {
         UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPost.isFavourite() != null && mPost
-                .isFavourite()));
+        boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
+
+        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
+                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
+                AnalyticsUtil.LABEL_ID, mPost.getId());
         mFavouritePresenter.initialize(data);
     }
 
@@ -92,6 +97,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
 
         initialize();
+
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -114,6 +120,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
+	data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
         setResult(RESULT_OK, data);
         finish();
@@ -132,7 +139,13 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
+        mPost.setIsFavourite(newFavouriteState);
+        int likes = mPost.getLikes() == null ? 0 : mPost.getLikes();
+        mPost.setLikes(newFavouriteState == mOldFavouriteState
+                ? likes
+                : newFavouriteState ? likes + 1 : likes - 1);
+        ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
         mOldFavouriteState = mPost.isFavourite();
         invalidateOptionsMenu();
     }

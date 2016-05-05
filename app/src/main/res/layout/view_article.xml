@@ -62,6 +62,7 @@
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     tools:text="Work Permit"/>
+
                 <TextView
                     android:id="@+id/view"
                     android:layout_width="wrap_content"

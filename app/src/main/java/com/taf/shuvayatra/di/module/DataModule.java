@@ -29,6 +29,8 @@ import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
 import com.taf.util.MyConstants;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import dagger.Module;
@@ -41,6 +43,7 @@ public class DataModule {
     Long mParentId = Long.MIN_VALUE;
     MyConstants.DataParent mParentType;
     String mPostType;
+    List<String> mExcludeTypes;
     boolean mFavouriteOnly = false;
     boolean mUnSyncedOnly = false;
     boolean mIsCategory = false;
@@ -63,12 +66,22 @@ public class DataModule {
         mParentId = pParentId;
     }
 
+    public DataModule(MyConstants.DataParent pParentType, boolean pIsCategory, Long pParentId,
+                      List<String> pExcludeTypes) {
+        mParentType = pParentType;
+        mIsCategory = pIsCategory;
+        mParentId = pParentId;
+        mExcludeTypes = pExcludeTypes;
+    }
+
     public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
         mParentId = pParentId;
         mParentType = pParentType;
     }
 
-    public DataModule(Long pParentId, MyConstants.DataParent pParentType, String pPostType) {
+    public DataModule(Long pId, Long pParentId, MyConstants.DataParent pParentType, String
+            pPostType) {
+        mId = pId;
         mParentId = pParentId;
         mParentType = pParentType;
         mPostType = pPostType;
@@ -123,7 +136,8 @@ public class DataModule {
     UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
         return new GetPostListUseCase(mParentType, mParentId, mPostType, mFavouriteOnly,
-                mUnSyncedOnly, pDataRepository, pThreadExecutor, pPostExecutionThread);
+                mUnSyncedOnly, mExcludeTypes, pDataRepository, pThreadExecutor,
+                pPostExecutionThread);
     }
 
     @Provides
@@ -146,7 +160,7 @@ public class DataModule {
     UseCase provideSectionCategoryUseCase(ISectionRepository pRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread
                                                   pPostExecutionThread) {
-        return new GetSectionCategoryUseCase(mIsCategory,mParentId, mParentType, pRepository, pThreadExecutor,
+        return new GetSectionCategoryUseCase(mIsCategory, mParentId, mParentType, pRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 
@@ -180,7 +194,7 @@ public class DataModule {
     @PerActivity
     @Named("notification")
     UseCase provideNotificationUseCase(INotificationRepository pRepository,
-                                       ThreadExecutor pExecutor, PostExecutionThread pThread){
+                                       ThreadExecutor pExecutor, PostExecutionThread pThread) {
         return new GetNotificationListUseCase(pRepository, pExecutor, pThread);
     }
 
@@ -188,7 +202,7 @@ public class DataModule {
     @PerActivity
     @Named("notification_received")
     UseCase provideSaveNotificationUseCase(INotificationRepository pRepository,
-                                       ThreadExecutor pExecutor, PostExecutionThread pThread){
+                                           ThreadExecutor pExecutor, PostExecutionThread pThread) {
         return new SaveNotificationListUseCase(pRepository, pExecutor, pThread);
     }
 

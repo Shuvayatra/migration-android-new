@@ -85,10 +85,12 @@ public abstract class FacebookActivity extends BaseActivity {
         mShareDialog.registerCallback(mCallback, mFbCallBack);
     }
 
-    public void showShareDialog(final BaseModel pModel) {
+    public boolean showShareDialog(final BaseModel pModel) {
         if (mShareDialog.canShow(ShareOpenGraphContent.class)) {
             mShareDialog.show(getShareContent(pModel));
+            return true;
         }
+        return false;
 //        Bundle params = new Bundle();
 //        params.putString("og:title", ((Post) pModel).getTitle());
 //        params.putString("og:description", ((Post) pModel).getDescription());

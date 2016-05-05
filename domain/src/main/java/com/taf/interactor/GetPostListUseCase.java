@@ -20,12 +20,14 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
     private final String mPostType;
     private final boolean mFavouriteOnly;
     private final boolean mUnSyncedOnly;
+    private final List<String> mExcludeTypes;
 
     @Inject
     public GetPostListUseCase(MyConstants.DataParent pParentType, Long pParentId,
                               String pPostType, boolean pFavouriteOnly, boolean pUnSyncedOnly,
-                              IPostRepository pRepository, ThreadExecutor pThreadExecutor,
-                              PostExecutionThread pPostExecutionThread) {
+                              List<String> pExcludeTypes, IPostRepository pRepository,
+                              ThreadExecutor pThreadExecutor, PostExecutionThread
+                                          pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mParentType = pParentType;
         mParentId = pParentId;
@@ -33,13 +35,14 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
         mFavouriteOnly = pFavouriteOnly;
         mUnSyncedOnly = pUnSyncedOnly;
         mRepository = pRepository;
+        mExcludeTypes = pExcludeTypes;
     }
 
     @Override
     protected Observable<List<Post>> buildUseCaseObservable(UseCaseData pData) {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
         int limit = pData.getInteger(UseCaseData.LIMIT, -1);
-        List<Long> excludeList = (List<Long>) pData.getSerializable(UseCaseData.EXCLUDE_LIST);
+        List<Long> excludeIdList = (List<Long>) pData.getSerializable(UseCaseData.EXCLUDE_LIST);
 
         if (mUnSyncedOnly) {
             return mRepository.getPostWithUnSyncedFavourites();
@@ -49,7 +52,7 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
                 case COUNTRY:
                 case JOURNEY:
                     return mRepository.getPostByCategory(mParentId, limit, offset, mPostType,
-                            excludeList);
+                            mExcludeTypes, excludeIdList);
             }
         } else if (mFavouriteOnly) {
             return mRepository.getFavouriteList(limit, offset);

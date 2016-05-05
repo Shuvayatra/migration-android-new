@@ -3,6 +3,7 @@ package com.taf.shuvayatra.di.component;
 
 import android.content.Context;
 
+import com.google.android.gms.analytics.Tracker;
 import com.taf.data.database.dao.DaoSession;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
@@ -29,4 +30,6 @@ public interface ApplicationComponent {
     AppPreferences getAppPreferences();
 
     DaoSession getDaoSession();
+
+    Tracker getTracker();
 }

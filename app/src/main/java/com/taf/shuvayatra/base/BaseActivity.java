@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.Tracker;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
@@ -15,6 +16,8 @@ import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.util.AppPreferences;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,7 +28,11 @@ public abstract class BaseActivity extends GCMActivity {
     @Nullable
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+
+    @Inject
     AppPreferences mPreferences;
+    @Inject
+    Tracker mTracker;
 
     public abstract int getLayout();
 
@@ -54,8 +61,6 @@ public abstract class BaseActivity extends GCMActivity {
             ButterKnife.bind(this, mBinding.getRoot());
         }
         initializeToolbar();
-
-        mPreferences = new AppPreferences(this);
     }
 
     @Override
@@ -120,6 +125,10 @@ public abstract class BaseActivity extends GCMActivity {
 
     public AppPreferences getPreferences() {
         return mPreferences;
+    }
+
+    public Tracker getTracker() {
+        return mTracker;
     }
 
     public ApplicationComponent getApplicationComponent() {

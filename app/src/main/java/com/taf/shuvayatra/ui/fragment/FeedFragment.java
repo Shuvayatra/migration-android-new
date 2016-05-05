@@ -85,6 +85,7 @@ public class FeedFragment extends BaseFragment implements
     boolean mFavouritesOnly = false;
     boolean mFromCategory = false;
     List<Category> mSubCategories;
+    List<String> mExcludeTypes;
     List<Post> mPosts;
     String[] mFilters;
 
@@ -103,13 +104,15 @@ public class FeedFragment extends BaseFragment implements
         return feedFragment;
     }
 
-    public static FeedFragment newInstance(boolean fromCategory, long categoryId, List<Category> pCategories) {
+    public static FeedFragment newInstance(boolean fromCategory, long categoryId, List<Category>
+            pCategories, List<String> excludeTypes) {
         FeedFragment feedFragment = new FeedFragment();
 
         Bundle data = new Bundle();
         data.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, fromCategory);
         data.putLong(MyConstants.Extras.KEY_CATEGORY, categoryId);
         data.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) pCategories);
+        data.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) excludeTypes);
         feedFragment.setArguments(data);
         return feedFragment;
     }
@@ -273,6 +276,7 @@ public class FeedFragment extends BaseFragment implements
             mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
             mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
             mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
+	    mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
         }
     }
 
@@ -322,8 +326,7 @@ public class FeedFragment extends BaseFragment implements
                 Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
                 CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
                 mFilterSpinner.setAdapter(adapter);
-            }
-            else{
+            } else {
                 mFilterContainer.setVisibility(View.GONE);
             }
         } else {
@@ -359,11 +362,11 @@ public class FeedFragment extends BaseFragment implements
                     } else {
                         if (option.equals(getString(R.string.article))) {
                             filteredPost = filterByType(getString(R.string.filter_article));
-                        } else if(option.equals(getString(R.string.audio))){
+                        } else if (option.equals(getString(R.string.audio))) {
                             filteredPost = filterByType(getString(R.string.filter_audio));
-                        } else if(option.equals(getString(R.string.video))){
+                        } else if (option.equals(getString(R.string.video))) {
                             filteredPost = filterByType(getString(R.string.filter_video));
-                        } else if(option.equals(getString(R.string.news))){
+                        } else if (option.equals(getString(R.string.news))) {
                             filteredPost = filterByType(getString(R.string.filter_news));
                         }
                     }

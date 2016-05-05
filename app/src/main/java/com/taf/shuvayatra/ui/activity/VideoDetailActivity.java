@@ -22,6 +22,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.util.regex.Matcher;
@@ -78,8 +79,12 @@ public class VideoDetailActivity extends FacebookActivity implements
     @Override
     public void updateFavouriteState() {
         UseCaseData data = new UseCaseData();
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, !(mPost.isFavourite() != null && mPost
-                .isFavourite()));
+        boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
+        data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
+
+        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
+                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
+                AnalyticsUtil.LABEL_ID, mPost.getId());
         mFavouritePresenter.initialize(data);
     }
 
@@ -123,13 +128,20 @@ public class VideoDetailActivity extends FacebookActivity implements
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
         setResult(RESULT_OK, data);
         finish();
     }
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        mPost.setIsFavourite(status ? !mOldFavouriteState : mOldFavouriteState);
+        boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
+        mPost.setIsFavourite(newFavouriteState);
+        int likes = mPost.getLikes() == null ? 0 : mPost.getLikes();
+        mPost.setLikes(newFavouriteState == mOldFavouriteState
+                ? likes
+                : newFavouriteState ? likes + 1 : likes - 1);
+        ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mOldFavouriteState = mPost.isFavourite();
         invalidateOptionsMenu();
     }
@@ -186,9 +198,10 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if(containsFavouriteOption()){
-            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite()!= null &&mPost.isFavourite()?
-                    R.drawable.icon_favourite: R.drawable.icon_not_favourite));
+        if (containsFavouriteOption()) {
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
+                    .isFavourite()) ? R.drawable
+                    .icon_favourite : R.drawable.icon_not_favourite);
             return true;
         }
         return super.onPrepareOptionsMenu(menu);

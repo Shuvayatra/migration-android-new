@@ -2,12 +2,17 @@ package com.taf.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class PostDataEntity {
     @SerializedName("media_url")
     String mediaUrl;
     String content;
     String thumbnail;
     String duration;
+    @SerializedName("phone")
+    List<String> phoneNumbers;
+    String address;
 
     public String getMediaUrl() {
         return mediaUrl;
@@ -41,4 +46,19 @@ public class PostDataEntity {
         duration = pDuration;
     }
 
+    public List<String> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(List<String> pPhoneNumbers) {
+        phoneNumbers = pPhoneNumbers;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String pAddress) {
+        address = pAddress;
+    }
 }
