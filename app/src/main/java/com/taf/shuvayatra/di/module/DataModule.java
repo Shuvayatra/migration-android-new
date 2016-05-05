@@ -39,11 +39,11 @@ import dagger.Provides;
 @Module
 public class DataModule {
 
-    Long mId = Long.MIN_VALUE;
-    Long mParentId = Long.MIN_VALUE;
+    Long mId = null;
+    Long mParentId = null;
     MyConstants.DataParent mParentType;
     String mPostType;
-    List<String> mExcludeTypes;
+    List<String> mExcludeTypes = null;
     boolean mFavouriteOnly = false;
     boolean mUnSyncedOnly = false;
     boolean mIsCategory = false;
@@ -74,9 +74,13 @@ public class DataModule {
         mExcludeTypes = pExcludeTypes;
     }
 
-    public DataModule(Long pParentId, MyConstants.DataParent pParentType) {
+    public DataModule(List<String> pExcludeTypes) {
+        mExcludeTypes = pExcludeTypes;
+    }
+
+    public DataModule(Long pParentId, List<String> pExcludeTypes) {
         mParentId = pParentId;
-        mParentType = pParentType;
+        mExcludeTypes = pExcludeTypes;
     }
 
     public DataModule(Long pId, Long pParentId, MyConstants.DataParent pParentType, String
@@ -211,7 +215,7 @@ public class DataModule {
     @Named("view_count_update")
     UseCase providePostViewCountUseCase(IPostRepository pRepository,
                                         ThreadExecutor pThreadExecutor, PostExecutionThread
-                                                pPostExecutionThread){
-        return new UpdatePostViewCountUseCase(mId,pRepository,pThreadExecutor,pPostExecutionThread);
+                                                pPostExecutionThread) {
+        return new UpdatePostViewCountUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
     }
 }

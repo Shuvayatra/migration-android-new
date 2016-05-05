@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
@@ -19,12 +18,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-
 /**
  * Created by Nirazan-PC on 4/25/2016.
  */
-public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView{
+public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView {
     public Category mCategory;
     public List<Category> mSubCategories;
 
@@ -33,21 +30,7 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
 
     public abstract MyConstants.DataParent getDataParent();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Bundle bundle = getIntent().getExtras();
-        if(bundle!= null){
-            mCategory = (Category) bundle.get(MyConstants.Extras.KEY_CATEGORY);
-            Logger.e("CategoryDetailActivity", "SUb Categoreis"+mSubCategories);
-        }
-        initialize();
-
-    }
-
-    public void addFeedFragment(List<Category> pCategories){
+    public void addFeedFragment(List<Category> pCategories) {
         List<String> excludeTypes = null;
         if (!mCategory.getSection().getAlias().equals(MyConstants.SECTION.COUNTRY)) {
             excludeTypes = new ArrayList<>();
@@ -56,7 +39,8 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
 
         FeedFragment fragment = FeedFragment.newInstance(true, mCategory.getId(), pCategories,
                 excludeTypes);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 
@@ -76,11 +60,23 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
         return true;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mCategory = (Category) bundle.get(MyConstants.Extras.KEY_CATEGORY);
+        }
+        initialize();
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }

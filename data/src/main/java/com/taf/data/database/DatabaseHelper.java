@@ -18,6 +18,7 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
@@ -38,8 +39,8 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DaoSession pDaoSession, DataMapper pDataMapper) {
-        /*QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;*/
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
         mDaoSession = pDaoSession;
         mDataMapper = pDataMapper;
     }
@@ -127,6 +128,11 @@ public class DatabaseHelper {
         return getPosts(pLimit, pOffset, pType, false, categoryId, excludeTypes, excludeIds);
     }
 
+    public Observable<Map<String, Object>> getPostWithExcludes(int pLimit, int pOffset,
+                                                               List<String> excludeTypes) {
+        return getPosts(pLimit, pOffset, null, false, null, excludeTypes, null);
+    }
+
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
         return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null);
@@ -147,9 +153,10 @@ public class DatabaseHelper {
         if (pExcludeIds != null) {
             queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
         }
-        /*if (pExcludeTypes != null) {
+        Logger.d("DatabaseHelper_getPosts", "excludeTypes: " + pExcludeTypes);
+        if (pExcludeTypes != null) {
             queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
-        }*/
+        }
 
         Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
                 DbPostCategoryDao.Properties.PostId);
@@ -217,7 +224,7 @@ public class DatabaseHelper {
                 .list();
         for (DbPost dbPost : postList) {
             dbPost.setIsSynced(isSynced);
-            if(isSynced)
+            if (isSynced)
                 dbPost.setUnsyncedViewCount(0);
         }
         postDao.insertOrReplaceInTx(postList);
@@ -282,10 +289,10 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
-    public long updateUnSyncedViewCount(Long pId){
+    public long updateUnSyncedViewCount(Long pId) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         DbPost post = postDao.queryBuilder().where(DbPostDao.Properties.Id.eq(pId)).unique();
-        post.setUnsyncedViewCount((post.getUnsyncedViewCount()!=null? post.getUnsyncedViewCount():0)+1);
+        post.setUnsyncedViewCount((post.getUnsyncedViewCount() != null ? post.getUnsyncedViewCount() : 0) + 1);
         post.setIsSynced(false);
         return postDao.insertOrReplace(post);
     }
