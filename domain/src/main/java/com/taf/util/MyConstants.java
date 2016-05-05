@@ -72,6 +72,7 @@ public class MyConstants {
         public static final String KEY_FROM_CATEGORY = "key_from_category";
         public static final String KEY_VIEW_COUNT = "key_view_count";
         public static final String KEY_EXCLUDE_LIST = "key_exclude";
+        public static final String KEY_SHARE_COUNT = "key_share_count";
     }
 
     public static final class Intent {

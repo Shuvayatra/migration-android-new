@@ -118,6 +118,11 @@ public class PostRepository implements IPostRepository {
                 .map(pPost -> mDataMapper.transformPostFromDb(pPost, 0));
     }
 
+    @Override
+    public Observable<Long> updateUnSyncedShareCount(long pId) {
+        return Observable.just(mDataStoreFactory.createDBDataStore().updateUnSyncedShareCount(pId));
+    }
+
     /*
     return localDataStore.getPostWithUnSyncedFavourites()
                 .map(pPosts -> {

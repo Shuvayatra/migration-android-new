@@ -114,6 +114,7 @@ public class VideoDetailActivity extends FacebookActivity implements
                 .inject(this);
         mFavouritePresenter.attachView(this);
         mPostViewCountPresenter.attachView(this);
+        mPostShareCountPresenter.attachView(this);
     }
 
     @Override
@@ -129,6 +130,7 @@ public class VideoDetailActivity extends FacebookActivity implements
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
+        data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT,mPost.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
     }
@@ -149,6 +151,12 @@ public class VideoDetailActivity extends FacebookActivity implements
     @Override
     public void onViewCountUpdated() {
         mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
+    }
+
+    @Override
+    public void onShareCountUpdate() {
+        mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount()+1);
+        ((VideoDetailDataBinding) mBinding).setVideo(mPost);
     }
 
     @Override

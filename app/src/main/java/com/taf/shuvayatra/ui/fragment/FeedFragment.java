@@ -262,6 +262,32 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT,0);
+                Logger.e("FeedFragment", "view count = "+viewCount);
+                if(viewCount!=0){
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
+                }
+                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT,0);
+                Logger.e("FeedFragment", "share count = "+shareCount);
+                if(shareCount!=0){
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedShareCount(shareCount);
+                }
+                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
+                mListAdapter.getDataCollection().get(mCurrentSelection).setLikes(favCount);
+                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
+    @Override
     public void latestContentFetched(boolean hasNewContent) {
         loadPostsList(INITIAL_OFFSET);
     }
@@ -408,23 +434,6 @@ public class FeedFragment extends BaseFragment implements
         return getActivity();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == BaseActivity.RESULT_OK) {
-            if (requestCode == 3209) {
-                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
-                        false);
-                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
-                Logger.e("FeedFragment", "view count = " + viewCount);
-                if (viewCount != 0) {
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
-                }
-                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
-                mListAdapter.notifyDataSetChanged();
-            }
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

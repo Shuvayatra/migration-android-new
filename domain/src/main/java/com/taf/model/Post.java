@@ -24,6 +24,7 @@ public class Post extends BaseModel {
     Long downloadReference;
     Integer mViewCount;
     Integer mUnSyncedViewCount;
+    Integer mUnSyncedShareCount;
 
     List<Category> mCategoryList;
     // for pagination purpose
@@ -200,12 +201,7 @@ public class Post extends BaseModel {
     }
 
     public String getTotalViews(){
-        Integer total = ( mViewCount != null? mViewCount :0) + (mUnSyncedViewCount!=null?mUnSyncedViewCount :0);
-        if(total<1000){
-            return total.toString();
-        }else {
-            return total/1000 + "K";
-        }
+        return getInTermOfK(mViewCount, mUnSyncedViewCount);
     }
 
     public String getFeaturedImage() {
@@ -214,5 +210,30 @@ public class Post extends BaseModel {
 
     public void setFeaturedImage(String pFeaturedImage) {
         featuredImage = pFeaturedImage;
+    }
+
+    public Integer getUnSyncedShareCount() {
+        return mUnSyncedShareCount!=null?mUnSyncedShareCount:0;
+    }
+
+    public void setUnSyncedShareCount(Integer pUnSyncedShareCount) {
+        mUnSyncedShareCount = pUnSyncedShareCount;
+    }
+
+    public String getTotalShare(){
+        return getInTermOfK(share, mUnSyncedShareCount);
+    }
+
+    public String getTotalLikes(){
+        return getInTermOfK(likes,0);
+    }
+
+    public String getInTermOfK(Integer num1, Integer num2){
+        Integer total = ((num1 != null ? num1 : 0) + (num2 != null ? num2 : 0));
+        if(total<1000){
+            return total.toString();
+        }else {
+            return total/1000 + "K";
+        }
     }
 }

@@ -21,7 +21,10 @@ import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.presenter.PostShareCountPresenter;
 import com.taf.util.MyConstants;
+
+import javax.inject.Inject;
 
 import bolts.AppLinks;
 
@@ -29,6 +32,9 @@ import bolts.AppLinks;
  * Created by Nirazan-PC on 4/28/2016.
  */
 public abstract class FacebookActivity extends BaseActivity {
+
+    @Inject
+    protected PostShareCountPresenter mPostShareCountPresenter;
 
     private CallbackManager mCallback;
     private FacebookCallback<Sharer.Result> mFbCallBack;
@@ -52,6 +58,7 @@ public abstract class FacebookActivity extends BaseActivity {
             @Override
             public void onSuccess(Sharer.Result result) {
                 Logger.e("ArticleDetailActivity", "succcess");
+                mPostShareCountPresenter.initialize(null);
             }
 
             @Override

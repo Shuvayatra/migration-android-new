@@ -28,6 +28,7 @@ public class DbPost {
     private Integer viewCount;
     private Integer unsyncedViewCount;
     private String featuredImage;
+    private Integer unsyncedShareCount;
 
     // KEEP FIELDS - put your custom fields here
     List<DbCategory> categoryList;
@@ -40,7 +41,7 @@ public class DbPost {
         this.id = id;
     }
 
-    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference, Integer viewCount, Integer unsyncedViewCount, String featuredImage) {
+    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference, Integer viewCount, Integer unsyncedViewCount, String featuredImage, Integer unsyncedShareCount) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -59,6 +60,7 @@ public class DbPost {
         this.viewCount = viewCount;
         this.unsyncedViewCount = unsyncedViewCount;
         this.featuredImage = featuredImage;
+        this.unsyncedShareCount = unsyncedShareCount;
     }
 
     public Long getId() {
@@ -203,6 +205,14 @@ public class DbPost {
 
     public void setFeaturedImage(String featuredImage) {
         this.featuredImage = featuredImage;
+    }
+
+    public Integer getUnsyncedShareCount() {
+        return unsyncedShareCount;
+    }
+
+    public void setUnsyncedShareCount(Integer unsyncedShareCount) {
+        this.unsyncedShareCount = unsyncedShareCount;
     }
 
     // KEEP METHODS - put your custom methods here

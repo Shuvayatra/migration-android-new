@@ -51,6 +51,7 @@ public class MyDaoGenerator {
         post.addIntProperty("viewCount");
         post.addIntProperty("unsyncedViewCount");
         post.addStringProperty("featuredImage");
+        post.addIntProperty("unsyncedShareCount");
         return post;
     }
 
