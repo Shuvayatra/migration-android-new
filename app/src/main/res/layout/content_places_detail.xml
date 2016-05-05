@@ -12,6 +12,10 @@
         <variable
             name="place"
             type="com.taf.model.Post"/>
+
+        <variable
+            name="countryId"
+            type="java.lang.Long"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -201,6 +205,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:similarPosts="@{similarPlaces}"
+                    app:countryId="@{countryId}"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/spacing_standard"
                     android:paddingTop="@dimen/spacing_standard"/>

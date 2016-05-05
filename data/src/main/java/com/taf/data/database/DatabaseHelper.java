@@ -153,7 +153,6 @@ public class DatabaseHelper {
         if (pExcludeIds != null) {
             queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
         }
-        Logger.d("DatabaseHelper_getPosts", "excludeTypes: " + pExcludeTypes);
         if (pExcludeTypes != null) {
             queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
         }

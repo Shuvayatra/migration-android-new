@@ -4,7 +4,6 @@ package com.taf.shuvayatra.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -96,7 +95,7 @@ public class SplashScreenActivity extends BaseActivity implements
     }
 
     private void syncFavourites(List<Post> pUnSyncedPosts) {
-        messageView.setText(getString(R.string.message_syncing_favourites));
+        messageView.setText(getString(R.string.message_syncing_data));
 
         mUseCaseData.clearAll();
         mUseCaseData.putBoolean(UseCaseData.SEARCH_UN_SYNCED_DATA, false);
@@ -105,7 +104,7 @@ public class SplashScreenActivity extends BaseActivity implements
     }
 
     private void searchUnSyncedFavourites() {
-        messageView.setText(getString(R.string.message_search_un_synced_favourites));
+        messageView.setText(getString(R.string.message_search_un_synced_data));
 
         mUseCaseData.clearAll();
         mUseCaseData.putBoolean(UseCaseData.SEARCH_UN_SYNCED_DATA, true);
@@ -125,15 +124,15 @@ public class SplashScreenActivity extends BaseActivity implements
         if (pUnSyncedPosts != null && !pUnSyncedPosts.isEmpty()) {
             syncFavourites(pUnSyncedPosts);
         } else {
-            messageView.setText(getString(R.string.message_no_un_synced_favourites));
+            messageView.setText(getString(R.string.message_no_un_synced_data));
             exitSplashScreen();
         }
     }
 
     @Override
     public void favouritesSynced(Boolean status) {
-        messageView.setText(getString(status ? R.string.message_favourites_synced : R.string
-                .message_not_all_favourites_synced));
+        messageView.setText(getString(status ? R.string.message_data_synced : R.string
+                .message_not_all_data_synced));
         exitSplashScreen();
     }
 
