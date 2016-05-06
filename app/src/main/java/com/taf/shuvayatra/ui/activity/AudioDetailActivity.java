@@ -416,6 +416,8 @@ public class AudioDetailActivity extends FacebookActivity implements
         updateSeekBar();
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
+        bufferingText.setVisibility(View.GONE);
+        bufferingTextMini.setVisibility(View.GONE);
     }
 
     @Override

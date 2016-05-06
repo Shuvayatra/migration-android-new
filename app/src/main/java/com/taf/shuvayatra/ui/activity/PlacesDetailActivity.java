@@ -42,6 +42,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     LinearLayout mPlacesContainer;
 
     Post mPlace;
+    Long mCountryId;
     boolean mOldFavouriteState;
 
     @Override
@@ -109,9 +110,12 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mPlace = (Post) bundle.getSerializable(MyConstants.Extras.KEY_PLACE);
+            mCountryId = bundle.getLong(MyConstants.Extras.KEY_CATEGORY_ID);
         }
-        if (mPlace == null) throw new IllegalStateException("Place must be provided.");
+        if (mPlace == null || mCountryId == null) throw new IllegalStateException("Place and " +
+                "respective country id must be provided.");
         ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
+        ((PlaceDetailDataBinding) mBinding).setCountryId(mCountryId);
         mOldFavouriteState = mPlace.isFavourite() != null ? mPlace.isFavourite() : false;
 
         initialize();
@@ -126,7 +130,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     private void initialize() {
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
-                .dataModule(new DataModule(mPlace.getId(), null, MyConstants.DataParent.COUNTRY,
+                .dataModule(new DataModule(mPlace.getId(), mCountryId, MyConstants.DataParent.COUNTRY,
                         "place"))
                 .applicationComponent(getApplicationComponent())
                 .build()

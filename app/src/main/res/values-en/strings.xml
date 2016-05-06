@@ -5,12 +5,11 @@
     <string name="message_download_success">%1$s downloaded successfully</string>
     <string name="message_already_downloaded">%1$s already downloaded</string>
 
-    <string name="message_search_un_synced_favourites">Searching for un-synced favourites.</string>
-    <string name="message_no_un_synced_favourites">No un-synced favourites found.</string>
-    <string name="message_syncing_favourites">Syncing favourites  to server.</string>
-    <string name="message_favourites_synced">All favourites synced to server.</string>
-    <string name="message_not_all_favourites_synced">Could not sync all favourites to
-        server.</string>
+    <string name="message_search_un_synced_data">Searching for un-synced data.</string>
+    <string name="message_no_un_synced_data">No un-synced data found.</string>
+    <string name="message_syncing_data">Syncing data  to server.</string>
+    <string name="message_data_synced">All data synced to server.</string>
+    <string name="message_not_all_data_synced">Could not sync all data to server.</string>
     <string name="message_fetching_latest_content">Searching for new contents...</string>
     <string name="message_content_available">New contents available</string>
     <string name="error_message_no_metadata">Unable to fetch data</string>

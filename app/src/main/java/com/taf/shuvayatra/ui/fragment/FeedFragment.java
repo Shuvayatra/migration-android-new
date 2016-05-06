@@ -139,7 +139,6 @@ public class FeedFragment extends BaseFragment implements
 
         mSearchFilterSection.setVisibility(mFavouritesOnly ? View.GONE : View.VISIBLE);
 
-        Logger.d("FeedFragment_onActivityCreated", "excludeTypes:" + mExcludeTypes);
         initialize();
         setUpAdapter();
         if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
@@ -250,6 +249,7 @@ public class FeedFragment extends BaseFragment implements
                 break;
             case MyConstants.Adapter.TYPE_PLACE:
                 intent = new Intent(getContext(), PlacesDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_CATEGORY_ID, mCategoryId);
                 intent.putExtra(MyConstants.Extras.KEY_PLACE, pModel);
                 break;
         }
@@ -433,7 +433,6 @@ public class FeedFragment extends BaseFragment implements
     public Context getContext() {
         return getActivity();
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

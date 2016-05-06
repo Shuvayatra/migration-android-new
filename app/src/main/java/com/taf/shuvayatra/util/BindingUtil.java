@@ -81,15 +81,16 @@ public class BindingUtil {
         pView.setText(getTimeAgo(millis));
     }
 
-    @BindingAdapter("bind:similarPosts")
-    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts) {
+    @BindingAdapter({"bind:similarPosts", "bind:countryId"})
+    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts, Long
+            countryId) {
         if (pPosts != null && pPosts.size() > 0) {
             for (Post post : pPosts) {
                 if (post.getDataType() == MyConstants.Adapter.TYPE_AUDIO || post.getDataType() ==
                         MyConstants.Adapter.TYPE_AUDIO) {
                     showSimilarAudioVideo(pContainer.getContext(), pContainer, post);
                 } else if (post.getDataType() == MyConstants.Adapter.TYPE_PLACE) {
-                    showSimilarPlace(pContainer.getContext(), pContainer, post);
+                    showSimilarPlace(pContainer.getContext(), pContainer, post, countryId);
                 }
             }
         }
@@ -173,7 +174,7 @@ public class BindingUtil {
     }
 
     public static void showSimilarPlace(final Context pContext, LinearLayout pContainer, final Post
-            pPost) {
+            pPost, final Long countryId) {
         if (pPost != null) {
             PlaceDataBinding placeDataBinding = DataBindingUtil.inflate(LayoutInflater.from
                     (pContext), R.layout.view_place, pContainer, false);
@@ -189,6 +190,7 @@ public class BindingUtil {
                 public void onClick(View v) {
                     Intent intent = new Intent(pContext, PlacesDetailActivity.class);
                     intent.putExtra(MyConstants.Extras.KEY_PLACE, pPost);
+                    intent.putExtra(MyConstants.Extras.KEY_CATEGORY_ID, countryId);
                     pContext.startActivity(intent);
                 }
             });

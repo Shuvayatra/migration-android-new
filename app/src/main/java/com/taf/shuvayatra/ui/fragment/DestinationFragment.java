@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
 import com.taf.model.BaseModel;
@@ -29,14 +28,14 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class DestinationFragment extends BaseFragment implements CategoryView, ListItemClickListener, SearchView.OnQueryTextListener {
+public class DestinationFragment extends BaseFragment implements
+        CategoryView,
+        ListItemClickListener {
 
     @Bind(R.id.recyclerView)
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
     RelativeLayout mEmptyView;
-    @Bind(R.id.searchView)
-    SearchView mSearchView;
     List<Category> mCountries;
     List<Category> mSubCategories;
 
@@ -44,14 +43,14 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     CategoryPresenter mPresenter;
     private ListAdapter<Category> mAdapter;
 
-    @Override
-    public int getLayout() {
-        return R.layout.fragment_destination;
-    }
-
     public static DestinationFragment newInstance() {
         DestinationFragment fragment = new DestinationFragment();
         return fragment;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.fragment_destination;
     }
 
     @Override
@@ -60,11 +59,10 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
         initialize();
         loadCountries();
         setUpAdapter();
-        mSearchView.setOnQueryTextListener(this);
     }
 
     private void setUpAdapter() {
-        mAdapter = new ListAdapter<>(getContext(),this);
+        mAdapter = new ListAdapter<>(getContext(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
@@ -74,7 +72,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     private void initialize() {
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
-                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true,0L))
+                .dataModule(new DataModule(MyConstants.DataParent.COUNTRY, true, 0L))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
@@ -82,7 +80,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
         mSubCategories = new ArrayList<>();
     }
 
-    void loadCountries(){
+    void loadCountries() {
         mPresenter.initialize(null);
     }
 
@@ -109,7 +107,7 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        Category category  = ((Category) pModel);
+        Category category = ((Category) pModel);
         Intent i = new Intent(getContext(), CountryDetailActivity.class);
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
         startActivity(i);
@@ -119,28 +117,4 @@ public class DestinationFragment extends BaseFragment implements CategoryView, L
     public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
 
     }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        filterCountries(query);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        filterCountries(query);
-        return true;
-    }
-
-    void filterCountries(String query){
-        List<Category> filterCountreis = new ArrayList<>();
-        if(mCountries!=null) {
-            for (Category country : mCountries) {
-                if (country.getTitle().toLowerCase().contains(query.toLowerCase()))
-                    filterCountreis.add(country);
-            }
-        }
-        mAdapter.setDataCollection(filterCountreis);
-    }
-
 }

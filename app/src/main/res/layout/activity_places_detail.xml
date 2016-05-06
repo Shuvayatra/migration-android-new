@@ -16,6 +16,10 @@
         <variable
             name="place"
             type="com.taf.model.Post"/>
+
+        <variable
+            name="countryId"
+            type="java.lang.Long"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -44,11 +48,11 @@
                     android:fitsSystemWindows="true"
                     app:imageUrl="@{place.featuredImage}"
                     app:layout_collapseMode="parallax"
+                    app:placeholderImage="@drawable/default_gradient"
                     fresco:actualImageScaleType="focusCrop"
                     fresco:fadeDuration="300"
                     fresco:failureImageScaleType="centerInside"
-                    fresco:overlayImage="@drawable/transparent_gradient"
-                    app:placeholderImage="@drawable/default_gradient"/>
+                    fresco:overlayImage="@drawable/transparent_gradient"/>
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -62,6 +66,7 @@
 
         <include
             layout="@layout/content_places_detail"
+            bind:countryId="@{countryId}"
             bind:place="@{place}"
             bind:similarPlaces="@{similarPlaces}"/>
     </android.support.design.widget.CoordinatorLayout>
