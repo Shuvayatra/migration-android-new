@@ -9,9 +9,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -32,6 +33,7 @@ import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
+import com.taf.shuvayatra.ui.activity.TagListActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
@@ -48,16 +50,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 public class FeedFragment extends BaseFragment implements
         ListItemClickListener,
         PostListView,
         LatestContentView,
         AdapterView.OnItemSelectedListener,
-        SearchView.OnQueryTextListener,
         SwipeRefreshLayout.OnRefreshListener {
 
-    public static final Integer PAGE_LIMIT = 12;
+    public static final int REQUEST_CODE_SEARCH = 9823;
+
+    public static final Integer PAGE_LIMIT = -1;
     public static final Integer INITIAL_OFFSET = 0;
 
     @Inject
@@ -74,11 +78,13 @@ public class FeedFragment extends BaseFragment implements
     @Bind(R.id.search_filter)
     LinearLayout mSearchFilterSection;
     @Bind(R.id.search)
-    SearchView mSearchView;
+    EditText mSearchView;
     @Bind(R.id.filterSpinner)
     Spinner mFilterSpinner;
     @Bind(R.id.filterContainer)
     CardView mFilterContainer;
+    @Bind(R.id.clear)
+    ImageView clear;
     ListAdapter<Post> mListAdapter;
     LinearLayoutManager mLayoutManager;
 
@@ -151,6 +157,19 @@ public class FeedFragment extends BaseFragment implements
         loadPostsList(INITIAL_OFFSET);
     }
 
+    @OnClick(R.id.search_action)
+    public void showFilterTags() {
+        Intent tagsIntent = new Intent(getActivity(), TagListActivity.class);
+        startActivityForResult(tagsIntent, REQUEST_CODE_SEARCH);
+    }
+
+    @OnClick(R.id.clear)
+    public void clearFilter() {
+        mSearchView.setText("");
+        mListAdapter.setDataCollection(mPosts);
+        clear.setVisibility(View.GONE);
+    }
+
     private void initialize() {
         DataModule dataModule;
         if (mFavouritesOnly) {
@@ -168,7 +187,6 @@ public class FeedFragment extends BaseFragment implements
                 .inject(this);
         mPresenter.attachView(this);
         mLatestPresenter.attachView(this);
-        mSearchView.setOnQueryTextListener(this);
     }
 
     private void setUpAdapter() {
@@ -260,32 +278,6 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == BaseActivity.RESULT_OK) {
-            if (requestCode == 3209) {
-                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
-                        false);
-                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT,0);
-                Logger.e("FeedFragment", "view count = "+viewCount);
-                if(viewCount!=0){
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
-                }
-                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT,0);
-                Logger.e("FeedFragment", "share count = "+shareCount);
-                if(shareCount!=0){
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedShareCount(shareCount);
-                }
-                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
-                mListAdapter.getDataCollection().get(mCurrentSelection).setLikes(favCount);
-                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
-                mListAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
 
     @Override
     public void latestContentFetched(boolean hasNewContent) {
@@ -406,32 +398,39 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public boolean onQueryTextSubmit(String query) {
-        filterBySearchView(query);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        filterBySearchView(newText);
-        return true;
-    }
-
-    void filterBySearchView(String query) {
-        if (mPosts != null) {
-            List<Post> filteredPost = new ArrayList<>();
-
-            for (Post post : mPosts) {
-                if (post.getTitle().toLowerCase().contains(query.toLowerCase()))
-                    filteredPost.add(post);
-            }
-            mListAdapter.setDataCollection(filteredPost);
-        }
-    }
-
-    @Override
     public Context getContext() {
         return getActivity();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
+                Logger.e("FeedFragment", "view count = " + viewCount);
+                if (viewCount != 0) {
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
+                }
+                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
+                Logger.e("FeedFragment", "share count = " + shareCount);
+                if (shareCount != 0) {
+                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedShareCount(shareCount);
+                }
+                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
+                mListAdapter.getDataCollection().get(mCurrentSelection).setLikes(favCount);
+                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            } else if (requestCode == REQUEST_CODE_SEARCH) {
+                String tag = data.getStringExtra(MyConstants.Extras.KEY_TAG);
+                if (tag != null) {
+                    mSearchView.setText(tag);
+                    filterListByTag(tag);
+                }
+            }
+        }
     }
 
     @Override
@@ -445,5 +444,16 @@ public class FeedFragment extends BaseFragment implements
             mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
             mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
         }
+    }
+
+    private void filterListByTag(String pTag) {
+        List<Post> filteredList = new ArrayList<>();
+        for (Post post : mPosts) {
+            if (post.getTags().contains(pTag)) {
+                filteredList.add(post);
+            }
+        }
+        mListAdapter.setDataCollection(filteredList);
+        clear.setVisibility(View.VISIBLE);
     }
 }

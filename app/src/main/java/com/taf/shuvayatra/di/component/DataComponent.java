@@ -10,6 +10,7 @@ import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
+import com.taf.shuvayatra.ui.activity.TagListActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
@@ -30,6 +31,7 @@ public interface DataComponent extends ActivityComponent {
     void inject(AudioDetailActivity pActivity);
     void inject(ArticleDetailActivity pActivity);
     void inject(VideoDetailActivity pActivity);
+    void inject(TagListActivity pActivity);
     void inject(FeedFragment pFragment);
     void inject(JourneyFragment pFragment);
     void inject(DestinationFragment pFragment);

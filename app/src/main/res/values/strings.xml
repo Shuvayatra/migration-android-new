@@ -11,4 +11,5 @@
     <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
     <string name="title_activity_country_detail">CountryDetailActivity</string>
     <string name="title_activity_info_detail">InfoDetailActivity</string>
+    <string name="title_activity_tag_list">Search By Tags</string>
 </resources>

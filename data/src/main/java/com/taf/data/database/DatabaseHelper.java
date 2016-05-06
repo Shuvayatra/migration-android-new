@@ -13,12 +13,13 @@ import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.database.dao.DbSection;
 import com.taf.data.database.dao.DbSectionDao;
+import com.taf.data.database.dao.DbTag;
+import com.taf.data.database.dao.DbTagDao;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
-import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
@@ -68,6 +69,7 @@ public class DatabaseHelper {
                     item.setPostId(insertId);
                     postCategoryDao.insertOrReplace(item);
                 }
+                insertTags(entity.getTags());
             }
         }
     }
@@ -98,6 +100,24 @@ public class DatabaseHelper {
             category.setSectionId(pSectionId);
             if (category != null) {
                 categoryDao.insertOrReplace(category);
+            }
+        }
+    }
+
+    public void insertTags(List<String> tags) {
+        if (tags != null) {
+            DbTagDao tagDao = mDaoSession.getDbTagDao();
+            for (String tag : tags) {
+                if (tag != null) {
+                    long count = tagDao.queryBuilder()
+                            .where(DbTagDao.Properties.Title.eq(tag))
+                            .count();
+                    if (count < 1) {
+                        DbTag dbTag = new DbTag();
+                        dbTag.setTitle(tag);
+                        tagDao.insert(dbTag);
+                    }
+                }
             }
         }
     }
@@ -296,11 +316,18 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
-    public long updateUnSyncedShareCount(Long pId){
+    public long updateUnSyncedShareCount(Long pId) {
         DbPostDao postDao = mDaoSession.getDbPostDao();
         DbPost post = postDao.queryBuilder().where(DbPostDao.Properties.Id.eq(pId)).unique();
-        post.setUnsyncedShareCount((post.getUnsyncedShareCount()!=null?post.getUnsyncedShareCount():0)+1);
+        post.setUnsyncedShareCount((post.getUnsyncedShareCount() != null ? post.getUnsyncedShareCount() : 0) + 1);
         post.setIsSynced(false);
         return postDao.insertOrReplace(post);
+    }
+
+    public Observable<List<DbTag>> getTags() {
+        List<DbTag> tags = mDaoSession.getDbTagDao()
+                .queryBuilder().list();
+
+        return Observable.defer(() -> Observable.just(tags));
     }
 }

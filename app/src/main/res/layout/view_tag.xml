@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="TagListDataBinding">
+
+        <variable
+            name="tag"
+            type="java.lang.String"/>
+
+        <variable
+            name="selected"
+            type="java.lang.Boolean"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_xsmall"
+        android:layout_marginRight="@dimen/spacing_xsmall"
+        app:cardElevation="3dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@{selected ? @drawable/tag_selected : @drawable/tag_default}"
+            android:paddingBottom="@dimen/spacing_xsmall"
+            android:paddingLeft="@dimen/spacing_standard"
+            android:paddingRight="@dimen/spacing_standard"
+            android:paddingTop="@dimen/spacing_xsmall"
+            android:text='@{"#" + tag}'
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_large"
+            tools:text="त्रुट"/>
+    </android.support.v7.widget.CardView>
+</layout>

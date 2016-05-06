@@ -6,6 +6,7 @@ import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbSection;
+import com.taf.data.database.dao.DbTag;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -314,5 +315,15 @@ public class DataMapper {
                     : SyncData.STATUS_DISLIKE),pPost.getUnsyncedViewCount());
         }
         return null;
+    }
+
+    public List<String> transformTags(List<DbTag> data){
+        List<String> tags = new ArrayList<>();
+        for (DbTag dbTag : data) {
+            if(dbTag != null && dbTag.getTitle() != null && !dbTag.getTitle().isEmpty()){
+                tags.add(dbTag.getTitle());
+            }
+        }
+        return tags;
     }
 }

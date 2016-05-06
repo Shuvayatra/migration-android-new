@@ -9,6 +9,7 @@ import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.SectionCategoryRepository;
+import com.taf.data.repository.TagRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
@@ -17,6 +18,7 @@ import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetNotificationListUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
+import com.taf.interactor.GetTagListUseCase;
 import com.taf.interactor.SaveNotificationListUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
@@ -28,6 +30,7 @@ import com.taf.repository.IBaseRepository;
 import com.taf.repository.INotificationRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
+import com.taf.repository.ITagRepository;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -226,5 +229,20 @@ public class DataModule {
     UseCase providePostShareCountUseCase(IPostRepository pRepository,
                                          ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread){
         return new UpdatePostShareCountUseCase(mId,pRepository,pThreadExecutor,pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    ITagRepository provideTagDataRepository(DataStoreFactory pDataStoreFactory, DataMapper
+            pDataMapper) {
+        return new TagRepository(pDataStoreFactory, pDataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("tagList")
+    UseCase provideTagListUseCase(ITagRepository pTagRepository, ThreadExecutor pThreadExecutor,
+                                  PostExecutionThread pPostExecutionThread) {
+        return new GetTagListUseCase(pTagRepository, pThreadExecutor, pPostExecutionThread);
     }
 }

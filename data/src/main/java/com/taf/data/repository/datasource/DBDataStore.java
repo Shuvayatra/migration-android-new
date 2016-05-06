@@ -7,6 +7,7 @@ import com.taf.data.database.DatabaseHelper;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
+import com.taf.data.database.dao.DbTag;
 import com.taf.model.Notification;
 
 import java.util.List;
@@ -89,6 +90,10 @@ public class DBDataStore implements IDataStore {
 
     public long updateUnSyncedShareCount(Long pId){
         return mHelper.updateUnSyncedShareCount(pId);
+    }
+
+    public Observable<List<DbTag>> getTags() {
+        return mHelper.getTags();
     }
 }
 

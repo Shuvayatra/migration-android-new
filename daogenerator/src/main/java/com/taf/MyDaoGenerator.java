@@ -29,6 +29,7 @@ public class MyDaoGenerator {
 
         createPostCategoryTable(pSchema);
         createNotificationTable(pSchema);
+        createTagsTable(pSchema);
     }
 
     private static Entity createPostTable(Schema pSchema) {
@@ -97,6 +98,12 @@ public class MyDaoGenerator {
         return notification;
     }
 
+    private static Entity createTagsTable(Schema pSchema) {
+        Entity tag = pSchema.addEntity("DbTag");
+        tag.addIdProperty();
+        tag.addStringProperty("title");
+        return tag;
+    }
 }
 
 

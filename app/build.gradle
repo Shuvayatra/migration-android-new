@@ -50,6 +50,8 @@ dependencies {
     compile appDependencies.analytics
     compile appDependencies.gcm
 
+    compile "com.wefika:flowlayout:0.4.1"
+
     compile appDependencies.butterKnife
     apt appDependencies.daggerCompiler
     compile appDependencies.dagger
