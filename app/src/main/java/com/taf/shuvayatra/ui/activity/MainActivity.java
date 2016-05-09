@@ -61,8 +61,8 @@ public class MainActivity extends BaseActivity {
         logoIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUpTabs();
                 showFragment(4);
+                setUpTabs();
             }
         });
     }
@@ -104,6 +104,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                tab.setIcon(tabIcons[tab.getPosition()]);
+                showFragment(tab.getPosition());
             }
         });
     }
@@ -112,26 +114,51 @@ public class MainActivity extends BaseActivity {
         currentFragment = position;
         switch (position) {
             case 0:
-                JourneyFragment journeyFragment = JourneyFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, journeyFragment).commit();
+                JourneyFragment journeyFragment = (JourneyFragment) getSupportFragmentManager()
+                        .findFragmentByTag("journey");
+                if (journeyFragment == null) {
+                    journeyFragment = JourneyFragment.newInstance();
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        journeyFragment, "journey").commit();
                 break;
             case 1:
-                DestinationFragment destinationFragment = DestinationFragment.newInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, destinationFragment).commit();
+                DestinationFragment destinationFragment = (DestinationFragment)
+                        getSupportFragmentManager().findFragmentByTag("destination");
+                if (destinationFragment == null) {
+                    destinationFragment = DestinationFragment.newInstance();
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        destinationFragment, "destination").commit();
                 break;
             case 2:
-                InfoFragment infoFragment = InfoFragment.getInstance();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, infoFragment).commit();
+                InfoFragment infoFragment = (InfoFragment) getSupportFragmentManager()
+                        .findFragmentByTag("info");
+                if (infoFragment == null) {
+                    infoFragment = InfoFragment.getInstance();
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        infoFragment, "info").commit();
                 break;
             case 3:
-                UserFragment userFragment = new UserFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, userFragment).commit();
+                UserFragment userFragment = (UserFragment) getSupportFragmentManager()
+                        .findFragmentByTag("user");
+                if (userFragment == null) {
+                    userFragment = new UserFragment();
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        userFragment, "user").commit();
                 break;
             case 4:
                 List<String> excludes = new ArrayList<>();
                 excludes.add("place");
-                FeedFragment feedFragment = FeedFragment.newInstance(excludes);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, feedFragment).commit();
+                FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
+                        .findFragmentByTag("home");
+                if (feedFragment == null) {
+                    feedFragment = FeedFragment.newInstance(excludes);
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        feedFragment, "home").commit();
                 break;
         }
     }

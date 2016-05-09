@@ -61,14 +61,21 @@ public class FeedFragment extends BaseFragment implements
 
     public static final int REQUEST_CODE_SEARCH = 9823;
 
+    public static final String SUB_CATEGORY_SELECTION = "subCategorySelection";
+    public static final String LIST_ITEM_SELECTION = "listItemSelection";
+    public static final String CURRENT_TAG = "currentTag";
+
     public static final Integer PAGE_LIMIT = -1;
     public static final Integer INITIAL_OFFSET = 0;
+
+    int subCategorySelection = 0;
+    String currentTag;
+    int listItemSelection;
 
     @Inject
     LatestContentPresenter mLatestPresenter;
     @Inject
     PostListPresenter mPresenter;
-
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
     @Bind(R.id.recyclerView)
@@ -87,20 +94,17 @@ public class FeedFragment extends BaseFragment implements
     ImageView clear;
     ListAdapter<Post> mListAdapter;
     LinearLayoutManager mLayoutManager;
-
     boolean mFavouritesOnly = false;
     boolean mFromCategory = false;
     List<Category> mSubCategories;
     List<String> mExcludeTypes;
     List<Post> mPosts;
     String[] mFilters;
-
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
     Integer mPage = 0;
     UseCaseData mUseCaseData = new UseCaseData();
     private Long mCategoryId;
-    private int mCurrentSelection;
 
     public FeedFragment() {
     }
@@ -143,7 +147,26 @@ public class FeedFragment extends BaseFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            mFavouritesOnly = savedInstanceState.getBoolean(MyConstants.Extras
+                    .KEY_FAVOURITES_ONLY, false);
+            mFromCategory = savedInstanceState.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY,
+                    false);
+            mCategoryId = savedInstanceState.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mSubCategories = (List<Category>) savedInstanceState.getSerializable(MyConstants
+                    .Extras.KEY_SUBCATEGORY);
+            mExcludeTypes = (List<String>) savedInstanceState.getSerializable(MyConstants.Extras
+                    .KEY_EXCLUDE_LIST);
+
+            subCategorySelection = savedInstanceState.getInt(SUB_CATEGORY_SELECTION, 0);
+            listItemSelection = savedInstanceState.getInt(LIST_ITEM_SELECTION, 0);
+            currentTag = savedInstanceState.getString(CURRENT_TAG);
+            clear.setVisibility(currentTag != null ? View.VISIBLE : View.GONE);
+            mSearchView.setText(currentTag != null ? currentTag : "");
+        }
+
         mSearchFilterSection.setVisibility(mFavouritesOnly ? View.GONE : View.VISIBLE);
+
         initialize();
         setUpAdapter();
         if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
@@ -152,6 +175,7 @@ public class FeedFragment extends BaseFragment implements
             mFilterContainer.setVisibility(View.VISIBLE);
             loadFilterOptions();
             mFilterSpinner.setOnItemSelectedListener(this);
+            mFilterSpinner.setSelection(subCategorySelection);
         }
         loadPostsList(INITIAL_OFFSET);
     }
@@ -165,8 +189,9 @@ public class FeedFragment extends BaseFragment implements
     @OnClick(R.id.clear)
     public void clearFilter() {
         mSearchView.setText("");
-        mListAdapter.setDataCollection(mPosts);
+        currentTag = null;
         clear.setVisibility(View.GONE);
+        filterPost(subCategorySelection);
     }
 
     private void initialize() {
@@ -212,7 +237,8 @@ public class FeedFragment extends BaseFragment implements
                 int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
                 if (!mIsLoading && !mIsLastPage) {
-                    if (PAGE_LIMIT != -1 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
+                    if (PAGE_LIMIT != -1 && (visibleItemCount + firstVisibleItemPosition) >=
+                            totalItemCount &&
                             firstVisibleItemPosition >= 0 && totalItemCount >= PAGE_LIMIT) {
                         loadPostsList(mPage);
                     }
@@ -246,7 +272,7 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
         Intent intent = null;
-        mCurrentSelection = pIndex;
+        listItemSelection = pIndex;
         switch (pModel.getDataType()) {
             case MyConstants.Adapter.TYPE_VIDEO:
                 intent = new Intent(getContext(), VideoDetailActivity.class);
@@ -296,6 +322,7 @@ public class FeedFragment extends BaseFragment implements
         mTotalDataCount = pTotalCount;
         mPage++;
         mIsLastPage = (mPage * PAGE_LIMIT >= pTotalCount);
+        filterPost(subCategorySelection);
     }
 
     @Override
@@ -317,11 +344,12 @@ public class FeedFragment extends BaseFragment implements
 
     void loadFilterOptions() {
         if (mFromCategory) {
-            if (!mSubCategories.isEmpty() && !mSubCategories.get(0).getTitle().equals("All")) {
-                Category category = new Category();
-                category.setTitle("All");
-                mSubCategories.add(0, category);
-                Logger.e("FeedFragment", "showing filterlist" + mSubCategories);
+            if (!mSubCategories.isEmpty()) {
+                if (!mSubCategories.get(0).getTitle().equals("All")) {
+                    Category category = new Category();
+                    category.setTitle("All");
+                    mSubCategories.add(0, category);
+                }
                 CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);
                 mFilterSpinner.setAdapter(adapter);
             } else {
@@ -334,10 +362,84 @@ public class FeedFragment extends BaseFragment implements
         }
     }
 
-    void filterPost(int position) {
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getId()) {
+            case R.id.filterSpinner:
+                filterPost(position);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
+                Logger.e("FeedFragment", "view count = " + viewCount);
+                if (viewCount != 0) {
+                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedViewCount(viewCount);
+                }
+                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
+                Logger.e("FeedFragment", "share count = " + shareCount);
+                if (shareCount != 0) {
+                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedShareCount(shareCount);
+                }
+                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
+                mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
+                mListAdapter.getDataCollection().get(listItemSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            } else if (requestCode == REQUEST_CODE_SEARCH) {
+                currentTag = data.getStringExtra(MyConstants.Extras.KEY_TAG);
+                mSearchView.setText(currentTag);
+                filterPost(subCategorySelection);
+            }
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle data = getArguments();
+        if (data != null) {
+            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
+            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
+            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
+            mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SUB_CATEGORY_SELECTION, subCategorySelection);
+        outState.putInt(LIST_ITEM_SELECTION, listItemSelection);
+        outState.putString(CURRENT_TAG, currentTag);
+        outState.putBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, mFavouritesOnly);
+        outState.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, mFromCategory);
+        outState.putLong(MyConstants.Extras.KEY_CATEGORY, mCategoryId);
+        outState.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) mSubCategories);
+        outState.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) mExcludeTypes);
+    }
+
+    private void filterPost(int position) {
+        subCategorySelection = position;
         if (mPosts != null) {
             if (position == 0) {
-                mListAdapter.setDataCollection(mPosts);
+                filterListByTag(mPosts, currentTag);
             } else {
                 List<Post> filteredPost = new ArrayList<>();
                 if (mFromCategory) {
@@ -369,12 +471,12 @@ public class FeedFragment extends BaseFragment implements
                         }
                     }
                 }
-                mListAdapter.setDataCollection(filteredPost);
+                filterListByTag(filteredPost, currentTag);
             }
         }
     }
 
-    List<Post> filterByType(String type) {
+    private List<Post> filterByType(String type) {
         List<Post> filteredPost = new ArrayList<>();
         for (Post post : mPosts) {
             if (post.getType().toLowerCase().equals(type.toLowerCase()))
@@ -383,76 +485,19 @@ public class FeedFragment extends BaseFragment implements
         return filteredPost;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.filterSpinner:
-                filterPost(position);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public Context getContext() {
-        return getActivity();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == BaseActivity.RESULT_OK) {
-            if (requestCode == 3209) {
-                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
-                        false);
-                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
-                Logger.e("FeedFragment", "view count = " + viewCount);
-                if (viewCount != 0) {
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedViewCount(viewCount);
-                }
-                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
-                Logger.e("FeedFragment", "share count = " + shareCount);
-                if (shareCount != 0) {
-                    mListAdapter.getDataCollection().get(mCurrentSelection).setUnSyncedShareCount(shareCount);
-                }
-                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
-                mListAdapter.getDataCollection().get(mCurrentSelection).setLikes(favCount);
-                mListAdapter.getDataCollection().get(mCurrentSelection).setIsFavourite(status);
-                mListAdapter.notifyDataSetChanged();
-            } else if (requestCode == REQUEST_CODE_SEARCH) {
-                String tag = data.getStringExtra(MyConstants.Extras.KEY_TAG);
-                if (tag != null) {
-                    mSearchView.setText(tag);
-                    filterListByTag(tag);
+    private void filterListByTag(List<Post> pPosts, String pTag) {
+        if (pTag != null) {
+            currentTag = pTag;
+            List<Post> filteredList = new ArrayList<>();
+            for (Post post : pPosts) {
+                if (post.getTags().contains(pTag)) {
+                    filteredList.add(post);
                 }
             }
+            mListAdapter.setDataCollection(filteredList);
+            clear.setVisibility(View.VISIBLE);
+        } else {
+            mListAdapter.setDataCollection(pPosts);
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle data = getArguments();
-        if (data != null) {
-            mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
-            mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
-            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
-            mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
-            mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
-        }
-    }
-
-    private void filterListByTag(String pTag) {
-        List<Post> filteredList = new ArrayList<>();
-        for (Post post : mPosts) {
-            if (post.getTags().contains(pTag)) {
-                filteredList.add(post);
-            }
-        }
-        mListAdapter.setDataCollection(filteredList);
-        clear.setVisibility(View.VISIBLE);
     }
 }
