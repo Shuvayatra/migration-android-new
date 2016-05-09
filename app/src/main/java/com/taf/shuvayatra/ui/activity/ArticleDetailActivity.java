@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -24,6 +25,8 @@ import com.taf.util.MyConstants;
 import javax.inject.Inject;
 
 public class ArticleDetailActivity extends FacebookActivity implements PostDetailView {
+
+    public static final String KEY_POST = "key_post";
 
     @Inject
     PostFavouritePresenter mFavouritePresenter;
@@ -90,17 +93,22 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_ARTICLE);
+            if(savedInstanceState != null)
+                mPost = (Post) savedInstanceState.get(KEY_POST);
+            else
+                mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_ARTICLE);
         }
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
-
+        Logger.e("ArticleDetailActivity", "oncreate activity:  view count: "+ mPost.getUnSyncedViewCount());
         initialize();
 
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mPostViewCountPresenter.initialize(null);
+        Logger.e("ArticleDetailActivity", "savedinstance: "+savedInstanceState);
+        if(savedInstanceState==null){
+            mPostViewCountPresenter.initialize(null);
+        }
     }
 
     @Override
@@ -118,6 +126,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     private void finishWithResult() {
         Intent data = new Intent();
+        Logger.e("ArticleDetailActivity", "view count: "+ mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
 	    data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
@@ -154,7 +163,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Override
     public void onViewCountUpdated() {
         mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
-
+        Logger.e("ArticleDetailActivity", "on view updated:  view count" + mPost.getUnSyncedViewCount());
     }
 
     @Override
@@ -183,4 +192,9 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         return true;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(KEY_POST,mPost);
+        super.onSaveInstanceState(outState);
+    }
 }

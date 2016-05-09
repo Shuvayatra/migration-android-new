@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.analytics.Tracker;
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
@@ -34,6 +35,7 @@ public abstract class BaseActivity extends GCMActivity {
     @Inject
     Tracker mTracker;
 
+
     public abstract int getLayout();
 
     public boolean isDataBindingEnabled() {
@@ -50,7 +52,7 @@ public abstract class BaseActivity extends GCMActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initLanguage();
+//        initLanguage();
         super.onCreate(savedInstanceState);
         getApplicationComponent().inject(this);
         if (!isDataBindingEnabled()) {
@@ -72,6 +74,12 @@ public abstract class BaseActivity extends GCMActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        initLanguage();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         initLanguage();
     }
 
@@ -103,6 +111,7 @@ public abstract class BaseActivity extends GCMActivity {
 
     private void initLanguage() {
         Utils.setLanguage(MyConstants.Language.NEPALI, getApplicationContext());
+
     }
 
     private void initializeToolbar() {

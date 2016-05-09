@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
@@ -37,7 +38,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("");
-
+        Logger.e("MainActivity", "onActivity created");
         if (savedInstanceState != null) {
             currentFragment = savedInstanceState.getInt(CURRENT_FRAGMENT_POS, 4);
         }

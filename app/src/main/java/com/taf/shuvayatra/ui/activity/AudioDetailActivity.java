@@ -53,6 +53,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private static final int GROUP1 = 101;
     private static final int SUBMENU_BLUETOOTH = 1001;
     private static final int SUBMENU_FACEBOOK = 1002;
+    private static final String KEY_AUDIO = "key_audio";
 
     @Inject
     AudioDetailPresenter mPresenter;
@@ -254,8 +255,13 @@ public class AudioDetailActivity extends FacebookActivity implements
         super.onCreate(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
+        Logger.e("AudioDetailActivity", "data bunde "+data);
         if (data != null) {
-            mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+            if(savedInstanceState!=null){
+                mAudio = (Post) savedInstanceState.get(KEY_AUDIO);
+            }else {
+                mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+            }
             updateView(mAudio);
         }
 
@@ -263,7 +269,8 @@ public class AudioDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initialize();
-        mPostViewCountPresenter.initialize(null);
+        if(savedInstanceState == null)
+            mPostViewCountPresenter.initialize(null);
 
         mediaReceiver = new MediaReceiver(this);
         receiverFilter = new IntentFilter();
@@ -491,5 +498,11 @@ public class AudioDetailActivity extends FacebookActivity implements
     private void updateSeekBar() {
         seekbarHandler.removeCallbacks(updateSeekTime);
         seekbarHandler.postDelayed(updateSeekTime, 100);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(KEY_AUDIO,mAudio);
+        super.onSaveInstanceState(outState);
     }
 }
