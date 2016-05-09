@@ -144,7 +144,6 @@ public class FeedFragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
 
         mSearchFilterSection.setVisibility(mFavouritesOnly ? View.GONE : View.VISIBLE);
-
         initialize();
         setUpAdapter();
         if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
@@ -213,7 +212,7 @@ public class FeedFragment extends BaseFragment implements
                 int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
                 if (!mIsLoading && !mIsLastPage) {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
+                    if (PAGE_LIMIT != -1 && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
                             firstVisibleItemPosition >= 0 && totalItemCount >= PAGE_LIMIT) {
                         loadPostsList(mPage);
                     }

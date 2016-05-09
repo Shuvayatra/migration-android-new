@@ -19,6 +19,7 @@ import com.taf.interactor.GetNotificationListUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSectionCategoryUseCase;
 import com.taf.interactor.GetTagListUseCase;
+import com.taf.interactor.GetSinglePostUseCase;
 import com.taf.interactor.SaveNotificationListUseCase;
 import com.taf.interactor.SyncFavouritesUseCase;
 import com.taf.interactor.UpdateDownloadStatusUseCase;
@@ -244,5 +245,13 @@ public class DataModule {
     UseCase provideTagListUseCase(ITagRepository pTagRepository, ThreadExecutor pThreadExecutor,
                                   PostExecutionThread pPostExecutionThread) {
         return new GetTagListUseCase(pTagRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("single_post")
+    UseCase provideSinglePostUseCase(IPostRepository pRepository, ThreadExecutor pThreadExecutor,
+                                     PostExecutionThread pPostExecutionThread){
+        return new GetSinglePostUseCase(mId,pRepository, pThreadExecutor, pPostExecutionThread);
     }
 }

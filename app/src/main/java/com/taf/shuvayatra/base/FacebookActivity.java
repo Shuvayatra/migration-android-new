@@ -44,10 +44,7 @@ public abstract class FacebookActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
-        if (targetUrl != null) {
-            Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
-        }
+
         initializeFbShare();
     }
 
@@ -146,7 +143,8 @@ public abstract class FacebookActivity extends BaseActivity {
                 .putString("og:type", "nrnaapp:post")
                 .putString("og:title", title)
                 .putString("og:description", description)
-//                .putString("og:url","shuvayatra://post")
+                .putString("og:url","https://fb.me/988277937930762?id="+pModel.getId())
+                .putString("al:android:url","shuvayatra://taf.posts")
                 .putString("al:android:app_name",getString(R.string.app_name))
                 .putString("al:android:package","com.taf.shuvayatra")
                 .build();

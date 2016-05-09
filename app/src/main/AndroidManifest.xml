@@ -43,16 +43,6 @@
         <activity
             android:name=".ui.activity.ArticleDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                    android:host="path"
-                    android:scheme="shuvayatra"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.VideoDetailActivity"
@@ -142,6 +132,7 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
         <activity
             android:name=".ui.activity.TagListActivity"
             android:label="@string/title_activity_tag_list"
@@ -150,6 +141,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.taf.shuvayatra.ui.activity.MainActivity"/>
+            </activity>
+
+        <activity
+            android:name=".ui.activity.FacebookParseActivity"
+            android:label="@string/title_activity_facebook_parse"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="shuvayatra"/>
+            </intent-filter>
         </activity>
     </application>
 
