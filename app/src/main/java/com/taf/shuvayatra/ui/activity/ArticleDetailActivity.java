@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -120,7 +119,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
-	data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
+	    data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
         data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mPost.getUnSyncedShareCount());
         setResult(RESULT_OK, data);

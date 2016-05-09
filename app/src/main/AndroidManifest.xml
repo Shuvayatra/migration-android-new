@@ -137,13 +137,20 @@
             android:label="@string/title_activity_info_detail"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
+        <activity
+            android:name=".ui.activity.TagListActivity"
+            android:label="@string/title_activity_tag_list"
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.taf.shuvayatra.ui.activity.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

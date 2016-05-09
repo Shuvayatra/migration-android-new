@@ -69,6 +69,7 @@ public class MyConstants {
         public static final String KEY_FAVOURITE_COUNT = "key_favourite_count";
         public static final String KEY_SUBCATEGORY = "key_subcategory";
         public static final String KEY_CATEGORY = "key_category";
+        public static final String KEY_TAG = "key_tag";
         public static final String KEY_CATEGORY_ID = "key_category_id";
         public static final String KEY_FROM_CATEGORY = "key_from_category";
         public static final String KEY_VIEW_COUNT = "key_view_count";
