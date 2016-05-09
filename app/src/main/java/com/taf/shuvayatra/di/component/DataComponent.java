@@ -8,6 +8,7 @@ import com.taf.shuvayatra.gcm.MyGcmListenerService;
 import com.taf.shuvayatra.receivers.DownloadStateReceiver;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.FacebookParseActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
 import com.taf.shuvayatra.ui.activity.TagListActivity;
@@ -40,4 +41,5 @@ public interface DataComponent extends ActivityComponent {
     void inject(MyGcmListenerService pService);
     void inject(NotificationsFragment pFragment);
     void inject(InfoFragment pFragment);
+    void inject(FacebookParseActivity pActivity);
 }

@@ -12,4 +12,5 @@
     <string name="title_activity_country_detail">CountryDetailActivity</string>
     <string name="title_activity_info_detail">InfoDetailActivity</string>
     <string name="title_activity_tag_list">Search By Tags</string>
+    <string name="title_activity_facebook_parse">FacebookParseActivity</string>
 </resources>
