@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 
+import com.taf.data.utils.Logger;
 import com.taf.util.MyConstants;
 
 import java.util.Locale;
@@ -28,6 +29,7 @@ public class Utils {
     public static void setLanguage(int i, Context context) {
         switch (i) {
             case MyConstants.Language.ENGLISH:
+                Logger.e("Utils", "locale: ENGLISH");
                 Locale localeEN = new Locale("en");
                 Locale.setDefault(localeEN);
                 Configuration configEn = new Configuration();
@@ -35,6 +37,7 @@ public class Utils {
                 context.getApplicationContext().getResources().updateConfiguration(configEn, null);
                 break;
             case MyConstants.Language.NEPALI:
+                Logger.e("Utils", "Locale : Nepali");
                 Locale localeNp = new Locale("np");
                 Locale.setDefault(localeNp);
                 Configuration configNp = new Configuration();

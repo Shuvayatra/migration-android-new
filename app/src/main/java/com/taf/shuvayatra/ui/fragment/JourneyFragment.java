@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.widget.RelativeLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
@@ -61,6 +62,7 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
         initialize();
         loadCategories();
         setupAdapter();
+        Logger.e("JourneyFragment", "onActivity created");
     }
 
     private void setupAdapter() {

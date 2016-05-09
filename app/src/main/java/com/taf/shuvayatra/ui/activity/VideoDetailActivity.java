@@ -34,6 +34,7 @@ public class VideoDetailActivity extends FacebookActivity implements
         YouTubePlayer.OnInitializedListener,
         PostDetailView {
 
+    private static final String KEY_VIDEO = "key_video";
     @Inject
     PostFavouritePresenter mFavouritePresenter;
     @Inject
@@ -95,12 +96,17 @@ public class VideoDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
+            if(savedInstanceState != null)
+                mPost = (Post) savedInstanceState.get(KEY_VIDEO);
+            else
+                mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
         }
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         initialize();
-        mPostViewCountPresenter.initialize(null);
+        if(savedInstanceState==null){
+            mPostViewCountPresenter.initialize(null);
+        }
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
     }
@@ -213,5 +219,11 @@ public class VideoDetailActivity extends FacebookActivity implements
             return true;
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(KEY_VIDEO,mPost);
+        super.onSaveInstanceState(outState);
     }
 }
