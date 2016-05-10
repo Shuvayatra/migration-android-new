@@ -57,8 +57,8 @@
 
                     <com.facebook.drawee.view.SimpleDraweeView
                         android:id="@+id/icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="@dimen/spacing_large"
                         android:layout_marginTop="@dimen/detail_icon_top_offset"
                         app:actualImageScaleType="fitCenter"

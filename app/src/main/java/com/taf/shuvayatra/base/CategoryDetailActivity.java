@@ -23,7 +23,6 @@ import javax.inject.Inject;
  */
 public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView {
     public Category mCategory;
-    public List<Category> mSubCategories;
 
     @Inject
     CategoryPresenter mPresenter;
@@ -37,10 +36,14 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
             excludeTypes.add("place");
         }
 
-        FeedFragment fragment = FeedFragment.newInstance(true, mCategory.getId(), pCategories,
-                excludeTypes);
+        FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag
+                ("feeds");
+        if (fragment == null) {
+            fragment = FeedFragment.newInstance(true, mCategory.getId(), pCategories,
+                    excludeTypes);
+        }
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, fragment, "feeds")
                 .commit();
     }
 
@@ -85,7 +88,6 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
 
     @Override
     public void renderCategories(List<Category> pCategories) {
-
         addFeedFragment(pCategories);
     }
 

@@ -27,8 +27,8 @@
                 android:layout_height="@dimen/category_height">
 
                 <com.facebook.drawee.view.SimpleDraweeView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_centerInParent="true"
                     app:actualImageScaleType="fitCenter"
                     app:imageUrl="@{category.iconUrl}"

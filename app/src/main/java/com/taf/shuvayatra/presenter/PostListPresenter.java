@@ -1,6 +1,5 @@
 package com.taf.shuvayatra.presenter;
 
-import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
