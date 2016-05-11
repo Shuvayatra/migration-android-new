@@ -37,8 +37,9 @@ public class RestDataStore implements IDataStore {
                         Logger.d("RestDataStore_getLatestContents", "insert/update");
                         Observable.create(pSubscriber -> {
                             mDBHelper.insertUpdate(pLatestContentEntity);
+                            Logger.e("RestDataStore", "completed insert");
                             pSubscriber.onCompleted();
-                        }).subscribeOn(Schedulers.computation()).subscribe();
+                        }).subscribe();
                     });
         } else {
             return Observable.error(new NetworkConnectionException());

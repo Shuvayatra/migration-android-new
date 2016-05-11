@@ -168,7 +168,7 @@ public class SplashScreenActivity extends BaseActivity implements
                         startActivity(intent);
                         finish();
                     }
-                }, 400
+                }, 0
         );
     }
 }

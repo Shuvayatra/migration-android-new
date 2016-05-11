@@ -19,7 +19,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/country_list_image_height"
-            app:imageUrl="@{category.iconUrl}"
+            app:imageUrl="@{category.coverImageUrl}"
             app:placeholderImage="@drawable/default_gradient"
             app:progressBarImage="@drawable/ic_refresh"
             app:progressBarAutoRotateInterval="1000"
