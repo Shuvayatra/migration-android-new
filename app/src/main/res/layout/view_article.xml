@@ -73,6 +73,7 @@
                     android:textSize="@dimen/text_small"
                     android:text='@{" - " + article.totalViews + " Views"}'
                     android:layout_alignParentRight="true"
+                    android:visibility="invisible"
                     tools:text=" - 120K"/>
                 <TextView
                     android:layout_width="wrap_content"
