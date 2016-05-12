@@ -4,11 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class CategoryEntity {
     Long id;
-    @SerializedName("parent")
+    @SerializedName("parent_id")
     Long parentId;
     Long position;
     String title;
-    @SerializedName("main_image")
+    @SerializedName("alias_name")
+    String alias;
+    @SerializedName("featured_image")
     String coverImageUrl;
     @SerializedName("icon")
     String iconUrl;
@@ -18,6 +20,12 @@ public class CategoryEntity {
     Long createdAt;
     @SerializedName("updated_At")
     Long updatedAt;
+    @SerializedName("lft")
+    Integer leftIndex;
+    @SerializedName("rgt")
+    Integer rightIndex;
+    Integer depth;
+
 
     public Long getId() {
         return id;
@@ -89,5 +97,37 @@ public class CategoryEntity {
 
     public void setUpdatedAt(Long pUpdatedAt) {
         updatedAt = pUpdatedAt;
+    }
+
+    public Integer getRightIndex() {
+        return rightIndex;
+    }
+
+    public void setRightIndex(Integer pRightIndex) {
+        rightIndex = pRightIndex;
+    }
+
+    public Integer getLeftIndex() {
+        return leftIndex;
+    }
+
+    public void setLeftIndex(Integer pLeftIndex) {
+        leftIndex = pLeftIndex;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String pAlias) {
+        alias = pAlias;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer pDepth) {
+        depth = pDepth;
     }
 }

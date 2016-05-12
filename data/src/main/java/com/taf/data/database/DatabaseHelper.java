@@ -11,14 +11,11 @@ import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbPostCategory;
 import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbPostDao;
-import com.taf.data.database.dao.DbSection;
-import com.taf.data.database.dao.DbSectionDao;
 import com.taf.data.database.dao.DbTag;
 import com.taf.data.database.dao.DbTagDao;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
-import com.taf.data.entity.SectionEntity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
@@ -31,6 +28,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.dao.query.Join;
 import de.greenrobot.dao.query.QueryBuilder;
+import de.greenrobot.dao.query.WhereCondition;
 import rx.Observable;
 
 public class DatabaseHelper {
@@ -46,13 +44,13 @@ public class DatabaseHelper {
         mDataMapper = pDataMapper;
     }
 
-    public void clearCache(DaoSession pDaoSession) {
-        pDaoSession.clear();
+    public void clearCache() {
+        mDaoSession.clear();
     }
 
     public void insertUpdate(LatestContentEntity pEntity) {
+        insertUpdateCategories(pEntity.getCategories());
         insertUpdatePosts(pEntity.getPosts());
-        insertUpdateSections(pEntity.getSections());
     }
 
     public void insertUpdatePosts(List<PostEntity> pEntities) {
@@ -81,23 +79,10 @@ public class DatabaseHelper {
                 .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
-    public void insertUpdateSections(List<SectionEntity> pEntities) {
-        DbSectionDao sectionDao = mDaoSession.getDbSectionDao();
-        for (SectionEntity entity : pEntities) {
-            DbSection section = mDataMapper.transformSectionForDB(entity);
-            if (section != null) {
-                sectionDao.insertOrReplace(section);
-            }
-            insertUpdateCategories(entity.getCategoryList(), entity.getId());
-            insertUpdateCategories(entity.getSubCategoryList(), entity.getId());
-        }
-    }
-
-    public void insertUpdateCategories(List<CategoryEntity> pEntities, Long pSectionId) {
+    public void insertUpdateCategories(List<CategoryEntity> pEntities) {
         DbCategoryDao categoryDao = mDaoSession.getDbCategoryDao();
         for (CategoryEntity entity : pEntities) {
             DbCategory category = mDataMapper.transformCategoryForDB(entity);
-            category.setSectionId(pSectionId);
             if (category != null) {
                 categoryDao.insertOrReplace(category);
             }
@@ -143,23 +128,31 @@ public class DatabaseHelper {
         return getPosts(pLimit, pOffset, pType, false);
     }
 
+    public Observable<Map<String, Object>> getSimilarPosts(int pLimit, int pOffset, @NonNull
+    String pType, List<String> pTags, List<Long> pExcludeIds) {
+        if (pTags == null || pTags.isEmpty()) {
+            return Observable.empty();
+        }
+        return getPosts(pLimit, pOffset, pType, false, null, pTags, pExcludeIds, null);
+    }
+
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
             pOffset, String pType, List<String> excludeTypes, List<Long> excludeIds) {
-        return getPosts(pLimit, pOffset, pType, false, categoryId, excludeTypes, excludeIds);
+        return getPosts(pLimit, pOffset, pType, false, categoryId, null, excludeIds, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPostWithExcludes(int pLimit, int pOffset,
                                                                List<String> excludeTypes) {
-        return getPosts(pLimit, pOffset, null, false, null, excludeTypes, null);
+        return getPosts(pLimit, pOffset, null, false, null, null, null, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
-        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null);
+        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null, null);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
-            pFavouritesOnly, Long pCategoryId, List<String> pExcludeTypes, List<Long> pExcludeIds) {
+            pFavouritesOnly, Long pCategoryId, List<String> pTags, List<Long> pExcludeIds, List<String> pExcludeTypes) {
         Map<String, Object> map = new HashMap<>();
         DbPostDao postDao = mDaoSession.getDbPostDao();
 
@@ -175,6 +168,16 @@ public class DatabaseHelper {
         }
         if (pExcludeTypes != null) {
             queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
+        }
+        if (pTags != null) {
+            String whereClause = "";
+            for (int i = 0; i < pTags.size(); i++) {
+                if (i != 0) {
+                    whereClause += " || ";
+                }
+                whereClause += "tags like %" + pTags.get(i) + "%";
+            }
+            queryBuilder.where(new WhereCondition.StringCondition(whereClause));
         }
 
         Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
@@ -266,27 +269,41 @@ public class DatabaseHelper {
         return postDao.insertOrReplace(post);
     }
 
-    public Observable<List<DbCategory>> getCategoriesBySection(String section, boolean isCategory, Long pParentId) {
+    public Observable<List<DbCategory>> getCategoriesBySection(String section, Boolean isCategory,
+                                                               Long pParentId) {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         QueryBuilder queryBuilder = categoriesDao.queryBuilder();
 
-        if (!section.equals(MyConstants.SECTION.INFO)) {
-            Join sectionJoin = queryBuilder.join(DbCategoryDao.Properties.SectionId, DbSection.class,
-                    DbSectionDao.Properties.Id);
-            sectionJoin.where(DbSectionDao.Properties.Alias.eq(section));
+        DbCategory parentCategory = null;
+        if (section != null && !section.equals(MyConstants.SECTION.INFO)) {
+            parentCategory = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.Alias.eq
+                    (section)).unique();
         }
 
-        if (isCategory) {
-            queryBuilder.whereOr(DbCategoryDao.Properties.ParentId.isNull(), DbCategoryDao
-                    .Properties.ParentId.eq(0L));
+        int parentDepth = 0;
+        if (parentCategory != null) {
+            queryBuilder.where(DbCategoryDao.Properties.LeftIndex.between(parentCategory.getLeftIndex
+                    (), parentCategory.getRightIndex()));
+            parentDepth = parentCategory.getDepth();
+        }
+
+        if (isCategory == null) {
+        } else if (isCategory) {
+            queryBuilder.where(DbCategoryDao.Properties.Depth.eq(parentDepth + 1));
         } else {
-            queryBuilder.where(DbCategoryDao.Properties.ParentId.isNotNull());
-            queryBuilder.where(DbCategoryDao.Properties.ParentId.notEq(0L));
+            queryBuilder.where(DbCategoryDao.Properties.Depth.eq(parentDepth + 2));
+        }
+
+        if (pParentId != null && pParentId != Long.MIN_VALUE) {
             queryBuilder.where(DbCategoryDao.Properties.ParentId.eq(pParentId));
         }
 
         List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.Position)
                 .list();
+        for (DbCategory category : categories) {
+            category.setParentAlias(parentCategory != null ? parentCategory.getAlias()
+                    : "");
+        }
         return Observable.defer(() -> Observable.just(categories));
     }
 
@@ -330,4 +347,16 @@ public class DatabaseHelper {
 
         return Observable.defer(() -> Observable.just(tags));
     }
+
+/*
+    * insert into DB_CATEGORY (_id, title, left_index, right_index, alias, parent_id, depth)
+    * values (3, 'A', 3, 8,'a',1,2),(4, 'B', 9,10,'b',1,2),(5, 'C', 13,14,'c',2,2),(6, 'D', 15,
+    * 16,'d',2,2),(7, 'E', 4,5,'e',3,3), (8, 'F', 6,7,'f',3,3) ;
+    *
+    * update DB_CATEGORY set left_index = 8, right_index=12, depth=1 where alias = 'country';
+    * update DB_CATEGORY set left_index = 8, right_index=12, depth=1 where alias = 'destination';
+    *
+    * select c1._id, c1.title, c1.alias, c2._id, c2.title, c2.alias from db_category c1 join
+    * db_category c2 on c1.parent_id = c2._id where c2.alias = 'journey';
+    * */
 }

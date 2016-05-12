@@ -21,10 +21,13 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
+import com.taf.shuvayatra.presenter.SimilarPostPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
+import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,9 +35,12 @@ import javax.inject.Inject;
 
 public class VideoDetailActivity extends FacebookActivity implements
         YouTubePlayer.OnInitializedListener,
-        PostDetailView {
+        PostDetailView,
+        PostListView {
 
     private static final String KEY_VIDEO = "key_video";
+    @Inject
+    SimilarPostPresenter mSimilarPresenter;
     @Inject
     PostFavouritePresenter mFavouritePresenter;
     @Inject
@@ -96,7 +102,7 @@ public class VideoDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            if(savedInstanceState != null)
+            if (savedInstanceState != null)
                 mPost = (Post) savedInstanceState.get(KEY_VIDEO);
             else
                 mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
@@ -104,8 +110,9 @@ public class VideoDetailActivity extends FacebookActivity implements
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         initialize();
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
+            mSimilarPresenter.initialize(new UseCaseData());
         }
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
@@ -115,12 +122,13 @@ public class VideoDetailActivity extends FacebookActivity implements
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(mPost.getId()))
+                .dataModule(new DataModule(mPost.getId(), "video", mPost.getTags()))
                 .build()
                 .inject(this);
         mFavouritePresenter.attachView(this);
         mPostViewCountPresenter.attachView(this);
         mPostShareCountPresenter.attachView(this);
+        mSimilarPresenter.attachView(this);
     }
 
     @Override
@@ -134,11 +142,24 @@ public class VideoDetailActivity extends FacebookActivity implements
     private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
-        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT, mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
-        data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT,mPost.getUnSyncedShareCount());
+        data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mPost.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override
+    public void renderPostList(List<Post> pPosts, int pTotalCount) {
+        ((VideoDetailDataBinding) mBinding).setSimilarVideos(pPosts);
+    }
+
+    @Override
+    public void showLoadingView() {
+    }
+
+    @Override
+    public void hideLoadingView() {
     }
 
     @Override
@@ -156,12 +177,12 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     @Override
     public void onViewCountUpdated() {
-        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
+        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount() + 1);
     }
 
     @Override
     public void onShareCountUpdate() {
-        mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount()+1);
+        mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount() + 1);
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
     }
 
@@ -223,7 +244,7 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(KEY_VIDEO,mPost);
+        outState.putSerializable(KEY_VIDEO, mPost);
         super.onSaveInstanceState(outState);
     }
 }

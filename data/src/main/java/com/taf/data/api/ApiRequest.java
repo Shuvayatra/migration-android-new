@@ -18,11 +18,11 @@ public class ApiRequest {
         mApiService = pApiService;
     }
 
-    public Observable<LatestContentEntity> getLatestContents(long pLatestUpdateStamp) {
+    public Observable<LatestContentEntity> getLatestContents(Long pLatestUpdateStamp) {
         return mApiService.getLatestContent(pLatestUpdateStamp);
     }
 
-    public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList){
+    public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList) {
         return mApiService.syncLikes(pSyncDataList);
     }
 }

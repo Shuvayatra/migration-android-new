@@ -35,11 +35,14 @@ import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.presenter.AudioDetailPresenter;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
+import com.taf.shuvayatra.presenter.SimilarPostPresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
+import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -47,6 +50,7 @@ import butterknife.Bind;
 
 public class AudioDetailActivity extends FacebookActivity implements
         AudioDetailView,
+        PostListView,
         View.OnClickListener,
         SeekBar.OnSeekBarChangeListener {
 
@@ -61,6 +65,9 @@ public class AudioDetailActivity extends FacebookActivity implements
     PostFavouritePresenter mFavouritePresenter;
     @Inject
     PostViewCountPresenter mPostViewCountPresenter;
+    @Inject
+    SimilarPostPresenter mSimilarPresenter;
+
 
     @Bind(R.id.audio_time)
     TextView mAudioTime;
@@ -191,6 +198,15 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void onPause() {
+        mSeekbar.removeCallbacks(updateSeekTime);
+        mSeekbarMini.removeCallbacks(updateSeekTime);
+        if (mediaReceiver != null)
+            unregisterReceiver(mediaReceiver);
+        super.onPause();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.audio_detail, menu);
@@ -255,11 +271,11 @@ public class AudioDetailActivity extends FacebookActivity implements
         super.onCreate(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
-        Logger.e("AudioDetailActivity", "data bunde "+data);
+        Logger.e("AudioDetailActivity", "data bunde " + data);
         if (data != null) {
-            if(savedInstanceState!=null){
+            if (savedInstanceState != null) {
                 mAudio = (Post) savedInstanceState.get(KEY_AUDIO);
-            }else {
+            } else {
                 mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
             }
             updateView(mAudio);
@@ -269,8 +285,10 @@ public class AudioDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initialize();
-        if(savedInstanceState == null)
+        if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
+            mSimilarPresenter.initialize(new UseCaseData());
+        }
 
         mediaReceiver = new MediaReceiver(this);
         receiverFilter = new IntentFilter();
@@ -315,7 +333,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mAudio.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mAudio.getLikes());
-        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mAudio.getUnSyncedViewCount());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT, mAudio.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mAudio.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
@@ -325,7 +343,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(mAudio.getId()))
+                .dataModule(new DataModule(mAudio.getId(), "audio", mAudio.getTags()))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
@@ -333,6 +351,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         mPresenter.initialize(null);
         mPostViewCountPresenter.attachView(this);
         mPostShareCountPresenter.attachView(this);
+        mSimilarPresenter.attachView(this);
     }
 
     @Override
@@ -359,12 +378,9 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
-    public void onPause() {
-        mSeekbar.removeCallbacks(updateSeekTime);
-        mSeekbarMini.removeCallbacks(updateSeekTime);
-        if (mediaReceiver != null)
-            unregisterReceiver(mediaReceiver);
-        super.onPause();
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(KEY_AUDIO, mAudio);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -394,6 +410,19 @@ public class AudioDetailActivity extends FacebookActivity implements
     public void onStopTrackingTouch(SeekBar seekBar) {
         mService.seekTo(seekBar.getProgress());
         updateSeekBar();
+    }
+
+    @Override
+    public void renderPostList(List<Post> pPosts, int pTotalCount) {
+        ((ActivityAudioDetailBinding) mBinding).setSimilarAudios(pPosts);
+    }
+
+    @Override
+    public void showLoadingView() {
+    }
+
+    @Override
+    public void hideLoadingView() {
     }
 
     @Override
@@ -480,7 +509,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void onShareCountUpdate() {
-        mAudio.setUnSyncedShareCount(mAudio.getUnSyncedShareCount()+1);
+        mAudio.setUnSyncedShareCount(mAudio.getUnSyncedShareCount() + 1);
         ((ActivityAudioDetailBinding) mBinding).setAudio(mAudio);
     }
 
@@ -498,11 +527,5 @@ public class AudioDetailActivity extends FacebookActivity implements
     private void updateSeekBar() {
         seekbarHandler.removeCallbacks(updateSeekTime);
         seekbarHandler.postDelayed(updateSeekTime, 100);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(KEY_AUDIO,mAudio);
-        super.onSaveInstanceState(outState);
     }
 }

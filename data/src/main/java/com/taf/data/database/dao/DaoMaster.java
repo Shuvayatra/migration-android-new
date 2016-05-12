@@ -9,7 +9,6 @@ import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import com.taf.data.database.dao.DbPostDao;
-import com.taf.data.database.dao.DbSectionDao;
 import com.taf.data.database.dao.DbCategoryDao;
 import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbNotificationDao;
@@ -25,7 +24,6 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         DbPostDao.createTable(db, ifNotExists);
-        DbSectionDao.createTable(db, ifNotExists);
         DbCategoryDao.createTable(db, ifNotExists);
         DbPostCategoryDao.createTable(db, ifNotExists);
         DbNotificationDao.createTable(db, ifNotExists);
@@ -35,7 +33,6 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         DbPostDao.dropTable(db, ifExists);
-        DbSectionDao.dropTable(db, ifExists);
         DbCategoryDao.dropTable(db, ifExists);
         DbPostCategoryDao.dropTable(db, ifExists);
         DbNotificationDao.dropTable(db, ifExists);
@@ -72,7 +69,6 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(SQLiteDatabase db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(DbPostDao.class);
-        registerDaoClass(DbSectionDao.class);
         registerDaoClass(DbCategoryDao.class);
         registerDaoClass(DbPostCategoryDao.class);
         registerDaoClass(DbNotificationDao.class);

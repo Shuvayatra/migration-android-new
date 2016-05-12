@@ -148,7 +148,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         return super.onKeyDown(keyCode, event);
     }
 
-    private void finishWithResult() {
+    private void finishWithResult(){
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPlace.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPlace.getLikes());

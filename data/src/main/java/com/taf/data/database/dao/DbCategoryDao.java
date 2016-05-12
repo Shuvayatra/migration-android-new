@@ -1,17 +1,12 @@
 package com.taf.data.database.dao;
 
-import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
-import de.greenrobot.dao.query.Query;
-import de.greenrobot.dao.query.QueryBuilder;
 
 import com.taf.data.database.dao.DbCategory;
 
@@ -30,19 +25,19 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
-        public final static Property IconUrl = new Property(2, String.class, "iconUrl", false, "ICON_URL");
-        public final static Property SmallIconUrl = new Property(3, String.class, "smallIconUrl", false, "SMALL_ICON_URL");
-        public final static Property CoverImageUrl = new Property(4, String.class, "coverImageUrl", false, "COVER_IMAGE_URL");
-        public final static Property ParentId = new Property(5, Long.class, "parentId", false, "PARENT_ID");
-        public final static Property Position = new Property(6, Long.class, "position", false, "POSITION");
-        public final static Property CreatedAt = new Property(7, Long.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(8, Long.class, "updatedAt", false, "UPDATED_AT");
-        public final static Property SectionId = new Property(9, long.class, "sectionId", false, "SECTION_ID");
+        public final static Property Alias = new Property(2, String.class, "alias", false, "ALIAS");
+        public final static Property IconUrl = new Property(3, String.class, "iconUrl", false, "ICON_URL");
+        public final static Property SmallIconUrl = new Property(4, String.class, "smallIconUrl", false, "SMALL_ICON_URL");
+        public final static Property CoverImageUrl = new Property(5, String.class, "coverImageUrl", false, "COVER_IMAGE_URL");
+        public final static Property LeftIndex = new Property(6, Integer.class, "leftIndex", false, "LEFT_INDEX");
+        public final static Property RightIndex = new Property(7, Integer.class, "rightIndex", false, "RIGHT_INDEX");
+        public final static Property Depth = new Property(8, Integer.class, "depth", false, "DEPTH");
+        public final static Property ParentId = new Property(9, Long.class, "parentId", false, "PARENT_ID");
+        public final static Property Position = new Property(10, Long.class, "position", false, "POSITION");
+        public final static Property CreatedAt = new Property(11, Long.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(12, Long.class, "updatedAt", false, "UPDATED_AT");
     };
 
-    private DaoSession daoSession;
-
-    private Query<DbCategory> dbSection_CategoryListQuery;
 
     public DbCategoryDao(DaoConfig config) {
         super(config);
@@ -50,7 +45,6 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
     
     public DbCategoryDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -59,14 +53,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"DB_CATEGORY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"TITLE\" TEXT," + // 1: title
-                "\"ICON_URL\" TEXT," + // 2: iconUrl
-                "\"SMALL_ICON_URL\" TEXT," + // 3: smallIconUrl
-                "\"COVER_IMAGE_URL\" TEXT," + // 4: coverImageUrl
-                "\"PARENT_ID\" INTEGER," + // 5: parentId
-                "\"POSITION\" INTEGER," + // 6: position
-                "\"CREATED_AT\" INTEGER," + // 7: createdAt
-                "\"UPDATED_AT\" INTEGER," + // 8: updatedAt
-                "\"SECTION_ID\" INTEGER NOT NULL );"); // 9: sectionId
+                "\"ALIAS\" TEXT," + // 2: alias
+                "\"ICON_URL\" TEXT," + // 3: iconUrl
+                "\"SMALL_ICON_URL\" TEXT," + // 4: smallIconUrl
+                "\"COVER_IMAGE_URL\" TEXT," + // 5: coverImageUrl
+                "\"LEFT_INDEX\" INTEGER," + // 6: leftIndex
+                "\"RIGHT_INDEX\" INTEGER," + // 7: rightIndex
+                "\"DEPTH\" INTEGER," + // 8: depth
+                "\"PARENT_ID\" INTEGER," + // 9: parentId
+                "\"POSITION\" INTEGER," + // 10: position
+                "\"CREATED_AT\" INTEGER," + // 11: createdAt
+                "\"UPDATED_AT\" INTEGER);"); // 12: updatedAt
     }
 
     /** Drops the underlying database table. */
@@ -90,47 +87,60 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
             stmt.bindString(2, title);
         }
  
+        String alias = entity.getAlias();
+        if (alias != null) {
+            stmt.bindString(3, alias);
+        }
+ 
         String iconUrl = entity.getIconUrl();
         if (iconUrl != null) {
-            stmt.bindString(3, iconUrl);
+            stmt.bindString(4, iconUrl);
         }
  
         String smallIconUrl = entity.getSmallIconUrl();
         if (smallIconUrl != null) {
-            stmt.bindString(4, smallIconUrl);
+            stmt.bindString(5, smallIconUrl);
         }
  
         String coverImageUrl = entity.getCoverImageUrl();
         if (coverImageUrl != null) {
-            stmt.bindString(5, coverImageUrl);
+            stmt.bindString(6, coverImageUrl);
+        }
+ 
+        Integer leftIndex = entity.getLeftIndex();
+        if (leftIndex != null) {
+            stmt.bindLong(7, leftIndex);
+        }
+ 
+        Integer rightIndex = entity.getRightIndex();
+        if (rightIndex != null) {
+            stmt.bindLong(8, rightIndex);
+        }
+ 
+        Integer depth = entity.getDepth();
+        if (depth != null) {
+            stmt.bindLong(9, depth);
         }
  
         Long parentId = entity.getParentId();
         if (parentId != null) {
-            stmt.bindLong(6, parentId);
+            stmt.bindLong(10, parentId);
         }
  
         Long position = entity.getPosition();
         if (position != null) {
-            stmt.bindLong(7, position);
+            stmt.bindLong(11, position);
         }
  
         Long createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(8, createdAt);
+            stmt.bindLong(12, createdAt);
         }
  
         Long updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(9, updatedAt);
+            stmt.bindLong(13, updatedAt);
         }
-        stmt.bindLong(10, entity.getSectionId());
-    }
-
-    @Override
-    protected void attachEntity(DbCategory entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -145,14 +155,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
         DbCategory entity = new DbCategory( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // iconUrl
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // smallIconUrl
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // coverImageUrl
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // parentId
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // position
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // createdAt
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // updatedAt
-            cursor.getLong(offset + 9) // sectionId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // alias
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // iconUrl
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // smallIconUrl
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // coverImageUrl
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // leftIndex
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // rightIndex
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // depth
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // parentId
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // position
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // createdAt
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // updatedAt
         );
         return entity;
     }
@@ -162,14 +175,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
     public void readEntity(Cursor cursor, DbCategory entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setIconUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setSmallIconUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setCoverImageUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setParentId(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setPosition(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setCreatedAt(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setUpdatedAt(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
-        entity.setSectionId(cursor.getLong(offset + 9));
+        entity.setAlias(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setIconUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setSmallIconUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCoverImageUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setLeftIndex(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setRightIndex(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setDepth(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setParentId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setPosition(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setCreatedAt(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setUpdatedAt(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
      }
     
     /** @inheritdoc */
@@ -195,112 +211,4 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "categoryList" to-many relationship of DbSection. */
-    public List<DbCategory> _queryDbSection_CategoryList(long sectionId) {
-        synchronized (this) {
-            if (dbSection_CategoryListQuery == null) {
-                QueryBuilder<DbCategory> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.SectionId.eq(null));
-                queryBuilder.orderRaw("T.'POSITION' ASC");
-                dbSection_CategoryListQuery = queryBuilder.build();
-            }
-        }
-        Query<DbCategory> query = dbSection_CategoryListQuery.forCurrentThread();
-        query.setParameter(0, sectionId);
-        return query.list();
-    }
-
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getDbSectionDao().getAllColumns());
-            builder.append(" FROM DB_CATEGORY T");
-            builder.append(" LEFT JOIN DB_SECTION T0 ON T.\"SECTION_ID\"=T0.\"_id\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected DbCategory loadCurrentDeep(Cursor cursor, boolean lock) {
-        DbCategory entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        DbSection section = loadCurrentOther(daoSession.getDbSectionDao(), cursor, offset);
-         if(section != null) {
-            entity.setSection(section);
-        }
-
-        return entity;    
-    }
-
-    public DbCategory loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<DbCategory> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<DbCategory> list = new ArrayList<DbCategory>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
-            }
-        }
-        return list;
-    }
-    
-    protected List<DbCategory> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<DbCategory> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }

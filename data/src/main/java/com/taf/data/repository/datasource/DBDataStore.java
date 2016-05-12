@@ -35,6 +35,11 @@ public class DBDataStore implements IDataStore {
         }
     }
 
+    public Observable<Map<String, Object>> getSimilarPosts(int pLimit, int pOffset, @Nullable String
+            pType, List<String> pTags, List<Long> pExcludeIds) {
+        return mHelper.getSimilarPosts(pLimit, pOffset, pType, pTags, pExcludeIds);
+    }
+
     public Long updateFavouriteState(Long pId, boolean isFavourite) {
         return mHelper.updateFavouriteState(pId, isFavourite, false);
     }

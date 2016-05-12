@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="similarAudios"
+            type="java.util.List&lt;com.taf.model.Post>"/>
+
+        <variable
             name="audio"
             type="com.taf.model.Post"/>
     </data>
@@ -135,6 +139,7 @@
 
         <include
             layout="@layout/content_audio_detail"
+            app:similarAudios="@{similarAudios}"
             bind:audio="@{audio}"/>
 
         <LinearLayout

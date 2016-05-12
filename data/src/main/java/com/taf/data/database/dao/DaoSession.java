@@ -10,14 +10,12 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import com.taf.data.database.dao.DbPost;
-import com.taf.data.database.dao.DbSection;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbPostCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbTag;
 
 import com.taf.data.database.dao.DbPostDao;
-import com.taf.data.database.dao.DbSectionDao;
 import com.taf.data.database.dao.DbCategoryDao;
 import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbNotificationDao;
@@ -33,14 +31,12 @@ import com.taf.data.database.dao.DbTagDao;
 public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig dbPostDaoConfig;
-    private final DaoConfig dbSectionDaoConfig;
     private final DaoConfig dbCategoryDaoConfig;
     private final DaoConfig dbPostCategoryDaoConfig;
     private final DaoConfig dbNotificationDaoConfig;
     private final DaoConfig dbTagDaoConfig;
 
     private final DbPostDao dbPostDao;
-    private final DbSectionDao dbSectionDao;
     private final DbCategoryDao dbCategoryDao;
     private final DbPostCategoryDao dbPostCategoryDao;
     private final DbNotificationDao dbNotificationDao;
@@ -52,9 +48,6 @@ public class DaoSession extends AbstractDaoSession {
 
         dbPostDaoConfig = daoConfigMap.get(DbPostDao.class).clone();
         dbPostDaoConfig.initIdentityScope(type);
-
-        dbSectionDaoConfig = daoConfigMap.get(DbSectionDao.class).clone();
-        dbSectionDaoConfig.initIdentityScope(type);
 
         dbCategoryDaoConfig = daoConfigMap.get(DbCategoryDao.class).clone();
         dbCategoryDaoConfig.initIdentityScope(type);
@@ -69,14 +62,12 @@ public class DaoSession extends AbstractDaoSession {
         dbTagDaoConfig.initIdentityScope(type);
 
         dbPostDao = new DbPostDao(dbPostDaoConfig, this);
-        dbSectionDao = new DbSectionDao(dbSectionDaoConfig, this);
         dbCategoryDao = new DbCategoryDao(dbCategoryDaoConfig, this);
         dbPostCategoryDao = new DbPostCategoryDao(dbPostCategoryDaoConfig, this);
         dbNotificationDao = new DbNotificationDao(dbNotificationDaoConfig, this);
         dbTagDao = new DbTagDao(dbTagDaoConfig, this);
 
         registerDao(DbPost.class, dbPostDao);
-        registerDao(DbSection.class, dbSectionDao);
         registerDao(DbCategory.class, dbCategoryDao);
         registerDao(DbPostCategory.class, dbPostCategoryDao);
         registerDao(DbNotification.class, dbNotificationDao);
@@ -85,7 +76,6 @@ public class DaoSession extends AbstractDaoSession {
     
     public void clear() {
         dbPostDaoConfig.getIdentityScope().clear();
-        dbSectionDaoConfig.getIdentityScope().clear();
         dbCategoryDaoConfig.getIdentityScope().clear();
         dbPostCategoryDaoConfig.getIdentityScope().clear();
         dbNotificationDaoConfig.getIdentityScope().clear();
@@ -94,10 +84,6 @@ public class DaoSession extends AbstractDaoSession {
 
     public DbPostDao getDbPostDao() {
         return dbPostDao;
-    }
-
-    public DbSectionDao getDbSectionDao() {
-        return dbSectionDao;
     }
 
     public DbCategoryDao getDbCategoryDao() {
