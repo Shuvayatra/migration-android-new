@@ -13,6 +13,7 @@
     <dimen name="spacing_xsmall">8dp</dimen>
     <dimen name="spacing_xxsmall">5dp</dimen>
     <dimen name="spacing_xxxsmall">3dp</dimen>
+    <dimen name="spacing_tiny">1dp</dimen>
 
 
     <dimen name="splash_icon_size">100dp</dimen>

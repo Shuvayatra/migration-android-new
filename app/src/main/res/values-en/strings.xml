@@ -66,4 +66,5 @@
     <string name="select_category">JOURNEY - SELECT CATEGORY</string>
     <string name="query_hint_destination">Search Destination</string>
     <string name="message_buffering">(buffering...)</string>
+    <string name="read_more">Read more...</string>
 </resources>

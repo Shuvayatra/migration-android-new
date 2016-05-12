@@ -2,7 +2,8 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <data class="TagListDataBinding">
 
@@ -30,7 +31,7 @@
             android:paddingLeft="@dimen/spacing_standard"
             android:paddingRight="@dimen/spacing_standard"
             android:paddingTop="@dimen/spacing_xsmall"
-            android:text='@{"#" + tag}'
+            android:text="@{tag}"
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_large"
             tools:text="त्रुट"/>

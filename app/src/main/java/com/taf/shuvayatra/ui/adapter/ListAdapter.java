@@ -29,9 +29,10 @@ import butterknife.ButterKnife;
 public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private Boolean mFromInfo = false;
     List<T> mDataCollection;
     ListItemClickListener mListener;
+    int selectedPosition = -1;
+    private Boolean mFromInfo = false;
 
     public ListAdapter(Context pContext, ListItemClickListener pListener) {
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
@@ -39,11 +40,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
         this.mListener = pListener;
     }
 
-    public ListAdapter(Context pContext, ListItemClickListener pListener,Boolean fromInfo){
+    public ListAdapter(Context pContext, ListItemClickListener pListener, Boolean fromInfo) {
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
         this.mListener = pListener;
-         mFromInfo = fromInfo;
+        mFromInfo = fromInfo;
     }
 
     public ListAdapter(Context pContext, List<T> pDataCollection, ListItemClickListener pListener) {
@@ -72,9 +73,9 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        if(mFromInfo){
-            InfoListDataBinding infoListDataBinding  = DataBindingUtil.inflate
-                    (mLayoutInflater,R.layout.view_info_list, parent, false);
+        if (mFromInfo) {
+            InfoListDataBinding infoListDataBinding = DataBindingUtil.inflate
+                    (mLayoutInflater, R.layout.view_info_list, parent, false);
             return new InfoViewHolder(infoListDataBinding);
         }
         switch (viewType) {
@@ -117,7 +118,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(mFromInfo){
+        if (mFromInfo) {
             ((InfoViewHolder) holder).mBinding.setCategory((Category) mDataCollection.get(position));
             return;
         }
@@ -146,6 +147,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             case Adapter.TYPE_NOTIFICATION:
                 ((NotificationViewHolder) holder).mBinding.setNotification((Notification)
                         mDataCollection.get(position));
+                ((NotificationViewHolder) holder).mBinding.setSelected(position ==
+                        selectedPosition);
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -262,10 +265,18 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             super(pBinding.getRoot());
             mBinding = pBinding;
             ButterKnife.bind(this, mBinding.getRoot());
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getDataCollection().indexOf(mBinding.getNotification());
+                    selectedPosition = selectedPosition == position ? -1 : position;
+                    notifyDataSetChanged();
+                }
+            });
         }
     }
 
-    public class InfoViewHolder extends RecyclerView.ViewHolder{
+    public class InfoViewHolder extends RecyclerView.ViewHolder {
 
         InfoListDataBinding mBinding;
 

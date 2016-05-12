@@ -69,4 +69,6 @@
     <string name="select_category">यात्रा( रोजाइ छान्नु होस्)</string>
     <string name="query_hint_destination">Search Destination</string>
     <string name="message_buffering">(buffering...)</string>
+
+    <string name="read_more">Read more...</string>
 </resources>

@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Notification;
@@ -54,7 +56,8 @@ public class NotificationsFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        TextView tv = new TextView(getContext());
+        tv.setEllipsize(TextUtils.TruncateAt.END);
         initialize();
         setUpAdapter();
         mPresenter.initialize(data);
