@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.RelativeLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
+import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -21,6 +23,7 @@ import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -80,8 +83,29 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
 
     @Override
     public void renderCategories(List<Category> pCategories) {
-        mAdapter.setDataCollection(pCategories);
+        mAdapter.setDataCollection(addHeader(pCategories));
     }
+
+
+    private List<BaseModel> addHeader(List<Category> pCategories){
+        List<BaseModel> headerCategories= new ArrayList<>();
+        String sectionName = "";
+        for (int i = 0; i < pCategories.size(); i++) {
+            Category category = pCategories.get(i);
+            Logger.e("InfoFragment", "header section :"+ category.getParentAlias());
+            if(!category.getParentAlias().equals(sectionName)){
+                sectionName = category.getParentAlias();
+                Logger.e("InfoFragment", "header: "+sectionName);
+                HeaderItem header = new HeaderItem(sectionName);
+                header.setDataType(MyConstants.Adapter.TYPE_CATEGORY_HEADER);
+                headerCategories.add(header);
+            }
+                headerCategories.add(category);
+
+        }
+        return headerCategories;
+    }
+
 
     @Override
     public void showLoadingView() {

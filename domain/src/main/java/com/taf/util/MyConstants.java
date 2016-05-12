@@ -43,6 +43,7 @@ public class MyConstants {
         public static final int TYPE_SECTION = 8;
         public static final int TYPE_NOTIFICATION = 9;
         public static final int TYPE_INFO = 10;
+        public static final int TYPE_CATEGORY_HEADER = 11;
     }
 
 

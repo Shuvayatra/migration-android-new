@@ -1,14 +1,20 @@
 package com.taf.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SyncDataEntity {
     Long id;
-    String status;
+    Boolean like;
+    @SerializedName("view_count")
     Integer views;
+    @SerializedName("share_count")
+    Integer share;
 
-    public SyncDataEntity(Long pId, String pStatus, Integer viewCount) {
+    public SyncDataEntity(Long pId, Boolean plike, Integer viewCount, Integer pShare) {
         id = pId;
-        status = pStatus;
+        like = plike;
         views = viewCount;
+        share = pShare;
     }
 
     public Long getId() {
@@ -19,12 +25,12 @@ public class SyncDataEntity {
         id = pId;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getlike() {
+        return like;
     }
 
-    public void setStatus(String pStatus) {
-        status = pStatus;
+    public void setlike(Boolean plike) {
+        like = plike;
     }
 
     public Integer getViews() {
@@ -33,5 +39,13 @@ public class SyncDataEntity {
 
     public void setViews(Integer pViews) {
         views = pViews;
+    }
+
+    public Integer getShare() {
+        return share;
+    }
+
+    public void setShare(Integer pShare) {
+        share = pShare;
     }
 }

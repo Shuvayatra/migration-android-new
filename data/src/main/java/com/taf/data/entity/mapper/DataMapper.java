@@ -268,7 +268,7 @@ public class DataMapper {
 
     public SyncDataEntity transformSyncData(SyncData pSyncData) {
         if (pSyncData != null) {
-            return new SyncDataEntity(pSyncData.getId(), pSyncData.getStatus(), pSyncData.getViewCount());
+            return new SyncDataEntity(pSyncData.getId(), pSyncData.getLike(), pSyncData.getViewCount(),pSyncData.getShareCount());
         }
         return null;
     }
@@ -288,9 +288,8 @@ public class DataMapper {
 
     public SyncDataEntity transformPostForSync(DbPost pPost) {
         if (pPost != null) {
-            return new SyncDataEntity(pPost.getId(), pPost.getIsFavourite() == null ? null : (pPost.getIsFavourite()
-                    ? SyncData.STATUS_LIKE
-                    : SyncData.STATUS_DISLIKE), pPost.getUnsyncedViewCount());
+            return new SyncDataEntity(pPost.getId(),pPost.getIsFavourite()==null?null:pPost.getIsFavourite(),
+                    pPost.getUnsyncedViewCount(),pPost.getUnsyncedShareCount());
         }
         return null;
     }
