@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_xsmall"
-                android:paddingRight="@dimen/spacing_xsmall"
-                android:paddingTop="@dimen/spacing_small">
+    >
 
     <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/spacing_standard"
+        android:paddingTop="@dimen/spacing_small"
         tools:listitem="@layout/view_info_list"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginLeft="@dimen/spacing_xsmall"
+        android:layout_marginRight="@dimen/spacing_xsmall"
+        android:layout_marginTop="@dimen/spacing_xsmall"
+        app:cardElevation="3dp">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_height"
+            android:background="@null"
+            android:drawableLeft="@drawable/icon_search"
+            android:drawablePadding="@dimen/spacing_small"
+            android:enabled="false"
+            android:hint="@string/query_hint"
+            android:paddingLeft="@dimen/spacing_small"/>
+
+        <View
+            android:id="@+id/search_action"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_height"/>
+
+        <ImageView
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:paddingLeft="@dimen/spacing_small"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_clear"/>
+    </android.support.v7.widget.CardView>
 
     <include
         android:id="@+id/empty_view"

@@ -17,6 +17,7 @@ import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
@@ -273,11 +274,17 @@ public class DatabaseHelper {
                                                                Long pParentId) {
         DbCategoryDao categoriesDao = mDaoSession.getDbCategoryDao();
         QueryBuilder queryBuilder = categoriesDao.queryBuilder();
-
+        Map<Long, String> aliasMapping = null;
         DbCategory parentCategory = null;
         if (section != null && !section.equals(MyConstants.SECTION.INFO)) {
             parentCategory = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.Alias.eq
                     (section)).unique();
+        }else{
+            List<DbCategory> parentList = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.Depth.eq(0)).list();
+            aliasMapping = new HashMap<>();
+            for (DbCategory category : parentList) {
+                aliasMapping.put(category.getId(), category.getTitle());
+            }
         }
 
         int parentDepth = 0;
@@ -298,11 +305,15 @@ public class DatabaseHelper {
             queryBuilder.where(DbCategoryDao.Properties.ParentId.eq(pParentId));
         }
 
-        List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.Position)
+        List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.ParentId,DbCategoryDao.Properties.Position)
                 .list();
         for (DbCategory category : categories) {
-            category.setParentAlias(parentCategory != null ? parentCategory.getAlias()
-                    : "");
+            if(section.equals(MyConstants.SECTION.INFO)){
+                category.setParentAlias(aliasMapping.get(category.getParentId()));
+            }else {
+                category.setParentAlias(parentCategory != null ? parentCategory.getAlias()
+                        : "");
+            }
         }
         return Observable.defer(() -> Observable.just(categories));
     }

@@ -5,13 +5,15 @@ public class SyncData {
     public static final String STATUS_DISLIKE = "dislike";
 
     Long id;
-    String status;
+    Boolean like;
     Integer viewCount;
+    Integer shareCount;
 
-    public SyncData(Long pId, String pStatus,Integer pViewCount) {
+    public SyncData(Long pId, Boolean pLike, Integer pViewCount, Integer pShareCount) {
         id = pId;
-        status = pStatus;
+        like = pLike;
         viewCount = pViewCount;
+        shareCount = pShareCount;
     }
 
     public Long getId() {
@@ -22,12 +24,12 @@ public class SyncData {
         id = pId;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getLike() {
+        return like;
     }
 
-    public void setStatus(String pStatus) {
-        status = pStatus;
+    public void setLike(Boolean pLike) {
+        like = pLike;
     }
 
     public Integer getViewCount() {
@@ -36,5 +38,13 @@ public class SyncData {
 
     public void setViewCount(Integer pViewCount) {
         viewCount = pViewCount;
+    }
+
+    public Integer getShareCount() {
+        return shareCount;
+    }
+
+    public void setShareCount(Integer pShareCount) {
+        shareCount = pShareCount;
     }
 }
