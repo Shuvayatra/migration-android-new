@@ -33,7 +33,7 @@ public class GetSimilarPostsUseCase extends UseCase<List<Post>> {
     @Override
     protected Observable<List<Post>> buildUseCaseObservable(UseCaseData pData) {
         int offset = pData.getInteger(UseCaseData.OFFSET, 0);
-        int limit = pData.getInteger(UseCaseData.LIMIT, -1);
+        int limit = pData.getInteger(UseCaseData.LIMIT, 5);
         List<Long> excludeIdList = new ArrayList<>();
         if (mExcludeId != null)
             excludeIdList.add(mExcludeId);
