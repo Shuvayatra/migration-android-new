@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_xsmall"
         android:layout_marginRight="@dimen/spacing_xsmall"
+        app:cardUseCompatPadding="true"
         app:cardElevation="3dp">
 
         <TextView

@@ -10,6 +10,7 @@ import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.FacebookParseActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
+import com.taf.shuvayatra.ui.activity.SearchListActivity;
 import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
 import com.taf.shuvayatra.ui.activity.TagListActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
@@ -42,4 +43,5 @@ public interface DataComponent extends ActivityComponent {
     void inject(NotificationsFragment pFragment);
     void inject(InfoFragment pFragment);
     void inject(FacebookParseActivity pActivity);
+    void inject(SearchListActivity pActivity);
 }

@@ -13,4 +13,5 @@
     <string name="title_activity_info_detail">InfoDetailActivity</string>
     <string name="title_activity_tag_list">Search By Tags</string>
     <string name="title_activity_facebook_parse">FacebookParseActivity</string>
+    <string name="title_activity_search_list">SearchListActivity</string>
 </resources>

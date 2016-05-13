@@ -35,4 +35,8 @@ public interface IPostRepository extends IBaseRepository<Post> {
     Observable<Long> updateUnSyncedViewCount(long pId);
 
     Observable<Long> updateUnSyncedShareCount(long pId);
+
+    Observable<List<Post>> getPostsByTitle(int pLimit, int pOffset, String title);
+
+    Observable<List<Post>> getPostByTags(int pLimit, int pOffset,List<String> pTags);
 }

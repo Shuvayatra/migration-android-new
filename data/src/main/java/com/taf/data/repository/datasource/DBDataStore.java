@@ -73,6 +73,14 @@ public class DBDataStore implements IDataStore {
         return mHelper.getPostWithExcludes(pLimit, pOffset, excludeTypes);
     }
 
+    public Observable<Map<String,Object>> getPostsByTitle(int pLimit, int pOffset, String pTitle){
+        return mHelper.getPostsByTitle(pLimit,pOffset,pTitle);
+    }
+
+    public Observable<Map<String,Object>> getPostsByTags(int pLimit, int pOffset, List<String> pTags){
+        return mHelper.getPostByTags(pLimit,pOffset,pTags);
+    }
+
     public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {
         return mHelper.updateDownloadStatus(pReference, pDownloadStatus);
     }
@@ -100,5 +108,6 @@ public class DBDataStore implements IDataStore {
     public Observable<List<DbTag>> getTags() {
         return mHelper.getTags();
     }
+
 }
 

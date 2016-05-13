@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -17,6 +18,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CategoryPresenter;
 import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
+import com.taf.shuvayatra.ui.activity.TagListActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.CategoryView;
@@ -29,6 +31,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 public class InfoFragment extends BaseFragment implements CategoryView, ListItemClickListener {
 
@@ -39,6 +42,8 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
     RelativeLayout mEmptyView;
+    @Bind(R.id.search)
+    EditText mSearchView;
     private ListAdapter mAdapter;
 
     public static InfoFragment getInstance(){
@@ -133,4 +138,11 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
     public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
 
     }
+
+    @OnClick(R.id.search_action)
+    public void showFilterTags() {
+        Intent tagsIntent = new Intent(getActivity(), TagListActivity.class);
+        startActivity(tagsIntent);
+    }
+
 }

@@ -54,12 +54,18 @@ public class DataModule {
     boolean mFavouriteOnly = false;
     boolean mUnSyncedOnly = false;
     boolean mIsCategory = false;
+    String mTitle = null;
 
     public DataModule() {
     }
 
     public DataModule(Long pId) {
         mId = pId;
+    }
+
+    public DataModule(String pTitle,List<String> pTags){
+        mTitle = pTitle;
+        mTags = pTags;
     }
 
     public DataModule(Long pId, String pPostType, List<String> pTags) {
@@ -161,8 +167,8 @@ public class DataModule {
     @Named("postList")
     UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(mParentType, mParentId, mPostType, mFavouriteOnly,
-                mUnSyncedOnly, mExcludeTypes, pDataRepository, pThreadExecutor,
+        return new GetPostListUseCase( mParentId, mPostType, mFavouriteOnly,
+                mUnSyncedOnly, mTitle,mTags, mExcludeTypes, pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 
