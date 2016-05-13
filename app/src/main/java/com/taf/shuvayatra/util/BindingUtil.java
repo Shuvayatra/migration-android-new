@@ -20,9 +20,9 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
-import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -83,17 +83,29 @@ public class BindingUtil {
 
     @BindingAdapter("bind:similarPosts")
     public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts) {
-        setSimilarPosts(pContainer, pPosts, null);
+        setSimilarPosts(pContainer, pPosts, null, null);
+    }
+
+    @BindingAdapter({"bind:similarPosts", "bind:clickListener"})
+    public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts,
+                                       ListItemClickListener pListener) {
+        setSimilarPosts(pContainer, pPosts, null, pListener);
     }
 
     @BindingAdapter({"bind:similarPosts", "bind:countryId"})
     public static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts, Long
             countryId) {
+        setSimilarPosts(pContainer, pPosts, countryId, null);
+    }
+
+    private static void setSimilarPosts(LinearLayout pContainer, List<Post> pPosts, Long
+            countryId, ListItemClickListener pListener) {
+        pContainer.removeAllViews();
         if (pPosts != null && pPosts.size() > 0) {
             for (Post post : pPosts) {
                 if (post.getDataType() == MyConstants.Adapter.TYPE_AUDIO || post.getDataType() ==
                         MyConstants.Adapter.TYPE_VIDEO) {
-                    showSimilarAudioVideo(pContainer.getContext(), pContainer, post);
+                    showSimilarAudioVideo(pContainer.getContext(), pContainer, post, pListener);
                 } else if (post.getDataType() == MyConstants.Adapter.TYPE_PLACE) {
                     showSimilarPlace(pContainer.getContext(), pContainer, post, countryId);
                 }
@@ -151,7 +163,7 @@ public class BindingUtil {
     }
 
     public static void showSimilarAudioVideo(final Context pContext, LinearLayout pContainer, final Post
-            pPost) {
+            pPost, final ListItemClickListener pListener) {
         if (pPost != null) {
             AudioVideoDataBinding audioDataBinding = DataBindingUtil.inflate
                     (LayoutInflater.from(pContext), R.layout.view_audio_video_list, pContainer,
@@ -166,12 +178,13 @@ public class BindingUtil {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent;
-                    intent = new Intent(pContext, (pPost.getDataType() == MyConstants.Adapter
-                            .TYPE_AUDIO) ? AudioDetailActivity.class : VideoDetailActivity.class);
-                    intent.putExtra((pPost.getDataType() == MyConstants.Adapter.TYPE_AUDIO) ?
-                            MyConstants.Extras.KEY_AUDIO : MyConstants.Extras.KEY_VIDEO, pPost);
-                    pContext.startActivity(intent);
+                    if (pPost.getDataType() == MyConstants.Adapter.TYPE_VIDEO) {
+                        Intent intent = new Intent(pContext, VideoDetailActivity.class);
+                        intent.putExtra(MyConstants.Extras.KEY_VIDEO, pPost);
+                        pContext.startActivity(intent);
+                    } else {
+                        pListener.onListItemSelected(pPost, -1);
+                    }
                 }
             });
             pContainer.addView(view);

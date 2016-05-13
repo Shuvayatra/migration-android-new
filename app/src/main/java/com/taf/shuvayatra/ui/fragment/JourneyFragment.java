@@ -125,11 +125,6 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
         startActivity(i);
     }
 
-    @Override
-    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
-
-    }
-
     void filterCountries(String query) {
         List<Category> filterCountreis = new ArrayList<>();
         if (mCategories != null) {

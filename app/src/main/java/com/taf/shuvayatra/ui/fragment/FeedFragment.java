@@ -301,10 +301,6 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
-    }
-
-    @Override
     public void latestContentFetched(boolean hasNewContent) {
         loadPostsList(INITIAL_OFFSET);
     }

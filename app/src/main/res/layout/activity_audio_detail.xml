@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
+
+        <variable
             name="similarAudios"
             type="java.util.List&lt;com.taf.model.Post>"/>
 
@@ -140,6 +144,7 @@
         <include
             layout="@layout/content_audio_detail"
             app:similarAudios="@{similarAudios}"
+            app:listener="@{listener}"
             bind:audio="@{audio}"/>
 
         <LinearLayout

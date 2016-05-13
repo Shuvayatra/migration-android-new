@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -132,11 +131,6 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
         Intent intent = new Intent(getContext(),InfoDetailActivity.class);
         intent.putExtra(MyConstants.Extras.KEY_CATEGORY, pModel);
         startActivity(intent);
-    }
-
-    @Override
-    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
-
     }
 
     @OnClick(R.id.search_action)

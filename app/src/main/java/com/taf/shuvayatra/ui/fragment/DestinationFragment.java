@@ -112,9 +112,4 @@ public class DestinationFragment extends BaseFragment implements
         i.putExtra(MyConstants.Extras.KEY_CATEGORY, category);
         startActivity(i);
     }
-
-    @Override
-    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
-
-    }
 }
