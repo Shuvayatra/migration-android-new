@@ -35,6 +35,16 @@ public class DBDataStore implements IDataStore {
         }
     }
 
+    public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType,
+                                                    boolean pFavouritesOnly, Long pCategoryId,
+                                                    Long pSubCategoryId, List<String> pTags,
+                                                    String pSearchQuery, List<Long>
+                                                            pExcludeIds, List<String>
+                                                            pExcludeTypes) {
+        return mHelper.getPostsNew(pLimit, pOffset, pType, pFavouritesOnly, pCategoryId,
+                pSubCategoryId, pTags, pSearchQuery, pExcludeIds, pExcludeTypes);
+    }
+
     public Observable<Map<String, Object>> getSimilarPosts(int pLimit, int pOffset, @Nullable String
             pType, List<String> pTags, List<Long> pExcludeIds) {
         return mHelper.getSimilarPosts(pLimit, pOffset, pType, pTags, pExcludeIds);
@@ -97,11 +107,11 @@ public class DBDataStore implements IDataStore {
         return mHelper.saveNotification(pNotification);
     }
 
-    public long updateUnSyncedViewCount(Long pId){
+    public long updateUnSyncedViewCount(Long pId) {
         return mHelper.updateUnSyncedViewCount(pId);
     }
 
-    public long updateUnSyncedShareCount(Long pId){
+    public long updateUnSyncedShareCount(Long pId) {
         return mHelper.updateUnSyncedShareCount(pId);
     }
 

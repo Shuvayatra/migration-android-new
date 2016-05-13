@@ -34,13 +34,9 @@ public class TagListActivity extends BaseActivity implements
 
     @Inject
     TagListPresenter mPresenter;
-
     @Bind(R.id.tag_list_container)
     FlowLayout mTagsContainer;
-
-    Boolean mIsQuerySubmitted=false;
-
-    public static final int SEARCH_REQUEST_CODE = 3000;
+    Boolean mIsQuerySubmitted = false;
     private SearchView mSearchView;
 
     @Override
@@ -58,13 +54,19 @@ public class TagListActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mIsQuerySubmitted = false;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem item = menu.findItem(R.id.action_search);
-        mSearchView =
-                (SearchView) item.getActionView();
+        mSearchView = (SearchView) item.getActionView();
+        mSearchView.setIconified(false);
         mSearchView.setQueryHint(getString(R.string.query_hint));
         mSearchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
@@ -72,7 +74,6 @@ public class TagListActivity extends BaseActivity implements
         mSearchView.setOnQueryTextListener(this);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -134,7 +135,7 @@ public class TagListActivity extends BaseActivity implements
     @Override
     public boolean onQueryTextSubmit(String query) {
         Logger.e("TagListActivity", "query submitted");
-        if(!mIsQuerySubmitted) {
+        if (!mIsQuerySubmitted) {
             mIsQuerySubmitted = true;
             Intent intent = new Intent(this, SearchListActivity.class);
             intent.putExtra(MyConstants.Extras.KEY_TITLE, query);

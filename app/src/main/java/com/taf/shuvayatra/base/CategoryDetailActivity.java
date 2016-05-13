@@ -31,6 +31,8 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
     CategoryPresenter mPresenter;
 
     public abstract MyConstants.DataParent getDataParent();
+    public void expandAppBar(){
+    }
 
     public void addFeedFragment(List<Category> pCategories) {
         List<String> excludeTypes = null;

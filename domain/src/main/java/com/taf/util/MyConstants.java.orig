@@ -76,10 +76,13 @@ public class MyConstants {
         public static final String KEY_VIEW_COUNT = "key_view_count";
         public static final String KEY_EXCLUDE_LIST = "key_exclude";
         public static final String KEY_SHARE_COUNT = "key_share_count";
+<<<<<<< 0e9924ac5c3dd81201835179a996f6d083cff8fd
         public static final String KEY_TITLE = "key_title";
+=======
         public static final String KEY_FILTER_FAVOURITES_ONLY = "key_filter_fav_only";
         public static final String KEY_SUB_CATEGORY = "key_sub_category";
         public static final String KEY_TYPE = "key_post_type";
+>>>>>>> filter list using db query to support pagination
     }
 
     public static final class Intent {

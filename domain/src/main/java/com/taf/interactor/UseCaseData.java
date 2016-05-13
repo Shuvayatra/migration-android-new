@@ -7,7 +7,6 @@ import java.util.Map;
 public class UseCaseData implements Serializable {
     public static final String LIMIT = "limit";
     public static final String OFFSET = "offset";
-    public static final String ID = "id";
     public static final String FAVOURITE_STATE = "is_favourite";
     public static final String SYNC_LIST = "sync_list";
     public static final String SEARCH_UN_SYNCED_DATA = "searchUnSyncedData";
@@ -16,6 +15,12 @@ public class UseCaseData implements Serializable {
     public static final String DOWNLOAD_STATUS = "download_status";
     public static final String EXCLUDE_LIST = "exclude_list";
     public static final String SUBMISSION_DATA = "submission_data";
+
+    public static final String IS_SEARCH = "is_search";
+    public static final String SEARCH_QUERY = "search_query";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String POST_TYPE = "type";
+    public static final String IS_FAVOURITE = "is_favourite";
 
     Map<String, Object> data = null;
 

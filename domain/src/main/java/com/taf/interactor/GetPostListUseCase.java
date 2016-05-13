@@ -4,7 +4,6 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.model.Post;
 import com.taf.repository.IPostRepository;
-import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
         int offset = 0;
         int limit = -1;
         List<Long> excludeIdList = new ArrayList<>();
-        if(pData!=null) {
+        if (pData != null) {
             offset = pData.getInteger(UseCaseData.OFFSET, 0);
             limit = pData.getInteger(UseCaseData.LIMIT, -1);
 
@@ -55,20 +54,13 @@ public class GetPostListUseCase extends UseCase<List<Post>> {
         }
         if (mUnSyncedOnly) {
             return mRepository.getPostWithUnSyncedFavourites();
-        } else if (mParentId != null) {
-            return mRepository.getPostByCategory(mParentId, limit, offset, mPostType,
-                    mExcludeTypes, excludeIdList);
-        } else if (mFavouriteOnly) {
-            return mRepository.getFavouriteList(limit, offset);
-        } else if (mExcludeTypes != null) {
-            return mRepository.getPostWithExcludes(limit, offset, mExcludeTypes);
-        } else if (mTitle!=null){
-            return mRepository.getPostsByTitle(limit,offset,mTitle);
-        } else if (mTags!=null){
-            return mRepository.getPostByTags(limit,offset,mTags);
-        }
-        else {
-            return mRepository.getList(limit, offset);
+        } else {
+            String type = pData.getString(UseCaseData.POST_TYPE, mPostType);
+            Boolean favOnly = pData.getBoolean(UseCaseData.IS_FAVOURITE, mFavouriteOnly);
+            Long subCategoryId = pData.getLong(UseCaseData.CATEGORY_ID);
+
+            return mRepository.getList(limit, offset, type, favOnly, mParentId, subCategoryId,
+                    mTags, mTitle, excludeIdList, mExcludeTypes);
         }
     }
 }
