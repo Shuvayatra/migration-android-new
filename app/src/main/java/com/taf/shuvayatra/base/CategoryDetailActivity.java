@@ -4,11 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CategoryPresenter;
+import com.taf.shuvayatra.ui.activity.CountryDetailActivity;
+import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
 import com.taf.shuvayatra.ui.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.interfaces.CategoryView;
 import com.taf.util.MyConstants;
@@ -31,7 +34,8 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
 
     public void addFeedFragment(List<Category> pCategories) {
         List<String> excludeTypes = null;
-        if (!mCategory.getParentAlias().equals(MyConstants.SECTION.COUNTRY)) {
+        if (!(this instanceof CountryDetailActivity) && !(this instanceof InfoDetailActivity)) {
+            Logger.e("CategoryDetailActivity", "excluded: place");
             excludeTypes = new ArrayList<>();
             excludeTypes.add("place");
         }

@@ -17,7 +17,9 @@ import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
+import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
 import java.util.HashMap;
@@ -133,26 +135,35 @@ public class DatabaseHelper {
         if (pTags == null || pTags.isEmpty()) {
             return Observable.empty();
         }
-        return getPosts(pLimit, pOffset, pType, false, null, pTags, pExcludeIds, null);
+        return getPosts(pLimit, pOffset, pType, false, null, null,pTags, pExcludeIds, null);
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
             pOffset, String pType, List<String> excludeTypes, List<Long> excludeIds) {
-        return getPosts(pLimit, pOffset, pType, false, categoryId, null, excludeIds, excludeTypes);
+        return getPosts(pLimit, pOffset, pType, false, categoryId,null, null, excludeIds, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPostWithExcludes(int pLimit, int pOffset,
                                                                List<String> excludeTypes) {
-        return getPosts(pLimit, pOffset, null, false, null, null, null, excludeTypes);
+        return getPosts(pLimit, pOffset, null, false, null,null, null, null, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
-        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null, null);
+        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null,null, null, null, null);
+    }
+
+    public Observable<Map<String,Object>> getPostsByTitle(int pLimit, int pOffset,String title){
+        Logger.e("DatabaseHelper", "title: "+title);
+         return getPosts(pLimit,pOffset,null,false,null,title,null,null,null);
+    }
+
+    public Observable<Map<String,Object>> getPostByTags(int pLimit, int pOffset,List<String> pTags){
+        return getPosts(pLimit,pOffset,null,false,null,null,pTags,null,null);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
-            pFavouritesOnly, Long pCategoryId, List<String> pTags, List<Long> pExcludeIds, List<String> pExcludeTypes) {
+            pFavouritesOnly, Long pCategoryId,String pTitle, List<String> pTags, List<Long> pExcludeIds, List<String> pExcludeTypes) {
         Map<String, Object> map = new HashMap<>();
         DbPostDao postDao = mDaoSession.getDbPostDao();
 
@@ -181,6 +192,11 @@ public class DatabaseHelper {
             queryBuilder.where(new WhereCondition.StringCondition(whereClause));
         }
 
+        if(pTitle!=null){
+//            queryBuilder.where(DbPostDao.Properties.Title.like(pTitle));
+            queryBuilder.where(new WhereCondition.StringCondition("T.title like '%"+ pTitle+"%'"));
+        }
+
         Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
                 DbPostCategoryDao.Properties.PostId);
         Join categoryJoin = queryBuilder.join(postJoin, DbPostCategoryDao.Properties.CategoryId,
@@ -205,6 +221,7 @@ public class DatabaseHelper {
                     queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
                             .list()
             );
+            Logger.e("DatabaseHelper", "post: "+ dbPost.getTitle());
         }
 
         map.put("total_count", queryBuilder.list().size());

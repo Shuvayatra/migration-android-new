@@ -118,6 +118,18 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+    public Observable<List<Post>> getPostsByTitle(int pLimit, int pOffset, String title) {
+        return mDataStoreFactory.createDBDataStore().getPostsByTitle(pLimit,pOffset,title)
+                .map(pObjectMap->mDataMapper.transformPostFromDb(pObjectMap));
+    }
+
+    @Override
+    public Observable<List<Post>> getPostByTags(int pLimit, int pOffset, List<String> pTags) {
+        return mDataStoreFactory.createDBDataStore().getPostsByTags(pLimit,pOffset,pTags)
+                .map(pObjectMap->mDataMapper.transformPostFromDb(pObjectMap));
+    }
+
+    @Override
     public Observable<List<Post>> getList(int pLimit, int pOffset) {
         return mDataStoreFactory.createDBDataStore()
                 .getPosts(pLimit, pOffset, null)

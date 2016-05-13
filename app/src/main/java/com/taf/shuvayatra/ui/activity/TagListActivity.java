@@ -1,14 +1,18 @@
 package com.taf.shuvayatra.ui.activity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.databinding.TagListDataBinding;
@@ -26,13 +30,18 @@ import javax.inject.Inject;
 import butterknife.Bind;
 
 public class TagListActivity extends BaseActivity implements
-        TagListView {
+        TagListView, SearchView.OnQueryTextListener {
 
     @Inject
     TagListPresenter mPresenter;
 
     @Bind(R.id.tag_list_container)
     FlowLayout mTagsContainer;
+
+    Boolean mIsQuerySubmitted=false;
+
+    public static final int SEARCH_REQUEST_CODE = 3000;
+    private SearchView mSearchView;
 
     @Override
     public int getLayout() {
@@ -47,6 +56,23 @@ public class TagListActivity extends BaseActivity implements
         initialize();
         mPresenter.initialize(null);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem item = menu.findItem(R.id.action_search);
+        mSearchView =
+                (SearchView) item.getActionView();
+        mSearchView.setQueryHint(getString(R.string.query_hint));
+        mSearchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -78,10 +104,9 @@ public class TagListActivity extends BaseActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent data = new Intent();
-                    data.putExtra(MyConstants.Extras.KEY_TAG, tag);
-                    setResult(RESULT_OK, data);
-                    finish();
+                    Intent intent = new Intent(TagListActivity.this, SearchListActivity.class);
+                    intent.putExtra(MyConstants.Extras.KEY_TAG, tag);
+                    startActivity(intent);
                 }
             });
             mTagsContainer.addView(view);
@@ -104,5 +129,23 @@ public class TagListActivity extends BaseActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Logger.e("TagListActivity", "query submitted");
+        if(!mIsQuerySubmitted) {
+            mIsQuerySubmitted = true;
+            Intent intent = new Intent(this, SearchListActivity.class);
+            intent.putExtra(MyConstants.Extras.KEY_TITLE, query);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Logger.e("TagListActivity", "searchlist activity started");
+        return true;
     }
 }
