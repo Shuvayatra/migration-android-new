@@ -17,7 +17,6 @@ import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
-import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
@@ -171,13 +170,14 @@ public class DatabaseHelper {
             queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
         }
         if (pTags != null) {
-            String whereClause = "";
+            String whereClause = "(";
             for (int i = 0; i < pTags.size(); i++) {
                 if (i != 0) {
-                    whereClause += " || ";
+                    whereClause += " or ";
                 }
-                whereClause += "tags like %" + pTags.get(i) + "%";
+                whereClause += "tags like '%" + pTags.get(i) + "%'";
             }
+            whereClause += ")";
             queryBuilder.where(new WhereCondition.StringCondition(whereClause));
         }
 
@@ -279,7 +279,7 @@ public class DatabaseHelper {
         if (section != null && !section.equals(MyConstants.SECTION.INFO)) {
             parentCategory = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.Alias.eq
                     (section)).unique();
-        }else{
+        } else {
             List<DbCategory> parentList = categoriesDao.queryBuilder().where(DbCategoryDao.Properties.Depth.eq(0)).list();
             aliasMapping = new HashMap<>();
             for (DbCategory category : parentList) {
@@ -305,12 +305,12 @@ public class DatabaseHelper {
             queryBuilder.where(DbCategoryDao.Properties.ParentId.eq(pParentId));
         }
 
-        List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.ParentId,DbCategoryDao.Properties.Position)
+        List<DbCategory> categories = queryBuilder.orderAsc(DbCategoryDao.Properties.ParentId, DbCategoryDao.Properties.Position)
                 .list();
         for (DbCategory category : categories) {
-            if(section.equals(MyConstants.SECTION.INFO)){
+            if (section.equals(MyConstants.SECTION.INFO)) {
                 category.setParentAlias(aliasMapping.get(category.getParentId()));
-            }else {
+            } else {
                 category.setParentAlias(parentCategory != null ? parentCategory.getAlias()
                         : "");
             }
