@@ -12,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
+import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.FacebookActivity;
@@ -37,6 +39,7 @@ import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.presenter.SimilarPostPresenter;
 import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.interfaces.PostListView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
@@ -52,6 +55,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         AudioDetailView,
         PostListView,
         View.OnClickListener,
+        ListItemClickListener,
         SeekBar.OnSeekBarChangeListener {
 
     private static final int GROUP1 = 101;
@@ -68,7 +72,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Inject
     SimilarPostPresenter mSimilarPresenter;
 
-
+    @Bind(R.id.scroll_view)
+    NestedScrollView mScrollView;
     @Bind(R.id.audio_time)
     TextView mAudioTime;
     @Bind(R.id.audio_time_mini)
@@ -271,20 +276,20 @@ public class AudioDetailActivity extends FacebookActivity implements
         super.onCreate(savedInstanceState);
 
         Bundle data = getIntent().getExtras();
-        Logger.e("AudioDetailActivity", "data bunde " + data);
         if (data != null) {
             if (savedInstanceState != null) {
                 mAudio = (Post) savedInstanceState.get(KEY_AUDIO);
             } else {
                 mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
             }
-            updateView(mAudio);
         }
+        ((ActivityAudioDetailBinding) mBinding).setListener(this);
+        updateView(mAudio);
 
+        initialize();
         getToolbar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        initialize();
         if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
             mSimilarPresenter.initialize(new UseCaseData());
@@ -418,6 +423,18 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void onListItemSelected(BaseModel pModel, int pIndex) {
+        mAudio = (Post) pModel;
+        updateView(mAudio);
+        initialize();
+        mPostViewCountPresenter.initialize(null);
+        mSimilarPresenter.initialize(new UseCaseData());
+
+        mService.setTrack(mAudio);
+        mService.startStreaming();
+    }
+
+    @Override
     public void showLoadingView() {
     }
 
@@ -519,6 +536,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     private void updateView(Post pAudio) {
+        mScrollView.scrollTo(0, 0);
+        mAppBar.setExpanded(true);
         ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
         mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
         invalidateOptionsMenu();
