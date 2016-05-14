@@ -46,7 +46,7 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
     EditText mSearchView;
     private ListAdapter mAdapter;
 
-    public static InfoFragment getInstance() {
+    public static InfoFragment getInstance(){
         InfoFragment fragment = new InfoFragment();
         return fragment;
     }
@@ -64,7 +64,7 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
         setupAdapter();
     }
 
-    void initialize() {
+    void initialize(){
         DataModule dataModule = new DataModule(MyConstants.DataParent.INFO, true, null);
         DaggerDataComponent.builder().activityModule(((BaseActivity) getActivity()).getActivityModule())
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
@@ -74,13 +74,13 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
         mPresenter.attachView(this);
     }
 
-    private void loadCategories() {
+    private void loadCategories(){
         mPresenter.initialize(null);
     }
 
     private void setupAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new ListAdapter(getContext(), this, true);
+        mAdapter = new ListAdapter(getContext(), this,true);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
         mRecyclerView.setEmptyMessage(getString(R.string.empty_section));
@@ -92,20 +92,20 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
     }
 
 
-    private List<BaseModel> addHeader(List<Category> pCategories) {
-        List<BaseModel> headerCategories = new ArrayList<>();
+    private List<BaseModel> addHeader(List<Category> pCategories){
+        List<BaseModel> headerCategories= new ArrayList<>();
         String sectionName = "";
         for (int i = 0; i < pCategories.size(); i++) {
             Category category = pCategories.get(i);
-            Logger.e("InfoFragment", "header section :" + category.getParentAlias());
-            if (!category.getParentAlias().equals(sectionName)) {
+            Logger.e("InfoFragment", "header section :"+ category.getParentAlias());
+            if(!category.getParentAlias().equals(sectionName)){
                 sectionName = category.getParentAlias();
-                Logger.e("InfoFragment", "header: " + sectionName);
+                Logger.e("InfoFragment", "header: "+sectionName);
                 HeaderItem header = new HeaderItem(sectionName);
                 header.setDataType(MyConstants.Adapter.TYPE_CATEGORY_HEADER);
                 headerCategories.add(header);
             }
-            headerCategories.add(category);
+                headerCategories.add(category);
 
         }
         return headerCategories;
@@ -129,9 +129,15 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        Intent intent = new Intent(getContext(), InfoDetailActivity.class);
+        Intent intent = new Intent(getContext(),InfoDetailActivity.class);
         intent.putExtra(MyConstants.Extras.KEY_CATEGORY, pModel);
         startActivity(intent);
+    }
+<<<<<<< 0044d2a921a503bb0b7871c99d7886dcf345c619
+
+    @Override
+    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
+
     }
 
     @OnClick(R.id.search_action)
@@ -140,4 +146,6 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
         startActivity(tagsIntent);
     }
 
+=======
+>>>>>>> fix for audio play from similar section
 }

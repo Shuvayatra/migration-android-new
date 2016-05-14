@@ -1,14 +1,13 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
+import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -53,31 +52,41 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
-            mTitle = bundle.getString(MyConstants.Extras.KEY_TITLE,null);
+        if (bundle != null) {
+            mTitle = bundle.getString(MyConstants.Extras.KEY_TITLE, null);
             mTags = (String) bundle.get(MyConstants.Extras.KEY_TAG);
         }
-        getSupportActionBar().setTitle(mTitle!=null?mTitle:mTags);
-        Logger.e("SearchListActivity", "title "+ mTitle);
+        getSupportActionBar().setTitle(mTitle != null ? mTitle : mTags);
+        Logger.e("SearchListActivity", "title " + mTitle);
         initialize();
         setupAdapter();
-        mPostListPresenter.initialize(null);
+        mPostListPresenter.initialize(new UseCaseData());
     }
 
-    private void initialize(){
-        List<String> tags = new ArrayList<>(1);
-        tags.add(mTags);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initialize() {
+        List<String> tags = new ArrayList<>();
+        if (mTags != null)
+            tags.add(mTags);
         DaggerDataComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(getActivityModule())
-                .dataModule(new DataModule(mTitle,tags))
+                .dataModule(new DataModule(mTitle, tags))
                 .build()
                 .inject(this);
         mPostListPresenter.attachView(this);
     }
 
-    private void setupAdapter(){
-        mAdapter = new ListAdapter(this,this);
+    private void setupAdapter() {
+        mAdapter = new ListAdapter(this, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
@@ -94,17 +103,8 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
-        Logger.e("SearchListActivity", "search :"+ pPosts);
+        Logger.e("SearchListActivity", "search :" + pPosts);
         mAdapter.setDataCollection(pPosts);
     }
 
@@ -120,11 +120,6 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-
-    }
-
-    @Override
-    public void onListItemSelected(List<BaseModel> pCollection, int pIndex) {
 
     }
 }

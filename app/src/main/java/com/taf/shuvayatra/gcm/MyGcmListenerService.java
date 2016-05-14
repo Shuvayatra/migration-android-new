@@ -48,7 +48,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         if (title != null) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(title)
                     .setContentText(description)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(description));

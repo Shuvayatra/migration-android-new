@@ -19,7 +19,6 @@ import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
-import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
 import java.util.HashMap;
@@ -135,35 +134,39 @@ public class DatabaseHelper {
         if (pTags == null || pTags.isEmpty()) {
             return Observable.empty();
         }
-        return getPosts(pLimit, pOffset, pType, false, null, null,pTags, pExcludeIds, null);
+        //// TODO: 5/13/16 better implementation
+        if (pTags.isEmpty()) {
+            pTags.add("dummy-text");
+        }
+        return getPosts(pLimit, pOffset, pType, false, null, null, pTags, pExcludeIds, null);
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
             pOffset, String pType, List<String> excludeTypes, List<Long> excludeIds) {
-        return getPosts(pLimit, pOffset, pType, false, categoryId,null, null, excludeIds, excludeTypes);
+        return getPosts(pLimit, pOffset, pType, false, categoryId, null, null, excludeIds, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPostWithExcludes(int pLimit, int pOffset,
                                                                List<String> excludeTypes) {
-        return getPosts(pLimit, pOffset, null, false, null,null, null, null, excludeTypes);
+        return getPosts(pLimit, pOffset, null, false, null, null, null, null, excludeTypes);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly) {
-        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null,null, null, null, null);
+        return getPosts(pLimit, pOffset, pType, pFavouritesOnly, null, null, null, null, null);
     }
 
-    public Observable<Map<String,Object>> getPostsByTitle(int pLimit, int pOffset,String title){
-        Logger.e("DatabaseHelper", "title: "+title);
-         return getPosts(pLimit,pOffset,null,false,null,title,null,null,null);
+    public Observable<Map<String, Object>> getPostsByTitle(int pLimit, int pOffset, String title) {
+        Logger.e("DatabaseHelper", "title: " + title);
+        return getPosts(pLimit, pOffset, null, false, null, title, null, null, null);
     }
 
-    public Observable<Map<String,Object>> getPostByTags(int pLimit, int pOffset,List<String> pTags){
-        return getPosts(pLimit,pOffset,null,false,null,null,pTags,null,null);
+    public Observable<Map<String, Object>> getPostByTags(int pLimit, int pOffset, List<String> pTags) {
+        return getPosts(pLimit, pOffset, null, false, null, null, pTags, null, null);
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, String pType, boolean
-            pFavouritesOnly, Long pCategoryId,String pTitle, List<String> pTags, List<Long> pExcludeIds, List<String> pExcludeTypes) {
+            pFavouritesOnly, Long pCategoryId, String pTitle, List<String> pTags, List<Long> pExcludeIds, List<String> pExcludeTypes) {
         Map<String, Object> map = new HashMap<>();
         DbPostDao postDao = mDaoSession.getDbPostDao();
 
@@ -192,9 +195,9 @@ public class DatabaseHelper {
             queryBuilder.where(new WhereCondition.StringCondition(whereClause));
         }
 
-        if(pTitle!=null){
+        if (pTitle != null) {
 //            queryBuilder.where(DbPostDao.Properties.Title.like(pTitle));
-            queryBuilder.where(new WhereCondition.StringCondition("T.title like '%"+ pTitle+"%'"));
+            queryBuilder.where(new WhereCondition.StringCondition("T.title like '%" + pTitle + "%'"));
         }
 
         Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
@@ -221,10 +224,86 @@ public class DatabaseHelper {
                     queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
                             .list()
             );
-            Logger.e("DatabaseHelper", "post: "+ dbPost.getTitle());
+            Logger.e("DatabaseHelper", "post: " + dbPost.getTitle());
         }
 
         map.put("total_count", queryBuilder.list().size());
+        map.put("data", dbPosts);
+
+        return Observable.defer(() -> Observable.just(map));
+    }
+
+    public Observable<Map<String, Object>> getPostsNew(int pLimit, int pOffset, String pType,
+                                                       boolean pFavouritesOnly, Long pCategoryId,
+                                                       Long pSubCategoryId, List<String> pTags,
+                                                       String pTitle, List<Long>
+                                                               pExcludeIds, List<String>
+                                                               pExcludeTypes) {
+        Map<String, Object> map = new HashMap<>();
+        DbPostDao postDao = mDaoSession.getDbPostDao();
+
+        QueryBuilder<DbPost> queryBuilder = postDao.queryBuilder();
+        if (pType != null) {
+            queryBuilder.where(DbPostDao.Properties.Type.eq(pType));
+        }
+        if (pTitle != null) {
+            queryBuilder.where(DbPostDao.Properties.Title.like("%" + pTitle + "%"));
+        }
+        if (pFavouritesOnly) {
+            queryBuilder.where(DbPostDao.Properties.IsFavourite.eq(true));
+        }
+        if (pExcludeIds != null) {
+            queryBuilder.where(DbPostDao.Properties.Id.notIn(pExcludeIds));
+        }
+        if (pExcludeTypes != null) {
+            queryBuilder.where(DbPostDao.Properties.Type.notIn(pExcludeTypes));
+        }
+        if (pTags != null && !pTags.isEmpty()) {
+            String whereClause = "(";
+            for (int i = 0; i < pTags.size(); i++) {
+                if (i != 0) {
+                    whereClause += " or ";
+                }
+                whereClause += "tags like '%" + pTags.get(i) + "%'";
+            }
+            whereClause += ")";
+            queryBuilder.where(new WhereCondition.StringCondition(whereClause));
+        }
+
+        Join postJoin = queryBuilder.join(DbPostDao.Properties.Id, DbPostCategory.class,
+                DbPostCategoryDao.Properties.PostId);
+        Join categoryJoin = queryBuilder.join(postJoin, DbPostCategoryDao.Properties.CategoryId,
+                DbCategory.class, DbCategoryDao.Properties.Id);
+        if (pCategoryId != null) {
+            categoryJoin.whereOr(DbCategoryDao.Properties.Id.eq(pCategoryId), DbCategoryDao
+                    .Properties.ParentId.eq(pCategoryId));
+        }
+        if (pSubCategoryId != null) {
+            categoryJoin.where(DbCategoryDao.Properties.Id.eq(pSubCategoryId));
+        }
+
+        QueryBuilder queryBuilderSub = queryBuilder;
+        map.put("total_count", queryBuilder.distinct().list().size());
+
+        List<DbPost> dbPosts = queryBuilderSub
+                .limit(pLimit)
+                .offset(pOffset)
+                .orderDesc(DbPostDao.Properties.CreatedAt)
+                .distinct()
+                .list();
+        Logger.d("DatabaseHelper_getPostsNew", "list :" + pLimit + "/" + pOffset);
+        Logger.d("DatabaseHelper_getPostsNew", "listSize: " + dbPosts.size());
+
+        for (DbPost dbPost : dbPosts) {
+            QueryBuilder<DbCategory> queryBuilder1 = mDaoSession.getDbCategoryDao().queryBuilder();
+            queryBuilder1.join(DbCategoryDao.Properties.Id, DbPostCategory.class,
+                    DbPostCategoryDao.Properties.CategoryId)
+                    .where(DbPostCategoryDao.Properties.PostId.eq(dbPost.getId()));
+            dbPost.setCategoryList(
+                    queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
+                            .list()
+            );
+        }
         map.put("data", dbPosts);
 
         return Observable.defer(() -> Observable.just(map));

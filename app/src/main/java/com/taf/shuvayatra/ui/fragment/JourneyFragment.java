@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.SearchView;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
@@ -34,7 +33,9 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 
-public class JourneyFragment extends BaseFragment implements CategoryView, ListItemClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class JourneyFragment extends BaseFragment implements
+        CategoryView, ListItemClickListener,
+        SearchView.OnQueryTextListener {
 
     @Inject
     CategoryPresenter mPresenter;
@@ -89,7 +90,6 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
         mCategories = new ArrayList<>();
         mSubCategories = new ArrayList<>();
         mSearchView.setOnQueryTextListener(this);
-        mSearchView.setOnCloseListener(this);
     }
 
     private void loadCategories() {
@@ -148,14 +148,6 @@ public class JourneyFragment extends BaseFragment implements CategoryView, ListI
     @Override
     public boolean onQueryTextChange(String query) {
         filterCountries(query);
-        return true;
-    }
-
-    @Override
-    public boolean onClose() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-
         return true;
     }
 }

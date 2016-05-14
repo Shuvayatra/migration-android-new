@@ -118,6 +118,7 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
+<<<<<<< 0e9924ac5c3dd81201835179a996f6d083cff8fd
     public Observable<List<Post>> getPostsByTitle(int pLimit, int pOffset, String title) {
         return mDataStoreFactory.createDBDataStore().getPostsByTitle(pLimit,pOffset,title)
                 .map(pObjectMap->mDataMapper.transformPostFromDb(pObjectMap));
@@ -127,9 +128,7 @@ public class PostRepository implements IPostRepository {
     public Observable<List<Post>> getPostByTags(int pLimit, int pOffset, List<String> pTags) {
         return mDataStoreFactory.createDBDataStore().getPostsByTags(pLimit,pOffset,pTags)
                 .map(pObjectMap->mDataMapper.transformPostFromDb(pObjectMap));
-    }
-
-    @Override
+=======
     public Observable<List<Post>> getList(int pLimit, int pOffset, String pType, boolean
             pFavouritesOnly, Long pCategoryId, Long pSubCategoryId, List<String> pTags, String
                                                   pSearchQuery, List<Long> pExcludeIds,
@@ -138,6 +137,7 @@ public class PostRepository implements IPostRepository {
                 .getPosts(pLimit, pOffset, pType, pFavouritesOnly, pCategoryId, pSubCategoryId,
                         pTags, pSearchQuery, pExcludeIds, pExcludeTypes)
                 .map(pPosts -> mDataMapper.transformPostFromDb(pPosts));
+>>>>>>> filter list using db query to support pagination
     }
 
     @Override

@@ -10,6 +10,11 @@ import rx.Observable;
 public interface IPostRepository extends IBaseRepository<Post> {
     Observable<List<Post>> getListByType(String pType, int pLimit, int pOffset);
 
+    Observable<List<Post>> getList(int pLimit, int pOffset, String pType, boolean
+            pFavouritesOnly, Long pCategoryId, Long pSubCategoryId, List<String> pTags, String
+                                                  pSearchQuery, List<Long> pExcludeIds,
+                                          List<String> pExcludeTypes);
+
     Observable<List<Post>> getSimilarPost(String pType, List<String> pTags, List<Long> excludeIds,
                                           int pLimit, int pOffset);
 

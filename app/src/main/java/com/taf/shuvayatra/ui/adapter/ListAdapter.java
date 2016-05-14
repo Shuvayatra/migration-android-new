@@ -68,6 +68,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     public void addDataCollection(List<T> pDataCollection) {
         mDataCollection.addAll(pDataCollection);
+        Logger.d("renderPost-adapter-param", "size:" + pDataCollection.size());
+        Logger.d("renderPost-adapter", "size:" + mDataCollection.size());
         int newStartPosition = mDataCollection.size() - pDataCollection.size();
         notifyItemRangeChanged(newStartPosition, pDataCollection.size());
         notifyDataSetChanged();
@@ -76,15 +78,15 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        if(mFromInfo){
-            if(viewType == Adapter.TYPE_CATEGORY_HEADER) {
-                Logger.e("ListAdapter", "header "+ "header category");
+        if (mFromInfo) {
+            if (viewType == Adapter.TYPE_CATEGORY_HEADER) {
+                Logger.e("ListAdapter", "header " + "header category");
                 HeaderDataBinding headerDataBinding = DataBindingUtil.inflate
                         (mLayoutInflater, R.layout.view_category_header, parent, false);
                 return new HeaderViewHolder(headerDataBinding);
-            }                
-            InfoListDataBinding infoListDataBinding  = DataBindingUtil.inflate
-                    (mLayoutInflater,R.layout.view_info_list, parent, false);
+            }
+            InfoListDataBinding infoListDataBinding = DataBindingUtil.inflate
+                    (mLayoutInflater, R.layout.view_info_list, parent, false);
             return new InfoViewHolder(infoListDataBinding);
         }
         switch (viewType) {
@@ -119,7 +121,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 NotificationDataBinding notificationDataBinding = DataBindingUtil.inflate
                         (mLayoutInflater, R.layout.view_notification_list, parent, false);
                 viewHolder = new NotificationViewHolder(notificationDataBinding);
-                break;           
+                break;
             default:
         }
         return viewHolder;
@@ -127,8 +129,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(mFromInfo){
-            if(holder.getItemViewType() == Adapter.TYPE_CATEGORY_HEADER){
+        if (mFromInfo) {
+            if (holder.getItemViewType() == Adapter.TYPE_CATEGORY_HEADER) {
                 ((HeaderViewHolder) holder).mBinding.setTitle(((HeaderItem) mDataCollection.get(position)).getTitle());
                 return;
             }
@@ -307,7 +309,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
         }
     }
 
-    public class HeaderViewHolder extends RecyclerView.ViewHolder{
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
         HeaderDataBinding mBinding;
 
         public HeaderViewHolder(HeaderDataBinding pBinding) {
