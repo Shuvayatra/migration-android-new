@@ -31,7 +31,6 @@ import com.taf.shuvayatra.presenter.LatestContentPresenter;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
-import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.activity.TagListActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
@@ -63,7 +62,7 @@ public class FeedFragment extends BaseFragment implements
     public static final String SUB_CATEGORY_SELECTION = "subCategorySelection";
     public static final String LIST_ITEM_SELECTION = "listItemSelection";
 
-    public static final Integer PAGE_LIMIT = 10;
+    public static final Integer PAGE_LIMIT = 20;
     public static final Integer INITIAL_OFFSET = 0;
 
     int subCategorySelection = 0;
@@ -96,7 +95,6 @@ public class FeedFragment extends BaseFragment implements
     boolean mFromCategory = false;
     List<Category> mSubCategories;
     List<String> mExcludeTypes;
-    List<Post> mPosts;
     String[] mFilters;
     boolean mIsLoading = false, mIsLastPage = false;
     Integer mTotalDataCount = 0;
@@ -165,16 +163,15 @@ public class FeedFragment extends BaseFragment implements
         initialize();
         setUpAdapter();
 
-        if (mFavouritesOnly || getContext() instanceof InfoDetailActivity) {
+        if (mFavouritesOnly) {
             mFilterContainer.setVisibility(View.GONE);
+            loadPostsList(INITIAL_OFFSET);
         } else {
             mFilterContainer.setVisibility(View.VISIBLE);
             loadFilterOptions();
             mFilterSpinner.setOnItemSelectedListener(this);
-
             mFilterSpinner.setSelection(subCategorySelection);
         }
-        //loadPostsList(INITIAL_OFFSET);
     }
 
     @OnClick(R.id.search_action)
@@ -314,17 +311,11 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
-        Logger.d("FeedFragment_renderPostList", "totalCount: " + pTotalCount);
-        Logger.d("FeedFragment_renderPostList", "size: " + pPosts.size());
         if (mPage == INITIAL_OFFSET) {
-            Logger.d("FeedFragment_renderPostLgist", "set");
             mListAdapter.setDataCollection(pPosts);
-            mPosts = pPosts;
         } else {
-            Logger.d("FeedFragment_renderPostList", "add");
             mListAdapter.addDataCollection(pPosts);
         }
-        Logger.d("FeedFragment_renderPostList", "size after:" + mListAdapter.getDataCollection().size());
 
         mTotalDataCount = pTotalCount;
         mPage++;

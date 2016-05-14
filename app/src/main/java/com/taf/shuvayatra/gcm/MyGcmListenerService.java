@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -51,6 +52,10 @@ public class MyGcmListenerService extends GcmListenerService {
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(title)
                     .setContentText(description)
+                    .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat
+                            .DEFAULT_VIBRATE)
+                    .setLights(Color.GREEN, 2000, 3000)
+                    .setAutoCancel(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(description));
 
             Intent resultIntent = new Intent(this, SplashScreenActivity.class);
