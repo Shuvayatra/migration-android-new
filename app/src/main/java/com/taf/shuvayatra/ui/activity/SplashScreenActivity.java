@@ -14,8 +14,11 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.DeletedContentPresenter;
 import com.taf.shuvayatra.presenter.LatestContentPresenter;
 import com.taf.shuvayatra.presenter.SyncFavouritesPresenter;
+import com.taf.shuvayatra.ui.interfaces.DeletedInfoView;
+import com.taf.shuvayatra.ui.interfaces.LatestContentView;
 import com.taf.shuvayatra.ui.interfaces.SplashScreenView;
 
 import java.io.Serializable;
@@ -27,10 +30,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SplashScreenActivity extends BaseActivity implements
-        SplashScreenView {
+        SplashScreenView,
+        LatestContentView,
+        DeletedInfoView {
 
     @Inject
     LatestContentPresenter mPresenter;
+    @Inject
+    DeletedContentPresenter mDeletePresenter;
     @Inject
     SyncFavouritesPresenter mSyncPresenter;
 
@@ -84,6 +91,7 @@ public class SplashScreenActivity extends BaseActivity implements
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
+        mDeletePresenter.attachView(this);
         mSyncPresenter.attachView(this);
     }
 
@@ -92,6 +100,12 @@ public class SplashScreenActivity extends BaseActivity implements
         UseCaseData data = new UseCaseData();
         data.putLong(UseCaseData.LAST_UPDATED, getPreferences().getLastUpdateStamp());
         mPresenter.initialize(data);
+    }
+
+    private void deleteTrashedContents() {
+        UseCaseData data = new UseCaseData();
+        data.putLong(UseCaseData.LAST_UPDATED, getPreferences().getLastUpdateStamp());
+        mDeletePresenter.initialize(data);
     }
 
     private void syncFavourites(List<Post> pUnSyncedPosts) {
@@ -112,11 +126,16 @@ public class SplashScreenActivity extends BaseActivity implements
     }
 
     @Override
+    public void deletedInfoFetched() {
+        searchUnSyncedFavourites();
+    }
+
+    @Override
     public void latestContentFetched(boolean hasNewContents) {
         if (hasNewContents)
             messageView.setText(getString(R.string.message_content_available));
 
-        searchUnSyncedFavourites();
+        deleteTrashedContents();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.repository.DeletedContentRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PostRepository;
@@ -13,6 +14,7 @@ import com.taf.data.repository.TagRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.DeletedContentUseCase;
 import com.taf.interactor.DownloadAudioUseCase;
 import com.taf.interactor.GetLatestContentUseCase;
 import com.taf.interactor.GetNotificationListUseCase;
@@ -151,6 +153,22 @@ public class DataModule {
     IBaseRepository provideLatestContentDataRepository(DataStoreFactory pDataStoreFactory,
                                                        DataMapper pDataMapper) {
         return new LatestContentRepository(pDataStoreFactory, pDataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("deleted")
+    UseCase provideDeleteContentUseCase(@Named("deleted") IBaseRepository pDataRepository,
+                                        ThreadExecutor pThreadExecutor, PostExecutionThread
+                                                pPostExecutionThread) {
+        return new DeletedContentUseCase(pDataRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("deleted")
+    IBaseRepository provideDeletedContentRepository(DataStoreFactory pDataStoreFactory) {
+        return new DeletedContentRepository(pDataStoreFactory);
     }
 
     @Provides

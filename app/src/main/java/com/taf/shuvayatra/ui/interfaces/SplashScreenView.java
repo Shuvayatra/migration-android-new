@@ -4,8 +4,7 @@ import com.taf.model.Post;
 
 import java.util.List;
 
-public interface SplashScreenView extends LatestContentView {
-    void latestContentFetched(boolean hasNewContent);
+public interface SplashScreenView extends LoadDataView {
 
     void unSyncedFavouritesSearched(List<Post> pUnSyncedPosts);
 

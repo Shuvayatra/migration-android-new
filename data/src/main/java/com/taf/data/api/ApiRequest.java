@@ -1,6 +1,7 @@
 package com.taf.data.api;
 
 import com.google.gson.Gson;
+import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
@@ -22,6 +23,10 @@ public class ApiRequest {
 
     public Observable<LatestContentEntity> getLatestContents(Long pLatestUpdateStamp) {
         return mApiService.getLatestContent(pLatestUpdateStamp);
+    }
+
+    public Observable<DeletedContentDataEntity> getDeletedContent(Long pLatestUpdateStamp) {
+        return mApiService.getDeletedContent(pLatestUpdateStamp);
     }
 
     public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList) {

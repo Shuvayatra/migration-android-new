@@ -14,6 +14,8 @@ import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.database.dao.DbTag;
 import com.taf.data.database.dao.DbTagDao;
 import com.taf.data.entity.CategoryEntity;
+import com.taf.data.entity.DeletedContentDataEntity;
+import com.taf.data.entity.DeletedContentEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.mapper.DataMapper;
@@ -21,6 +23,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +42,8 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DaoSession pDaoSession, DataMapper pDataMapper) {
-        QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;
+        /*QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;*/
         mDaoSession = pDaoSession;
         mDataMapper = pDataMapper;
     }
@@ -455,15 +458,31 @@ public class DatabaseHelper {
         return Observable.defer(() -> Observable.just(tags));
     }
 
-/*
-    * insert into DB_CATEGORY (_id, title, left_index, right_index, alias, parent_id, depth)
-    * values (3, 'A', 3, 8,'a',1,2),(4, 'B', 9,10,'b',1,2),(5, 'C', 13,14,'c',2,2),(6, 'D', 15,
-    * 16,'d',2,2),(7, 'E', 4,5,'e',3,3), (8, 'F', 6,7,'f',3,3) ;
-    *
-    * update DB_CATEGORY set left_index = 8, right_index=12, depth=1 where alias = 'country';
-    * update DB_CATEGORY set left_index = 8, right_index=12, depth=1 where alias = 'destination';
-    *
-    * select c1._id, c1.title, c1.alias, c2._id, c2.title, c2.alias from db_category c1 join
-    * db_category c2 on c1.parent_id = c2._id where c2.alias = 'journey';
-    * */
+    public void deleteContents(DeletedContentDataEntity pContent) {
+        List<Long> deleteIds = new ArrayList<>();
+        if (pContent.getPosts() != null) {
+            for (DeletedContentEntity post : pContent.getPosts()) {
+                deleteIds.add(post.getId());
+            }
+            mDaoSession.getDbPostDao().queryBuilder()
+                    .where(DbPostDao.Properties.Id.in(deleteIds))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            mDaoSession.getDbPostCategoryDao().queryBuilder()
+                    .where(DbPostCategoryDao.Properties.PostId.in(deleteIds))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+        }
+
+        if (pContent.getSections() != null) {
+            deleteIds.clear();
+            for (DeletedContentEntity section : pContent.getSections()) {
+                deleteIds.add(section.getId());
+            }
+            mDaoSession.getDbCategoryDao().queryBuilder()
+                    .where(DbCategoryDao.Properties.Id.in(deleteIds))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            mDaoSession.getDbPostCategoryDao().queryBuilder()
+                    .where(DbPostCategoryDao.Properties.CategoryId.in(deleteIds))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+        }
+    }
 }

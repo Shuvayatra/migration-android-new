@@ -27,7 +27,7 @@ public class MyConstants {
 
     public static final class API {
         public static final String LATEST_CONTENT = "api/latest";
-        public static final String SYNC_LIKES = "api/likes";
+        public static final String SYNC_DATA = "api/sync";
         public static final String DELETED_CONTENT = "api/trash";
 
     }
