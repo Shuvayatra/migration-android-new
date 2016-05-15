@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 
 import com.taf.data.api.ApiRequest;
 import com.taf.data.database.DatabaseHelper;
+import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.exception.NetworkConnectionException;
@@ -41,6 +42,16 @@ public class RestDataStore implements IDataStore {
                             pSubscriber.onCompleted();
                         }).subscribe();
                     });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<DeletedContentDataEntity> getDeletedContent(long pLastUpdatedStamp) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getDeletedContent(pLastUpdatedStamp)
+                    .doOnNext(pDeletedContentDataEntity -> mDBHelper.deleteContents
+                            (pDeletedContentDataEntity));
         } else {
             return Observable.error(new NetworkConnectionException());
         }
