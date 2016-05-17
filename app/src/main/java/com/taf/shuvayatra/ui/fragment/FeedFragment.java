@@ -275,6 +275,7 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
+        Logger.e("FeedFragment", "Post createdAt: "+ ((Post) pModel).getCreatedAt());
         Intent intent = null;
         listItemSelection = pIndex;
         switch (pModel.getDataType()) {
@@ -316,7 +317,6 @@ public class FeedFragment extends BaseFragment implements
         } else {
             mListAdapter.addDataCollection(pPosts);
         }
-
         mTotalDataCount = pTotalCount;
         mPage++;
         mIsLastPage = (mPage * PAGE_LIMIT >= pTotalCount);
@@ -342,9 +342,9 @@ public class FeedFragment extends BaseFragment implements
     void loadFilterOptions() {
         if (mFromCategory) {
             if (!mSubCategories.isEmpty()) {
-                if (!mSubCategories.get(0).getTitle().equals("All")) {
+                if (!mSubCategories.get(0).getTitle().equals(getString(R.string.all))) {
                     Category category = new Category();
-                    category.setTitle("All");
+                    category.setTitle(getString(R.string.all));
                     mSubCategories.add(0, category);
                 }
                 CustomArrayAdapter adapter = new CustomArrayAdapter(getContext(), mSubCategories);

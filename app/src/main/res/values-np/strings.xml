@@ -19,7 +19,7 @@
 
     <string name="action_download">Download</string>
     <string name="action_share">Share</string>
-    <string name="action_share_facebook">Share On Facebook</string>
+    <string name="action_share_facebook">Share</string>
     <string name="action_share_bluetooth">Share via Bluetooth</string>
     <string name="action_settings">Settings</string>
 
@@ -27,7 +27,7 @@
     <string name="error_bluetooth_share">You need to download the audio in order to share</string>
 
     <string name="default_empty_message">No feeds available currently.</string>
-    <string name="similar_audios">similar audios</string>
+    <string name="similar_audios">मिल्दोजुल्दो अडियोहरु </string>
     <string name="audio_time">%1$s | %2$s</string>
 
     <string-array name="user_section_tabs">
@@ -60,15 +60,15 @@
 
     <string name="like">Likes</string>
     <string name="share">Shared</string>
-    <string name="label_description">Description</string>
-    <string name="label_other_places">other favourite places</string>
+    <string name="label_description">विवरण </string>
+    <string name="label_other_places">अन्य ठाउँहरु </string>
     <string name="empty_section">No categories are available for this section.</string>
     <string name="no_favourites">You have not favourited any posts yet.</string>
-    <string name="query_hint">What you want to know?</string>
-    <string name="similar_video">SIMILAR VIDEOS</string>
+    <string name="query_hint">तपाईं के हेर्न चाहनुहुन्छ ? </string>
+    <string name="similar_video">मिल्दोजुल्दो भिडियोहरु </string>
     <string name="select_category">यात्रा( रोजाइ छान्नु होस्)</string>
-    <string name="query_hint_destination">Search Destination</string>
     <string name="message_buffering">(buffering...)</string>
+    <string name="youtube_error">Error while playing video. You can open from youtube app</string>
 
     <string name="read_more">Read more...</string>
 </resources>

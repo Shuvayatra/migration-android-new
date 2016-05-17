@@ -89,7 +89,25 @@ public abstract class FacebookActivity extends BaseActivity {
         mShareDialog.registerCallback(mCallback, mFbCallBack);
     }
 
-    public boolean showShareDialog(final BaseModel pModel) {
+    public boolean share(final BaseModel pModel){
+        try {
+            Intent fbIntent = new Intent(Intent.ACTION_SEND);
+            fbIntent.setType("text/plain");
+//            fbIntent.putExtra(Intent.EXTRA_TEXT, (Html.fromHtml(((Post) pModel).getTitle()).toString()));
+//            fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getDescription());
+//                        fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getTitle());
+            //// TODO: 5/16/2016 play store
+            fbIntent.putExtra(Intent.EXTRA_TEXT,"https://www.play.google.com/store/apps/details?id=com.taf.shuvayatra");
+
+            startActivity(fbIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    //// TODO: 5/16/2016 use after app verification
+    public boolean share1(final BaseModel pModel) {
         if (mShareDialog.canShow(ShareOpenGraphContent.class)) {
             mShareDialog.show(getShareContent(pModel));
             return true;

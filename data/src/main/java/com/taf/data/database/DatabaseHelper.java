@@ -42,8 +42,8 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DaoSession pDaoSession, DataMapper pDataMapper) {
-        /*QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;*/
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
         mDaoSession = pDaoSession;
         mDataMapper = pDataMapper;
     }
@@ -217,7 +217,7 @@ public class DatabaseHelper {
                 .orderDesc(DbPostDao.Properties.CreatedAt)
                 .distinct()
                 .list();
-
+        Logger.e("DatabaseHelper", "dbpost: "+ dbPosts);
         for (DbPost dbPost : dbPosts) {
             QueryBuilder<DbCategory> queryBuilder1 = mDaoSession.getDbCategoryDao().queryBuilder();
             queryBuilder1.join(DbCategoryDao.Properties.Id, DbPostCategory.class,
@@ -227,7 +227,7 @@ public class DatabaseHelper {
                     queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
                             .list()
             );
-            Logger.e("DatabaseHelper", "post: " + dbPost.getTitle());
+            Logger.e("DatabaseHelper", "post: " + dbPost.getCategoryList());
         }
 
         map.put("total_count", queryBuilder.list().size());
@@ -281,6 +281,7 @@ public class DatabaseHelper {
             categoryJoin.whereOr(DbCategoryDao.Properties.Id.eq(pCategoryId), DbCategoryDao
                     .Properties.ParentId.eq(pCategoryId));
         }
+        Logger.e("DatabaseHelper", " sub category Id"+ pSubCategoryId);
         if (pSubCategoryId != null) {
             categoryJoin.where(DbCategoryDao.Properties.Id.eq(pSubCategoryId));
         }
@@ -302,10 +303,26 @@ public class DatabaseHelper {
             queryBuilder1.join(DbCategoryDao.Properties.Id, DbPostCategory.class,
                     DbPostCategoryDao.Properties.CategoryId)
                     .where(DbPostCategoryDao.Properties.PostId.eq(dbPost.getId()));
-            dbPost.setCategoryList(
-                    queryBuilder1.orderAsc(DbCategoryDao.Properties.Position)
-                            .list()
-            );
+            List<DbCategory> dbCategories =  queryBuilder1.orderAsc(DbCategoryDao.Properties.Depth,DbCategoryDao.Properties.Position)
+                    .list();
+            for (DbCategory dbCategory : dbCategories) {
+                    queryBuilder1 = mDaoSession.getDbCategoryDao().queryBuilder();
+                DbCategory parent = queryBuilder1.where(DbCategoryDao.Properties.Id.eq(dbCategory.getParentId())).unique();
+                if(parent.getAlias()!=null) {
+                    dbCategory.setParentAlias(parent.getAlias());
+                    Logger.e("DatabaseHelper", "not null parent alias: "+ dbCategory.getParentAlias()+" title: \t"+ dbCategory.getTitle());
+
+                }else{
+                    dbCategory.setAlias(parent.getTitle());
+                    Logger.e("DatabaseHelper", "null parent alias: "+ parent.getAlias());
+
+                }
+
+//                List<DbCategory> parents = queryBuilder1.where(DbCategoryDao.Properties.LeftIndex.lt(dbCategory.getLeftIndex()),
+//                        DbCategoryDao.Properties.Depth.lt(dbCategory.getDepth())).list();
+
+            }
+            dbPost.setCategoryList(dbCategories);
         }
         map.put("data", dbPosts);
 

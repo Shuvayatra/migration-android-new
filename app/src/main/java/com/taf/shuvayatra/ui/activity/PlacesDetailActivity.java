@@ -72,7 +72,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
                 finishWithResult();
                 break;
             case R.id.action_share:
-                showShareDialog(mPlace);
+                share(mPlace);
                 break;
 
         }

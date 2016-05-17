@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
@@ -77,8 +78,14 @@ public class BindingUtil {
     }
 
     @BindingAdapter("bind:elapsedTime")
-    public static void setElapsedTime(TextView pView, Long millis) {
-        pView.setText(getTimeAgo(millis));
+    public static void setElapsedTime(TextView pView, Long elapsedTime) {
+        Logger.e("BindingUtil", "createdAt: " + elapsedTime);
+        if (elapsedTime != null){
+            Logger.e("BindingUtil", "elapsed Time: "+ getTimeAgo(elapsedTime));
+            pView.setText(getTimeAgo(elapsedTime));
+        }else
+            Logger.e("BindingUtil", "elapsed Time: not available");
+
     }
 
     @BindingAdapter("bind:similarPosts")
@@ -165,6 +172,7 @@ public class BindingUtil {
     public static void showSimilarAudioVideo(final Context pContext, LinearLayout pContainer, final Post
             pPost, final ListItemClickListener pListener) {
         if (pPost != null) {
+            Logger.e("BindingUtil", "category");
             AudioVideoDataBinding audioDataBinding = DataBindingUtil.inflate
                     (LayoutInflater.from(pContext), R.layout.view_audio_video_list, pContainer,
                             false);

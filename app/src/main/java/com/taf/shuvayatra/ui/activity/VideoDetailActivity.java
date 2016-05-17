@@ -2,13 +2,16 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeIntents;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.taf.data.utils.Logger;
@@ -49,6 +52,7 @@ public class VideoDetailActivity extends FacebookActivity implements
     Post mPost;
     boolean mOldFavouriteState;
     private YouTubePlayerSupportFragment mYouTubePlayerFragment;
+    Boolean IsFromIntent = false;
 
     @Override
     public int getLayout() {
@@ -77,7 +81,7 @@ public class VideoDetailActivity extends FacebookActivity implements
             finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
-            showShareDialog(mPost);
+            share(mPost);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -204,13 +208,71 @@ public class VideoDetailActivity extends FacebookActivity implements
         pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
 //        pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
 
-
-        String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
+        final String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
         if (!isRestored) {
             if (!videoId.isEmpty())
-                pYouTubePlayer.loadVideo(videoId);
+                Logger.e("VideoDetailActivity", "video loaded");
+            pYouTubePlayer.loadVideo(videoId);
+            pYouTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+                @Override
+                public void onLoading() {
+                    Logger.e("VideoDetailActivity", " video loading");
+                }
+
+                @Override
+                public void onLoaded(String pS) {
+                    Logger.e("VideoDetailActivity", " video loaded " + pS);
+
+                }
+
+                @Override
+                public void onAdStarted() {
+
+                }
+
+                @Override
+                public void onVideoStarted() {
+                    Logger.e("VideoDetailActivity", " video started");
+
+                }
+
+                @Override
+                public void onVideoEnded() {
+                    Logger.e("VideoDetailActivity", " video ended");
+
+                }
+
+                @Override
+                public void onError(YouTubePlayer.ErrorReason pErrorReason) {
+                    Logger.e("VideoDetailActivity", " video error: " + pErrorReason);
+                    if(!IsFromIntent) {
+                        IsFromIntent = true;
+                        playViaIntent(videoId);
+                    }
+//                    Snackbar.make(mBinding.getRoot(), R.string.youtube_error, Snackbar.LENGTH_LONG)
+//                            .setAction("Open", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    playViaIntent(mPost.getData().getMediaUrl());
+//                                }
+//                            }).show();
+
+                }
+            });
         } else {
+            Logger.e("VideoDetailActivity", "video played");
             pYouTubePlayer.play();
+        }
+    }
+
+    private void playViaIntent(String url) {
+        if(YouTubeIntents.canResolvePlayVideoIntent(this)){
+            Logger.e("VideoDetailActivity", "play via intent");
+            Intent intent = YouTubeIntents.createPlayVideoIntent(this,url);
+            startActivity(intent);
+        }else
+        {
+            Logger.e("VideoDetailActivity", "cant play via intent");
         }
     }
 
