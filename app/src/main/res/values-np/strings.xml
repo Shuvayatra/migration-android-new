@@ -1,15 +1,15 @@
 <resources>
-    <string name="message_play_services_not_found">Play services must be installed.</string>
-    <string name="message_downloading">Downloading...</string>
-    <string name="message_download_start">Downloading %1$s</string>
-    <string name="message_download_success">%1$s downloaded successfully</string>
-    <string name="message_already_downloaded">%1$s already downloaded</string>
+    <string name="message_play_services_not_found">प्लएे सर्भिसस  राख्नुहोस्  </string>
+    <string name="message_downloading">डाउनलोडिङ ...</string>
+    <string name="message_download_start">डाउनलोडिङ %1$s</string>
+    <string name="message_download_success">%1$s डाउनलोडेड  सम्पन्नभयो </string>
+    <string name="message_already_downloaded">%1$s डाउनलोड पहिले भइसक्यो</string>
 
-    <string name="message_search_un_synced_data">Searching for un-synced data.</string>
-    <string name="message_no_un_synced_data">No un-synced data found.</string>
-    <string name="message_syncing_data">Syncing data  to server.</string>
-    <string name="message_data_synced">All data synced to server.</string>
-    <string name="message_not_all_data_synced">Could not sync all data to server</string>
+    <string name="message_search_un_synced_data">सिंक नभएको सामाग्री खोज्दै </string>
+    <string name="message_no_un_synced_data">सिंक नभएको सामाग्री छैन</string>
+    <string name="message_syncing_data">सर्भरको सामाग्रीसँग सिंक गरिदै </string>
+    <string name="message_data_synced">सर्भरको सबै सामाग्री सिंक गरिसकियो  </string>
+    <string name="message_not_all_data_synced">सर्भरको सबै सामाग्री सिंक हुनसकेन </string>
 
     <string name="message_fetching_latest_content">नयाँ सामग्री खोज्दै...</string>
     <string name="message_content_available">नयाँ सामग्री उपलब्ध...</string>
@@ -17,16 +17,16 @@
     <string name="exception_message_generic">त्रुटि फेला पर्यो</string>
     <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
 
-    <string name="action_download">Download</string>
-    <string name="action_share">Share</string>
-    <string name="action_share_facebook">Share</string>
-    <string name="action_share_bluetooth">Share via Bluetooth</string>
+    <string name="action_download">डाउनलोड</string>
+    <string name="action_share">शेयर</string>
+    <string name="action_share_facebook">शेयर</string>
+    <string name="action_share_bluetooth">ब्लुतूथबाट शेयर</string>
     <string name="action_settings">Settings</string>
 
-    <string name="share_audio">Share Audio Post</string>
-    <string name="error_bluetooth_share">You need to download the audio in order to share</string>
+    <string name="share_audio">शेयर अडियो </string>
+    <string name="error_bluetooth_share">शेयर गर्नको लागी पहिले डाउनलोड गर्नुहोस </string>
 
-    <string name="default_empty_message">No feeds available currently.</string>
+    <string name="default_empty_message">कुनै सामाग्री उपलब्द छैन</string>
     <string name="similar_audios">मिल्दोजुल्दो अडियोहरु </string>
     <string name="audio_time">%1$s | %2$s</string>
 
@@ -58,17 +58,25 @@
     <string name="news">समाचार</string>
     <string name="favourite">मलाई मनपर्न</string>
 
-    <string name="like">Likes</string>
-    <string name="share">Shared</string>
+    <string name="like">लाइक </string>
+    <string name="share">शेयर</string>
     <string name="label_description">विवरण </string>
     <string name="label_other_places">अन्य ठाउँहरु </string>
-    <string name="empty_section">No categories are available for this section.</string>
-    <string name="no_favourites">You have not favourited any posts yet.</string>
+    <string name="empty_section">सम्बन्धित सामाग्री उपलब्ध छैन</string>
+    <string name="no_favourites">कुनै सामाग्री मनपराउनु भएको छैन </string>
     <string name="query_hint">तपाईं के हेर्न चाहनुहुन्छ ? </string>
     <string name="similar_video">मिल्दोजुल्दो भिडियोहरु </string>
     <string name="select_category">यात्रा( रोजाइ छान्नु होस्)</string>
-    <string name="message_buffering">(buffering...)</string>
-    <string name="youtube_error">Error while playing video. You can open from youtube app</string>
+    <string name="message_buffering">(बफरिङ ...)</string>
+    
+    <string name="just_now"> भर्खरै</string>
+    <string name="a_minute_ago"> एक मिनेट अगाडि </string>
+    <string name="minute_ago">  मिनेट अगाडि</string>
+    <string name="a_hour_ago"> एक घण्टा अगाडि </string>
+    <string name="hour_ago">  घण्टा अगाडि </string>
+    <string name="yesterday"> हिजो </string>
+    <string name="days_ago">  दिन अगाडि </string>
+    <string name="months_ago">  महिना अगाडि </string>
 
     <string name="read_more">Read more...</string>
 </resources>
