@@ -1,10 +1,8 @@
 package com.taf.shuvayatra.base;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,8 +23,6 @@ import com.taf.shuvayatra.presenter.PostShareCountPresenter;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
-
-import bolts.AppLinks;
 
 /**
  * Created by Nirazan-PC on 4/28/2016.
@@ -89,18 +85,17 @@ public abstract class FacebookActivity extends BaseActivity {
         mShareDialog.registerCallback(mCallback, mFbCallBack);
     }
 
-    public boolean share(final BaseModel pModel){
+    public boolean share(final BaseModel pModel) {
         try {
             Intent fbIntent = new Intent(Intent.ACTION_SEND);
             fbIntent.setType("text/plain");
 //            fbIntent.putExtra(Intent.EXTRA_TEXT, (Html.fromHtml(((Post) pModel).getTitle()).toString()));
 //            fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getDescription());
 //                        fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getTitle());
-            //// TODO: 5/16/2016 play store
-            fbIntent.putExtra(Intent.EXTRA_TEXT,"https://www.play.google.com/store/apps/details?id=com.taf.shuvayatra");
+            fbIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.taf.shuvayatra");
 
             startActivity(fbIntent);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
@@ -161,10 +156,10 @@ public abstract class FacebookActivity extends BaseActivity {
                 .putString("og:type", "nrnaapp:post")
                 .putString("og:title", title)
                 .putString("og:description", description)
-                .putString("og:url","https://fb.me/988277937930762?id="+pModel.getId())
-                .putString("al:android:url","shuvayatra://taf.posts")
-                .putString("al:android:app_name",getString(R.string.app_name))
-                .putString("al:android:package","com.taf.shuvayatra")
+                .putString("og:url", "https://fb.me/988277937930762?id=" + pModel.getId())
+                .putString("al:android:url", "shuvayatra://taf.posts")
+                .putString("al:android:app_name", getString(R.string.app_name))
+                .putString("al:android:package", "com.taf.shuvayatra")
                 .build();
         ShareOpenGraphAction action = new ShareOpenGraphAction.Builder()
                 .setActionType("nrnaapp:share")
