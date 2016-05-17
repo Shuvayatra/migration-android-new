@@ -56,6 +56,7 @@ public class DeletedContentPresenter implements Presenter {
 
         @Override
         public void onCompleted() {
+            mView.hideLoadingView();
         }
 
         @Override
@@ -72,7 +73,7 @@ public class DeletedContentPresenter implements Presenter {
         public void onNext(Boolean pFlag) {
             if (pFlag != null) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                ((BaseActivity) mView.getContext()).getPreferences().setLastUpdateStamp(
+                ((BaseActivity) mView.getContext()).getPreferences().setLastDeleteStamp(
                         (timestamp / 1000L));
             }
             mView.deletedInfoFetched();

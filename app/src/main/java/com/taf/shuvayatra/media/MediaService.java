@@ -80,6 +80,7 @@ public class MediaService extends Service implements
     public void onPrepared(MediaPlayer pMediaPlayer) {
         mIsMediaValid = true;
         pMediaPlayer.start();
+        pMediaPlayer.seekTo(0);
         sendBroadcast(new Intent(MyConstants.Media.ACTION_STATUS_PREPARED));
     }
 
@@ -122,17 +123,17 @@ public class MediaService extends Service implements
     }
 
     private void setDataSource(Post pTrack) throws IOException {
-        String mediaUrl = pTrack.getData().getMediaUrl();
-        String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
+        String mediaUrl = pTrack.getData().getMediaUrl().replace(" ", "%20");
+        String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
         File dir = new File(root, getString(R.string.app_name));
-        dir.mkdirs();
+        dir.mkdir();
         File audioFile = new File(dir, fileName);
 
         if (audioFile.exists()) {
             String path = audioFile.getAbsolutePath();
-            if (!(path.startsWith("file") || path.startsWith("content") || path.startsWith("FILE") || path
-                    .startsWith("CONTENT"))) {
+            if (!(path.startsWith("file") || path.startsWith("content") || path.startsWith
+                    ("FILE") || path.startsWith("CONTENT"))) {
                 path = "file://" + path;
             }
             mPlayer.setDataSource(this, Uri.parse(path));
@@ -155,7 +156,7 @@ public class MediaService extends Service implements
     }
 
     public void stopPlayback() {
-        mPlayer.pause();
+        mPlayer.stop();
     }
 
     public void seekTo(int seekbarProgress) {

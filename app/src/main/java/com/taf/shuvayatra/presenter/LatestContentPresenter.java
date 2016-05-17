@@ -74,8 +74,8 @@ public class LatestContentPresenter implements Presenter {
         public void onNext(LatestContent pLatestContent) {
             if (pLatestContent != null) {
                 long timestamp = Calendar.getInstance().getTimeInMillis();
-                ((BaseActivity) mView.getContext()).getPreferences().setLastUpdateStamp(
-                        (timestamp / 1000L));
+                ((BaseActivity) mView.getContext()).getPreferences().setLastUpdateStamp((timestamp /
+                        1000L));
             }
             mView.latestContentFetched(pLatestContent != null && !pLatestContent.getPosts()
                     .isEmpty());

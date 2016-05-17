@@ -1,82 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipe_container"
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:clipToPadding="false"
-    android:paddingLeft="@dimen/spacing_xsmall"
-    android:paddingRight="@dimen/spacing_xsmall"
-    android:paddingTop="@dimen/spacing_small">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/main_background"
+        android:clipToPadding="false"
+        android:paddingLeft="@dimen/spacing_xsmall"
+        android:paddingRight="@dimen/spacing_xsmall"
+        android:paddingTop="@dimen/spacing_small">
 
         <LinearLayout
-            android:id="@+id/search_filter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
+                android:id="@+id/search_filter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_small"
-                app:cardElevation="3dp">
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/search_height"
-                    android:drawableLeft="@drawable/icon_search"
-                    android:drawablePadding="@dimen/spacing_small"
-                    android:enabled="false"
-                    android:background="@null"
-                    android:hint="@string/query_hint"
-                    android:paddingLeft="@dimen/spacing_small"/>
-
-                <View
-                    android:id="@+id/search_action"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/search_height"/>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/filterContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_small"
-                app:cardElevation="3dp">
-
-                <Spinner
-                    android:id="@+id/filterSpinner"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/search_height"
-                    android:background="@color/spinnerBackground"
-                    android:dropDownWidth="match_parent"/>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    app:cardElevation="3dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                    <EditText
+                        android:id="@+id/search"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/search_height"
+                        android:background="@null"
+                        android:drawableLeft="@drawable/icon_search"
+                        android:drawablePadding="@dimen/spacing_small"
+                        android:enabled="false"
+                        android:hint="@string/query_hint"
+                        android:paddingLeft="@dimen/spacing_small"/>
 
-            <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-                android:id="@+id/recyclerView"
+                    <View
+                        android:id="@+id/search_action"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/search_height"/>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/filterContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    app:cardElevation="3dp">
+
+                    <Spinner
+                        android:id="@+id/filterSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/spinnerBackground"
+                        android:dropDownWidth="match_parent"
+                        android:minHeight="@dimen/search_height"/>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                tools:listitem="@layout/view_audio_video_list"/>
+                android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/empty_view"
-                layout="@layout/empty_list_view"
-                android:visibility="gone"/>
-        </RelativeLayout>
-    </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+                <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    tools:listitem="@layout/view_audio_video_list"/>
+
+                <include
+                    android:id="@+id/empty_view"
+                    layout="@layout/empty_list_view"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

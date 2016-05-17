@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 
-import com.taf.data.utils.Logger;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
@@ -68,8 +67,7 @@ public class AudioDetailPresenter implements Presenter {
         String mediaUrl = pAudio.getData().getMediaUrl().replace(" ", "%20");
         String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File audioFile = getAudioFile(fileName);
-        Logger.d("AudioDetailPresenter_downloadAudioPost", "filename: " + fileName);
-        Logger.d("AudioDetailPresenter_downloadAudioPost", "path: " + audioFile.getAbsolutePath());
+
         if (!audioFile.exists()) {
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mediaUrl));
             request.setNotificationVisibility(DownloadManager.Request
@@ -96,8 +94,8 @@ public class AudioDetailPresenter implements Presenter {
     }
 
     public void shareViaBluetooth(Post pAudio) {
-        String mediaUrl = pAudio.getData().getMediaUrl();
-        String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1);
+        String mediaUrl = pAudio.getData().getMediaUrl().replace(" ", "%20");
+        String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File audioFile = getAudioFile(fileName);
 
         if (audioFile.exists()) {

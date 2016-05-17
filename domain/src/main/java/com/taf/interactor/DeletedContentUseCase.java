@@ -21,6 +21,6 @@ public class DeletedContentUseCase extends UseCase<Boolean> {
 
     @Override
     protected Observable<Boolean> buildUseCaseObservable(UseCaseData pData) {
-        return mRepository.getSingle(pData.getLong(UseCaseData.LAST_UPDATED, -1l));
+        return mRepository.getSingle(pData.getLong(UseCaseData.LAST_UPDATED, -1L));
     }
 }

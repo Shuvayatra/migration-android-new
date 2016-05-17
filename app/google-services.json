@@ -1,12 +1,12 @@
 {
   "project_info": {
-    "project_number": "569264745263",
-    "project_id": "shuvayatra-1293"
+    "project_number": "698661085126",
+    "project_id": "nepalmigrantworkers"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:569264745263:android:710df081737c8e00",
+        "mobilesdk_app_id": "1:698661085126:android:710df081737c8e00",
         "android_client_info": {
           "package_name": "com.taf.shuvayatra"
         }
@@ -14,14 +14,14 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDgl06jhf3dUUnREvDfUQiMPyTp-lbxwWE"
+          "current_key": "AIzaSyAJaQtaVm4Zo1pqV3xvN__h0gtDFhL1pzg"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": "UA-74795701-2"
+            "tracking_id": "UA-74795701-3"
           }
         },
         "appinvite_service": {

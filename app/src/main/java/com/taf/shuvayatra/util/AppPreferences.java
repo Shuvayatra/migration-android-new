@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.taf.util.MyConstants.Preferences.DOWNLOAD_REFERENCES;
+import static com.taf.util.MyConstants.Preferences.LAST_DELETE_STAMP;
 import static com.taf.util.MyConstants.Preferences.LAST_UPDATE_STAMP;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
 
@@ -29,6 +30,15 @@ public class AppPreferences {
 
     public void setLastUpdateStamp(long pStamp) {
         editor.putLong(LAST_UPDATE_STAMP, pStamp);
+        editor.apply();
+    }
+
+    public Long getLastDeleteStamp() {
+        return pref.getLong(LAST_DELETE_STAMP, -1);
+    }
+
+    public void setLastDeleteStamp(long pStamp) {
+        editor.putLong(LAST_DELETE_STAMP, pStamp);
         editor.apply();
     }
 

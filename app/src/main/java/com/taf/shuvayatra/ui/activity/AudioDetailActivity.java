@@ -174,6 +174,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     protected void onDestroy() {
+        mService.stopPlayback();
         stopService(mPlayIntent);
         // Unbind from the service
         if (mMusicBound) {
@@ -469,8 +470,6 @@ public class AudioDetailActivity extends FacebookActivity implements
         updateSeekBar();
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
-        bufferingText.setVisibility(View.GONE);
-        bufferingTextMini.setVisibility(View.GONE);
     }
 
     @Override
