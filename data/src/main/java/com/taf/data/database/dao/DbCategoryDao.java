@@ -26,16 +26,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property Alias = new Property(2, String.class, "alias", false, "ALIAS");
-        public final static Property IconUrl = new Property(3, String.class, "iconUrl", false, "ICON_URL");
-        public final static Property SmallIconUrl = new Property(4, String.class, "smallIconUrl", false, "SMALL_ICON_URL");
-        public final static Property CoverImageUrl = new Property(5, String.class, "coverImageUrl", false, "COVER_IMAGE_URL");
-        public final static Property LeftIndex = new Property(6, Integer.class, "leftIndex", false, "LEFT_INDEX");
-        public final static Property RightIndex = new Property(7, Integer.class, "rightIndex", false, "RIGHT_INDEX");
-        public final static Property Depth = new Property(8, Integer.class, "depth", false, "DEPTH");
-        public final static Property ParentId = new Property(9, Long.class, "parentId", false, "PARENT_ID");
-        public final static Property Position = new Property(10, Long.class, "position", false, "POSITION");
-        public final static Property CreatedAt = new Property(11, Long.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(12, Long.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property ParentAlias = new Property(3, String.class, "parentAlias", false, "PARENT_ALIAS");
+        public final static Property IconUrl = new Property(4, String.class, "iconUrl", false, "ICON_URL");
+        public final static Property SmallIconUrl = new Property(5, String.class, "smallIconUrl", false, "SMALL_ICON_URL");
+        public final static Property CoverImageUrl = new Property(6, String.class, "coverImageUrl", false, "COVER_IMAGE_URL");
+        public final static Property LeftIndex = new Property(7, Integer.class, "leftIndex", false, "LEFT_INDEX");
+        public final static Property RightIndex = new Property(8, Integer.class, "rightIndex", false, "RIGHT_INDEX");
+        public final static Property Depth = new Property(9, Integer.class, "depth", false, "DEPTH");
+        public final static Property ParentId = new Property(10, Long.class, "parentId", false, "PARENT_ID");
+        public final static Property Position = new Property(11, Long.class, "position", false, "POSITION");
+        public final static Property CreatedAt = new Property(12, Long.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(13, Long.class, "updatedAt", false, "UPDATED_AT");
     };
 
 
@@ -54,16 +55,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"TITLE\" TEXT," + // 1: title
                 "\"ALIAS\" TEXT," + // 2: alias
-                "\"ICON_URL\" TEXT," + // 3: iconUrl
-                "\"SMALL_ICON_URL\" TEXT," + // 4: smallIconUrl
-                "\"COVER_IMAGE_URL\" TEXT," + // 5: coverImageUrl
-                "\"LEFT_INDEX\" INTEGER," + // 6: leftIndex
-                "\"RIGHT_INDEX\" INTEGER," + // 7: rightIndex
-                "\"DEPTH\" INTEGER," + // 8: depth
-                "\"PARENT_ID\" INTEGER," + // 9: parentId
-                "\"POSITION\" INTEGER," + // 10: position
-                "\"CREATED_AT\" INTEGER," + // 11: createdAt
-                "\"UPDATED_AT\" INTEGER);"); // 12: updatedAt
+                "\"PARENT_ALIAS\" TEXT," + // 3: parentAlias
+                "\"ICON_URL\" TEXT," + // 4: iconUrl
+                "\"SMALL_ICON_URL\" TEXT," + // 5: smallIconUrl
+                "\"COVER_IMAGE_URL\" TEXT," + // 6: coverImageUrl
+                "\"LEFT_INDEX\" INTEGER," + // 7: leftIndex
+                "\"RIGHT_INDEX\" INTEGER," + // 8: rightIndex
+                "\"DEPTH\" INTEGER," + // 9: depth
+                "\"PARENT_ID\" INTEGER," + // 10: parentId
+                "\"POSITION\" INTEGER," + // 11: position
+                "\"CREATED_AT\" INTEGER," + // 12: createdAt
+                "\"UPDATED_AT\" INTEGER);"); // 13: updatedAt
     }
 
     /** Drops the underlying database table. */
@@ -92,54 +94,59 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
             stmt.bindString(3, alias);
         }
  
+        String parentAlias = entity.getParentAlias();
+        if (parentAlias != null) {
+            stmt.bindString(4, parentAlias);
+        }
+ 
         String iconUrl = entity.getIconUrl();
         if (iconUrl != null) {
-            stmt.bindString(4, iconUrl);
+            stmt.bindString(5, iconUrl);
         }
  
         String smallIconUrl = entity.getSmallIconUrl();
         if (smallIconUrl != null) {
-            stmt.bindString(5, smallIconUrl);
+            stmt.bindString(6, smallIconUrl);
         }
  
         String coverImageUrl = entity.getCoverImageUrl();
         if (coverImageUrl != null) {
-            stmt.bindString(6, coverImageUrl);
+            stmt.bindString(7, coverImageUrl);
         }
  
         Integer leftIndex = entity.getLeftIndex();
         if (leftIndex != null) {
-            stmt.bindLong(7, leftIndex);
+            stmt.bindLong(8, leftIndex);
         }
  
         Integer rightIndex = entity.getRightIndex();
         if (rightIndex != null) {
-            stmt.bindLong(8, rightIndex);
+            stmt.bindLong(9, rightIndex);
         }
  
         Integer depth = entity.getDepth();
         if (depth != null) {
-            stmt.bindLong(9, depth);
+            stmt.bindLong(10, depth);
         }
  
         Long parentId = entity.getParentId();
         if (parentId != null) {
-            stmt.bindLong(10, parentId);
+            stmt.bindLong(11, parentId);
         }
  
         Long position = entity.getPosition();
         if (position != null) {
-            stmt.bindLong(11, position);
+            stmt.bindLong(12, position);
         }
  
         Long createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(12, createdAt);
+            stmt.bindLong(13, createdAt);
         }
  
         Long updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(13, updatedAt);
+            stmt.bindLong(14, updatedAt);
         }
     }
 
@@ -156,16 +163,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // alias
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // iconUrl
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // smallIconUrl
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // coverImageUrl
-            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // leftIndex
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // rightIndex
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // depth
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // parentId
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // position
-            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // createdAt
-            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12) // updatedAt
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // parentAlias
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // iconUrl
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // smallIconUrl
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // coverImageUrl
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // leftIndex
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // rightIndex
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // depth
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // parentId
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // position
+            cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12), // createdAt
+            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // updatedAt
         );
         return entity;
     }
@@ -176,16 +184,17 @@ public class DbCategoryDao extends AbstractDao<DbCategory, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setAlias(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setIconUrl(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setSmallIconUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCoverImageUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setLeftIndex(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
-        entity.setRightIndex(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
-        entity.setDepth(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
-        entity.setParentId(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
-        entity.setPosition(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
-        entity.setCreatedAt(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
-        entity.setUpdatedAt(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setParentAlias(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setIconUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setSmallIconUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCoverImageUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setLeftIndex(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setRightIndex(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setDepth(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setParentId(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
+        entity.setPosition(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setCreatedAt(cursor.isNull(offset + 12) ? null : cursor.getLong(offset + 12));
+        entity.setUpdatedAt(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
      }
     
     /** @inheritdoc */

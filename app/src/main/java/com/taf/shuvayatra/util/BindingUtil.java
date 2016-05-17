@@ -81,7 +81,7 @@ public class BindingUtil {
     public static void setElapsedTime(TextView pView, Long elapsedTime) {
         Logger.e("BindingUtil", "createdAt: " + elapsedTime);
         if (elapsedTime != null){
-            pView.setText(getTimeAgo(elapsedTime,pView.getContext()));
+            pView.setText(getTimeAgo(elapsedTime, pView.getContext()));
         }
     }
 
@@ -221,7 +221,7 @@ public class BindingUtil {
         }
     }
 
-    public static String getTimeAgo(long time,Context pContext) {
+    public static String getTimeAgo(long time, Context pContext) {
         final long SECOND_MILLIS = 1000;
         final long MINUTE_MILLIS = 60 * SECOND_MILLIS;
         final long HOUR_MILLIS = 60 * MINUTE_MILLIS;

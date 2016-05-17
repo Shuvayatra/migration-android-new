@@ -124,6 +124,7 @@ public class DataMapper {
             category.setRightIndex(pEntity.getRightIndex());
             category.setDepth(pEntity.getDepth());
             category.setAlias(pEntity.getAlias());
+            category.setParentAlias(pEntity.getParentAlias());
             return category;
         }
         return null;
@@ -172,7 +173,7 @@ public class DataMapper {
             post.setIsFavourite(pPost.getIsFavourite());
             post.setIsSynced(pPost.getIsSynced());
             post.setTotalCount(totalCount);
-            post.setCategoryList(transformCategoryFromDb(pPost.getCategoryList()));
+            post.setCategory(pPost.getCategory());
             post.setViewCount(pPost.getViewCount());
             post.setUnSyncedViewCount(pPost.getUnsyncedViewCount());
             post.setFeaturedImage(pPost.getFeaturedImage());
@@ -268,7 +269,7 @@ public class DataMapper {
 
     public SyncDataEntity transformSyncData(SyncData pSyncData) {
         if (pSyncData != null) {
-            return new SyncDataEntity(pSyncData.getId(), pSyncData.getLike(), pSyncData.getViewCount(),pSyncData.getShareCount());
+            return new SyncDataEntity(pSyncData.getId(), pSyncData.getLike(), pSyncData.getViewCount(), pSyncData.getShareCount());
         }
         return null;
     }
@@ -288,8 +289,8 @@ public class DataMapper {
 
     public SyncDataEntity transformPostForSync(DbPost pPost) {
         if (pPost != null) {
-            return new SyncDataEntity(pPost.getId(),pPost.getIsFavourite()==null?null:pPost.getIsFavourite(),
-                    pPost.getUnsyncedViewCount(),pPost.getUnsyncedShareCount());
+            return new SyncDataEntity(pPost.getId(), pPost.getIsFavourite() == null ? null : pPost.getIsFavourite(),
+                    pPost.getUnsyncedViewCount(), pPost.getUnsyncedShareCount());
         }
         return null;
     }

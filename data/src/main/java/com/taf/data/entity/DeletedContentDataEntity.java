@@ -7,8 +7,7 @@ import java.util.List;
 public class DeletedContentDataEntity {
 
     List<DeletedContentEntity> posts;
-    // TODO: 5/15/16 replace the serialized name as per api
-    @SerializedName("my_sections")
+    @SerializedName("categories")
     List<DeletedContentEntity> sections;
 
     public List<DeletedContentEntity> getPosts() {

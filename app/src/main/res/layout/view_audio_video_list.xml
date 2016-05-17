@@ -10,6 +10,10 @@
         <variable
             name="content"
             type="com.taf.model.Post"/>
+
+        <variable
+            name="defaultCategory"
+            type="java.lang.String"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -74,11 +78,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_xsmall"
                     android:ellipsize="end"
-                    android:maxLines="2"
                     android:lines="2"
+                    android:maxLines="2"
                     android:text="@{content.getTitle()}"
-                    android:textSize="@dimen/text_default"
                     android:textColor="@android:color/black"
+                    android:textSize="@dimen/text_default"
                     tools:text="How migrants control over world the  ajdshjasd  jasd sdfj wer sdf sjdf wer"/>
 
                 <TextView
@@ -87,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/title"
                     android:layout_marginBottom="@dimen/spacing_xxsmall"
-                    android:text="@{content.getCategory()}"
+                    android:text="@{defaultCategory ?? content.getCategory()}"
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     tools:text="Work Permit"/>
@@ -97,18 +101,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/category"
-                    app:elapsedTime="@{content.getCreatedAt()}"
-                    android:textSize="@dimen/text_small"
                     android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_small"
+                    app:elapsedTime="@{content.getCreatedAt()}"
                     tools:text="3 days ago"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/category"
                     android:layout_toRightOf="@id/time"
                     android:text='@{" - " + content.totalViews + " Views"}'
-                    android:textSize="@dimen/text_small"
                     android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_small"
                     android:visibility="gone"
                     tools:text=" - 100 views"/>
             </RelativeLayout>

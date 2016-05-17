@@ -79,6 +79,7 @@ public class LatestContentPresenter implements Presenter {
             }
             mView.latestContentFetched(pLatestContent != null && !pLatestContent.getPosts()
                     .isEmpty());
+
             onCompleted();
         }
     }

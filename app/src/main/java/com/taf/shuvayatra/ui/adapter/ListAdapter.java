@@ -36,11 +36,19 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
     ListItemClickListener mListener;
     int selectedPosition = -1;
     private Boolean mFromInfo = false;
+    private String mDefaultCategory = null;
 
     public ListAdapter(Context pContext, ListItemClickListener pListener) {
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
         this.mListener = pListener;
+    }
+
+    public ListAdapter(Context pContext, ListItemClickListener pListener, String pDefaultCategory) {
+        this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
+                .LAYOUT_INFLATER_SERVICE);
+        this.mListener = pListener;
+        this.mDefaultCategory = pDefaultCategory;
     }
 
     public ListAdapter(Context pContext, ListItemClickListener pListener, Boolean fromInfo) {
@@ -142,11 +150,13 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             case Adapter.TYPE_VIDEO:
                 ((AudioVideoViewHolder) holder).mBinding.setContent((Post) mDataCollection.get
                         (position));
+                ((AudioVideoViewHolder) holder).mBinding.setDefaultCategory(mDefaultCategory);
                 break;
             case Adapter.TYPE_NEWS:
             case Adapter.TYPE_TEXT:
                 ((ArticleViewHolder) holder).mBinding.setArticle((Post) mDataCollection.get
                         (position));
+                ((ArticleViewHolder) holder).mBinding.setDefaultCategory(mDefaultCategory);
                 break;
             case Adapter.TYPE_JOURNEY_CATEGORY:
                 ((JourneyCategoryViewHolder) holder).mBinding.setCategory((Category)
