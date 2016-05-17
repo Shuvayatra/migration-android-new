@@ -81,11 +81,8 @@ public class BindingUtil {
     public static void setElapsedTime(TextView pView, Long elapsedTime) {
         Logger.e("BindingUtil", "createdAt: " + elapsedTime);
         if (elapsedTime != null){
-            Logger.e("BindingUtil", "elapsed Time: "+ getTimeAgo(elapsedTime));
-            pView.setText(getTimeAgo(elapsedTime));
-        }else
-            Logger.e("BindingUtil", "elapsed Time: not available");
-
+            pView.setText(getTimeAgo(elapsedTime,pView.getContext()));
+        }
     }
 
     @BindingAdapter("bind:similarPosts")
@@ -224,7 +221,7 @@ public class BindingUtil {
         }
     }
 
-    public static String getTimeAgo(long time) {
+    public static String getTimeAgo(long time,Context pContext) {
         final long SECOND_MILLIS = 1000;
         final long MINUTE_MILLIS = 60 * SECOND_MILLIS;
         final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
@@ -244,21 +241,21 @@ public class BindingUtil {
         // TODO: localize
         final long diff = now - time;
         if (diff < MINUTE_MILLIS) {
-            return "just now";
+            return pContext.getString(R.string.just_now);
         } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute ago";
+            return pContext.getString(R.string.a_minute_ago);
         } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes ago";
+            return diff / MINUTE_MILLIS + " " + pContext.getString(R.string.minute_ago);
         } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
+            return pContext.getString(R.string.a_hour_ago);
         } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " hours ago";
+            return diff / HOUR_MILLIS + " " + pContext.getString(R.string.hour_ago);
         } else if (diff < 48 * HOUR_MILLIS) {
-            return "yesterday";
+            return pContext.getString(R.string.yesterday);
         } else if (diff < MONTH_MILLIS) {
-            return diff / DAY_MILLIS + " days ago";
+            return diff / DAY_MILLIS + " " + pContext.getString(R.string.days_ago);
         } else {
-            return diff / MONTH_MILLIS + " months ago";
+            return diff / MONTH_MILLIS + " " + pContext.getString(R.string.months_ago);
         }
     }
 }

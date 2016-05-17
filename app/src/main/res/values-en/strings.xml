@@ -66,6 +66,14 @@
     <string name="select_category">JOURNEY - SELECT CATEGORY</string>
     <string name="message_buffering">(buffering...)</string>
     <string name="read_more">Read more...</string>
-    <string name="youtube_error">Error while playing video. You can open from youtube app</string>
+
+    <string name="just_now">just now</string>
+    <string name="a_minute_ago">a minute ago</string>
+    <string name="minute_ago"> minute ago</string>
+    <string name="hour_ago"> hours ago</string>
+    <string name="a_hour_ago">an hour ago</string>
+    <string name="yesterday">yesterday </string>
+    <string name="days_ago"> days ago</string>
+    <string name="months_ago"> months ago</string>
 
 </resources>
