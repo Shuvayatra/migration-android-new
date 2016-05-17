@@ -69,7 +69,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
-            showShareDialog(mPost);
+            share(mPost);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -98,6 +98,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             else
                 mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_ARTICLE);
         }
+        Logger.e("ArticleDetailActivity", "POst createdAt: "+mPost.getCreatedAt());
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         Logger.e("ArticleDetailActivity", "oncreate activity:  view count: "+ mPost.getUnSyncedViewCount());

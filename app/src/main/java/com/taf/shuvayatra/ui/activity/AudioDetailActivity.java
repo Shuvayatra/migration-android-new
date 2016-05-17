@@ -248,7 +248,7 @@ public class AudioDetailActivity extends FacebookActivity implements
                 shareViaBluetooth();
                 break;
             case SUBMENU_FACEBOOK:
-                if (showShareDialog(mAudio)) {
+                if (share(mAudio)) {
                     AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_SHARE,
                             AnalyticsUtil.ACTION_FACEBOOK, AnalyticsUtil.LABEL_ID, mService
                                     .getCurrentTrack().getId());

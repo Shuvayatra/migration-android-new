@@ -38,11 +38,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
-            android:layout_marginBottom="@dimen/spacing_standard"
-            android:layout_marginTop="@dimen/spacing_xsmall"
-            android:text="@{content.getCategory()}"
+            android:layout_marginBottom="@dimen/spacing_xxsmall"
+            android:text='@{content.getCategory!=null ?(content.getCategory() + " - "):""}'
+            android:textColor="@color/text_main"
             android:textSize="@dimen/text_small"
-            tools:text="Work Permit - 3 days ago"/>
+            tools:text="Work Permit"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_toRightOf="@id/category"
+            app:elapsedTime="@{content.getCreatedAt()}"
+            android:textSize="@dimen/text_small"
+            android:textColor="@color/text_main"
+            tools:text="3 days ago"/>
 
         <ImageView
             android:id="@+id/like"

@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
@@ -40,7 +41,8 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     EmptyStateRecyclerView mRecyclerView;
     @Bind(R.id.empty_view)
     RelativeLayout mEmptyView;
-    private ListAdapter mAdapter;
+    private ListAdapter<Post> mListAdapter;
+    private int listItemSelection;
 
     @Override
     public int getLayout() {
@@ -86,9 +88,9 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     }
 
     private void setupAdapter() {
-        mAdapter = new ListAdapter(this, this);
+        mListAdapter = new ListAdapter(this, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mListAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
     }
 
@@ -105,7 +107,7 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
         Logger.e("SearchListActivity", "search :" + pPosts);
-        mAdapter.setDataCollection(pPosts);
+        mListAdapter.setDataCollection(pPosts);
     }
 
     @Override
@@ -120,6 +122,52 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-
+        Intent intent = null;
+        listItemSelection = pIndex;
+        switch (pModel.getDataType()) {
+            case MyConstants.Adapter.TYPE_VIDEO:
+                intent = new Intent(getContext(), VideoDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_VIDEO, pModel);
+                break;
+            case MyConstants.Adapter.TYPE_TEXT:
+                intent = new Intent(getContext(), ArticleDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_ARTICLE, pModel);
+                break;
+            case MyConstants.Adapter.TYPE_NEWS:
+                intent = new Intent(getContext(), ArticleDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_ARTICLE, pModel);
+                break;
+            case MyConstants.Adapter.TYPE_AUDIO:
+                intent = new Intent(getContext(), AudioDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_AUDIO, pModel);
+                break;
+        }
+        if (intent != null)
+            startActivityForResult(intent, 3209);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == BaseActivity.RESULT_OK) {
+            if (requestCode == 3209) {
+                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
+                        false);
+                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
+                Logger.e("FeedFragment", "view count = " + viewCount);
+                if (viewCount != 0) {
+                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedViewCount(viewCount);
+                }
+                int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
+                Logger.e("FeedFragment", "share count = " + shareCount);
+                if (shareCount != 0) {
+                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedShareCount(shareCount);
+                }
+                int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
+                mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
+                mListAdapter.getDataCollection().get(listItemSelection).setIsFavourite(status);
+                mListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }
