@@ -12,6 +12,7 @@ public class DbCategory {
     private Long id;
     private String title;
     private String alias;
+    private String parentAlias;
     private String iconUrl;
     private String smallIconUrl;
     private String coverImageUrl;
@@ -24,7 +25,6 @@ public class DbCategory {
     private Long updatedAt;
 
     // KEEP FIELDS - put your custom fields here
-    String parentAlias;
     // KEEP FIELDS END
 
     public DbCategory() {
@@ -34,10 +34,11 @@ public class DbCategory {
         this.id = id;
     }
 
-    public DbCategory(Long id, String title, String alias, String iconUrl, String smallIconUrl, String coverImageUrl, Integer leftIndex, Integer rightIndex, Integer depth, Long parentId, Long position, Long createdAt, Long updatedAt) {
+    public DbCategory(Long id, String title, String alias, String parentAlias, String iconUrl, String smallIconUrl, String coverImageUrl, Integer leftIndex, Integer rightIndex, Integer depth, Long parentId, Long position, Long createdAt, Long updatedAt) {
         this.id = id;
         this.title = title;
         this.alias = alias;
+        this.parentAlias = parentAlias;
         this.iconUrl = iconUrl;
         this.smallIconUrl = smallIconUrl;
         this.coverImageUrl = coverImageUrl;
@@ -72,6 +73,14 @@ public class DbCategory {
 
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    public String getParentAlias() {
+        return parentAlias;
+    }
+
+    public void setParentAlias(String parentAlias) {
+        this.parentAlias = parentAlias;
     }
 
     public String getIconUrl() {
@@ -155,15 +164,6 @@ public class DbCategory {
     }
 
     // KEEP METHODS - put your custom methods here
-
-    public String getParentAlias() {
-        return parentAlias;
-    }
-
-    public void setParentAlias(String pParentAlias) {
-        parentAlias = pParentAlias;
-    }
-
     // KEEP METHODS END
 
 }

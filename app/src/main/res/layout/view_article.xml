@@ -11,6 +11,10 @@
         <variable
             name="article"
             type="com.taf.model.Post"/>
+
+        <variable
+            name="defaultCategory"
+            type="java.lang.String"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -41,8 +45,8 @@
                 android:layout_marginLeft="@dimen/spacing_standard"
                 android:layout_marginRight="@dimen/spacing_standard"
                 android:text="@{article.getTitle()}"
-                android:textSize="@dimen/text_large"
                 android:textColor="@android:color/black"
+                android:textSize="@dimen/text_large"
                 tools:text="This is the article"/>
 
             <RelativeLayout
@@ -58,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{article.getCategory()}"
+                    android:text="@{defaultCategory ?? article.getCategory()}"
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     tools:text="Work Permit"/>
@@ -67,22 +71,23 @@
                     android:id="@+id/view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_gravity="end"
                     android:layout_weight="1"
+                    android:text='@{" - " + article.totalViews + " Views"}'
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
-                    android:text='@{" - " + article.totalViews + " Views"}'
-                    android:layout_alignParentRight="true"
                     android:visibility="invisible"
                     tools:text=" - 120K"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:layout_toLeftOf="@id/view"
                     android:layout_weight="1"
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
-                    android:layout_toLeftOf="@id/view"
                     app:elapsedTime="@{article.getCreatedAt()}"
                     tools:text="3 days ago"/>
 

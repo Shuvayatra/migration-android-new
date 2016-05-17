@@ -139,5 +139,4 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
         Intent tagsIntent = new Intent(getActivity(), TagListActivity.class);
         startActivity(tagsIntent);
     }
-
 }

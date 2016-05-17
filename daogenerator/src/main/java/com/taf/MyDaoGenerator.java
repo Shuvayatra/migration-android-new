@@ -59,6 +59,7 @@ public class MyDaoGenerator {
         category.addIdProperty();
         category.addStringProperty("title");
         category.addStringProperty("alias");
+        category.addStringProperty("parentAlias");
         category.addStringProperty("iconUrl");
         category.addStringProperty("smallIconUrl");
         category.addStringProperty("coverImageUrl");

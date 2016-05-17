@@ -31,7 +31,8 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
     CategoryPresenter mPresenter;
 
     public abstract MyConstants.DataParent getDataParent();
-    public void expandAppBar(){
+
+    public void expandAppBar() {
     }
 
     public void addFeedFragment(List<Category> pCategories) {
@@ -45,8 +46,10 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
         FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag
                 ("feeds");
         if (fragment == null) {
-            fragment = FeedFragment.newInstance(true, mCategory.getId(), pCategories,
-                    excludeTypes);
+            fragment = FeedFragment.newInstance(true, mCategory.getId(), mCategory.getTitle(),
+                    excludeTypes,
+                    pCategories
+            );
         }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, "feeds")

@@ -10,6 +10,8 @@ public class CategoryEntity {
     String title;
     @SerializedName("alias_name")
     String alias;
+    @SerializedName("parent_alias")
+    String parentAlias;
     @SerializedName("featured_image")
     String coverImageUrl;
     @SerializedName("icon")
@@ -129,5 +131,13 @@ public class CategoryEntity {
 
     public void setDepth(Integer pDepth) {
         depth = pDepth;
+    }
+
+    public String getParentAlias() {
+        return parentAlias;
+    }
+
+    public void setParentAlias(String pParentAlias) {
+        parentAlias = pParentAlias;
     }
 }

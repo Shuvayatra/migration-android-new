@@ -1,6 +1,5 @@
 package com.taf.shuvayatra.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -101,6 +100,7 @@ public class FeedFragment extends BaseFragment implements
     Integer mPage = 0;
     UseCaseData mUseCaseData = new UseCaseData();
     private Long mCategoryId;
+    private String mDefaultCategory = null;
 
     public FeedFragment() {
     }
@@ -113,13 +113,14 @@ public class FeedFragment extends BaseFragment implements
         return feedFragment;
     }
 
-    public static FeedFragment newInstance(boolean fromCategory, long categoryId, List<Category>
-            pCategories, List<String> excludeTypes) {
+    public static FeedFragment newInstance(boolean fromCategory, long categoryId, String
+            pDefaultCategory, List<String> excludeTypes, List<Category> pCategories) {
         FeedFragment feedFragment = new FeedFragment();
 
         Bundle data = new Bundle();
         data.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, fromCategory);
-        data.putLong(MyConstants.Extras.KEY_CATEGORY, categoryId);
+        data.putLong(MyConstants.Extras.KEY_CATEGORY_ID, categoryId);
+        data.putString(MyConstants.Extras.KEY_CATEGORY, pDefaultCategory);
         data.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) pCategories);
         data.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) excludeTypes);
         feedFragment.setArguments(data);
@@ -142,13 +143,14 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        Logger.d("FeedFragment_onActivityCreated", "test");
         if (savedInstanceState != null) {
             mFavouritesOnly = savedInstanceState.getBoolean(MyConstants.Extras
                     .KEY_FAVOURITES_ONLY, false);
             mFromCategory = savedInstanceState.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY,
                     false);
-            mCategoryId = savedInstanceState.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mCategoryId = savedInstanceState.getLong(MyConstants.Extras.KEY_CATEGORY_ID);
+            mDefaultCategory = savedInstanceState.getString(MyConstants.Extras.KEY_CATEGORY);
             mSubCategories = (List<Category>) savedInstanceState.getSerializable(MyConstants
                     .Extras.KEY_SUBCATEGORY);
             mExcludeTypes = (List<String>) savedInstanceState.getSerializable(MyConstants.Extras
@@ -200,7 +202,7 @@ public class FeedFragment extends BaseFragment implements
     }
 
     private void setUpAdapter() {
-        mListAdapter = new ListAdapter(getContext(), this);
+        mListAdapter = new ListAdapter(getContext(), this, mDefaultCategory);
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSwipeContainer.setOnRefreshListener(this);
@@ -254,8 +256,6 @@ public class FeedFragment extends BaseFragment implements
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
 
         //Filter options
-        Logger.d("FeedFragment_loadPostsList", "search: " +
-                filterFavouritesOnly + ", " + subCategoryId + ", " + postType);
         if (!mFavouritesOnly)
             mUseCaseData.putBoolean(UseCaseData.IS_FAVOURITE, filterFavouritesOnly);
         mUseCaseData.putLong(UseCaseData.CATEGORY_ID, (subCategoryId != null && subCategoryId ==
@@ -275,7 +275,7 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        Logger.e("FeedFragment", "Post createdAt: "+ ((Post) pModel).getCreatedAt());
+        Logger.e("FeedFragment", "Post createdAt: " + ((Post) pModel).getCreatedAt());
         Intent intent = null;
         listItemSelection = pIndex;
         switch (pModel.getDataType()) {
@@ -401,11 +401,6 @@ public class FeedFragment extends BaseFragment implements
     }
 
     @Override
-    public Context getContext() {
-        return getActivity();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == BaseActivity.RESULT_OK) {
@@ -437,7 +432,8 @@ public class FeedFragment extends BaseFragment implements
         if (data != null) {
             mFavouritesOnly = data.getBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, false);
             mFromCategory = data.getBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, false);
-            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY);
+            mCategoryId = data.getLong(MyConstants.Extras.KEY_CATEGORY_ID);
+            mDefaultCategory = data.getString(MyConstants.Extras.KEY_CATEGORY);
             mSubCategories = (List<Category>) data.getSerializable(MyConstants.Extras.KEY_SUBCATEGORY);
             mExcludeTypes = (List<String>) data.getSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST);
 
@@ -454,12 +450,21 @@ public class FeedFragment extends BaseFragment implements
         outState.putInt(LIST_ITEM_SELECTION, listItemSelection);
         outState.putBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, mFavouritesOnly);
         outState.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, mFromCategory);
-        outState.putLong(MyConstants.Extras.KEY_CATEGORY, mCategoryId);
+        outState.putLong(MyConstants.Extras.KEY_CATEGORY_ID, mCategoryId);
+        outState.putString(MyConstants.Extras.KEY_CATEGORY, mDefaultCategory);
         outState.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) mSubCategories);
         outState.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) mExcludeTypes);
 
         outState.putBoolean(MyConstants.Extras.KEY_FILTER_FAVOURITES_ONLY, filterFavouritesOnly);
         outState.putLong(MyConstants.Extras.KEY_SUB_CATEGORY, subCategoryId);
         outState.putString(MyConstants.Extras.KEY_TYPE, postType);
+    }
+
+    @Override
+    public void onDestroyView() {
+        Logger.d("FeedFragment_onDestroyView", "test");
+        mPresenter.destroy();
+        mLatestPresenter.destroy();
+        super.onDestroyView();
     }
 }

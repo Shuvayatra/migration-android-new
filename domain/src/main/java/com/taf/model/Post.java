@@ -26,7 +26,7 @@ public class Post extends BaseModel {
     Integer mUnSyncedViewCount;
     Integer mUnSyncedShareCount;
 
-    List<Category> mCategoryList;
+    String mCategory;
     // for pagination purpose
     Integer mTotalCount;
 
@@ -127,18 +127,11 @@ public class Post extends BaseModel {
     }
 
     public String getCategory() {
-        for (Category category : getCategoryList()) {
-            if (category.getParentAlias() != null && category.getParentAlias().equals(MyConstants.SECTION
-                    .JOURNEY)) {
-                System.out.println(mId+" Post: journey"+ category.getTitle());
-                return category.getTitle();
-            }else{
-                System.out.println(mId+" Post: not "+ category.getTitle());
+        return mCategory;
+    }
 
-            }
-        }
-        //// TODO: 5/16/2016 need proper logic
-        return getCategoryList().get(0).getParentAlias()!=null?getCategoryList().get(0).getTitle():getCategoryList().get(0).getAlias();
+    public void setCategory(String pCategory) {
+        mCategory = pCategory;
     }
 
     public Integer getTotalCount() {
@@ -181,13 +174,7 @@ public class Post extends BaseModel {
         downloadReference = pDownloadReference;
     }
 
-    public List<Category> getCategoryList() {
-        return mCategoryList;
-    }
 
-    public void setCategoryList(List<Category> pCategoryList) {
-        mCategoryList = pCategoryList;
-    }
 
     public Integer getViewCount() {
         return mViewCount;
