@@ -23,7 +23,6 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Notification;
 import com.taf.util.MyConstants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,10 +76,12 @@ public class DatabaseHelper {
     }
 
     public void deleteAllPostCategoryRelations(Long postId) {
-        DbPostCategoryDao postCategoryDao = mDaoSession.getDbPostCategoryDao();
+        mDaoSession.getDatabase().delete(DbPostCategoryDao.TABLENAME, "POST_ID = " + postId,
+                null);
+        /*DbPostCategoryDao postCategoryDao = mDaoSession.getDbPostCategoryDao();
         postCategoryDao.queryBuilder()
                 .where(DbPostCategoryDao.Properties.PostId.eq(postId))
-                .buildDelete().executeDeleteWithoutDetachingEntities();
+                .buildDelete().executeDeleteWithoutDetachingEntities();*/
     }
 
     public void insertUpdateCategories(List<CategoryEntity> pEntities) {
@@ -141,7 +142,8 @@ public class DatabaseHelper {
         if (pTags.isEmpty()) {
             pTags.add("dummy-text");
         }
-        return getPosts(pLimit, pOffset, pType, false, null, null, pTags, pExcludeIds, null);
+        return getPostsNew(pLimit, pOffset, pType, false, null, null, pTags, null, pExcludeIds,
+                null);
     }
 
     public Observable<Map<String, Object>> getPostByCategory(Long categoryId, int pLimit, int
@@ -373,8 +375,10 @@ public class DatabaseHelper {
                 .list();
         for (DbPost dbPost : postList) {
             dbPost.setIsSynced(isSynced);
-            if (isSynced)
+            if (isSynced) {
                 dbPost.setUnsyncedViewCount(0);
+                dbPost.setUnsyncedShareCount(0);
+            }
         }
         postDao.insertOrReplaceInTx(postList);
     }
@@ -486,30 +490,40 @@ public class DatabaseHelper {
     }
 
     public void deleteContents(DeletedContentDataEntity pContent) {
-        List<Long> deleteIds = new ArrayList<>();
+        String deleteIds = "";
         if (pContent.getPosts() != null) {
             for (DeletedContentEntity post : pContent.getPosts()) {
-                deleteIds.add(post.getId());
+                deleteIds += post.getId().toString() + ", ";
             }
-            mDaoSession.getDbPostDao().queryBuilder()
+
+            mDaoSession.getDatabase().delete(DbPostDao.TABLENAME, "_id IN (" + deleteIds + "-1)",
+                    null);
+            mDaoSession.getDatabase().delete(DbPostCategoryDao.TABLENAME, "post_id IN (" +
+                    deleteIds + "-1)", null);
+            /*mDaoSession.getDbPostDao().queryBuilder()
                     .where(DbPostDao.Properties.Id.in(deleteIds))
                     .buildDelete().executeDeleteWithoutDetachingEntities();
             mDaoSession.getDbPostCategoryDao().queryBuilder()
                     .where(DbPostCategoryDao.Properties.PostId.in(deleteIds))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+                    .buildDelete().executeDeleteWithoutDetachingEntities();*/
         }
 
         if (pContent.getSections() != null) {
-            deleteIds.clear();
+            deleteIds = "";
             for (DeletedContentEntity section : pContent.getSections()) {
-                deleteIds.add(section.getId());
+                deleteIds += section.getId().toString() + ", ";
             }
-            mDaoSession.getDbCategoryDao().queryBuilder()
+            Logger.d("DatabaseHelper_deleteContents", "deleteIds: " + deleteIds);
+            mDaoSession.getDatabase().delete(DbCategoryDao.TABLENAME, "_id IN (" + deleteIds + "-1)",
+                    null);
+            mDaoSession.getDatabase().delete(DbPostCategoryDao.TABLENAME, "category_id IN (" +
+                    deleteIds + "-1)", null);
+            /*mDaoSession.getDbCategoryDao().queryBuilder()
                     .where(DbCategoryDao.Properties.Id.in(deleteIds))
                     .buildDelete().executeDeleteWithoutDetachingEntities();
             mDaoSession.getDbPostCategoryDao().queryBuilder()
                     .where(DbPostCategoryDao.Properties.CategoryId.in(deleteIds))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+                    .buildDelete().executeDeleteWithoutDetachingEntities();*/
         }
     }
 }

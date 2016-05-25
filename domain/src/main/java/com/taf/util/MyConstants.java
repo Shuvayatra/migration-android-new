@@ -16,7 +16,8 @@ public class MyConstants {
 
     public static final class Preferences {
         public static final String PREF_NAME = "nrna_app_preferences";
-        public static final String LAST_UPDATE_STAMP = "last_update_stamp";
+        public static final String LAST_UPDATE_STAMP = "last_update_stamp_1";
+        public static final String LAST_DELETE_STAMP = "last_delete_stamp_1";
         public static final String DOWNLOAD_REFERENCES = "download_references";
     }
 

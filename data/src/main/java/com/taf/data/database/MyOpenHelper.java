@@ -19,9 +19,10 @@ public class MyOpenHelper extends DaoMaster.DevOpenHelper {
         if (oldVersion < newVersion) {
             Logger.e("OpenHelper", "Update Schema version: " + Integer.toString(oldVersion) +
                     "->" + Integer.toString(newVersion));
-            /*switch (oldVersion) {
+            switch (oldVersion) {
                 case 1:
-            }*/
+
+            }
         }
     }
 

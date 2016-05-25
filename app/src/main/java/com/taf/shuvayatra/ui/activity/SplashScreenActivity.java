@@ -104,7 +104,7 @@ public class SplashScreenActivity extends BaseActivity implements
 
     private void deleteTrashedContents() {
         UseCaseData data = new UseCaseData();
-        data.putLong(UseCaseData.LAST_UPDATED, getPreferences().getLastUpdateStamp());
+        data.putLong(UseCaseData.LAST_UPDATED, getPreferences().getLastDeleteStamp());
         mDeletePresenter.initialize(data);
     }
 

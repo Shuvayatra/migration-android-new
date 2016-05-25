@@ -26,6 +26,7 @@ import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.DeletedContentPresenter;
 import com.taf.shuvayatra.presenter.LatestContentPresenter;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
@@ -36,6 +37,7 @@ import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.CustomArrayAdapter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
+import com.taf.shuvayatra.ui.interfaces.DeletedInfoView;
 import com.taf.shuvayatra.ui.interfaces.LatestContentView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.interfaces.PostListView;
@@ -53,6 +55,7 @@ public class FeedFragment extends BaseFragment implements
         ListItemClickListener,
         PostListView,
         LatestContentView,
+        DeletedInfoView,
         AdapterView.OnItemSelectedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -74,6 +77,9 @@ public class FeedFragment extends BaseFragment implements
     LatestContentPresenter mLatestPresenter;
     @Inject
     PostListPresenter mPresenter;
+    @Inject
+    DeletedContentPresenter mDeletePresenter;
+
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
     @Bind(R.id.recyclerView)
@@ -198,6 +204,7 @@ public class FeedFragment extends BaseFragment implements
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
+        mDeletePresenter.attachView(this);
         mLatestPresenter.attachView(this);
     }
 
@@ -269,8 +276,8 @@ public class FeedFragment extends BaseFragment implements
     public void onRefresh() {
         UseCaseData data = new UseCaseData();
         data.putLong(UseCaseData.LAST_UPDATED, ((BaseActivity) getActivity()).getPreferences()
-                .getLastUpdateStamp());
-        mLatestPresenter.initialize(data);
+                .getLastDeleteStamp());
+        mDeletePresenter.initialize(data);
     }
 
     @Override
@@ -308,6 +315,14 @@ public class FeedFragment extends BaseFragment implements
     @Override
     public void latestContentFetched(boolean hasNewContent) {
         loadPostsList(INITIAL_OFFSET);
+    }
+
+    @Override
+    public void deletedInfoFetched() {
+        UseCaseData data = new UseCaseData();
+        data.putLong(UseCaseData.LAST_UPDATED, ((BaseActivity) getActivity()).getPreferences()
+                .getLastUpdateStamp());
+        mLatestPresenter.initialize(data);
     }
 
     @Override
@@ -462,9 +477,9 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void onDestroyView() {
-        Logger.d("FeedFragment_onDestroyView", "test");
         mPresenter.destroy();
         mLatestPresenter.destroy();
+        mDeletePresenter.destroy();
         super.onDestroyView();
     }
 }

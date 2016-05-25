@@ -2,7 +2,7 @@
 <resources>
     <string
         name="ga_trackingId"
-        translatable="false">UA-74795701-2
+        translatable="false">UA-74795701-3
     </string>
 
     <bool name="ga_autoActivityTracking">true</bool>
