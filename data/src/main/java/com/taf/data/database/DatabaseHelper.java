@@ -62,7 +62,17 @@ public class DatabaseHelper {
         for (PostEntity entity : pEntities) {
             DbPost post = mDataMapper.transformPostForDB(entity);
             if (post != null) {
-                Long insertId = postDao.insertOrReplace(post);
+                Long insertId;
+                DbPost oldPOst = postDao.load(post.getId());
+                if(oldPOst==null) {
+                   insertId = postDao.insert(post);
+                } else{
+                    post.setIsFavourite(oldPOst.getIsFavourite());
+                    post.setUnsyncedShareCount(oldPOst.getUnsyncedShareCount());
+                    post.setUnsyncedViewCount(oldPOst.getUnsyncedViewCount());
+                    postDao.update(post);
+                    insertId = post.getId();
+                }
                 deleteAllPostCategoryRelations(insertId);
                 for (Long catId : entity.getCategoryIds()) {
                     DbPostCategory item = new DbPostCategory();

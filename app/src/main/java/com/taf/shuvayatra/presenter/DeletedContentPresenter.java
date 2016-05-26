@@ -36,6 +36,7 @@ public class DeletedContentPresenter implements Presenter {
 
     @Override
     public void destroy() {
+        mUseCase.unSubscribe();
     }
 
     @Override
