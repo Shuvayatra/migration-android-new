@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -20,7 +21,6 @@ import com.taf.shuvayatra.presenter.PlacesListPresenter;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.ui.interfaces.PlacesListView;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
-import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -85,9 +85,14 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         boolean status = !(mPlace.isFavourite() != null && mPlace.isFavourite());
         data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
 
-        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
+        /*AnalyticsUtil.trackEvent(getAnalytics(), AnalyticsUtil.CATEGORY_FAVOURITE,
                 status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
-                AnalyticsUtil.LABEL_ID, mPlace.getId());
+                AnalyticsUtil.LABEL_ID, mPlace.getId());*/
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mPlace.getId().toString());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mPlace.getTitle());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, mPlace.getType());
+        getAnalytics().logEvent("favourite", bundle);
         mFavouritePresenter.initialize(data);
     }
 
@@ -148,7 +153,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         return super.onKeyDown(keyCode, event);
     }
 
-    private void finishWithResult(){
+    private void finishWithResult() {
         Intent data = new Intent();
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPlace.isFavourite());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPlace.getLikes());
@@ -192,7 +197,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
 
     @Override
     public void onShareCountUpdate() {
-        mPlace.setUnSyncedShareCount(mPlace.getUnSyncedShareCount()+1);
+        mPlace.setUnSyncedShareCount(mPlace.getUnSyncedShareCount() + 1);
         ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
     }
 

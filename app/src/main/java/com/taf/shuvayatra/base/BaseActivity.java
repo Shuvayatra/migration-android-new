@@ -4,11 +4,12 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends GCMActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public ViewDataBinding mBinding;
     @Nullable
@@ -32,7 +33,7 @@ public abstract class BaseActivity extends GCMActivity {
     @Inject
     AppPreferences mPreferences;
     @Inject
-    Tracker mTracker;
+    FirebaseAnalytics mAnalytics;
 
 
     public abstract int getLayout();
@@ -71,14 +72,14 @@ public abstract class BaseActivity extends GCMActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
         initLanguage();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onResume() {
+        super.onResume();
         initLanguage();
     }
 
@@ -135,8 +136,8 @@ public abstract class BaseActivity extends GCMActivity {
         return mPreferences;
     }
 
-    public Tracker getTracker() {
-        return mTracker;
+    public FirebaseAnalytics getAnalytics() {
+        return mAnalytics;
     }
 
     public ApplicationComponent getApplicationComponent() {

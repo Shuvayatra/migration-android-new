@@ -1,35 +1,52 @@
 {
   "project_info": {
-    "project_number": "698661085126",
-    "project_id": "nepalmigrantworkers"
+    "project_number": "380677846429",
+    "firebase_url": "https://project-3371053837616912652.firebaseio.com",
+    "project_id": "project-3371053837616912652",
+    "storage_bucket": "project-3371053837616912652.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:698661085126:android:710df081737c8e00",
+        "mobilesdk_app_id": "1:380677846429:android:710df081737c8e00",
         "android_client_info": {
           "package_name": "com.taf.shuvayatra"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "380677846429-so5nrcesa2ltnu5e299u91icdeps6sad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taf.shuvayatra",
+            "certificate_hash": "F54A54077F01FBC66B85F809F572C69AEF473C00"
+          }
+        },
+        {
+          "client_id": "380677846429-59affor2sa0nq00o0mh9ivguepfbn5ak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJaQtaVm4Zo1pqV3xvN__h0gtDFhL1pzg"
+          "current_key": "AIzaSyD3uFr3tXBBmTiFuEqMpN8sb-Dd5cZCZK4"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-74795701-3"
-          }
+          "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380677846429-59affor2sa0nq00o0mh9ivguepfbn5ak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

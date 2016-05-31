@@ -21,9 +21,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * Created by Nirazan-PC on 4/25/2016.
- */
 public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView {
     public Category mCategory;
 

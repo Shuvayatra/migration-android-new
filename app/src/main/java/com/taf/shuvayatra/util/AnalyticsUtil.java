@@ -1,43 +1,54 @@
 package com.taf.shuvayatra.util;
 
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class AnalyticsUtil {
-    public static final String CATEGORY_FAVOURITE = "Favourite";
-    public static final String CATEGORY_SHARE = "Share";
-    public static final String CATEGORY_DOWNLOAD = "Download";
 
-    public static final String ACTION_AUDIO_DOWNLOAD = "Audio";
-    public static final String ACTION_BLUETOOTH = "Bluetooth";
-    public static final String ACTION_FACEBOOK = "Facebook";
-    public static final String ACTION_LIKE = "Like";
-    public static final String ACTION_UNLIKE = "Unlike";
-
-    public static final String LABEL_ID = "ID";
-
-    public static void trackScreenName(Tracker pTracker, String pScreenName) {
-        pTracker.setScreenName(pScreenName);
-        pTracker.send(new HitBuilders.ScreenViewBuilder()
-                .setNewSession()
-                .build());
+    public static void logAppOpenEvent(FirebaseAnalytics analytics) {
+        analytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
     }
 
-    public static void trackEvent(Tracker pTracker, String pCategory, String
-            pAction, @Nullable String pLabel, @Nullable Long pValue) {
-        HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(pCategory)
-                .setAction(pAction);
-        if (pLabel != null) {
-            eventBuilder.setLabel(pLabel);
-            if (pValue != null) eventBuilder.setValue(pValue);
-        }
-        /*if (pUserId != null) pTracker.set("&uid", pUserId.toString());*/
-
-        pTracker.send(eventBuilder.build());
+    public static void logViewEvent(FirebaseAnalytics analytics, Long id, String title, String
+            type) {
+        logEvent(analytics, FirebaseAnalytics.Event.VIEW_ITEM, id, title, type);
     }
 
+    public static void logBluetoothShareEvent(FirebaseAnalytics analytics, Long id, String title,
+                                              String type) {
+        logEvent(analytics, "bluetooth_share_item", id, title, type);
+    }
+
+    public static void logDownloadEvent(FirebaseAnalytics analytics, Long id, String title,
+                                        String type) {
+        logEvent(analytics, "download_item", id, title, type);
+    }
+
+    private static void logEvent(FirebaseAnalytics analytics, String eventType, Long id, String
+            title, String type) {
+        Bundle analyticsData = new Bundle();
+        analyticsData.putString(FirebaseAnalytics.Param.ITEM_ID, id.toString());
+        analyticsData.putString(FirebaseAnalytics.Param.ITEM_NAME, title);
+        analyticsData.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        analytics.logEvent(eventType, analyticsData);
+    }
+
+    public static void logSearchEvent(FirebaseAnalytics analytics, String query, boolean byTag) {
+        Bundle analyticsData = new Bundle();
+        analyticsData.putString(FirebaseAnalytics.Param.SEARCH_TERM, query);
+        analyticsData.putBoolean("search_by_tag", byTag);
+        analytics.logEvent(FirebaseAnalytics.Event.SEARCH, analyticsData);
+    }
+
+    public static void logFavouriteEvent(FirebaseAnalytics analytics, Long id, String title,
+                                         String type, boolean status) {
+        Bundle analyticsData = new Bundle();
+        analyticsData.putString(FirebaseAnalytics.Param.ITEM_ID, id.toString());
+        analyticsData.putString(FirebaseAnalytics.Param.ITEM_NAME, title);
+        analyticsData.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        analyticsData.putBoolean("favourte_status", status);
+        analytics.logEvent("favourite_item", analyticsData);
+    }
 
 }

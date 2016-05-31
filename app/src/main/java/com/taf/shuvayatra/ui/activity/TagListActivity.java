@@ -20,6 +20,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.TagListPresenter;
 import com.taf.shuvayatra.ui.interfaces.TagListView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 import com.wefika.flowlayout.FlowLayout;
 
@@ -105,6 +106,8 @@ public class TagListActivity extends BaseActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AnalyticsUtil.logSearchEvent(getAnalytics(), tag, true);
+
                     Intent intent = new Intent(TagListActivity.this, SearchListActivity.class);
                     intent.putExtra(MyConstants.Extras.KEY_TAG, tag);
                     startActivity(intent);
@@ -140,6 +143,8 @@ public class TagListActivity extends BaseActivity implements
             Intent intent = new Intent(this, SearchListActivity.class);
             intent.putExtra(MyConstants.Extras.KEY_TITLE, query);
             startActivity(intent);
+
+            AnalyticsUtil.logSearchEvent(getAnalytics(), query, false);
         }
         return true;
     }
