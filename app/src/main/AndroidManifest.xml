@@ -93,35 +93,21 @@
             android:windowSoftInputMode="stateHidden">
         </activity>
 
-        <!-- GCM -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-
-                <category android:name="com.ncellappcamp.gcm"/>
-            </intent-filter>
-        </receiver>
-
         <service
-            android:name=".gcm.MyGcmListenerService"
-            android:exported="false">
+            android:name=".gcm.MyFcmListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        ...
+
         <service
-            android:name=".gcm.GcmInstanceIDListenerService"
-            android:exported="false">
+            android:name=".gcm.GcmInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-        <service
-            android:name=".gcm.GcmRegistrationIntentService"
-            android:exported="false"/>
 
         <activity
             android:name=".ui.activity.InfoDetailActivity"

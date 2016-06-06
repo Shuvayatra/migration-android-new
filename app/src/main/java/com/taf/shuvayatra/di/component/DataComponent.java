@@ -4,7 +4,7 @@ import com.taf.data.di.PerActivity;
 import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.gcm.MyGcmListenerService;
+import com.taf.shuvayatra.gcm.MyFcmListenerService;
 import com.taf.shuvayatra.receivers.DownloadStateReceiver;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
@@ -39,7 +39,7 @@ public interface DataComponent extends ActivityComponent {
     void inject(DestinationFragment pFragment);
     void inject(DownloadStateReceiver pReceiver);
     void inject(CategoryDetailActivity pActivity);
-    void inject(MyGcmListenerService pService);
+    void inject(MyFcmListenerService pService);
     void inject(NotificationsFragment pFragment);
     void inject(InfoFragment pFragment);
     void inject(FacebookParseActivity pActivity);

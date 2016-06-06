@@ -5,11 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Notification;
@@ -23,29 +23,27 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.NotificationReceivedPresenter;
 import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 
-public class MyGcmListenerService extends GcmListenerService {
+public class MyFcmListenerService extends FirebaseMessagingService {
 
     @Inject
     NotificationReceivedPresenter mPresenter;
 
-    /**
-     * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
-     */
     @Override
-    public void onMessageReceived(String from, Bundle data) {
+    public void onMessageReceived(RemoteMessage pRemoteMessage) {
 
         initialize();
 
+        Map<String, String> data = pRemoteMessage.getData();
         Logger.d("MyGcmListenerService_onMessageReceived", "data:" + data.toString());
-        String title = data.getString("title");
-        String description = data.getString("description", "");
+
+        String title = data.get("title");
+        String description = data.get("description");
+        description = description != null ? description : "";
 
         if (title != null) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
@@ -60,21 +58,14 @@ public class MyGcmListenerService extends GcmListenerService {
 
             Intent resultIntent = new Intent(this, SplashScreenActivity.class);
 
-            // The stack builder object will contain an artificial back stack for the
-            // started Activity.
-            // This ensures that navigating backward from the Activity leads out of
-            // your application to the Home screen.
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(SplashScreenActivity.class);
-            // Adds the Intent that starts the Activity to the top of the stack
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent =
                     stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context
                     .NOTIFICATION_SERVICE);
-            // mId allows you to update the notification later on.
             mNotificationManager.notify(2390, builder.build());
 
             saveNotificationToDB(title, description);

@@ -2,13 +2,11 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeIntents;
@@ -51,8 +49,8 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     Post mPost;
     boolean mOldFavouriteState;
-    private YouTubePlayerSupportFragment mYouTubePlayerFragment;
     Boolean IsFromIntent = false;
+    private YouTubePlayerSupportFragment mYouTubePlayerFragment;
 
     @Override
     public int getLayout() {
@@ -93,9 +91,9 @@ public class VideoDetailActivity extends FacebookActivity implements
         boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
         data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
 
-        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
-                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
-                AnalyticsUtil.LABEL_ID, mPost.getId());
+        AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                .getType(), status);
+
         mFavouritePresenter.initialize(data);
     }
 
@@ -106,10 +104,13 @@ public class VideoDetailActivity extends FacebookActivity implements
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            if (savedInstanceState != null)
+            if (savedInstanceState != null) {
                 mPost = (Post) savedInstanceState.get(KEY_VIDEO);
-            else
+            } else {
                 mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_VIDEO);
+                AnalyticsUtil.logViewEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                        .getType());
+            }
         }
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
@@ -245,7 +246,7 @@ public class VideoDetailActivity extends FacebookActivity implements
                 @Override
                 public void onError(YouTubePlayer.ErrorReason pErrorReason) {
                     Logger.e("VideoDetailActivity", " video error: " + pErrorReason);
-                    if(!IsFromIntent) {
+                    if (!IsFromIntent) {
                         IsFromIntent = true;
                         playViaIntent(videoId);
                     }
@@ -265,20 +266,19 @@ public class VideoDetailActivity extends FacebookActivity implements
         }
     }
 
-    private void playViaIntent(String url) {
-        if(YouTubeIntents.canResolvePlayVideoIntent(this)){
-            Logger.e("VideoDetailActivity", "play via intent");
-            Intent intent = YouTubeIntents.createPlayVideoIntent(this,url);
-            startActivity(intent);
-        }else
-        {
-            Logger.e("VideoDetailActivity", "cant play via intent");
-        }
-    }
-
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider pProvider, YouTubeInitializationResult pYouTubeInitializationResult) {
         Logger.e("VideoDetailActivity", "error initializing error");
+    }
+
+    private void playViaIntent(String url) {
+        if (YouTubeIntents.canResolvePlayVideoIntent(this)) {
+            Logger.e("VideoDetailActivity", "play via intent");
+            Intent intent = YouTubeIntents.createPlayVideoIntent(this, url);
+            startActivity(intent);
+        } else {
+            Logger.e("VideoDetailActivity", "cant play via intent");
+        }
     }
 
     public String getYoutubeIdFromUrl(String url) {

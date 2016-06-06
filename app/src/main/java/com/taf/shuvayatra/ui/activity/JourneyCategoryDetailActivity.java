@@ -6,6 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.databinding.JourneyCategoryDetailDataBinding;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import butterknife.Bind;
@@ -21,18 +22,22 @@ public class JourneyCategoryDetailActivity extends CategoryDetailActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((JourneyCategoryDetailDataBinding) mBinding).setCategory(mCategory);
-    }
-
-    @Override
     public MyConstants.DataParent getDataParent() {
         return MyConstants.DataParent.JOURNEY;
     }
 
     @Override
-    public void expandAppBar(){
+    public void expandAppBar() {
         mAppBar.setExpanded(true);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((JourneyCategoryDetailDataBinding) mBinding).setCategory(mCategory);
+        if (savedInstanceState == null) {
+            AnalyticsUtil.logViewEvent(getAnalytics(), mCategory.getId(), mCategory.getTitle(),
+                    "section_journey");
+        }
     }
 }

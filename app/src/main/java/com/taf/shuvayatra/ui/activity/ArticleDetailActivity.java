@@ -81,9 +81,9 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
         data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
 
-        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
-                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
-                AnalyticsUtil.LABEL_ID, mPost.getId());
+        AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                .getType(), status);
+        
         mFavouritePresenter.initialize(data);
     }
 
@@ -93,21 +93,21 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            if(savedInstanceState != null)
+            if (savedInstanceState != null) {
                 mPost = (Post) savedInstanceState.get(KEY_POST);
-            else
+            } else {
                 mPost = (Post) bundle.getSerializable(MyConstants.Extras.KEY_ARTICLE);
+                AnalyticsUtil.logViewEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                        .getType());
+            }
         }
-        Logger.e("ArticleDetailActivity", "POst createdAt: "+mPost.getCreatedAt());
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
-        Logger.e("ArticleDetailActivity", "oncreate activity:  view count: "+ mPost.getUnSyncedViewCount());
         initialize();
 
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Logger.e("ArticleDetailActivity", "savedinstance: "+savedInstanceState);
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
         }
     }
@@ -127,10 +127,10 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     private void finishWithResult() {
         Intent data = new Intent();
-        Logger.e("ArticleDetailActivity", "view count: "+ mPost.getUnSyncedViewCount());
+        Logger.e("ArticleDetailActivity", "view count: " + mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
-	    data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
-        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT,mPost.getUnSyncedViewCount());
+        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
+        data.putExtra(MyConstants.Extras.KEY_VIEW_COUNT, mPost.getUnSyncedViewCount());
         data.putExtra(MyConstants.Extras.KEY_SHARE_COUNT, mPost.getUnSyncedShareCount());
         setResult(RESULT_OK, data);
         finish();
@@ -163,13 +163,13 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     @Override
     public void onViewCountUpdated() {
-        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount()+1);
+        mPost.setUnSyncedViewCount(mPost.getUnSyncedViewCount() + 1);
         Logger.e("ArticleDetailActivity", "on view updated:  view count" + mPost.getUnSyncedViewCount());
     }
 
     @Override
     public void onShareCountUpdate() {
-        mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount()+1);
+        mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount() + 1);
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
     }
 
@@ -195,7 +195,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(KEY_POST,mPost);
+        outState.putSerializable(KEY_POST, mPost);
         super.onSaveInstanceState(outState);
     }
 }

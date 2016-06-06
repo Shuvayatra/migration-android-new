@@ -62,6 +62,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private static final int SUBMENU_BLUETOOTH = 1001;
     private static final int SUBMENU_FACEBOOK = 1002;
     private static final String KEY_AUDIO = "key_audio";
+    private static final String KEY_PROGRESS = "key_progress";
 
     @Inject
     AudioDetailPresenter mPresenter;
@@ -106,6 +107,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private IntentFilter receiverFilter;
 
     private Post mAudio;
+    private int mCurrentProgress;
     private boolean mOldFavouriteState;
 
     //connect to the service
@@ -143,6 +145,7 @@ public class AudioDetailActivity extends FacebookActivity implements
                     mSeekbarMini.setProgress(progress);
                     seekbarHandler.postDelayed(this, 500);
                 } else {
+                    mCurrentProgress = 0;
                     mSeekbar.setProgress(0);
                     mSeekbar.removeCallbacks(updateSeekTime);
                     mSeekbarMini.setProgress(0);
@@ -186,6 +189,15 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void onPause() {
+        mSeekbar.removeCallbacks(updateSeekTime);
+        mSeekbarMini.removeCallbacks(updateSeekTime);
+        if (mediaReceiver != null)
+            unregisterReceiver(mediaReceiver);
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         updateSeekBar();
@@ -201,15 +213,6 @@ public class AudioDetailActivity extends FacebookActivity implements
         receiverFilter.addAction(MyConstants.Media.ACTION_STATUS_PREPARED);
         receiverFilter.addAction(MyConstants.Media.ACTION_PLAY_STATUS_CHANGE);
         registerReceiver(mediaReceiver, receiverFilter);
-    }
-
-    @Override
-    public void onPause() {
-        mSeekbar.removeCallbacks(updateSeekTime);
-        mSeekbarMini.removeCallbacks(updateSeekTime);
-        if (mediaReceiver != null)
-            unregisterReceiver(mediaReceiver);
-        super.onPause();
     }
 
     @Override
@@ -235,9 +238,8 @@ public class AudioDetailActivity extends FacebookActivity implements
                 try {
                     if (!getPreferences().getDownloadReferences().contains(mAudio
                             .getDownloadReference())) {
-                        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_DOWNLOAD,
-                                AnalyticsUtil.ACTION_AUDIO_DOWNLOAD, AnalyticsUtil.LABEL_ID,
-                                mAudio.getId());
+                        AnalyticsUtil.logDownloadEvent(getAnalytics(), mAudio.getId(), mAudio
+                                .getTitle(), mAudio.getType());
                         mPresenter.downloadAudioPost(mAudio);
                     }
                 } catch (IOException e) {
@@ -250,9 +252,7 @@ public class AudioDetailActivity extends FacebookActivity implements
                 break;
             case SUBMENU_FACEBOOK:
                 if (share(mAudio)) {
-                    AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_SHARE,
-                            AnalyticsUtil.ACTION_FACEBOOK, AnalyticsUtil.LABEL_ID, mService
-                                    .getCurrentTrack().getId());
+                    //// TODO: 5/25/16 track event firebase
                 }
                 break;
 
@@ -266,9 +266,9 @@ public class AudioDetailActivity extends FacebookActivity implements
         boolean status = !(mAudio.isFavourite() != null && mAudio.isFavourite());
         data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
 
-        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_FAVOURITE,
-                status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
-                AnalyticsUtil.LABEL_ID, mAudio.getId());
+        AnalyticsUtil.logFavouriteEvent(getAnalytics(), mAudio.getId(), mAudio.getTitle(), mAudio
+                .getType(), status);
+
         mFavouritePresenter.initialize(data);
     }
 
@@ -280,8 +280,11 @@ public class AudioDetailActivity extends FacebookActivity implements
         if (data != null) {
             if (savedInstanceState != null) {
                 mAudio = (Post) savedInstanceState.get(KEY_AUDIO);
+                mCurrentProgress = savedInstanceState.getInt(KEY_PROGRESS, 0);
             } else {
                 mAudio = (Post) data.getSerializable(MyConstants.Extras.KEY_AUDIO);
+                AnalyticsUtil.logViewEvent(getAnalytics(), mAudio.getId(), mAudio.getTitle(),
+                        mAudio.getType());
             }
         }
         ((ActivityAudioDetailBinding) mBinding).setListener(this);
@@ -373,8 +376,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     private void shareViaBluetooth() {
-        AnalyticsUtil.trackEvent(getTracker(), AnalyticsUtil.CATEGORY_SHARE, AnalyticsUtil
-                .ACTION_BLUETOOTH, AnalyticsUtil.LABEL_ID, mAudio.getId());
+        AnalyticsUtil.logBluetoothShareEvent(getAnalytics(), mAudio.getId(), mAudio.getTitle(),
+                mAudio.getType());
         mPresenter.shareViaBluetooth(mAudio);
     }
 
@@ -385,7 +388,9 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Logger.d("AudioDetailActivity_onSaveInstanceState", "test: " + mCurrentProgress);
         outState.putSerializable(KEY_AUDIO, mAudio);
+        outState.putInt(KEY_PROGRESS, mCurrentProgress);
         super.onSaveInstanceState(outState);
     }
 
@@ -414,6 +419,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        mCurrentProgress = seekBar.getProgress();
         mService.seekTo(seekBar.getProgress());
         updateSeekBar();
     }
@@ -468,6 +474,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void onMediaPrepared() {
         updateSeekBar();
+        Logger.d("AudioDetailActivity_onMediaPrepared", "test: " + mCurrentProgress);
+        mService.seekTo(mCurrentProgress);
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
     }

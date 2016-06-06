@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
@@ -12,8 +11,8 @@ android {
         applicationId "com.taf.shuvayatra"
         minSdkVersion globalConfig.getAt("androidMinSdkVersion")
         targetSdkVersion globalConfig.getAt("androidTargetSdkVersion")
-        versionCode 2
-        versionName "1.0.0-beta2"
+        versionCode 3
+        versionName "1.0.0-beta3"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -54,8 +53,8 @@ dependencies {
     compile appDependencies.cardView
     compile appDependencies.designSupport
     compile appDependencies.cardView
-    compile appDependencies.analytics
-    compile appDependencies.gcm
+    compile appDependencies.firebaseAnalytics
+    compile appDependencies.firebaseMessaging
 
     compile "com.wefika:flowlayout:0.4.1"
 
@@ -70,3 +69,5 @@ dependencies {
     compile appDependencies.facebookSdk
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
+
+apply plugin: 'com.google.gms.google-services'
