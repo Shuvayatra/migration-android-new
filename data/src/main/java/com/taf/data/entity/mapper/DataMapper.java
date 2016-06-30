@@ -61,6 +61,7 @@ public class DataMapper {
             post.setTitle(pEntity.getTitle());
             post.setDescription(pEntity.getDescription());
             post.setSource(pEntity.getSource());
+            post.setShareUrl(pEntity.getShareUrl());
             post.setUpdatedAt(pEntity.getUpdatedAt());
             post.setCreatedAt(pEntity.getCreatedAt());
             post.setTags(pEntity.getTags());
@@ -96,6 +97,7 @@ public class DataMapper {
             post.setDescription(pEntity.getDescription());
             post.setType(pEntity.getType());
             post.setData(gson.toJson(pEntity.getData()));
+            post.setShareUrl(pEntity.getShareUrl());
             post.setTags(gson.toJson(pEntity.getTags()));
             post.setType(pEntity.getType());
             post.setUpdatedAt(pEntity.getUpdatedAt());
@@ -163,6 +165,7 @@ public class DataMapper {
             post.setId(pPost.getId());
             post.setTitle(pPost.getTitle());
             post.setDescription(pPost.getDescription());
+            post.setShareUrl(pPost.getShareUrl());
             post.setType(pPost.getType());
             post.setData(transformPostData(gson.fromJson(pPost.getData(), PostDataEntity.class)));
             post.setTags(gson.fromJson(pPost.getTags(), new TypeToken<List<String>>() {

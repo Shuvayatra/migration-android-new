@@ -11,6 +11,7 @@ public class Post extends BaseModel {
     String mType;
     PostData mData;
     String mSource;
+    String shareUrl;
     List<String> mTags;
     Long mCreatedAt;
     Long mUpdatedAt;
@@ -175,7 +176,6 @@ public class Post extends BaseModel {
     }
 
 
-
     public Integer getViewCount() {
         return mViewCount;
     }
@@ -227,6 +227,14 @@ public class Post extends BaseModel {
         } else {
             return total / 1000 + "K";
         }
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String pShareUrl) {
+        shareUrl = pShareUrl;
     }
 
     @Override

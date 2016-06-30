@@ -15,6 +15,7 @@ public class DbPost {
     private String type;
     private String data;
     private String source;
+    private String shareUrl;
     private String tags;
     private Long createdAt;
     private Long updatedAt;
@@ -40,13 +41,14 @@ public class DbPost {
         this.id = id;
     }
 
-    public DbPost(Long id, String title, String description, String type, String data, String source, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference, Integer viewCount, Integer unsyncedViewCount, String featuredImage, Integer unsyncedShareCount) {
+    public DbPost(Long id, String title, String description, String type, String data, String source, String shareUrl, String tags, Long createdAt, Long updatedAt, Integer favouriteCount, Integer shareCount, Boolean isFavourite, Boolean isSynced, Boolean isDownloaded, Long downloadReference, Integer viewCount, Integer unsyncedViewCount, String featuredImage, Integer unsyncedShareCount) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.type = type;
         this.data = data;
         this.source = source;
+        this.shareUrl = shareUrl;
         this.tags = tags;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -108,6 +110,14 @@ public class DbPost {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 
     public String getTags() {
