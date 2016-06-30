@@ -11,8 +11,8 @@ android {
         applicationId "com.taf.shuvayatra"
         minSdkVersion globalConfig.getAt("androidMinSdkVersion")
         targetSdkVersion globalConfig.getAt("androidTargetSdkVersion")
-        versionCode 3
-        versionName "1.0.0-beta3"
+        versionCode 4
+        versionName "1.0.0-beta4"
         vectorDrawables.useSupportLibrary = true
     }
 

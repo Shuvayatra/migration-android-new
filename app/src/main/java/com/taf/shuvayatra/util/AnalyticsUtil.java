@@ -13,11 +13,17 @@ public class AnalyticsUtil {
     public static void logViewEvent(FirebaseAnalytics analytics, Long id, String title, String
             type) {
         logEvent(analytics, FirebaseAnalytics.Event.VIEW_ITEM, id, title, type);
+        //logEvent(analytics, FirebaseAnalytics.Event.SELECT_CONTENT, id, title, type);
     }
 
     public static void logBluetoothShareEvent(FirebaseAnalytics analytics, Long id, String title,
                                               String type) {
         logEvent(analytics, "bluetooth_share_item", id, title, type);
+    }
+
+    public static void logShareEvent(FirebaseAnalytics analytics, Long id, String title, String
+            type) {
+        logEvent(analytics, FirebaseAnalytics.Event.SHARE, id, title, type);
     }
 
     public static void logDownloadEvent(FirebaseAnalytics analytics, Long id, String title,

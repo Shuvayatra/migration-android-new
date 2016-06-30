@@ -11,6 +11,8 @@ public class PostEntity {
     String type;
     PostDataEntity data;
     String source;
+    @SerializedName("share_url")
+    String shareUrl;
     List<String> tags;
     @SerializedName("section_category")
     List<Long> categoryIds;
@@ -137,5 +139,13 @@ public class PostEntity {
 
     public void setViewCount(Integer pViewCount) {
         viewCount = pViewCount;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String pShareUrl) {
+        shareUrl = pShareUrl;
     }
 }

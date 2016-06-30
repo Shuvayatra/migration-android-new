@@ -29,19 +29,20 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         public final static Property Type = new Property(3, String.class, "type", false, "TYPE");
         public final static Property Data = new Property(4, String.class, "data", false, "DATA");
         public final static Property Source = new Property(5, String.class, "source", false, "SOURCE");
-        public final static Property Tags = new Property(6, String.class, "tags", false, "TAGS");
-        public final static Property CreatedAt = new Property(7, Long.class, "createdAt", false, "CREATED_AT");
-        public final static Property UpdatedAt = new Property(8, Long.class, "updatedAt", false, "UPDATED_AT");
-        public final static Property FavouriteCount = new Property(9, Integer.class, "favouriteCount", false, "FAVOURITE_COUNT");
-        public final static Property ShareCount = new Property(10, Integer.class, "shareCount", false, "SHARE_COUNT");
-        public final static Property IsFavourite = new Property(11, Boolean.class, "isFavourite", false, "IS_FAVOURITE");
-        public final static Property IsSynced = new Property(12, Boolean.class, "isSynced", false, "IS_SYNCED");
-        public final static Property IsDownloaded = new Property(13, Boolean.class, "isDownloaded", false, "IS_DOWNLOADED");
-        public final static Property DownloadReference = new Property(14, Long.class, "downloadReference", false, "DOWNLOAD_REFERENCE");
-        public final static Property ViewCount = new Property(15, Integer.class, "viewCount", false, "VIEW_COUNT");
-        public final static Property UnsyncedViewCount = new Property(16, Integer.class, "unsyncedViewCount", false, "UNSYNCED_VIEW_COUNT");
-        public final static Property FeaturedImage = new Property(17, String.class, "featuredImage", false, "FEATURED_IMAGE");
-        public final static Property UnsyncedShareCount = new Property(18, Integer.class, "unsyncedShareCount", false, "UNSYNCED_SHARE_COUNT");
+        public final static Property ShareUrl = new Property(6, String.class, "shareUrl", false, "SHARE_URL");
+        public final static Property Tags = new Property(7, String.class, "tags", false, "TAGS");
+        public final static Property CreatedAt = new Property(8, Long.class, "createdAt", false, "CREATED_AT");
+        public final static Property UpdatedAt = new Property(9, Long.class, "updatedAt", false, "UPDATED_AT");
+        public final static Property FavouriteCount = new Property(10, Integer.class, "favouriteCount", false, "FAVOURITE_COUNT");
+        public final static Property ShareCount = new Property(11, Integer.class, "shareCount", false, "SHARE_COUNT");
+        public final static Property IsFavourite = new Property(12, Boolean.class, "isFavourite", false, "IS_FAVOURITE");
+        public final static Property IsSynced = new Property(13, Boolean.class, "isSynced", false, "IS_SYNCED");
+        public final static Property IsDownloaded = new Property(14, Boolean.class, "isDownloaded", false, "IS_DOWNLOADED");
+        public final static Property DownloadReference = new Property(15, Long.class, "downloadReference", false, "DOWNLOAD_REFERENCE");
+        public final static Property ViewCount = new Property(16, Integer.class, "viewCount", false, "VIEW_COUNT");
+        public final static Property UnsyncedViewCount = new Property(17, Integer.class, "unsyncedViewCount", false, "UNSYNCED_VIEW_COUNT");
+        public final static Property FeaturedImage = new Property(18, String.class, "featuredImage", false, "FEATURED_IMAGE");
+        public final static Property UnsyncedShareCount = new Property(19, Integer.class, "unsyncedShareCount", false, "UNSYNCED_SHARE_COUNT");
     };
 
 
@@ -63,19 +64,20 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
                 "\"TYPE\" TEXT," + // 3: type
                 "\"DATA\" TEXT," + // 4: data
                 "\"SOURCE\" TEXT," + // 5: source
-                "\"TAGS\" TEXT," + // 6: tags
-                "\"CREATED_AT\" INTEGER," + // 7: createdAt
-                "\"UPDATED_AT\" INTEGER," + // 8: updatedAt
-                "\"FAVOURITE_COUNT\" INTEGER," + // 9: favouriteCount
-                "\"SHARE_COUNT\" INTEGER," + // 10: shareCount
-                "\"IS_FAVOURITE\" INTEGER," + // 11: isFavourite
-                "\"IS_SYNCED\" INTEGER," + // 12: isSynced
-                "\"IS_DOWNLOADED\" INTEGER," + // 13: isDownloaded
-                "\"DOWNLOAD_REFERENCE\" INTEGER," + // 14: downloadReference
-                "\"VIEW_COUNT\" INTEGER," + // 15: viewCount
-                "\"UNSYNCED_VIEW_COUNT\" INTEGER," + // 16: unsyncedViewCount
-                "\"FEATURED_IMAGE\" TEXT," + // 17: featuredImage
-                "\"UNSYNCED_SHARE_COUNT\" INTEGER);"); // 18: unsyncedShareCount
+                "\"SHARE_URL\" TEXT," + // 6: shareUrl
+                "\"TAGS\" TEXT," + // 7: tags
+                "\"CREATED_AT\" INTEGER," + // 8: createdAt
+                "\"UPDATED_AT\" INTEGER," + // 9: updatedAt
+                "\"FAVOURITE_COUNT\" INTEGER," + // 10: favouriteCount
+                "\"SHARE_COUNT\" INTEGER," + // 11: shareCount
+                "\"IS_FAVOURITE\" INTEGER," + // 12: isFavourite
+                "\"IS_SYNCED\" INTEGER," + // 13: isSynced
+                "\"IS_DOWNLOADED\" INTEGER," + // 14: isDownloaded
+                "\"DOWNLOAD_REFERENCE\" INTEGER," + // 15: downloadReference
+                "\"VIEW_COUNT\" INTEGER," + // 16: viewCount
+                "\"UNSYNCED_VIEW_COUNT\" INTEGER," + // 17: unsyncedViewCount
+                "\"FEATURED_IMAGE\" TEXT," + // 18: featuredImage
+                "\"UNSYNCED_SHARE_COUNT\" INTEGER);"); // 19: unsyncedShareCount
     }
 
     /** Drops the underlying database table. */
@@ -119,69 +121,74 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             stmt.bindString(6, source);
         }
  
+        String shareUrl = entity.getShareUrl();
+        if (shareUrl != null) {
+            stmt.bindString(7, shareUrl);
+        }
+ 
         String tags = entity.getTags();
         if (tags != null) {
-            stmt.bindString(7, tags);
+            stmt.bindString(8, tags);
         }
  
         Long createdAt = entity.getCreatedAt();
         if (createdAt != null) {
-            stmt.bindLong(8, createdAt);
+            stmt.bindLong(9, createdAt);
         }
  
         Long updatedAt = entity.getUpdatedAt();
         if (updatedAt != null) {
-            stmt.bindLong(9, updatedAt);
+            stmt.bindLong(10, updatedAt);
         }
  
         Integer favouriteCount = entity.getFavouriteCount();
         if (favouriteCount != null) {
-            stmt.bindLong(10, favouriteCount);
+            stmt.bindLong(11, favouriteCount);
         }
  
         Integer shareCount = entity.getShareCount();
         if (shareCount != null) {
-            stmt.bindLong(11, shareCount);
+            stmt.bindLong(12, shareCount);
         }
  
         Boolean isFavourite = entity.getIsFavourite();
         if (isFavourite != null) {
-            stmt.bindLong(12, isFavourite ? 1L: 0L);
+            stmt.bindLong(13, isFavourite ? 1L: 0L);
         }
  
         Boolean isSynced = entity.getIsSynced();
         if (isSynced != null) {
-            stmt.bindLong(13, isSynced ? 1L: 0L);
+            stmt.bindLong(14, isSynced ? 1L: 0L);
         }
  
         Boolean isDownloaded = entity.getIsDownloaded();
         if (isDownloaded != null) {
-            stmt.bindLong(14, isDownloaded ? 1L: 0L);
+            stmt.bindLong(15, isDownloaded ? 1L: 0L);
         }
  
         Long downloadReference = entity.getDownloadReference();
         if (downloadReference != null) {
-            stmt.bindLong(15, downloadReference);
+            stmt.bindLong(16, downloadReference);
         }
  
         Integer viewCount = entity.getViewCount();
         if (viewCount != null) {
-            stmt.bindLong(16, viewCount);
+            stmt.bindLong(17, viewCount);
         }
  
         Integer unsyncedViewCount = entity.getUnsyncedViewCount();
         if (unsyncedViewCount != null) {
-            stmt.bindLong(17, unsyncedViewCount);
+            stmt.bindLong(18, unsyncedViewCount);
         }
  
         String featuredImage = entity.getFeaturedImage();
         if (featuredImage != null) {
-            stmt.bindString(18, featuredImage);
+            stmt.bindString(19, featuredImage);
         }
  
         Integer unsyncedShareCount = entity.getUnsyncedShareCount();
         if (unsyncedShareCount != null) {
-            stmt.bindLong(19, unsyncedShareCount);
+            stmt.bindLong(20, unsyncedShareCount);
         }
     }
 
@@ -201,19 +208,20 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // type
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // data
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // source
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // tags
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // createdAt
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // updatedAt
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // favouriteCount
-            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // shareCount
-            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFavourite
-            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isSynced
-            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0, // isDownloaded
-            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14), // downloadReference
-            cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15), // viewCount
-            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // unsyncedViewCount
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // featuredImage
-            cursor.isNull(offset + 18) ? null : cursor.getInt(offset + 18) // unsyncedShareCount
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // shareUrl
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // tags
+            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // createdAt
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // updatedAt
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // favouriteCount
+            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // shareCount
+            cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0, // isFavourite
+            cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0, // isSynced
+            cursor.isNull(offset + 14) ? null : cursor.getShort(offset + 14) != 0, // isDownloaded
+            cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // downloadReference
+            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // viewCount
+            cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17), // unsyncedViewCount
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // featuredImage
+            cursor.isNull(offset + 19) ? null : cursor.getInt(offset + 19) // unsyncedShareCount
         );
         return entity;
     }
@@ -227,19 +235,20 @@ public class DbPostDao extends AbstractDao<DbPost, Long> {
         entity.setType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setData(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setSource(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setTags(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCreatedAt(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setUpdatedAt(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
-        entity.setFavouriteCount(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
-        entity.setShareCount(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
-        entity.setIsFavourite(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
-        entity.setIsSynced(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
-        entity.setIsDownloaded(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
-        entity.setDownloadReference(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
-        entity.setViewCount(cursor.isNull(offset + 15) ? null : cursor.getInt(offset + 15));
-        entity.setUnsyncedViewCount(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
-        entity.setFeaturedImage(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setUnsyncedShareCount(cursor.isNull(offset + 18) ? null : cursor.getInt(offset + 18));
+        entity.setShareUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTags(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCreatedAt(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
+        entity.setUpdatedAt(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setFavouriteCount(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setShareCount(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
+        entity.setIsFavourite(cursor.isNull(offset + 12) ? null : cursor.getShort(offset + 12) != 0);
+        entity.setIsSynced(cursor.isNull(offset + 13) ? null : cursor.getShort(offset + 13) != 0);
+        entity.setIsDownloaded(cursor.isNull(offset + 14) ? null : cursor.getShort(offset + 14) != 0);
+        entity.setDownloadReference(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
+        entity.setViewCount(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
+        entity.setUnsyncedViewCount(cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17));
+        entity.setFeaturedImage(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setUnsyncedShareCount(cursor.isNull(offset + 19) ? null : cursor.getInt(offset + 19));
      }
     
     /** @inheritdoc */

@@ -15,16 +15,15 @@ public class MyOpenHelper extends DaoMaster.DevOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        super.onUpgrade(db, oldVersion, newVersion);
         if (oldVersion < newVersion) {
             Logger.e("OpenHelper", "Update Schema version: " + Integer.toString(oldVersion) +
                     "->" + Integer.toString(newVersion));
             switch (oldVersion) {
                 case 1:
-
+                    super.onUpgrade(db, oldVersion, newVersion);
+                case 2:
+                    db.execSQL("ALTER TABLE DB_POST ADD SHARE_URL text");
             }
         }
     }
-
-
 }

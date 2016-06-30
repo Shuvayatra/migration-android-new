@@ -20,6 +20,7 @@ import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.presenter.PostShareCountPresenter;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
@@ -92,7 +93,10 @@ public abstract class FacebookActivity extends BaseActivity {
 //            fbIntent.putExtra(Intent.EXTRA_TEXT, (Html.fromHtml(((Post) pModel).getTitle()).toString()));
 //            fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getDescription());
 //                        fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getTitle());
-            fbIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.taf.shuvayatra");
+            fbIntent.putExtra(Intent.EXTRA_TEXT, ((Post) pModel).getShareUrl());
+
+            AnalyticsUtil.logShareEvent(getAnalytics(), pModel.getId(), ((Post) pModel).getTitle
+                    (), ((Post) pModel).getDescription());
 
             startActivity(fbIntent);
         } catch (Exception e) {
