@@ -30,7 +30,15 @@
         android:padding="@dimen/spacing_standard"
         app:htmlContent="@{article.description}"
         />
+
+    <include
+        layout="@layout/view_social_foot"
+        >
+    </include>
+
 </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
+
+
 
 </layout>

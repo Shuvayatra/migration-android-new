@@ -7,7 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.ImageButton;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
@@ -20,13 +21,18 @@ import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostViewCountPresenter;
 import com.taf.shuvayatra.ui.interfaces.PostDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.shuvayatra.util.SocialShare;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+
 public class ArticleDetailActivity extends FacebookActivity implements PostDetailView {
 
     public static final String KEY_POST = "key_post";
+
+
 
     @Inject
     PostFavouritePresenter mFavouritePresenter;
@@ -62,6 +68,21 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Bind(R.id.btnfb)
+    ImageButton btnFacebook;
+
+    @Bind(R.id.btntwit)
+    ImageButton btnTwitter;
+
+    @Bind(R.id.btnvib)
+    ImageButton btnViber;
+
+    @Bind(R.id.btnwapp)
+    ImageButton btnWhatsApp;
+
+    @Bind(R.id.btnmss)
+    ImageButton btnMessage;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -73,6 +94,12 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setVisibilityOfSocialIcons();
     }
 
     @Override
@@ -107,8 +134,40 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setVisibilityOfSocialIcons();
+        SocialBtnListener socialBtnListener=new SocialBtnListener(getApplicationContext(),mPost);
+        btnFacebook.setOnClickListener(socialBtnListener);
+        btnTwitter.setOnClickListener(socialBtnListener);
+        btnWhatsApp.setOnClickListener(socialBtnListener);
+        btnMessage.setOnClickListener(socialBtnListener);
+        btnViber.setOnClickListener(socialBtnListener);
+
         if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
+        }
+    }
+
+    private void setVisibilityOfSocialIcons() {
+        SocialShare socialShare=new SocialShare(getApplicationContext());
+        if(socialShare.isPackageInstalled("com.twitter.android")){
+            btnTwitter.setVisibility(View.VISIBLE);
+        }else{
+            btnTwitter.setVisibility(View.GONE);
+        }
+        if(socialShare.isPackageInstalled("com.facebook.katana")){
+            btnFacebook.setVisibility(View.VISIBLE);
+        }else{
+            btnFacebook.setVisibility(View.GONE);
+        }
+        if(socialShare.isPackageInstalled("com.viber.voip")){
+            btnViber.setVisibility(View.VISIBLE);
+        }else{
+            btnViber.setVisibility(View.GONE);
+        }
+        if(socialShare.isPackageInstalled("com.whatsapp")){
+            btnWhatsApp.setVisibility(View.VISIBLE);
+        }else{
+            btnWhatsApp.setVisibility(View.GONE);
         }
     }
 
@@ -197,5 +256,57 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(KEY_POST, mPost);
         super.onSaveInstanceState(outState);
+    }
+
+    private class SocialBtnListener implements View.OnClickListener{
+        private Context context;
+        private Post mPost;
+
+        public SocialBtnListener(Context context,Post mPost){
+                this.context=context;
+                this.mPost=mPost;
+        }
+
+        @Override
+        public void onClick(View v) {
+            SocialShare socialShare=new SocialShare(context);
+            switch(v.getId()){
+                case R.id.btnfb:
+                    try {
+                        startActivity(socialShare.getFacebookIntent(mPost.getShareUrl()));
+                    }catch(Exception e){
+                        startActivity(socialShare.getPlayStoreIntent("com.facebook.katana"));
+                    }
+                    break;
+                case R.id.btnvib:
+                    try {
+                        startActivity(socialShare.getViberIntent(mPost.getShareUrl()));
+                    }catch(Exception e){
+                        startActivity(socialShare.getPlayStoreIntent("com.viber.voip"));
+                    }
+                    break;
+                case R.id.btnwapp:
+                    try {
+                        startActivity(socialShare.getWhatsApp(mPost.getShareUrl()));
+                    }catch(Exception e){
+                        startActivity(socialShare.getPlayStoreIntent("com.whatsapp"));
+                    }
+                    break;
+                case R.id.btntwit:
+                    try {
+                        startActivity(socialShare.getTwitterIntent(mPost.getShareUrl()));
+                    }catch(Exception e){
+                        startActivity(socialShare.getPlayStoreIntent("com.twitter.android"));
+                    }
+                    break;
+                case R.id.btnmss:
+                    try {
+                        startActivity(socialShare.getSmsIntent(mPost.getShareUrl()));
+                    }catch(Exception e){
+
+                    }
+                    break;
+            }
+        }
     }
 }
