@@ -8,7 +8,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
@@ -83,6 +87,18 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     @Bind(R.id.btnmss)
     ImageButton btnMessage;
 
+    @Bind(R.id.row1)
+    LinearLayout laySocialRow;
+
+    @Bind(R.id.rowTop)
+    LinearLayout rowTop;
+
+    @Bind(R.id.btnShare)
+    ImageButton btnShare;
+
+    @Bind(R.id.content_webView)
+    WebView contentWebview;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -90,7 +106,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
-            share(mPost);
+            startActivity(Intent.createChooser(new SocialShare(getApplicationContext()).getGenericShare(mPost), "Share using"));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -128,47 +144,87 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
                         .getType());
             }
         }
+
+
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
+
+        myWebViewClient myWebViewClient = new myWebViewClient();
+        contentWebview.setWebViewClient(myWebViewClient);
+
+
+
+
         mOldFavouriteState = mPost.isFavourite() != null ? mPost.isFavourite() : false;
         initialize();
 
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setVisibilityOfSocialIcons();
+        int noOfSocialIcons=setVisibilityOfSocialIcons();
+        iconAdjustment(noOfSocialIcons);
         SocialBtnListener socialBtnListener=new SocialBtnListener(getApplicationContext(),mPost);
         btnFacebook.setOnClickListener(socialBtnListener);
         btnTwitter.setOnClickListener(socialBtnListener);
         btnWhatsApp.setOnClickListener(socialBtnListener);
         btnMessage.setOnClickListener(socialBtnListener);
         btnViber.setOnClickListener(socialBtnListener);
+        btnShare.setOnClickListener(socialBtnListener);
 
         if (savedInstanceState == null) {
             mPostViewCountPresenter.initialize(null);
         }
     }
 
-    private void setVisibilityOfSocialIcons() {
+    private void iconAdjustment(int noOfSocialIcons){
+        switch (noOfSocialIcons)
+        {
+            case 3:
+                laySocialRow.setWeightSum(3);
+                break;
+            case 4:
+                laySocialRow.setWeightSum(4);
+                break;
+            case 5:
+                laySocialRow.setWeightSum(5);
+                break;
+            case 6:
+                laySocialRow.setWeightSum(6);
+                break;
+            default:
+                laySocialRow.setWeightSum(2);
+                break;
+
+        }
+
+    }
+
+    private int setVisibilityOfSocialIcons() {
         SocialShare socialShare=new SocialShare(getApplicationContext());
+        int count=2 ;
         if(socialShare.isPackageInstalled("com.twitter.android")){
             btnTwitter.setVisibility(View.VISIBLE);
+            count++;
         }else{
             btnTwitter.setVisibility(View.GONE);
         }
         if(socialShare.isPackageInstalled("com.facebook.katana")){
             btnFacebook.setVisibility(View.VISIBLE);
+            count++;
         }else{
             btnFacebook.setVisibility(View.GONE);
         }
         if(socialShare.isPackageInstalled("com.viber.voip")){
             btnViber.setVisibility(View.VISIBLE);
+            count++;
         }else{
             btnViber.setVisibility(View.GONE);
         }
         if(socialShare.isPackageInstalled("com.whatsapp")){
             btnWhatsApp.setVisibility(View.VISIBLE);
+            count++;
         }else{
             btnWhatsApp.setVisibility(View.GONE);
         }
+        return count;
     }
 
     @Override
@@ -257,14 +313,25 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         outState.putSerializable(KEY_POST, mPost);
         super.onSaveInstanceState(outState);
     }
+    private class myWebViewClient extends WebViewClient {
 
-    private class SocialBtnListener implements View.OnClickListener{
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            rowTop.setVisibility(View.VISIBLE);
+            contentWebview.getSettings().setJavaScriptEnabled(true);
+            contentWebview.loadUrl("javascript:document.body.style.setProperty(\"color\", \"#373D3F\");");
+
+        }
+
+    }
+    private class SocialBtnListener  implements View.OnClickListener {
         private Context context;
         private Post mPost;
 
         public SocialBtnListener(Context context,Post mPost){
-                this.context=context;
-                this.mPost=mPost;
+            this.context=context;
+            this.mPost=mPost;
         }
 
         @Override
@@ -273,35 +340,42 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             switch(v.getId()){
                 case R.id.btnfb:
                     try {
-                        startActivity(socialShare.getFacebookIntent(mPost.getShareUrl()));
+                        startActivity(socialShare.getFacebookIntent(mPost));
                     }catch(Exception e){
                         startActivity(socialShare.getPlayStoreIntent("com.facebook.katana"));
                     }
                     break;
                 case R.id.btnvib:
                     try {
-                        startActivity(socialShare.getViberIntent(mPost.getShareUrl()));
+                        startActivity(socialShare.getViberIntent(mPost));
                     }catch(Exception e){
                         startActivity(socialShare.getPlayStoreIntent("com.viber.voip"));
                     }
                     break;
                 case R.id.btnwapp:
                     try {
-                        startActivity(socialShare.getWhatsApp(mPost.getShareUrl()));
+                        startActivity(socialShare.getWhatsApp(mPost));
                     }catch(Exception e){
                         startActivity(socialShare.getPlayStoreIntent("com.whatsapp"));
                     }
                     break;
                 case R.id.btntwit:
                     try {
-                        startActivity(socialShare.getTwitterIntent(mPost.getShareUrl()));
+                        startActivity(socialShare.getTwitterIntent(mPost));
                     }catch(Exception e){
                         startActivity(socialShare.getPlayStoreIntent("com.twitter.android"));
                     }
                     break;
                 case R.id.btnmss:
                     try {
-                        startActivity(socialShare.getSmsIntent(mPost.getShareUrl()));
+                        startActivity(socialShare.getSmsIntent(mPost));
+                    }catch(Exception e){
+
+                    }
+                    break;
+                case R.id.btnShare:
+                    try {
+                        startActivity(Intent.createChooser(socialShare.getGenericShare(mPost), "Share using"));
                     }catch(Exception e){
 
                     }
@@ -309,4 +383,8 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
             }
         }
     }
+
+
+
+
 }

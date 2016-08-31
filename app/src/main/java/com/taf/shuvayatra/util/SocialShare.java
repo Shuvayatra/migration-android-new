@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
+import com.taf.model.Post;
+
 import java.util.List;
 
 /**
@@ -16,73 +18,87 @@ import java.util.List;
 public class SocialShare {
 
     private PackageManager packageManager;
+    private static   String shareSuffix=" - Shared via Shubhayatra App";
 
     public SocialShare(Context context){
         packageManager = context.getPackageManager();
     }
 
-    public  Intent getFacebookIntent(String url) {
-        Intent intent = getShareIntent("katana");
-        if(url!=null){
-            Uri uri =Uri.parse(url);
-            intent.putExtra(Intent.EXTRA_TEXT,url);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
+    public  Intent getFacebookIntent(Post post) {
+        Intent intent = getShareIntent("katana",post);
+        if(post!=null){
+            Uri uri =Uri.parse(post.getFeaturedImage());
+            intent.putExtra(Intent.EXTRA_TITLE,post.getTitle()+" "+shareSuffix);
+            intent.putExtra(Intent.EXTRA_TEXT,post.getShareUrl()+" "+shareSuffix);
         }
-        intent.setType("text/plain");
+            intent.setType("text/plain");
         if (intent != null) {
             return intent;
         }
         return null;
     }
 
-    public  Intent getTwitterIntent(String url) {
-        Intent intent = getShareIntent("twitter");
-        if(url!=null){
-            Uri uri =Uri.parse(url);
-            intent.putExtra(Intent.EXTRA_TEXT,url);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
+    public  Intent getTwitterIntent(Post post) {
+        Intent intent = getShareIntent("twitter",post);
+        if(post!=null){
+            Uri uri =Uri.parse(post.getFeaturedImage());
+            intent.putExtra(Intent.EXTRA_TITLE,post.getTitle() + " " + shareSuffix);
+            intent.putExtra(Intent.EXTRA_TEXT,post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
         }
-        intent.setType("text/plain");
+            intent.setType("text/plain");
+        if (intent != null) {
+            return intent;
+        }
+        return null;
+
+    }
+
+    public  Intent getViberIntent(Post post) {
+        Intent intent = getShareIntent("viber",post);
+        if(post!=null){
+            Uri uri =Uri.parse(post.getFeaturedImage());
+            intent.putExtra(Intent.EXTRA_TITLE,post.getTitle() + " " + shareSuffix);
+            intent.putExtra(Intent.EXTRA_TEXT,post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
+            //intent.putExtra(Intent.EXTRA_STREAM, uri);
+        }
+            intent.setType("text/plain");
         if (intent != null) {
             return intent;
         }
         return null;
     }
 
-    public  Intent getViberIntent(String url) {
-        Intent intent = getShareIntent("viber");
-        if(url!=null){
-            Uri uri =Uri.parse(url);
-            intent.putExtra(Intent.EXTRA_TEXT,url);
-        }
-        intent.setType("text/plain");
-        if (intent != null) {
-            return intent;
-        }
-        return null;
-    }
-
-    public  Intent getSmsIntent(String url) {
+    public  Intent getSmsIntent(Post post) {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setData(Uri.parse("sms:"));
-        sendIntent.putExtra("sms_body", url);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
+        sendIntent.putExtra("sms_body", post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
+        sendIntent.putExtra(Intent.EXTRA_TITLE, post.getTitle());
         return sendIntent;
     }
 
-    public  Intent getWhatsApp(String url) {
-        Intent intent = getShareIntent("whatsapp");
-        if(url!=null){
-            Uri uri =Uri.parse(url);
-            intent.putExtra(Intent.EXTRA_TEXT,url);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
+    public  Intent getWhatsApp(Post post) {
+        Intent intent = getShareIntent("whatsapp",post);
+        if(post!=null) {
+            Uri uri = Uri.parse(post.getFeaturedImage());
+            intent.putExtra(Intent.EXTRA_TITLE, post.getTitle());
+            intent.putExtra(Intent.EXTRA_TEXT, post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
         }
-        intent.setType("text/plain");
+            intent.setType("text/plain");
         if (intent != null) {
             return intent;
         }
         return null;
+    }
+    public  Intent getGenericShare(Post post) {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, post.getTitle());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, post.getTitle()+" - "+post.getShareUrl()+" "+shareSuffix);
+        sendIntent.putExtra(Intent.EXTRA_TITLE, post.getTitle());
+            Uri uri =Uri.parse(post.getFeaturedImage());
+            sendIntent.setType("text/plain");
+        return sendIntent;
     }
 
     public Intent getPlayStoreIntent(String packageName){
@@ -101,7 +117,7 @@ public class SocialShare {
     }
 
     @SuppressLint("DefaultLocale")
-    private  Intent getShareIntent(String type) {
+    private  Intent getShareIntent(String type,Post post) {
         boolean found = false;
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
@@ -114,6 +130,8 @@ public class SocialShare {
                 if (info.activityInfo.packageName.toLowerCase().contains(type)
                         || info.activityInfo.name.toLowerCase().contains(type)) {
                     share.setPackage(info.activityInfo.packageName);
+                    share.putExtra(Intent.EXTRA_SUBJECT, post.getTitle()+" "+shareSuffix);
+                    share.putExtra(Intent.EXTRA_TEXT, post.getTitle()+ " - "+post.getShareUrl()+" "+shareSuffix);
                     found = true;
                     break;
                 }

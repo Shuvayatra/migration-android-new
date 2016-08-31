@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rowTop"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:visibility="gone"
+    >
+    <View
+    android:id="@+id/divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@color/divider"/>
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/row1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:weightSum="5"
+        android:layout_gravity="right"
+        android:divider="@drawable/dialog_divider_horizontal_light"
+        android:gravity="right"
+        android:weightSum="6"
         android:layout_centerHorizontal="true">
 
         <ImageButton
@@ -46,7 +63,6 @@
             android:padding="15dp"
             android:background="@null"/>
 
-
         <ImageButton
             android:id="@+id/btnmss"
             android:layout_width="wrap_content"
@@ -55,4 +71,14 @@
             android:src="@drawable/message_icon"
             android:padding="15dp"
             android:background="@null"/>
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_share"
+            android:padding="15dp"
+            android:background="@null"/>
+    </LinearLayout>
     </LinearLayout>
