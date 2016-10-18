@@ -14,6 +14,8 @@ android {
         versionCode 4
         versionName "1.0.0-beta4"
         vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -49,14 +51,15 @@ dependencies {
     compile project(':data');
 
     compile appDependencies.supportv4
-    compile appDependencies.appCompatv7
+    compile(appDependencies.appCompatv7) {
+        exclude module: 'support-v4'
+    }
     compile appDependencies.cardView
     compile appDependencies.designSupport
     compile appDependencies.cardView
     compile appDependencies.firebaseAnalytics
     compile appDependencies.firebaseMessaging
 
-    compile "com.wefika:flowlayout:0.4.1"
 
     compile appDependencies.butterKnife
     apt appDependencies.butterKnifeCompiler
@@ -67,9 +70,12 @@ dependencies {
     compile appDependencies.rxAndroid
     provided appDependencies.javaxAnnotation
     compile appDependencies.stetho
-    compile appDependencies.fresco
-    compile appDependencies.facebookSdk
+    compile(appDependencies.fresco) {
+        exclude module: 'support-v4'
+    }
     compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'com.wefika:flowlayout:0.4.1'
+    compile 'com.android.support:support-v4:24.2.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

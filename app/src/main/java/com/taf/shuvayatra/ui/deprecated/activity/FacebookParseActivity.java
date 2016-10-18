@@ -2,14 +2,12 @@ package com.taf.shuvayatra.ui.deprecated.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.facebook.FacebookSdk;
 import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -22,7 +20,6 @@ import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
-import bolts.AppLinks;
 import butterknife.BindView;
 
 public class FacebookParseActivity extends BaseActivity implements PostView {
@@ -42,18 +39,18 @@ public class FacebookParseActivity extends BaseActivity implements PostView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
         getSupportActionBar().setTitle(getString(R.string.app_name));
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
+        /*Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
         Logger.e("FacebookParseActivity", "target url: "+ targetUrl.toString());
 
         if (targetUrl != null) {
             Logger.e("FacebookParseActivity", "query parmeter: "+ targetUrl.getQuery());
             mId = Long.valueOf(targetUrl.getQueryParameter("id"));
             Logger.e("FacebookParseActivity", "App Link Target URL: " + targetUrl.getQueryParameter("id"));
-        }
+        }*/
         initialize();
     }
 

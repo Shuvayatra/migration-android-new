@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<group android:checkableBehavior="single">
+		<item
+			android:id="@+id/nav_home"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/home"/>
+		<item
+			android:id="@+id/nav_journey"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/journey"/>
+		<item
+			android:id="@+id/nav_destination"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/destination"/>
+		<item
+			android:id="@+id/nav_news"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/news"/>
+		<item
+			android:id="@+id/nav_radio"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/radio"/>
+		<item
+			android:id="@+id/nav_question"
+			android:icon="@drawable/ic_forum"
+			android:title="@string/question_answer"/>
+		<item
+			android:id="@+id/nav_account"
+			android:icon="@drawable/ic_account"
+			android:title="@string/account"/>
+	</group>
+
+	<item android:title="@string/help_feedback">
+		<menu>
+			<item
+				android:id="@+id/nav_contact"
+				android:icon="@drawable/ic_forum"
+				android:title="@string/contact"/>
+			<item
+				android:id="@+id/nav_about"
+				android:icon="@drawable/ic_forum"
+				android:title="@string/about"/>
+		</menu>
+	</item>
+
+</menu>
