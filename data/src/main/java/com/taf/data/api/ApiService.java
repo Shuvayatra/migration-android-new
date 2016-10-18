@@ -8,10 +8,10 @@ import com.taf.util.MyConstants;
 
 import java.util.List;
 
-import retrofit.http.Body;
-import retrofit.http.GET;
-import retrofit.http.POST;
-import retrofit.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface ApiService {
@@ -20,7 +20,7 @@ public interface ApiService {
 
     @GET(MyConstants.API.DELETED_CONTENT)
     Observable<DeletedContentDataEntity> getDeletedContent(@Query("last_updated") Long
-                                                               pLastUpdateStamp);
+                                                                   pLastUpdateStamp);
 
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);

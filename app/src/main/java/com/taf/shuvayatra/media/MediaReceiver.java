@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.taf.shuvayatra.ui.interfaces.AudioDetailView;
+import com.taf.shuvayatra.ui.deprecated.interfaces.AudioDetailView;
 import com.taf.util.MyConstants;
 
 public class MediaReceiver extends BroadcastReceiver {

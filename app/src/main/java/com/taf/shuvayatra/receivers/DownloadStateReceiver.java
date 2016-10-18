@@ -17,8 +17,8 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.di.module.ApplicationModule;
 import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.presenter.DownloadCompletePresenter;
-import com.taf.shuvayatra.ui.interfaces.MvpView;
+import com.taf.shuvayatra.presenter.deprecated.DownloadCompletePresenter;
+import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
 import com.taf.shuvayatra.util.AppPreferences;
 
 import javax.inject.Inject;

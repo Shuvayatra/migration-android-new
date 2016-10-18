@@ -19,7 +19,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.presenter.PostShareCountPresenter;
+import com.taf.shuvayatra.presenter.deprecated.PostShareCountPresenter;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 

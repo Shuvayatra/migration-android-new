@@ -9,11 +9,11 @@ import com.taf.model.Category;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.presenter.CategoryPresenter;
-import com.taf.shuvayatra.ui.activity.CountryDetailActivity;
-import com.taf.shuvayatra.ui.activity.InfoDetailActivity;
-import com.taf.shuvayatra.ui.fragment.FeedFragment;
-import com.taf.shuvayatra.ui.interfaces.CategoryView;
+import com.taf.shuvayatra.presenter.deprecated.CategoryPresenter;
+import com.taf.shuvayatra.ui.deprecated.activity.CountryDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.activity.InfoDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.deprecated.interfaces.CategoryView;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;

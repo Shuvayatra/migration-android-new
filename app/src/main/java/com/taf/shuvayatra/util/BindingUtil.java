@@ -21,9 +21,9 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
-import com.taf.shuvayatra.ui.activity.PlacesDetailActivity;
-import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
-import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.List;

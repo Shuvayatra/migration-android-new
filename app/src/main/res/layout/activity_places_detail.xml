@@ -5,7 +5,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.taf.shuvayatra.ui.activity.PlacesDetailActivity">
+    tools:context=".ui.deprecated.activity.PlacesDetailActivity">
 
     <data class="PlaceDetailDataBinding">
 

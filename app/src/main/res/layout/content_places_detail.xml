@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.taf.shuvayatra.ui.activity.PlacesDetailActivity"
+        tools:context=".ui.deprecated.activity.PlacesDetailActivity"
         tools:showIn="@layout/activity_places_detail">
 
         <LinearLayout

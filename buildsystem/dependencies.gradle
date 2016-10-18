@@ -6,33 +6,31 @@ allprojects {
 
 ext {
     //Android
-    androidBuildToolsVersion = "23.0.1"
+    androidBuildToolsVersion = "24.0.3"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 22
-    androidCompileSdkVersion = 23
+    androidTargetSdkVersion = 24
+    androidCompileSdkVersion = 24
 
     //Libraries
-    daggerVersion = '2.2'
-    butterKnifeVersion = '7.0.1'
-    supportLibVersion = '23.2.0'
+    daggerVersion = '2.6'
+    butterKnifeVersion = '8.4.0'
+    supportLibVersion = '23.2.1'
     rxJavaVersion = '1.0.14'
     rxAndroidVersion = '0.25.0'
     javaxAnnotationVersion = '1.0'
     androidAnnotationsVersion = '20.0.0'
-    retrofitVersion = '2.0.0-beta2'
-    retrofitGsonVersion = '2.0.0-beta2'
-    retrofitRxAdapterVersion = '2.0.0-beta2'
+    retrofitVersion = '2.1.0'
     pagerIndicatorVersion = '2.4.1'
-    stethoVersion = '1.2.0'
-    frescoVersion = '0.5.3'
+    stethoVersion = '1.4.0'
+    frescoVersion = '0.14.1'
     picassoVersion = '2.5.2'
     facebookSdkVersion = '4.7.0'
-    iconicsVersion = '2.5.2@aar'
+    iconicsVersion = '2.8.1@aar'
     iconicsGoogleVersion = '2.1.0.1.original@aar'
     showCaseVersion = '5.4.0'
     pdfViewerVersion = '1.0.4@aar'
-    playServicesVersion = '8.3.0'
-    firebaseVersion = '9.0.0'
+    playServicesVersion = '9.6.1'
+    firebaseVersion = '9.6.1'
 
     //Testing
     robolectricVersion = '3.0'
@@ -45,30 +43,31 @@ ext {
 
 
     appDependencies = [
-            supportv4        : "com.android.support:support-v4:${supportLibVersion}",
-            appCompatv7      : "com.android.support:appcompat-v7:${supportLibVersion}",
-            recyclerView     : "com.android.support:recyclerview-v7:${supportLibVersion}",
-            cardView         : "com.android.support:cardview-v7:${supportLibVersion}",
-            palette          : "com.android.support:palette-v7:${supportLibVersion}",
-            designSupport    : "com.android.support:design:${supportLibVersion}",
-            gcm              : "com.google.android.gms:play-services-gcm:${playServicesVersion}",
-            firebaseMessaging: "com.google.firebase:firebase-messaging:${firebaseVersion}",
-            firebaseAnalytics: "com.google.firebase:firebase-analytics:${firebaseVersion}",
+            supportv4          : "com.android.support:support-v4:${supportLibVersion}",
+            appCompatv7        : "com.android.support:appcompat-v7:${supportLibVersion}",
+            recyclerView       : "com.android.support:recyclerview-v7:${supportLibVersion}",
+            cardView           : "com.android.support:cardview-v7:${supportLibVersion}",
+            palette            : "com.android.support:palette-v7:${supportLibVersion}",
+            designSupport      : "com.android.support:design:${supportLibVersion}",
+            gcm                : "com.google.android.gms:play-services-gcm:${playServicesVersion}",
+            firebaseMessaging  : "com.google.firebase:firebase-messaging:${firebaseVersion}",
+            firebaseAnalytics  : "com.google.firebase:firebase-analytics:${firebaseVersion}",
 
-            daggerCompiler   : "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger           : "com.google.dagger:dagger:${daggerVersion}",
-            butterKnife      : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            rxJava           : "io.reactivex:rxjava:${rxJavaVersion}",
-            rxAndroid        : "io.reactivex:rxandroid:${rxAndroidVersion}",
-            javaxAnnotation  : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            pagerIndicator   : "com.mcxiaoke.viewpagerindicator:library:${pagerIndicatorVersion}",
-            stetho           : "com.facebook.stetho:stetho:${stethoVersion}",
-            fresco           : "com.facebook.fresco:fresco:${frescoVersion}",
-            picasso          : "com.squareup.picasso:picasso:${picassoVersion}",
-            facebookSdk      : "com.facebook.android:facebook-android-sdk:${facebookSdkVersion}",
-            iconics          : "com.mikepenz:iconics-core:${iconicsVersion}",
-            iconicsGoogle    : "com.mikepenz:google-material-typeface:${iconicsGoogleVersion}",
-            pdfViewer        : "com.joanzapata.pdfview:android-pdfview:${pdfViewerVersion}",
+            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger             : "com.google.dagger:dagger:${daggerVersion}",
+            butterKnife        : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnifeCompiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            rxJava             : "io.reactivex:rxjava:${rxJavaVersion}",
+            rxAndroid          : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            javaxAnnotation    : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            pagerIndicator     : "com.mcxiaoke.viewpagerindicator:library:${pagerIndicatorVersion}",
+            stetho             : "com.facebook.stetho:stetho:${stethoVersion}",
+            fresco             : "com.facebook.fresco:fresco:${frescoVersion}",
+            picasso            : "com.squareup.picasso:picasso:${picassoVersion}",
+            facebookSdk        : "com.facebook.android:facebook-android-sdk:${facebookSdkVersion}",
+            iconics            : "com.mikepenz:iconics-core:${iconicsVersion}",
+            iconicsGoogle      : "com.mikepenz:google-material-typeface:${iconicsGoogleVersion}",
+            pdfViewer          : "com.joanzapata.pdfview:android-pdfview:${pdfViewerVersion}",
     ]
 
     appTestDependencies = [
@@ -99,9 +98,9 @@ ext {
             rxAndroid            : "io.reactivex:rxandroid:${rxAndroidVersion}",
             javaxAnnotation      : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             androidAnnotations   : "com.android.support:support-annotations:${androidAnnotationsVersion}",
-            retrofit             : "com.squareup.retrofit:retrofit:${retrofitVersion}",
-            retrofitGsonConverter: "com.squareup.retrofit:converter-gson:${retrofitGsonVersion}",
-            retrofitRxAdapter    : "com.squareup.retrofit:adapter-rxjava:${retrofitRxAdapterVersion}"
+            retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitRxAdapter    : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
     ]
 
     dataTestDependencies = [

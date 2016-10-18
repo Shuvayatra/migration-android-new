@@ -1,6 +1,5 @@
 package com.taf.data.di;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.taf.data.api.ApiRequest;
 import com.taf.data.api.ApiService;
 import com.taf.data.api.HeaderInterceptor;
@@ -10,9 +9,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Dagger module that provides objects for API requests

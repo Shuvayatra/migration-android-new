@@ -32,19 +32,19 @@
     </screenName>
 
     <!-- Fragments -->
-    <screenName name="com.taf.shuvayatra.ui.fragment.DestinationFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.DestinationFragment">
         Destination List Screen
     </screenName>
-    <screenName name="com.taf.shuvayatra.ui.fragment.InfoFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment">
         Info Screen
     </screenName>
-    <screenName name="com.taf.shuvayatra.ui.fragment.JourneyFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment">
         Journey Category List Screen
     </screenName>
-    <screenName name="com.taf.shuvayatra.ui.fragment.UserFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.UserFragment">
         User Screen
     </screenName>
-    <screenName name="com.taf.shuvayatra.ui.fragment.FeedFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment">
         Feeds Section
     </screenName>
 </resources>

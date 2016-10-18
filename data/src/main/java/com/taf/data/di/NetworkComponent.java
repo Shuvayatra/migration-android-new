@@ -6,7 +6,7 @@ import com.taf.data.entity.mapper.DataMapper;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import retrofit.Retrofit;
+import retrofit2.Retrofit;
 
 @Singleton
 @Component(modules = NetworkModule.class)

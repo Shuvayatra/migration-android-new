@@ -20,8 +20,8 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.di.module.ApplicationModule;
 import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.presenter.NotificationReceivedPresenter;
-import com.taf.shuvayatra.ui.activity.SplashScreenActivity;
+import com.taf.shuvayatra.presenter.deprecated.NotificationReceivedPresenter;
+import com.taf.shuvayatra.ui.deprecated.activity.SplashScreenActivity;
 
 import java.util.Map;
 

@@ -8,17 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
+
+    Unbinder mUnbinder;
 
     public abstract int getLayout();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-    Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(getLayout(), container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         return view;
     }
@@ -31,6 +34,12 @@ public abstract class BaseFragment extends Fragment {
             //((BaseActivity) getActivity()).getPreferences().removeFilterChoices();
         }
         //setRetainInstance(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

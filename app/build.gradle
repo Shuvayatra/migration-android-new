@@ -59,6 +59,8 @@ dependencies {
     compile "com.wefika:flowlayout:0.4.1"
 
     compile appDependencies.butterKnife
+    apt appDependencies.butterKnifeCompiler
+
     apt appDependencies.daggerCompiler
     compile appDependencies.dagger
     compile appDependencies.rxJava
