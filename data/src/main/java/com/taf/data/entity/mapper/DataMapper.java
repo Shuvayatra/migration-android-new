@@ -7,11 +7,13 @@ import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbTag;
 import com.taf.data.di.PerActivity;
+import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SyncDataEntity;
+import com.taf.model.Block;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
 import com.taf.model.Notification;
@@ -306,5 +308,24 @@ public class DataMapper {
             }
         }
         return tags;
+    }
+
+    public List<Block> transformBlockEntity(List<BlockEntity> entities) {
+        List<Block> blocks = new ArrayList<>();
+        for (BlockEntity entity : entities) {
+            Block block = transformBlockEntity(entity);
+            if (block != null) blocks.add(block);
+        }
+        return blocks;
+    }
+
+    public Block transformBlockEntity(BlockEntity entity) {
+        if (entity != null) {
+            Block block = new Block();
+            block.setLayout(entity.getLayout());
+            block.setData(transformPost(entity.getData()));
+            return block;
+        }
+        return null;
     }
 }

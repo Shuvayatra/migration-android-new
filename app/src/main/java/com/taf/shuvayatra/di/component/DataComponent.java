@@ -19,6 +19,7 @@ import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
+import com.taf.shuvayatra.ui.fragment.HomeFragment;
 
 import dagger.Component;
 
@@ -29,19 +30,36 @@ import dagger.Component;
 )
 public interface DataComponent extends ActivityComponent {
     void inject(SplashScreenActivity pActivity);
+
     void inject(PlacesDetailActivity pActivity);
+
     void inject(AudioDetailActivity pActivity);
+
     void inject(ArticleDetailActivity pActivity);
+
     void inject(VideoDetailActivity pActivity);
+
     void inject(TagListActivity pActivity);
+
     void inject(FeedFragment pFragment);
+
     void inject(JourneyFragment pFragment);
+
     void inject(DestinationFragment pFragment);
+
     void inject(DownloadStateReceiver pReceiver);
+
     void inject(CategoryDetailActivity pActivity);
+
     void inject(MyFcmListenerService pService);
+
     void inject(NotificationsFragment pFragment);
+
     void inject(InfoFragment pFragment);
+
     void inject(FacebookParseActivity pActivity);
+
     void inject(SearchListActivity pActivity);
+
+    void inject(HomeFragment fragment);
 }
