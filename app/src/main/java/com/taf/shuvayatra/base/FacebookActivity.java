@@ -2,26 +2,11 @@ package com.taf.shuvayatra.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareOpenGraphAction;
-import com.facebook.share.model.ShareOpenGraphContent;
-import com.facebook.share.model.ShareOpenGraphObject;
-import com.facebook.share.widget.ShareDialog;
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
-import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.presenter.deprecated.PostShareCountPresenter;
 import com.taf.shuvayatra.util.AnalyticsUtil;
-import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
@@ -33,19 +18,15 @@ public abstract class FacebookActivity extends BaseActivity {
     @Inject
     protected PostShareCountPresenter mPostShareCountPresenter;
 
-    private CallbackManager mCallback;
-    private FacebookCallback<Sharer.Result> mFbCallBack;
-    private ShareDialog mShareDialog;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
 
-        initializeFbShare();
+//        initializeFbShare();
     }
 
-    private void initializeFbShare() {
+    /*private void initializeFbShare() {
         mShareDialog = new ShareDialog(this);
         mCallback = CallbackManager.Factory.create();
         mFbCallBack = new FacebookCallback<Sharer.Result>() {
@@ -84,7 +65,7 @@ public abstract class FacebookActivity extends BaseActivity {
         });
 
         mShareDialog.registerCallback(mCallback, mFbCallBack);
-    }
+    }*/
 
     public boolean share(final BaseModel pModel) {
         try {
@@ -107,10 +88,10 @@ public abstract class FacebookActivity extends BaseActivity {
 
     //// TODO: 5/16/2016 use after app verification
     public boolean share1(final BaseModel pModel) {
-        if (mShareDialog.canShow(ShareOpenGraphContent.class)) {
-            mShareDialog.show(getShareContent(pModel));
-            return true;
-        }
+//        if (mShareDialog.canShow(ShareOpenGraphContent.class)) {
+//            mShareDialog.show(getShareContent(pModel));
+//            return true;
+//        }
         return false;
 //        Bundle params = new Bundle();
 //        params.putString("og:title", ((Post) pModel).getTitle());
@@ -138,13 +119,13 @@ public abstract class FacebookActivity extends BaseActivity {
 //    }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCallback.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        mCallback.onActivityResult(requestCode, resultCode, data);
+//    }
 
-    public ShareOpenGraphContent getShareContent(BaseModel pModel) {
+    /*public ShareOpenGraphContent getShareContent(BaseModel pModel) {
         String title, description;
         switch (pModel.getDataType()) {
             default:
@@ -174,6 +155,6 @@ public abstract class FacebookActivity extends BaseActivity {
                 .setAction(action)
                 .build();
         return content;
-    }
+    }*/
 
 }

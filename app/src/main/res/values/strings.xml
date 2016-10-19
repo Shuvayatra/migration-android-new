@@ -1,18 +1,27 @@
 <resources>
 
-    <string name="app_name">Shuvayatra</string>
-    <string name="facebook_app_id">902864043138819</string>
+	<string name="app_name">Shuvayatra</string>
+	<string name="facebook_app_id">902864043138819</string>
 
-    <string name="filter_audio">audio</string>
-    <string name="filter_video">video</string>
-    <string name="filter_article">text</string>
-    <string name="filter_news">news</string>
+	<string name="filter_audio">audio</string>
+	<string name="filter_video">video</string>
+	<string name="filter_article">text</string>
+	<string name="filter_news">news</string>
 
-    <string name="title_activity_places_detail">PlacesDetailActivity</string>
-    <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
-    <string name="title_activity_country_detail">CountryDetailActivity</string>
-    <string name="title_activity_info_detail">InfoDetailActivity</string>
-    <string name="title_activity_tag_list">Search By Tags</string>
-    <string name="title_activity_facebook_parse">FacebookParseActivity</string>
-    <string name="title_activity_search_list">SearchListActivity</string>
+	<string name="title_activity_places_detail">PlacesDetailActivity</string>
+	<string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
+	<string name="title_activity_country_detail">CountryDetailActivity</string>
+	<string name="title_activity_info_detail">InfoDetailActivity</string>
+	<string name="title_activity_tag_list">Search By Tags</string>
+	<string name="title_activity_facebook_parse">FacebookParseActivity</string>
+	<string name="title_activity_search_list">SearchListActivity</string>
+	<string name="title_activity_home">HomeActivity</string>
+
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+
+	<string name="action_settings">Settings</string>
+
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
