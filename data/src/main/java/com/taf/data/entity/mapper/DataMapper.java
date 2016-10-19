@@ -10,12 +10,14 @@ import com.taf.data.di.PerActivity;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.model.Block;
 import com.taf.model.Category;
 import com.taf.model.LatestContent;
+import com.taf.model.Notice;
 import com.taf.model.Notification;
 import com.taf.model.Post;
 import com.taf.model.PostData;
@@ -312,9 +314,11 @@ public class DataMapper {
 
     public List<Block> transformBlockEntity(List<BlockEntity> entities) {
         List<Block> blocks = new ArrayList<>();
-        for (BlockEntity entity : entities) {
-            Block block = transformBlockEntity(entity);
-            if (block != null) blocks.add(block);
+        if (entities != null) {
+            for (BlockEntity entity : entities) {
+                Block block = transformBlockEntity(entity);
+                if (block != null) blocks.add(block);
+            }
         }
         return blocks;
     }
@@ -322,9 +326,23 @@ public class DataMapper {
     public Block transformBlockEntity(BlockEntity entity) {
         if (entity != null) {
             Block block = new Block();
+            block.setOrder(entity.getOrder());
+            block.setTitle(entity.getTitle());
+            block.setDescription(entity.getDescription());
             block.setLayout(entity.getLayout());
             block.setData(transformPost(entity.getData()));
+            block.setNotice(transformNotice(entity.getNotice()));
             return block;
+        }
+        return null;
+    }
+
+    public Notice transformNotice(NoticeEntity entity) {
+        if (entity != null) {
+            Notice notice = new Notice();
+            notice.setTitle(entity.getTitle());
+            notice.setDescription(entity.getDescription());
+            return notice;
         }
         return null;
     }

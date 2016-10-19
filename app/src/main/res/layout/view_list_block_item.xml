@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data class="BlockListItemDataBinding">
+
+		<variable
+			name="post"
+			type="com.taf.model.Post"/>
+	</data>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:theme="@style/AppTheme.Block.List.Item">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:lines="1"
+				android:text="@{post.title}"/>
+
+			<TextView
+				style="@style/ListSecondaryText"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:lines="2"
+				android:text="@{post.description}"/>
+		</LinearLayout>
+
+		<com.facebook.drawee.view.SimpleDraweeView
+			android:layout_width="60dp"
+			android:layout_height="60dp"
+			android:layout_marginLeft="@dimen/spacing_xxsmall"
+			app:actualImageScaleType="centerCrop"
+			app:placeholderImage="@drawable/default_gradient"
+			app:progressBarAutoRotateInterval="1000"
+			app:progressBarImage="@drawable/ic_refresh"
+			app:progressBarImageScaleType="centerInside"/>
+	</LinearLayout>
+</layout>

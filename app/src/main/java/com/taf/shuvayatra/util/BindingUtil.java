@@ -6,6 +6,9 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
+import com.taf.shuvayatra.ui.adapter.BlockItemAdapter;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
@@ -80,7 +84,7 @@ public class BindingUtil {
     @BindingAdapter("bind:elapsedTime")
     public static void setElapsedTime(TextView pView, Long elapsedTime) {
         Logger.e("BindingUtil", "createdAt: " + elapsedTime);
-        if (elapsedTime != null){
+        if (elapsedTime != null) {
             pView.setText(getTimeAgo(elapsedTime, pView.getContext()));
         }
     }
@@ -256,6 +260,24 @@ public class BindingUtil {
             return diff / DAY_MILLIS + " " + pContext.getString(R.string.days_ago);
         } else {
             return diff / MONTH_MILLIS + " " + pContext.getString(R.string.months_ago);
+        }
+    }
+
+    @BindingAdapter({"bind:data", "bind:orientation"})
+    public static void showBlockItems(RecyclerView recyclerView, List<com.taf.model.Post> posts,
+                                      int orientation) {
+        BlockItemAdapter adapter = new BlockItemAdapter(recyclerView.getContext(), posts,
+                orientation);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setClipToPadding(false);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
+                orientation, false));
+
+        if (recyclerView.getOnFlingListener() == null) {
+            //GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START, true);
+            LinearSnapHelper snapHelper = new LinearSnapHelper();
+            snapHelper.attachToRecyclerView(recyclerView);
         }
     }
 }

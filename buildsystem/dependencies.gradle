@@ -14,7 +14,7 @@ ext {
     //Libraries
     daggerVersion = '2.6'
     butterKnifeVersion = '8.4.0'
-    supportLibVersion = '23.2.1'
+    supportLibVersion = '24.2.1'
     rxJavaVersion = '1.0.14'
     rxAndroidVersion = '0.25.0'
     javaxAnnotationVersion = '1.0'
@@ -31,6 +31,7 @@ ext {
     pdfViewerVersion = '1.0.4@aar'
     playServicesVersion = '9.6.1'
     firebaseVersion = '9.6.1'
+    gravitySnapHelperVersion = '0.3'
 
     //Testing
     robolectricVersion = '3.0'
@@ -47,6 +48,8 @@ ext {
             appCompatv7        : "com.android.support:appcompat-v7:${supportLibVersion}",
             recyclerView       : "com.android.support:recyclerview-v7:${supportLibVersion}",
             cardView           : "com.android.support:cardview-v7:${supportLibVersion}",
+            gravitySnapHelper  : "com.github" +
+                    ".rubensousa:gravitysnaphelper:${gravitySnapHelperVersion}",
             palette            : "com.android.support:palette-v7:${supportLibVersion}",
             designSupport      : "com.android.support:design:${supportLibVersion}",
             gcm                : "com.google.android.gms:play-services-gcm:${playServicesVersion}",

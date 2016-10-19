@@ -6,7 +6,6 @@ import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Block;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
-import com.taf.shuvayatra.mapper.ModelDataMapper;
 import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
 import com.taf.shuvayatra.ui.views.HomeView;
 
@@ -22,13 +21,11 @@ import javax.inject.Named;
 public class HomePresenter implements Presenter {
 
     final UseCase mUseCase;
-    final ModelDataMapper mMapper;
     HomeView mView;
 
     @Inject
-    public HomePresenter(@Named("home") UseCase useCase, ModelDataMapper mapper) {
+    public HomePresenter(@Named("home") UseCase useCase) {
         mUseCase = useCase;
-        mMapper = mapper;
     }
 
     @Override
@@ -70,7 +67,7 @@ public class HomePresenter implements Presenter {
 
         @Override
         public void onNext(List<Block> blocks) {
-            mView.renderBlocks(mMapper.transformBlock(blocks));
+            mView.renderBlocks(blocks);
             onCompleted();
         }
     }

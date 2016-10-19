@@ -1,6 +1,6 @@
 package com.taf.shuvayatra.ui.views;
 
-import com.taf.shuvayatra.models.Block;
+import com.taf.model.Block;
 import com.taf.shuvayatra.ui.deprecated.interfaces.LoadDataView;
 
 import java.util.List;
