@@ -1,6 +1,7 @@
 package com.taf.data.api;
 
 import com.google.gson.Gson;
+import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -32,5 +33,9 @@ public class ApiRequest {
     public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList) {
         Logger.e("ApiRequest", "send request: "+ new Gson().toJson(pSyncDataList));
         return mApiService.syncLikes(pSyncDataList);
+    }
+
+    public Observable<List<BlockEntity>> getHomeBlocks(){
+        return mApiService.getHomeBlocks();
     }
 }

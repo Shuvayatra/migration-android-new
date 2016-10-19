@@ -6,6 +6,7 @@ import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.DeletedContentRepository;
+import com.taf.data.repository.HomeRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PostRepository;
@@ -14,6 +15,8 @@ import com.taf.data.repository.TagRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.GetHomeBlocksUseCase;
+import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
 import com.taf.interactor.deprecated.GetLatestContentUseCase;
@@ -29,8 +32,8 @@ import com.taf.interactor.deprecated.UpdateDownloadStatusUseCase;
 import com.taf.interactor.deprecated.UpdateFavouriteStateUseCase;
 import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
-import com.taf.interactor.UseCase;
 import com.taf.repository.IBaseRepository;
+import com.taf.repository.IHomeRepository;
 import com.taf.repository.INotificationRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
@@ -65,7 +68,7 @@ public class DataModule {
         mId = pId;
     }
 
-    public DataModule(String pTitle,List<String> pTags){
+    public DataModule(String pTitle, List<String> pTags) {
         mTitle = pTitle;
         mTags = pTags;
     }
@@ -185,8 +188,8 @@ public class DataModule {
     @Named("postList")
     UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase( mParentId, mPostType, mFavouriteOnly,
-                mUnSyncedOnly, mTitle,mTags, mExcludeTypes, pDataRepository, pThreadExecutor,
+        return new GetPostListUseCase(mParentId, mPostType, mFavouriteOnly,
+                mUnSyncedOnly, mTitle, mTags, mExcludeTypes, pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 
@@ -294,5 +297,21 @@ public class DataModule {
     UseCase provideSinglePostUseCase(IPostRepository pRepository, ThreadExecutor pThreadExecutor,
                                      PostExecutionThread pPostExecutionThread) {
         return new GetSinglePostUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    /* new version injections */
+    @Provides
+    @PerActivity
+    @Named("home")
+    UseCase provideHomeUseCase(IHomeRepository pRepository, ThreadExecutor pThreadExecutor,
+                               PostExecutionThread pPostExecutionThread) {
+        return new GetHomeBlocksUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    IHomeRepository provideHomeRepository(DataStoreFactory dataStoreFactory, DataMapper
+            dataMapper) {
+        return new HomeRepository(dataStoreFactory, dataMapper);
     }
 }

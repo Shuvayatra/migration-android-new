@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 
 import com.taf.data.api.ApiRequest;
 import com.taf.data.database.DatabaseHelper;
+import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -72,6 +73,17 @@ public class RestDataStore implements IDataStore {
                     .map(pResponseEntity -> true);
         } else {
             return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<List<BlockEntity>> getHomeBlocks(){
+        if(isThereInternetConnection()){
+            return mApiRequest.getHomeBlocks()
+                    .doOnNext(blockEntities -> {
+                        // TODO: 10/18/16 save to cache
+                    });
+        }else{
+            return  Observable.error(new NetworkConnectionException());
         }
     }
 

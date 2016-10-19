@@ -31,6 +31,7 @@ public class MyConstants {
         public static final String SYNC_DATA = "api/sync";
         public static final String DELETED_CONTENT = "api/trash";
 
+        public static final String HOME = "test/try.php";
     }
 
     public static final class Adapter {

@@ -1,5 +1,6 @@
 package com.taf.data.api;
 
+import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -24,4 +25,7 @@ public interface ApiService {
 
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);
+
+    @POST(MyConstants.API.HOME)
+    Observable<List<BlockEntity>> getHomeBlocks();
 }
