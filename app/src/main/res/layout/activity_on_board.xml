@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@android:color/white"
+    tools:context="com.taf.shuvayatra.ui.activity.OnBoardActivity">
+        <FrameLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/onboard_header_height"
+                android:background="@drawable/onboarding_header"
+                android:src="@drawable/ic_destination_faded"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/message_welcome"
+                android:textSize="@dimen/text_xxlarge"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+    <LinearLayout
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/onboard_content_margin_top">
+        <TextView
+            android:layout_marginLeft="@dimen/spacing_xxxxlarge"
+            android:layout_marginRight="@dimen/spacing_xxxxlarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/text_xxlarge"
+            android:textSize="@dimen/text_small"
+            android:textColor="@color/light_grey"
+            android:text="By answer question below will help us provide you better information"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_questions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_standard"
+        android:paddingLeft="@dimen/spacing_large"
+        android:paddingRight="@dimen/spacing_large"
+        android:paddingBottom="@dimen/spacing_standard"
+        app:layout_anchor="@id/header"
+        app:layout_anchorGravity="bottom|center"
+        android:background="@drawable/bg_top_round_white">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_xxxxxlarge"
+            android:layout_height="@dimen/spacing_xxxxxlarge"
+            android:src="@mipmap/ic_app_launcher"
+            android:layout_marginRight="@dimen/spacing_small"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/text_xxlarge"/>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

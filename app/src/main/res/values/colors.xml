@@ -29,4 +29,10 @@
     <color name="main_background">#ededed</color>
     <color name="text_main">#636363</color>
     <color name="spinnerBackground">#fafafa</color>
+    
+    <color name="header_blue_50">#B31695f7</color>
+    <color name="header_green_50">#B364c064</color>
+    <color name="light_grey">#bdbdbd</color>
+    <color name="grey_87">#de9a9a9a</color>
+    <color name="teal">#009688</color>
 </resources>

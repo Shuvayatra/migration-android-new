@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/question1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/spacing_xxxxxlarge"
+        android:text="Have You worked Before"
+        android:textColor="@color/grey_87"
+        android:textSize="@dimen/text_big"/>
+    <RadioGroup
+        android:id="@+id/radiogroup_previous_work_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/question1"
+        android:layout_marginTop="@dimen/spacing_xxxlarge"
+        android:orientation="horizontal">
+    <RadioButton
+        android:id="@+id/radiobutton_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        android:textColor="@color/grey_87"
+        android:textSize="@dimen/text_default"
+        android:layout_marginRight="@dimen/spacing_xxxxlarge"/>
+    <RadioButton
+        android:id="@+id/radiobutton_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="no"
+        android:textColor="@color/grey_87"/>
+    </RadioGroup>
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:background="@drawable/bg_round_corner_green"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/spacing_xxxlarge"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingLeft="@dimen/spacing_xxxxxlarge"
+        android:paddingRight="@dimen/spacing_xxxxxlarge"
+        android:textSize="@dimen/text_default"
+        android:textColor="@android:color/white"
+        />
+
+</RelativeLayout>

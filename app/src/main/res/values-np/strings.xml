@@ -79,4 +79,10 @@
     <string name="months_ago">  महिना अगाडि </string>
 
     <string name="read_more">Read more...</string>
+
+    <!--new-->
+    <string name="error_onboard">Please select an option</string>
+    <string name="message_welcome">welcome</string>
+
+
 </resources>

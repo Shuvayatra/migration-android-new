@@ -4,6 +4,8 @@ package com.taf.shuvayatra.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.taf.util.MyConstants;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,5 +65,32 @@ public class AppPreferences {
     public boolean hasDownloadReference(Long pReference) {
         Set<String> references = getDownloadReferences();
         return references.contains(String.valueOf(pReference));
+    }
+
+    public void setPreviousWorkStatus(boolean workStatus){
+        editor.putBoolean(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
+        editor.apply();
+    }
+
+    public boolean getPreviousWorkStatus(){
+        return pref.getBoolean(MyConstants.Preferences.PREVIOUS_WORK_STATUS,false);
+    }
+
+    public void setGender(String gender){
+        editor.putString(MyConstants.Preferences.GENDER, gender);
+        editor.apply();
+    }
+
+    public String getGender(){
+        return pref.getString(MyConstants.Preferences.GENDER,null);
+    }
+
+    public void setFirstLaunch(boolean isFirstLaunch){
+        editor.putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch);
+        editor.apply();
+    }
+
+    public boolean getFirstLaunch(){
+        return pref.getBoolean(MyConstants.Preferences.FIRST_LAUNCH,true);
     }
 }
