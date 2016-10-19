@@ -3,6 +3,7 @@
 	<dimen name="text_margin">16dp</dimen>
 
 	<dimen name="content_inset_start">72dp</dimen>
+	<dimen name="spacing_xxxxxlarge">50dp</dimen>
 	<dimen name="spacing_xxxxlarge">40dp</dimen>
 	<dimen name="spacing_xxxlarge">30dp</dimen>
 	<dimen name="spacing_xxlarge">28dp</dimen>
@@ -50,6 +51,7 @@
 	<dimen name="text_xxlarge">26sp</dimen>
 	<dimen name="text_xlarge">20sp</dimen>
 	<dimen name="text_large">18sp</dimen>
+	<dimen name="text_big">16sp</dimen>
 	<dimen name="text_default">14sp</dimen>
 	<dimen name="text_small">12sp</dimen>
 
@@ -65,4 +67,6 @@
 	<dimen name="nav_header_vertical_spacing">16dp</dimen>
 	<dimen name="nav_header_height">160dp</dimen>
 
+	<dimen name="onboard_header_height">206dp</dimen>
+	<dimen name="onboard_content_margin_top">300dp</dimen>
 </resources>

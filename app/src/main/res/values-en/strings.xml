@@ -88,4 +88,7 @@
 	<string name="contact">Contact</string>
 	<string name="about">About Shuvayatra</string>
 
+	<string name="error_onboard">Please select an option</string>
+	<string name="message_welcome">welcome</string>
+
 </resources>

@@ -56,4 +56,10 @@
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">@dimen/text_xlarge</item>
 	</style>
+	
+	<style name="AppTheme.AppThemeOnBoardActivity" parent="AppTheme.NoActionBar">
+		<item name="colorAccent">@color/teal</item>
+		<item name="colorControlNormal">@color/teal</item>
+
+	</style>
 </resources>

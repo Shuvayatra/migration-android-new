@@ -19,6 +19,11 @@ public class MyConstants {
         public static final String LAST_UPDATE_STAMP = "last_update_stamp_1";
         public static final String LAST_DELETE_STAMP = "last_delete_stamp_1";
         public static final String DOWNLOAD_REFERENCES = "download_references";
+
+        // --------- new preferences --------------
+        public static final String PREVIOUS_WORK_STATUS = "past-work-status";
+        public static final String GENDER = "gender";
+        public static final String FIRST_LAUNCH = "first-launch";
     }
 
     public static final class Language {
