@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -274,10 +273,10 @@ public class BindingUtil {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
                 orientation, false));
 
-        if (recyclerView.getOnFlingListener() == null) {
-            //GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.START, true);
-            LinearSnapHelper snapHelper = new LinearSnapHelper();
-            snapHelper.attachToRecyclerView(recyclerView);
-        }
+//        if (recyclerView.getOnFlingListener() == null) {
+//            GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.END, true);
+//            //LinearSnapHelper snapHelper = new LinearSnapHelper();
+//            snapHelper.attachToRecyclerView(recyclerView);
+//        }
     }
 }

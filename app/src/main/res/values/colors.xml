@@ -16,7 +16,7 @@
     <color name="colorEmptyState">#b2b2b2</color>
 
     <color name="article_art_bg">#f0f0f0</color>
-    <color name="divider">#d2f6fb</color>
+    <color name="divider">#979797</color>
 
     <color name="pager_indicator_inactive">#33ffffff</color>
     <color name="pager_indicator_active">#ffffff</color>

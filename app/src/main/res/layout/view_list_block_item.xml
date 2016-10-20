@@ -14,7 +14,9 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:theme="@style/AppTheme.Block.List.Item">
+		android:paddingLeft="@dimen/spacing_standard"
+		android:paddingRight="@dimen/spacing_standard"
+		android:paddingTop="@dimen/spacing_12">
 
 		<LinearLayout
 			android:layout_width="0dp"
