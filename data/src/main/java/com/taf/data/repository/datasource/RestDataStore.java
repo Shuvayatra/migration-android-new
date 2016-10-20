@@ -13,10 +13,12 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
+import com.taf.model.CountryWidgetData;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
@@ -76,14 +78,22 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<BlockEntity>> getHomeBlocks(){
-        if(isThereInternetConnection()){
+    public Observable<List<BlockEntity>> getHomeBlocks() {
+        if (isThereInternetConnection()) {
             return mApiRequest.getHomeBlocks()
                     .doOnNext(blockEntities -> {
                         // TODO: 10/18/16 save to cache
                     });
-        }else{
-            return  Observable.error(new NetworkConnectionException());
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<CountryWidgetData.Component> getComponent(int componentType) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getComponent(componentType);
+        } else {
+            return Observable.error(new NetworkConnectionException());
         }
     }
 
