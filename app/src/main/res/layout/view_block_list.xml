@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data class="BlockListDataBinding">
+
+		<import type="android.support.v7.widget.LinearLayoutManager"/>
+
+		<variable
+			name="block"
+			type="com.taf.model.Block"/>
+
+	</data>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingTop="@dimen/spacing_small"
+		android:theme="@style/AppTheme.Block.List">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/spacing_small"
+			android:paddingLeft="@dimen/spacing_large"
+			android:paddingRight="@dimen/spacing_18"
+			android:text="@{block.title}"
+			tools:text="News"/>
+
+		<android.support.v7.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/spacing_small"
+			app:data="@{block.data}"
+			app:orientation='@{LinearLayoutManager.VERTICAL}'>
+		</android.support.v7.widget.RecyclerView>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/divider"/>
+
+		<TextView
+			style="@style/AppTheme.Block.Link"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="View More"/>
+	</LinearLayout>
+</layout>

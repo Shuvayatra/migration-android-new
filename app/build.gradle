@@ -59,7 +59,7 @@ dependencies {
     compile appDependencies.cardView
     compile appDependencies.firebaseAnalytics
     compile appDependencies.firebaseMessaging
-
+    compile appDependencies.gravitySnapHelper
 
     compile appDependencies.butterKnife
     apt appDependencies.butterKnifeCompiler

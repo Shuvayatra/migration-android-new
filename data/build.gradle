@@ -25,6 +25,7 @@ android {
 
 //        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/\"")
         buildConfigField("String", "BASE_URL", "\"http://192.168.1.37/\"")
+//        buildConfigField("String", "BASE_URL", "\"http://192.168.0.110/\"")
         buildConfigField("String", "API_KEY", "\"670125552cb74cb09d7b53da59e0fc6907dd3478\"")
     }
 

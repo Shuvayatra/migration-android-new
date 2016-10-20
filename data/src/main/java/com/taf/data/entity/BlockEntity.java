@@ -9,10 +9,21 @@ import java.util.List;
  */
 
 public class BlockEntity {
+    private int order;
     private String layout;
     private String title;
+    private String description;
     @SerializedName("content")
     private List<PostEntity> data;
+    private NoticeEntity notice;
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public String getLayout() {
         return layout;
@@ -30,11 +41,27 @@ public class BlockEntity {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<PostEntity> getData() {
         return data;
     }
 
     public void setData(List<PostEntity> data) {
         this.data = data;
+    }
+
+    public NoticeEntity getNotice() {
+        return notice;
+    }
+
+    public void setNotice(NoticeEntity notice) {
+        this.notice = notice;
     }
 }
