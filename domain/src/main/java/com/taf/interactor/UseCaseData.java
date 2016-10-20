@@ -16,11 +16,13 @@ public class UseCaseData implements Serializable {
     public static final String EXCLUDE_LIST = "exclude_list";
     public static final String SUBMISSION_DATA = "submission_data";
 
-    public static final String IS_SEARCH = "is_search";
+    public static final String IS_SEARCH = "is_seearch";
     public static final String SEARCH_QUERY = "search_query";
     public static final String CATEGORY_ID = "category_id";
     public static final String POST_TYPE = "type";
     public static final String IS_FAVOURITE = "is_favourite";
+
+    public static final String COMPONENT_TYPE = "component_type";
 
     Map<String, Object> data = null;
 

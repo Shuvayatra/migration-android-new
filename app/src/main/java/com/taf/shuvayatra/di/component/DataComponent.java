@@ -19,6 +19,7 @@ import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
+import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 
 import dagger.Component;
@@ -62,4 +63,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(SearchListActivity pActivity);
 
     void inject(HomeFragment fragment);
+
+    void inject(CountryWidgetFragment fragment);
 }

@@ -6,7 +6,9 @@ import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
+import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
+import com.taf.model.CountryWidgetData;
 
 import java.util.List;
 
@@ -31,11 +33,22 @@ public class ApiRequest {
     }
 
     public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList) {
-        Logger.e("ApiRequest", "send request: "+ new Gson().toJson(pSyncDataList));
+        Logger.e("ApiRequest", "send request: " + new Gson().toJson(pSyncDataList));
         return mApiService.syncLikes(pSyncDataList);
     }
 
-    public Observable<List<BlockEntity>> getHomeBlocks(){
+    public Observable<List<BlockEntity>> getHomeBlocks() {
         return mApiService.getHomeBlocks();
+    }
+
+    public Observable<CountryWidgetData.Component> getComponent(int componentType) {
+        // todo add api request for each component
+        switch (componentType) {
+            case CountryWidgetData.COMPONENT_FOREX:
+                return Observable.error(new NetworkConnectionException());
+            case CountryWidgetData.COMPONENT_WEATHER:
+                return Observable.error(new NetworkConnectionException());
+        }
+        return null;
     }
 }

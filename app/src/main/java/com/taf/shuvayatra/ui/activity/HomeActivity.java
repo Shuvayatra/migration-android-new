@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 
 import butterknife.BindView;
@@ -40,7 +41,7 @@ public class HomeActivity extends BaseActivity
         mNavigationView.setCheckedItem(R.id.nav_home);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_home, new HomeFragment().getInstance(), HomeFragment.TAG)
+                .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
                 .commit();
     }
 
@@ -59,7 +60,9 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_home:
-
+                break;
+            case R.id.nav_journey:
+                break;
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

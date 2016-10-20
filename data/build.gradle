@@ -25,7 +25,6 @@ android {
 
 //        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/\"")
         buildConfigField("String", "BASE_URL", "\"http://192.168.1.37/\"")
-//        buildConfigField("String", "BASE_URL", "\"http://192.168.0.110/\"")
         buildConfigField("String", "API_KEY", "\"670125552cb74cb09d7b53da59e0fc6907dd3478\"")
     }
 
@@ -41,12 +40,6 @@ android {
         }
     }
 }
-
-//retrolambda {
-//    jdk System.getenv('JAVA8_HOME')
-//    oldJdk System.getenv('JAVA7_HOME')
-//    javaVersion JavaVersion.VERSION_1_7
-//}
 
 dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
