@@ -15,6 +15,10 @@
 		<item name="windowNoTitle">true</item>
 	</style>
 
+	<style name="AppTheme.NavigationView">
+		<item name="android:textColorSecondary">@color/nav_text_highlight</item>
+	</style>
+
 	<style name="SearchTheme" parent="ThemeOverlay.AppCompat.Dark">
 	</style>
 

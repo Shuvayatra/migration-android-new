@@ -32,15 +32,16 @@
 			android:title="@string/account"/>
 	</group>
 
-	<item android:title="@string/help_feedback">
+	<item
+		android:checkable="true"
+		android:checked="true"
+		android:title="@string/help_feedback">
 		<menu>
 			<item
 				android:id="@+id/nav_contact"
-				android:icon="@drawable/ic_forum"
 				android:title="@string/contact"/>
 			<item
 				android:id="@+id/nav_about"
-				android:icon="@drawable/ic_forum"
 				android:title="@string/about"/>
 		</menu>
 	</item>
