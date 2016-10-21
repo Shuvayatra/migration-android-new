@@ -79,31 +79,24 @@
 
 	<style name="AppTheme.Block.List">
 		<item name="android:textSize">@dimen/text_big</item>
-		<item name="android:lineSpacingExtra">8sp</item>
 	</style>
 
 	<style name="ListSecondaryText" parent="AppTheme.Block.List">
 		<item name="android:textSize">@dimen/text_default</item>
-		<item name="android:lineSpacingExtra">6sp</item>
 		<item name="android:textColor">#8b000000</item>
 	</style>
 
 	<style name="AppTheme.Block.Slider">
 		<item name="android:textSize">@dimen/text_default</item>
-		<item name="android:lineSpacingExtra">10sp</item>
 	</style>
 
 	<style name="SliderSecondaryText" parent="AppTheme.Block.Slider">
 		<item name="android:textSize">@dimen/text_default</item>
-		<item name="android:lineSpacingExtra">10sp</item>
 		<item name="android:textColor">#8a000000</item>
 	</style>
 
 	<style name="AppTheme.Block.List.Item">
-		<item name="android:paddingRight">@dimen/spacing_standard</item>
-		<item name="android:paddingLeft">@dimen/spacing_standard</item>
-		<item name="android:paddingTop">@dimen/spacing_12</item>
-		<item name="android:paddingBottom">@dimen/spacing_12</item>
+
 	</style>
 
 	<style name="AppTheme.Block.Slider.Item">

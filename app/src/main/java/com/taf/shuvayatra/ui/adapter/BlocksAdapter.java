@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
@@ -38,7 +37,6 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     }
 
     public void setBlocks(List<Block> blocks) {
-        Logger.d("BlocksAdapter_setBlocks", "test");
         mBlocks = blocks;
         notifyDataSetChanged();
     }

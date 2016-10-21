@@ -14,48 +14,60 @@
 
 	</data>
 
-	<LinearLayout
+	<android.support.v7.widget.CardView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:paddingTop="@dimen/spacing_small"
-		android:theme="@style/AppTheme.Block.Slider">
+		android:layout_marginBottom="@dimen/spacing_small"
+		android:background="@android:color/white"
+		app:cardElevation="4dp">
 
-		<TextView
+		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/spacing_small"
-			android:paddingLeft="@dimen/spacing_large"
-			android:paddingRight="@dimen/spacing_18"
-			android:text="@{block.title}"
-			tools:text="News"/>
+			android:orientation="vertical"
+			android:paddingTop="@dimen/spacing_small"
+			android:theme="@style/AppTheme.Block.Slider">
 
-		<TextView
-			style="@style/SliderSecondaryText"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/spacing_small"
-			android:paddingLeft="@dimen/spacing_large"
-			android:paddingRight="@dimen/spacing_18"
-			android:text="@{block.description}"
-			tools:text="How to find the right man power agency"/>
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/spacing_large"
+				android:paddingRight="@dimen/spacing_18"
+				android:text="@{block.title}"
+				android:textStyle="bold"
+				tools:text="News"/>
 
-		<android.support.v7.widget.RecyclerView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:data="@{block.data}"
-			app:orientation='@{LinearLayoutManager.HORIZONTAL}'>
-		</android.support.v7.widget.RecyclerView>
+			<TextView
+				style="@style/SliderSecondaryText"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/spacing_small"
+				android:ellipsize="end"
+				android:maxLines="2"
+				android:paddingLeft="@dimen/spacing_large"
+				android:paddingRight="@dimen/spacing_18"
+				android:text="@{block.description}"
+				android:textStyle="bold"
+				tools:text="How to find the right man power agency"/>
 
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="@color/divider"/>
+			<android.support.v7.widget.RecyclerView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/spacing_12"
+				app:data="@{block.data}"
+				app:orientation='@{LinearLayoutManager.HORIZONTAL}'>
+			</android.support.v7.widget.RecyclerView>
 
-		<TextView
-			style="@style/AppTheme.Block.Link"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="View More"/>
-	</LinearLayout>
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="@color/divider"/>
+
+			<TextView
+				style="@style/AppTheme.Block.Link"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="View More"/>
+		</LinearLayout>
+	</android.support.v7.widget.CardView>
 </layout>
