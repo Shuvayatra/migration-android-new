@@ -7,6 +7,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.gcm.MyFcmListenerService;
 import com.taf.shuvayatra.receivers.DownloadStateReceiver;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
+import com.taf.shuvayatra.ui.activity.PodcastsActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.FacebookParseActivity;
@@ -70,4 +71,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(CountryWidgetFragment fragment);
 
     void inject(JourneyFragment fragment);
+
+    void inject(PodcastsActivity activity);
 }

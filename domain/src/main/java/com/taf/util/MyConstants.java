@@ -41,9 +41,9 @@ public class MyConstants {
         // --------- new preferences --------------
         public static final String USERNAME = "username";
         public static final String BIRTHDAY = "birthday";
-        public static final String GENDER = "gender";
         public static final String ORIGINAL_LOCATION = "original-district";
         public static final String PREVIOUS_WORK_STATUS = "past-work-status";
+        public static final String GENDER = "gender";
         public static final String FIRST_LAUNCH = "first-launch";
         public static final String LOCATION = "location";
         public static final String DEFAULT_LOCATION = "Nepal";
@@ -67,6 +67,7 @@ public class MyConstants {
         public static final String OPEN_WEATHER = "data/2.5/weather";
         public static final String FOREX = "fetchForex";
         public static final String JOURNEY = "api/screen/home";
+        public static final String PODCASTS = "api/podcasts";
     }
 
     public static final class Adapter {
@@ -81,6 +82,7 @@ public class MyConstants {
         public static final int TYPE_NOTIFICATION = 9;
         public static final int TYPE_INFO = 10;
         public static final int TYPE_CATEGORY_HEADER = 11;
+        public static final int TYPE_PODCAST = 12;
     }
 
 

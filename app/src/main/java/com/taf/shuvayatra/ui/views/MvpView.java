@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.ui.deprecated.interfaces;
+package com.taf.shuvayatra.ui.views;
 
 import android.content.Context;
 

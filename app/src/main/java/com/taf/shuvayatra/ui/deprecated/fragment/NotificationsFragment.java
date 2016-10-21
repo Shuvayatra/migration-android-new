@@ -19,7 +19,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.NotificationListPresenter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
-import com.taf.shuvayatra.ui.deprecated.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.NotificationView;
 
 import java.util.List;

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.model.Country;
@@ -34,6 +35,9 @@ public interface ApiService {
     @GET(MyConstants.API.DESTINATION)
     Observable<JsonElement> getCountryList();
 
+    @GET(MyConstants.API.PODCASTS)
+    Observable<List<PodcastEntity>> getPodcasts(@Query("channel_id") Long channelId);
+
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);
 
@@ -42,4 +46,5 @@ public interface ApiService {
 
     @GET(MyConstants.API.FOREX)
     Observable<JsonElement> getForex();
+
 }

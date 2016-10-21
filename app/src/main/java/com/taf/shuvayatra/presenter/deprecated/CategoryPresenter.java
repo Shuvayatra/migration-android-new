@@ -9,7 +9,7 @@ import com.taf.model.Category;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.presenter.Presenter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.CategoryView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 import java.util.List;
 

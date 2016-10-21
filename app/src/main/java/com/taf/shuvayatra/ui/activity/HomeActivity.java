@@ -1,5 +1,6 @@
 package com.taf.shuvayatra.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
@@ -75,6 +76,10 @@ public class HomeActivity extends BaseActivity
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_home, JourneyFragment.getInstance(),JourneyFragment.TAG)
                         .commit();
+                break;
+            case R.id.nav_radio:
+                Logger.d("HomeActivity_onNavigationItemSelected", "radio");
+                startActivity(new Intent(this, PodcastsActivity.class));
                 break;
         }
         mDrawer.closeDrawer(GravityCompat.START);

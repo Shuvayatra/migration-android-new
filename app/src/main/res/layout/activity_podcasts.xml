@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data class="PodcastPlayerDataBinding">
+
+		<variable
+			name="podcast"
+			type="com.taf.model.Podcast"/>
+	</data>
+
+	<android.support.design.widget.CoordinatorLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true"
+		tools:context="com.taf.shuvayatra.ui.activity.PodcastsActivity">
+
+		<android.support.design.widget.AppBarLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="?attr/colorPrimary"
+				app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<include
+			layout="@layout/content_podcasts"
+			app:podcast="@{podcast}"/>
+
+	</android.support.design.widget.CoordinatorLayout>
+</layout>

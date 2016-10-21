@@ -12,8 +12,8 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.presenter.Presenter;
-import com.taf.shuvayatra.ui.deprecated.interfaces.AudioDetailView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.AudioDetailView;
+import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.data.utils.AppPreferences;
 
 import java.io.File;

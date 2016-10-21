@@ -12,6 +12,7 @@ import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
+import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
@@ -91,6 +92,17 @@ public class RestDataStore implements IDataStore {
                     .doOnNext(blockEntities -> {
                         // TODO: 10/18/16 save to cache
                         mCache.saveHomeBlocks(blockEntities);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getPodcasts(channelId)
+                    .doOnNext(blockEntities -> {
+                        // TODO: 10/18/16 save to cache
                     });
         } else {
             return Observable.error(new NetworkConnectionException());

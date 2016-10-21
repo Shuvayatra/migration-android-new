@@ -8,7 +8,7 @@ import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetData.CalendarComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 
 import javax.inject.Inject;

@@ -35,11 +35,11 @@ import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.TagListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.adapter.CustomArrayAdapter;
-import com.taf.shuvayatra.ui.deprecated.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.DeletedInfoView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.LatestContentView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.deprecated.interfaces.PostListView;
 import com.taf.util.MyConstants;
 

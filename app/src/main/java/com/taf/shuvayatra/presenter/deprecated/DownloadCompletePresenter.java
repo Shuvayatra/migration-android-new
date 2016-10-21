@@ -4,7 +4,7 @@ import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.shuvayatra.presenter.Presenter;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 import javax.inject.Inject;
 import javax.inject.Named;

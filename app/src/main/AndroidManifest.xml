@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.taf.shuvayatra">
+<manifest package="com.taf.shuvayatra"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
 	<uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -93,7 +93,6 @@
 				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 			</intent-filter>
 		</service>
-
 		<service android:name=".gcm.GcmInstanceIDListenerService">
 			<intent-filter>
 				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
@@ -105,11 +104,11 @@
 			android:label="@string/title_activity_info_detail"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
-		<!--<activity-->
-			<!--android:name="com.facebook.FacebookActivity"-->
-			<!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
-			<!--android:label="@string/app_name"-->
-			<!--android:theme="@android:style/Theme.Translucent.NoTitleBar"/>-->
+		<!-- <activity -->
+		<!-- android:name="com.facebook.FacebookActivity" -->
+		<!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
+		<!-- android:label="@string/app_name" -->
+		<!-- android:theme="@android:style/Theme.Translucent.NoTitleBar"/> -->
 		<activity
 			android:name=".ui.deprecated.activity.TagListActivity"
 			android:label="@string/title_activity_tag_list"
@@ -137,8 +136,6 @@
 			android:label="@string/title_activity_search_list"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
-
-
 		<activity
 			android:name=".ui.activity.HomeActivity"
 			android:label="@string/title_activity_home"
@@ -148,10 +145,10 @@
 			android:name=".ui.activity.OnBoardActivity"
 			android:label="@string/title_activity_on_board"
 			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
-
 		</activity>
+
 		<activity-alias
-			android:name="Launcher"
+			android:name=".Launcher"
 			android:label="@string/app_name"
 			android:targetActivity=".ui.activity.OnBoardActivity">
 			<intent-filter>
@@ -160,7 +157,16 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity-alias>
-	</application>
 
+		<activity
+			android:name=".ui.activity.PodcastsActivity"
+			android:label="@string/title_activity_podcasts"
+			android:parentActivityName=".ui.activity.HomeActivity"
+			android:theme="@style/AppTheme.NoActionBar">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+		</activity>
+	</application>
 
 </manifest>

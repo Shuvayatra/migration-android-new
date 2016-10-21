@@ -7,7 +7,7 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.Notification;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.presenter.Presenter;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.NotificationView;
 
 import java.util.List;

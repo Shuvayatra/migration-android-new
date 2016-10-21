@@ -18,7 +18,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostViewCountPresenter;
-import com.taf.shuvayatra.ui.deprecated.interfaces.PostDetailView;
+import com.taf.shuvayatra.ui.views.PostDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 

@@ -38,9 +38,10 @@ import com.taf.shuvayatra.presenter.deprecated.AudioDetailPresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostViewCountPresenter;
 import com.taf.shuvayatra.presenter.deprecated.SimilarPostPresenter;
-import com.taf.shuvayatra.ui.deprecated.interfaces.AudioDetailView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.deprecated.interfaces.PostListView;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.views.AudioDetailView;
+import com.taf.shuvayatra.ui.views.AudioPlayerView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
@@ -53,6 +54,7 @@ import butterknife.BindView;
 
 public class AudioDetailActivity extends FacebookActivity implements
         AudioDetailView,
+        AudioPlayerView,
         PostListView,
         View.OnClickListener,
         ListItemClickListener,
@@ -329,6 +331,18 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mAudio != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mAudio.isFavourite() != null && mAudio
+                    .isFavourite())
+                    ? R.drawable.icon_favourite
+                    : R.drawable.icon_not_favourite);
+        }
+        return true;
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if (mPlayIntent == null) {
@@ -336,6 +350,19 @@ public class AudioDetailActivity extends FacebookActivity implements
             bindService(mPlayIntent, mConnection, Context.BIND_AUTO_CREATE);
             startService(mPlayIntent);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Logger.d("AudioDetailActivity_onSaveInstanceState", "test: " + mCurrentProgress);
+        outState.putSerializable(KEY_AUDIO, mAudio);
+        outState.putInt(KEY_PROGRESS, mCurrentProgress);
+        super.onSaveInstanceState(outState);
     }
 
     private void finishWithResult() {
@@ -363,35 +390,10 @@ public class AudioDetailActivity extends FacebookActivity implements
         mSimilarPresenter.attachView(this);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mAudio != null) {
-            menu.findItem(R.id.action_favourite).setIcon((mAudio.isFavourite() != null && mAudio
-                    .isFavourite())
-                    ? R.drawable.icon_favourite
-                    : R.drawable.icon_not_favourite);
-        }
-        return true;
-    }
-
     private void shareViaBluetooth() {
         AnalyticsUtil.logBluetoothShareEvent(getAnalytics(), mAudio.getId(), mAudio.getTitle(),
                 mAudio.getType());
         mPresenter.shareViaBluetooth(mAudio);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        Logger.d("AudioDetailActivity_onSaveInstanceState", "test: " + mCurrentProgress);
-        outState.putSerializable(KEY_AUDIO, mAudio);
-        outState.putInt(KEY_PROGRESS, mCurrentProgress);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -452,11 +454,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void onMediaPlayPause() {
         mService.playPause();
-    }
-
-    @Override
-    public void onSeekTo(int progress) {
-        mService.seekTo(progress);
     }
 
     @Override

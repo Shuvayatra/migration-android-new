@@ -13,6 +13,7 @@
 	<style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
 		<item name="android:colorAccent">@color/colorPrimaryDark</item>
 	</style>
+
 	<style name="AppTheme.AppThemeOnBoardActivity" parent="AppTheme.NoActionBar">
 		<item name="colorAccent">@color/teal</item>
 		<item name="colorControlNormal">@color/teal</item>
