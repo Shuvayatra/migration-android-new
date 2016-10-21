@@ -9,7 +9,7 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.module.ApplicationModule;
-import com.taf.shuvayatra.util.AppPreferences;
+import com.taf.data.utils.AppPreferences;
 
 import javax.inject.Singleton;
 

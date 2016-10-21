@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.util;
+package com.taf.data.utils;
 
 
 import android.content.Context;
@@ -92,5 +92,14 @@ public class AppPreferences {
 
     public boolean getFirstLaunch(){
         return pref.getBoolean(MyConstants.Preferences.FIRST_LAUNCH,true);
+    }
+
+    public void setLocation(String location){
+        editor.putString(MyConstants.Preferences.LOCATION, location);
+        editor.apply();
+    }
+
+    public String getLocation(){
+        return pref.getString(MyConstants.Preferences.LOCATION,"Nepal");
     }
 }

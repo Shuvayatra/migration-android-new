@@ -14,7 +14,7 @@ import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
-import com.taf.shuvayatra.util.AppPreferences;
+import com.taf.data.utils.AppPreferences;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 

@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.taf.model.Block;
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -62,7 +63,6 @@ public class HomeFragment extends BaseFragment implements
 
         mPresenter.initialize(null);
     }
-
     @Override
     public void onRefresh() {
         mPresenter.initialize(null);

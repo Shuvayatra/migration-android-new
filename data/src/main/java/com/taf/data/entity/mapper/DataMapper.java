@@ -1,6 +1,10 @@
 package com.taf.data.entity.mapper;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
@@ -14,8 +18,10 @@ import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SyncDataEntity;
+import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Category;
+import com.taf.model.CountryWidgetData;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
 import com.taf.model.Notification;
@@ -24,6 +30,7 @@ import com.taf.model.PostData;
 import com.taf.model.SyncData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +38,8 @@ import javax.inject.Inject;
 
 @PerActivity
 public class DataMapper {
+
+    public static final String TAG = "DataMapper";
 
     @Inject
     public DataMapper() {
@@ -336,7 +345,6 @@ public class DataMapper {
         }
         return null;
     }
-
     public Notice transformNotice(NoticeEntity entity) {
         if (entity != null) {
             Notice notice = new Notice();
@@ -345,5 +353,18 @@ public class DataMapper {
             return notice;
         }
         return null;
+    }
+
+    public CountryWidgetData.WeatherComponent transformWeaherInfo(JsonElement json) {
+        JsonObject obj = json.getAsJsonObject();
+        String temperature = obj.getAsJsonObject("main").get("temp").getAsString();
+        String weather = obj.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString();
+       Logger.e(TAG,"temperature: "+ temperature);
+        Logger.e(TAG,"weather: "+ weather);
+        CountryWidgetData.WeatherComponent weatherComponent = new CountryWidgetData.WeatherComponent();
+        weatherComponent.setTemperature(temperature);
+        weatherComponent.setWeatherInfo(weather);
+        return weatherComponent;
+
     }
 }

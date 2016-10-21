@@ -58,4 +58,30 @@ public class CountryWidgetData extends BaseModel {
             return COMPONENT_FOREX;
         }
     }
+
+    public static class WeatherComponent implements Component {
+        String temperature;
+        String weatherInfo;
+
+        public String getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(String temperature) {
+            this.temperature = temperature;
+        }
+
+        public String getWeatherInfo() {
+            return weatherInfo;
+        }
+
+        public void setWeatherInfo(String weatherInfo) {
+            this.weatherInfo = weatherInfo;
+        }
+
+        @Override
+        public int componentType() {
+            return COMPONENT_WEATHER;
+        }
+    }
 }

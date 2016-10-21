@@ -8,7 +8,6 @@ import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetData.CalendarComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
-import com.taf.shuvayatra.mapper.ModelDataMapper;
 import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 
@@ -32,14 +31,11 @@ import javax.inject.Named;
 public class CountryWidgetPresenter implements Presenter {
 
     final UseCase mUseCase;
-    final ModelDataMapper mMapper;
     CountryWidgetView mView;
 
     @Inject
-    public CountryWidgetPresenter(@Named(DataModule.NAMED_COUNTRY_WIDGET) UseCase useCase,
-                                  ModelDataMapper mapper) {
+    public CountryWidgetPresenter(@Named(DataModule.NAMED_COUNTRY_WIDGET) UseCase useCase) {
         mUseCase = useCase;
-        mMapper = mapper;
     }
 
     @Override
