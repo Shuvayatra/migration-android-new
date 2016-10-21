@@ -1,5 +1,6 @@
 package com.taf.data.api;
 
+import com.google.gson.JsonElement;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -28,4 +29,8 @@ public interface ApiService {
 
     @POST(MyConstants.API.HOME)
     Observable<List<BlockEntity>> getHomeBlocks();
+
+    @GET(MyConstants.API.OPEN_WEATHER)
+    Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId );
+
 }

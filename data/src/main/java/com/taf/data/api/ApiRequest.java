@@ -1,6 +1,8 @@
 package com.taf.data.api;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -50,5 +52,9 @@ public class ApiRequest {
                 return Observable.error(new NetworkConnectionException());
         }
         return null;
+    }
+
+    public Observable<JsonElement> getWeather(String place, String unit) {
+        return mApiService.getWeatherInfo(place, unit, BuildConfig.OPEN_WEATHER_APPID);
     }
 }

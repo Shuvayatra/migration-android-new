@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.google.gson.JsonElement;
 import com.taf.data.api.ApiRequest;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.BlockEntity;
@@ -96,7 +97,13 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
         }
     }
-
+    public Observable<JsonElement> getWeatherInfo(String place, String unit) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getWeather(place, unit);
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
     private boolean isThereInternetConnection() {
         boolean isConnected;
 

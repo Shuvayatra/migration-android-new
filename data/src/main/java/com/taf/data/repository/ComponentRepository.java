@@ -1,7 +1,9 @@
 package com.taf.data.repository;
 
+import com.taf.data.BuildConfig;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
@@ -20,12 +22,15 @@ public class ComponentRepository implements IWidgetComponentRepository {
 
     private final DataStoreFactory mDataStoreFactory;
     private final DataMapper mDataMapper;
+    AppPreferences mAppPreferences;
+    String unit = "metric";
 
     private static final String TAG = "ComponentRepository";
 
-    public ComponentRepository(DataStoreFactory factory, DataMapper mapper) {
+    public ComponentRepository(DataStoreFactory factory, DataMapper mapper, AppPreferences appPreferences) {
         mDataStoreFactory = factory;
         mDataMapper = mapper;
+        mAppPreferences = appPreferences;
     }
 
     @Override
@@ -44,7 +49,9 @@ public class ComponentRepository implements IWidgetComponentRepository {
             case CountryWidgetData.COMPONENT_FOREX:
             case CountryWidgetData.COMPONENT_WEATHER:
                 Logger.e(TAG, ">>> component " + type);
-                return mDataStoreFactory.createRestDataStore().getComponent(type);
+                return mDataStoreFactory.createRestDataStore(BuildConfig.OPEN_WEATHER_URL)
+                        .getWeatherInfo(mAppPreferences.getLocation(),unit)
+                        .map(jsonElement -> mDataMapper.transformWeaherInfo(jsonElement));
         }
         return null;
     }

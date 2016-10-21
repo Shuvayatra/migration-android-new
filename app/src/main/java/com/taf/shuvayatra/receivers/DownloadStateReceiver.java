@@ -19,7 +19,7 @@ import com.taf.shuvayatra.di.module.ApplicationModule;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.DownloadCompletePresenter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
-import com.taf.shuvayatra.util.AppPreferences;
+import com.taf.data.utils.AppPreferences;
 
 import javax.inject.Inject;
 

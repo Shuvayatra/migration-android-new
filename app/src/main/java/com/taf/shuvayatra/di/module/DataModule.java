@@ -1,7 +1,6 @@
 package com.taf.shuvayatra.di.module;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
@@ -15,6 +14,7 @@ import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.TagRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetHomeBlocksUseCase;
@@ -333,7 +333,7 @@ public class DataModule {
 
     @Provides
     @PerActivity
-    IWidgetComponentRepository provideComponentRepository(DataStoreFactory factory, DataMapper mapper) {
-        return new ComponentRepository(factory, mapper);
+    IWidgetComponentRepository provideComponentRepository(DataStoreFactory factory, DataMapper mapper,AppPreferences preferences) {
+        return new ComponentRepository(factory, mapper, preferences);
     }
 }

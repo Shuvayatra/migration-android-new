@@ -37,4 +37,12 @@ public class DataStoreFactory {
                 .build();
         return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper);
     }
+
+    public RestDataStore createRestDataStore(String baseUrl) {
+        NetworkComponent networkComponent = DaggerNetworkComponent
+                .builder()
+                .networkModule(new NetworkModule(baseUrl))
+                .build();
+        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper);
+    }
 }

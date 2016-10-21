@@ -24,6 +24,7 @@ public class MyConstants {
         public static final String PREVIOUS_WORK_STATUS = "past-work-status";
         public static final String GENDER = "gender";
         public static final String FIRST_LAUNCH = "first-launch";
+        public static final String LOCATION = "location";
     }
 
     public static final class Language {
@@ -37,6 +38,7 @@ public class MyConstants {
         public static final String DELETED_CONTENT = "api/trash";
 
         public static final String HOME = "test/try.php";
+        public static final String OPEN_WEATHER = "data/2.5/weather";
     }
 
     public static final class Adapter {

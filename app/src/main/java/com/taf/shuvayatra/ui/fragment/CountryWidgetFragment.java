@@ -33,6 +33,8 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     TextView tvNepaliDate;
     @BindView(R.id.english_date)
     TextView tvEnglishDate;
+    @BindView(R.id.textview_temperature)
+    TextView tvTemperature;
 
     // Different use cases for different components
     UseCaseData caseCalendar = new UseCaseData();
@@ -42,6 +44,11 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     @Override
     public int getLayout() {
         return R.layout.list_item_country_widget;
+    }
+
+    public static CountryWidgetFragment getInstance(){
+        CountryWidgetFragment fragment = new CountryWidgetFragment();
+        return fragment;
     }
 
     @Override
@@ -87,6 +94,7 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
             case CountryWidgetData.COMPONENT_FOREX:
                 break;
             case CountryWidgetData.COMPONENT_WEATHER:
+                tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() +" "+ (char) 0x00B0 + "C");
                 break;
         }
     }

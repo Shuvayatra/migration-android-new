@@ -14,7 +14,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.presenter.Presenter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.AudioDetailView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
-import com.taf.shuvayatra.util.AppPreferences;
+import com.taf.data.utils.AppPreferences;
 
 import java.io.File;
 import java.io.IOException;

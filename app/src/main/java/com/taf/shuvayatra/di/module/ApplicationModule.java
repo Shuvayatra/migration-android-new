@@ -11,7 +11,7 @@ import com.taf.data.executor.JobExecutor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.MyApplication;
-import com.taf.shuvayatra.util.AppPreferences;
+import com.taf.data.utils.AppPreferences;
 import com.taf.shuvayatra.util.UIThread;
 
 import javax.inject.Singleton;
