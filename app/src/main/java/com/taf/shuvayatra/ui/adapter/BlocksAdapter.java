@@ -101,7 +101,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 break;
             case BlocksAdapter.VIEW_TYPE_NOTICE:
                 ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding
-                        .setNotice(mBlocks.get(position).getNotice());
+                        .setBlock(mBlocks.get(position));
                 break;
             case BlocksAdapter.VIEW_TYPE_LIST:
                 ((BlocksAdapter.ViewHolder<BlockListDataBinding>) holder).mBinding
@@ -140,6 +140,26 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         return mBlocks == null ? 0 : mBlocks.size();
     }
 
+    private String getFormattedDeeplink(Block block) {
+        // TODO: 10/27/16 remove check for radio widget after radio channel implementation
+        if (block.getLayout().equals("radio_widget")) {
+            return "shuvayatra://podcasts";
+        }
+        String deeplink = block.getDeeplink();
+        if (block.getFilterIds() != null && !block.getFilterIds().isEmpty()) {
+            deeplink += "?category_id=";
+            int index = 0;
+            for (Long filterId : block.getFilterIds()) {
+                index++;
+                deeplink += filterId;
+                if (index < block.getFilterIds().size()) {
+                    deeplink += ",";
+                }
+            }
+        }
+        return deeplink;
+    }
+
     public class ViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
         public final T mBinding;
 
@@ -152,17 +172,33 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 view = ((BlockListDataBinding) mBinding).deeplink;
             } else if (mBinding instanceof BlockSliderDataBinding) {
                 view = ((BlockSliderDataBinding) mBinding).deeplink;
-            }else if (mBinding instanceof BlockRadioWidgetDataBinding) {
+            } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
                 view = ((BlockRadioWidgetDataBinding) mBinding).play;
+            } else if (mBinding instanceof BlockNoticeDataBinding) {
+                view = ((BlockNoticeDataBinding) mBinding).dismiss;
             }
 
             if (view != null) {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mContext.startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(((BlockListDataBinding) mBinding).getBlock()
-                                        .getDeeplink())));
+                        Block block = null;
+                        if (mBinding instanceof BlockNoticeDataBinding) {
+                            block = ((BlockNoticeDataBinding) mBinding).getBlock();
+                            mBlocks.remove(block);
+                            BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
+                            return;
+                        } else if (mBinding instanceof BlockListDataBinding) {
+                            block = ((BlockListDataBinding) mBinding).getBlock();
+                        } else if (mBinding instanceof BlockSliderDataBinding) {
+                            block = ((BlockSliderDataBinding) mBinding).getBlock();
+                        } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
+                            block = ((BlockRadioWidgetDataBinding) mBinding).getBlock();
+                        }
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(getFormattedDeeplink(block)));
+                        intent.putExtra("title", block.getTitle());
+                        mContext.startActivity(intent);
                     }
                 });
             }

@@ -1,7 +1,5 @@
 package com.taf.data.entity.mapper;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,6 +17,7 @@ import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
@@ -32,6 +31,7 @@ import com.taf.model.Notification;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.model.PostData;
+import com.taf.model.PostResponse;
 import com.taf.model.SyncData;
 
 import java.util.ArrayList;
@@ -41,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import rx.Observable;
 
 @PerActivity
 public class DataMapper {
@@ -353,13 +351,15 @@ public class DataMapper {
     public Block transformBlockEntity(BlockEntity entity) {
         if (entity != null) {
             Block block = new Block();
-            block.setOrder(entity.getPosition());
+            block.setPosition(entity.getPosition());
             block.setTitle(entity.getTitle());
             block.setDescription(entity.getDescription());
+            block.setDeeplink(entity.getDeeplink());
             block.setLayout(entity.getLayout());
             block.setShowViewMore(entity.isShowViewMore());
             block.setViewMoreTitle(entity.getViewMoreTitle());
             block.setDeeplink(entity.getDeeplink());
+            block.setFilterIds(entity.getFilterIds());
             block.setData(transformPost(entity.getData()));
             block.setNotice(transformNotice(entity.getNotice()));
             return block;
@@ -372,22 +372,10 @@ public class DataMapper {
             Notice notice = new Notice();
             notice.setTitle(entity.getTitle());
             notice.setDescription(entity.getDescription());
+            notice.setImage(entity.getImage());
             return notice;
         }
         return null;
-    }
-
-    public CountryWidgetData.WeatherComponent transformWeatherInfo(JsonElement json) {
-        JsonObject obj = json.getAsJsonObject();
-        String temperature = obj.getAsJsonObject("main").get("temp").getAsString();
-        String weather = obj.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString();
-        Logger.e(TAG, "temperature: " + temperature);
-        Logger.e(TAG, "weather: " + weather);
-        CountryWidgetData.WeatherComponent weatherComponent = new CountryWidgetData.WeatherComponent();
-        weatherComponent.setTemperature(temperature);
-        weatherComponent.setWeatherInfo(weather);
-        return weatherComponent;
-
     }
 
     public List<Podcast> transformPodcastEntity(List<PodcastEntity> entities) {
@@ -408,9 +396,23 @@ public class DataMapper {
             podcast.setTitle(entity.getTitle());
             podcast.setDescription(entity.getDescription());
             podcast.setSource(entity.getSource());
+            podcast.setImage(entity.getImage());
             return podcast;
         }
         return null;
+    }
+
+    public CountryWidgetData.WeatherComponent transformWeatherInfo(JsonElement json) {
+        JsonObject obj = json.getAsJsonObject();
+        String temperature = obj.getAsJsonObject("main").get("temp").getAsString();
+        String weather = obj.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString();
+        Logger.e(TAG, "temperature: " + temperature);
+        Logger.e(TAG, "weather: " + weather);
+        CountryWidgetData.WeatherComponent weatherComponent = new CountryWidgetData.WeatherComponent();
+        weatherComponent.setTemperature(temperature);
+        weatherComponent.setWeatherInfo(weather);
+        return weatherComponent;
+
     }
 
     public CountryWidgetData.ForexComponent transformForexInfo(JsonElement json) {
@@ -451,6 +453,18 @@ public class DataMapper {
             component.setCurrencyMap(currencyMap);
             component.setToday(today);
             return component;
+        }
+        return null;
+    }
+
+    public PostResponse transformPostResponse(PostResponseEntity responseEntity) {
+        if (responseEntity != null) {
+            PostResponse response = new PostResponse(responseEntity.getCurrentPage(),
+                    responseEntity.getLastPage());
+            response.setLimit(responseEntity.getLimit());
+            response.setTotal(responseEntity.getTotal());
+            response.setData(transformPost(responseEntity.getData()));
+            return response;
         }
         return null;
     }

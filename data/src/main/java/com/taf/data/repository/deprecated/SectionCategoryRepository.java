@@ -1,10 +1,10 @@
-package com.taf.data.repository;
+package com.taf.data.repository.deprecated;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DBDataStore;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.model.Category;
-import com.taf.repository.ISectionRepository;
+import com.taf.repository.deprecated.ISectionRepository;
 
 import java.util.List;
 

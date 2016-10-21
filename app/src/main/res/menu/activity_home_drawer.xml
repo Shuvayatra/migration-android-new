@@ -17,17 +17,21 @@
 		<item
 			android:id="@+id/nav_news"
 			android:icon="@drawable/ic_forum"
+			android:enabled="false"
 			android:title="@string/news"/>
 		<item
 			android:id="@+id/nav_radio"
+			android:enabled="false"
 			android:icon="@drawable/ic_forum"
 			android:title="@string/radio"/>
 		<item
 			android:id="@+id/nav_question"
+			android:enabled="false"
 			android:icon="@drawable/ic_forum"
 			android:title="@string/question_answer"/>
 		<item
 			android:id="@+id/nav_account"
+			android:enabled="false"
 			android:icon="@drawable/ic_account"
 			android:title="@string/account"/>
 	</group>
@@ -39,9 +43,11 @@
 		<menu>
 			<item
 				android:id="@+id/nav_contact"
+				android:enabled="false"
 				android:title="@string/contact"/>
 			<item
 				android:id="@+id/nav_about"
+				android:enabled="false"
 				android:title="@string/about"/>
 		</menu>
 	</item>

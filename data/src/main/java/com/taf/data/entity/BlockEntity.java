@@ -19,6 +19,8 @@ public class BlockEntity {
     private String viewMoreTitle;
     @SerializedName("view_more_deeplink")
     private String deeplink;
+    @SerializedName("view_more_filter")
+    private List<Long> filterIds;
 
     @SerializedName("content")
     private List<PostEntity> data;
@@ -94,5 +96,13 @@ public class BlockEntity {
 
     public void setDeeplink(String deeplink) {
         this.deeplink = deeplink;
+    }
+
+    public List<Long> getFilterIds() {
+        return filterIds;
+    }
+
+    public void setFilterIds(List<Long> filterIds) {
+        this.filterIds = filterIds;
     }
 }

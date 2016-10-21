@@ -7,6 +7,7 @@ package com.taf.model;
 public class Notice extends BaseModel {
     String title;
     String description;
+    String image;
 
     public String getTitle() {
         return title;
@@ -22,5 +23,13 @@ public class Notice extends BaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

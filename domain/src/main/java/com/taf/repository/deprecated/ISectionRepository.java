@@ -1,6 +1,7 @@
-package com.taf.repository;
+package com.taf.repository.deprecated;
 
 import com.taf.model.Category;
+import com.taf.repository.IBaseRepository;
 
 import java.util.List;
 

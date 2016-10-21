@@ -11,8 +11,6 @@ import com.taf.data.di.NetworkModule;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 
-import javax.inject.Inject;
-
 @PerActivity
 public class DataStoreFactory {
     private final Context mContext;

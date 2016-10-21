@@ -8,9 +8,8 @@
 		<import type="android.support.v7.widget.LinearLayoutManager"/>
 
 		<variable
-			name="notice"
-			type="com.taf.model.Notice"/>
-		type="com.taf.model.Notice"/>
+			name="block"
+			type="com.taf.model.Block"/>
 	</data>
 
 	<android.support.v7.widget.CardView
@@ -31,8 +30,10 @@
 			<com.facebook.drawee.view.SimpleDraweeView
 				android:layout_width="38dp"
 				android:layout_height="38dp"
+				android:layout_gravity="center_vertical"
 				android:layout_marginRight="@dimen/spacing_small"
 				app:actualImageScaleType="centerCrop"
+				app:imageUrl="@{block.notice.image}"
 				app:placeholderImage="@drawable/default_gradient"
 				app:progressBarAutoRotateInterval="1000"
 				app:progressBarImage="@drawable/ic_refresh"
@@ -49,20 +50,22 @@
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="@{notice.title}"/>
+					android:text="@{block.notice.title}"/>
 
 				<TextView
 					style="@style/ListSecondaryText"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="@{notice.title}"/>
+					android:text="@{block.notice.description}"/>
 			</LinearLayout>
 
 			<ImageView
+				android:id="@+id/dismiss"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
 				android:layout_marginLeft="@dimen/spacing_xxsmall"
+				android:padding="@dimen/spacing_xxsmall"
 				app:srcCompat="@drawable/ic_clear"/>
 		</LinearLayout>
 	</android.support.v7.widget.CardView>

@@ -33,8 +33,11 @@ public class NetworkModule {
 
     @Provides
     OkHttpClient provideHttpClient() {
+//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okClient = new OkHttpClient.Builder()
-//                .addInterceptor(new HeaderInterceptor())
+//                .addInterceptor(interceptor)
+                .addInterceptor(new HeaderInterceptor())
                 .build();
         return okClient;
     }

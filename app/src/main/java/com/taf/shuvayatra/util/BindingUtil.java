@@ -285,4 +285,17 @@ public class BindingUtil {
     public static void setHtmlContent(TextView view, String content) {
         view.setText(Html.fromHtml(content));
     }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void setImage(SimpleDraweeView pView, Post post) {
+        String url;
+        if (post != null) {;
+            if(post.getType().equals("audio") || post.getType().equals("video")) {
+                url = post.getData().getThumbnail();
+            }else{
+                url = post.getFeaturedImage();
+            }
+            pView.setImageURI(Uri.parse(url));
+        }
+    }
 }

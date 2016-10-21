@@ -4,7 +4,7 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
-import com.taf.repository.ISectionRepository;
+import com.taf.repository.deprecated.ISectionRepository;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;

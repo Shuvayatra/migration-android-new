@@ -5,7 +5,7 @@ import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Notification;
-import com.taf.repository.INotificationRepository;
+import com.taf.repository.deprecated.INotificationRepository;
 
 import javax.inject.Inject;
 
