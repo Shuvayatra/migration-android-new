@@ -42,6 +42,7 @@ public class MyConstants {
 
         public static final String HOME = "test/try.php";
         public static final String OPEN_WEATHER = "data/2.5/weather";
+        public static final String JOURNEY = "test/try.php";
     }
 
     public static final class Adapter {

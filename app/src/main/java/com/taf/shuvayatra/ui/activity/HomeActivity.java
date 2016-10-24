@@ -2,6 +2,7 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,6 +12,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
+import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
 import butterknife.BindView;
 
@@ -57,12 +59,24 @@ public class HomeActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Fragment fragment = null;
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_home:
+                fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+                if(fragment==null){
+                    fragment = HomeFragment.getInstance();
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, fragment, HomeFragment.TAG)
+                        .commit();
                 break;
             case R.id.nav_journey:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, JourneyFragment.getInstance(),JourneyFragment.TAG)
+                        .commit();
                 break;
+
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

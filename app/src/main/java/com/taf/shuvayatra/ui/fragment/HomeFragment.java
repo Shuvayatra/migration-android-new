@@ -56,11 +56,10 @@ public class HomeFragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
         initialize();
 
-        mAdapter = new BlocksAdapter(getContext());
+        mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mSwipeContainer.setOnRefreshListener(this);
-
         mPresenter.initialize(null);
     }
     @Override

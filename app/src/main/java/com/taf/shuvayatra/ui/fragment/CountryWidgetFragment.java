@@ -26,6 +26,8 @@ import butterknife.BindView;
  */
 public class CountryWidgetFragment extends BaseFragment implements CountryWidgetView {
 
+    public static final String TAG = "CountryWidgetFragment";
+
     @Inject
     CountryWidgetPresenter widgetPresenter;
 
@@ -46,7 +48,7 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
         return R.layout.list_item_country_widget;
     }
 
-    public static CountryWidgetFragment getInstance(){
+    public static CountryWidgetFragment newInstance(){
         CountryWidgetFragment fragment = new CountryWidgetFragment();
         return fragment;
     }

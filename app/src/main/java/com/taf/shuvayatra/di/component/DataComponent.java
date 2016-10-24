@@ -17,10 +17,10 @@ import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
-import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
+import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
 import dagger.Component;
 
@@ -44,7 +44,7 @@ public interface DataComponent extends ActivityComponent {
 
     void inject(FeedFragment pFragment);
 
-    void inject(JourneyFragment pFragment);
+    void inject(com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment pFragment);
 
     void inject(DestinationFragment pFragment);
 
@@ -65,4 +65,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(HomeFragment fragment);
 
     void inject(CountryWidgetFragment fragment);
+
+    void inject(JourneyFragment fragment);
 }
