@@ -64,7 +64,7 @@ public class HomeActivity extends BaseActivity
         switch (id) {
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-                if(fragment==null){
+                if(fragment == null) {
                     fragment = HomeFragment.getInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
@@ -76,7 +76,6 @@ public class HomeActivity extends BaseActivity
                         .replace(R.id.content_home, JourneyFragment.getInstance(),JourneyFragment.TAG)
                         .commit();
                 break;
-
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

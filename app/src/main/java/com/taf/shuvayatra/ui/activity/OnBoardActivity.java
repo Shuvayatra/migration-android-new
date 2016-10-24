@@ -31,17 +31,23 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        mQuestionPager.setAdapter(new OnBoardQuestionAdapter(getSupportFragmentManager(),this));
+
+        // add api request for country listing
+        // api.shuvayatra.org/api/destinations
+
+        mQuestionPager.setAdapter(new OnBoardQuestionAdapter(getSupportFragmentManager(), this));
         mQuestionPager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if(!getPreferences().getFirstLaunch()){
-            Intent intent = new Intent(this,HomeActivity.class);
+        if (!getPreferences().getFirstLaunch()) {
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -49,12 +55,12 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void onNextButtonPressed(int pos) {
-        Logger.e(TAG,"pos: "+ pos);
-        if(pos<OnBoardQuestionAdapter.TOTAL_QUESTION_NUM -1) {
-            mQuestionPager.setCurrentItem(pos+1);
-        }else{
+        Logger.e(TAG, "pos: " + pos);
+        if (pos < OnBoardQuestionAdapter.TOTAL_QUESTION_NUM - 1) {
+            mQuestionPager.setCurrentItem(pos + 1);
+        } else {
             getPreferences().setFirstLaunch(false);
-            Intent intent = new Intent(this,HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -62,8 +68,7 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void onBackButtonPressed(int pos) {
-        Logger.e(TAG,"pos: "+ pos);
+        Logger.e(TAG, "pos: " + pos);
         mQuestionPager.setCurrentItem(--pos);
-
     }
 }

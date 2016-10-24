@@ -1,8 +1,10 @@
 package com.taf.data.entity.mapper;
 
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -18,6 +20,7 @@ import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SyncDataEntity;
+import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Category;
@@ -30,9 +33,11 @@ import com.taf.model.PostData;
 import com.taf.model.SyncData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -345,6 +350,7 @@ public class DataMapper {
         }
         return null;
     }
+
     public Notice transformNotice(NoticeEntity entity) {
         if (entity != null) {
             Notice notice = new Notice();
@@ -355,16 +361,58 @@ public class DataMapper {
         return null;
     }
 
-    public CountryWidgetData.WeatherComponent transformWeaherInfo(JsonElement json) {
+    public CountryWidgetData.WeatherComponent transformWeatherInfo(JsonElement json) {
         JsonObject obj = json.getAsJsonObject();
         String temperature = obj.getAsJsonObject("main").get("temp").getAsString();
         String weather = obj.getAsJsonArray("weather").get(0).getAsJsonObject().get("description").getAsString();
-       Logger.e(TAG,"temperature: "+ temperature);
-        Logger.e(TAG,"weather: "+ weather);
+        Logger.e(TAG, "temperature: " + temperature);
+        Logger.e(TAG, "weather: " + weather);
         CountryWidgetData.WeatherComponent weatherComponent = new CountryWidgetData.WeatherComponent();
         weatherComponent.setTemperature(temperature);
         weatherComponent.setWeatherInfo(weather);
         return weatherComponent;
-
     }
+
+    public CountryWidgetData.ForexComponent transformForexInfo(JsonElement json) {
+
+        JsonObject obj = json.getAsJsonObject();
+        JsonArray currenciesArray = obj.get("currencies").getAsJsonArray();
+
+        List<String> currencyList = new ArrayList<>();
+        for (int i = 0; i < currenciesArray.size(); i++) {
+            if (!currenciesArray.get(i).getAsString().equalsIgnoreCase("-"))
+                currencyList.add(currenciesArray.get(i).getAsString());
+        }
+
+        Calendar today = Calendar.getInstance();
+        JsonArray dataList = obj.get("data").getAsJsonArray();
+        JsonArray currentBlock = new JsonArray();
+        for (int i = 0; i < dataList.size(); i++) {
+            JsonArray dataBlock = dataList.get(i).getAsJsonArray();
+            for (int index = 0; index < dataBlock.size(); index++) {
+                if (index == 0) {
+                    if (DateUtils.getFormattedDate("yyyy-MM-dd", today.getTime())
+                            .equalsIgnoreCase(dataBlock.get(index).getAsString())) {
+                        currentBlock = dataBlock;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (currentBlock.size() != 0) {
+
+            HashMap<String, String> currencyMap = new HashMap<>();
+            for (int i = 0; i < currencyList.size(); i++) {
+                currencyMap.put(currencyList.get(i), currentBlock.get(i * 2 + 1).getAsString());
+            }
+
+            CountryWidgetData.ForexComponent component = new CountryWidgetData.ForexComponent();
+            component.setCurrencyMap(currencyMap);
+            component.setToday(today);
+            return component;
+        }
+        return null;
+    }
+
 }

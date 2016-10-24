@@ -1,6 +1,8 @@
 package com.taf.model;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by rakeeb on 10/20/16.
@@ -53,9 +55,48 @@ public class CountryWidgetData extends BaseModel {
 
     public static class ForexComponent implements Component {
 
+
+        /**
+         * saved as
+         * key: "country currency"
+         * value: buying value
+         */
+        HashMap<String, String> currencyMap;
+
+        /**
+         * forex value for calendar
+         */
+        Calendar today;
+
+        public Calendar getToday() {
+            return today;
+        }
+
+        public HashMap<String, String> getCurrencyMap() {
+            return currencyMap;
+        }
+
+        public void setCurrencyMap(HashMap<String, String> currencyMap) {
+            this.currencyMap = currencyMap;
+        }
+
+        public void setToday(Calendar today) {
+            this.today = today;
+        }
+
         @Override
         public int componentType() {
             return COMPONENT_FOREX;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            for (String key : currencyMap.keySet()) {
+                builder.append(String.format("key: %s, value: %s", key, currencyMap.get(key)));
+                builder.append("\n");
+            }
+            return builder.toString();
         }
     }
 

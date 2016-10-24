@@ -35,4 +35,7 @@ public interface ApiService {
 
     @POST(MyConstants.API.JOURNEY)
     Observable<List<BlockEntity>> getJourneyContents();
+
+    @GET(MyConstants.API.FOREX)
+    Observable<JsonElement> getForex();
 }

@@ -18,24 +18,10 @@
 		android:background="@android:color/white"
 		app:cardElevation="4dp">
 
-		<LinearLayout
-			android:id="@+id/parent"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:padding="@dimen/spacing_standard">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@{block.title}"/>
-
 			<LinearLayout
 				android:id="@+id/country_widget_fragment"
-				android:tag="abcs"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"/>
-		</LinearLayout>
 	</android.support.v7.widget.CardView>
 </layout>
