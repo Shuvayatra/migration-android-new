@@ -57,7 +57,7 @@ public class JourneyFragment extends BaseFragment implements
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_journey;
+        return R.layout.fragment_journey_old;
     }
 
     @Override

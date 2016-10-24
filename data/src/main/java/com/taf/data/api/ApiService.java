@@ -33,4 +33,6 @@ public interface ApiService {
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId );
 
+    @POST(MyConstants.API.JOURNEY)
+    Observable<List<BlockEntity>> getJourneyContents();
 }

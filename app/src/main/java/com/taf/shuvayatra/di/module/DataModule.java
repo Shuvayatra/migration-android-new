@@ -8,6 +8,7 @@ import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.ComponentRepository;
 import com.taf.data.repository.DeletedContentRepository;
 import com.taf.data.repository.HomeRepository;
+import com.taf.data.repository.JourneyRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PostRepository;
@@ -19,6 +20,7 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetHomeBlocksUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
+import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
@@ -37,6 +39,7 @@ import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IHomeRepository;
+import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INotificationRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
@@ -329,6 +332,21 @@ public class DataModule {
     UseCase provideCountryWidgetUseCase(IWidgetComponentRepository pRepository, ThreadExecutor pThreadExecutor,
                                         PostExecutionThread pPostExecutionThread) {
         return new GetWidgetComponentUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("journey")
+    UseCase provideJourneyUseCase(IJourneyRepository repository,
+                                  ThreadExecutor threadExecutor,
+                                  PostExecutionThread postExecutionThread){
+        return new GetJourneyUseCase(repository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    IJourneyRepository provideIJourneyRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+        return  new JourneyRepository(dataStoreFactory, dataMapper);
     }
 
     @Provides

@@ -104,6 +104,17 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
         }
     }
+    public Observable<List<BlockEntity>> getJourneyContents(){
+        if(isThereInternetConnection()){
+            return mApiRequest.getJourneyContent()
+                    .doOnNext(blockEntities -> {
+                        // // TODO: 10/21/16 save offline cache
+                    });
+        }else{
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
     private boolean isThereInternetConnection() {
         boolean isConnected;
 

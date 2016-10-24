@@ -7,11 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 
 public class BlankFragment extends Fragment {
 
-
+    public static final String TAG = "BlankFragment";
     public BlankFragment() {
         // Required empty public constructor
     }

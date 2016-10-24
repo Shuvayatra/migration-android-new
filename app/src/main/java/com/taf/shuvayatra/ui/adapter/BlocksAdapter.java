@@ -3,16 +3,19 @@ package com.taf.shuvayatra.ui.adapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
+import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 
 import java.util.List;
 
@@ -22,6 +25,8 @@ import java.util.List;
 
 public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder> {
 
+    public static final String TAG = "BlocksAdapter";
+
     public static final int VIEW_TYPE_LIST = 0;
     public static final int VIEW_TYPE_SLIDER = 1;
     public static final int VIEW_TYPE_COUNTRY_WIDGET = 2;
@@ -30,10 +35,18 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     private List<Block> mBlocks;
     private LayoutInflater mInflater;
     private Context mContext;
+    private FragmentManager mFragmentManager;
 
     public BlocksAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    // constructor for home fragment to show country widget fragment
+    public BlocksAdapter(Context context, FragmentManager fragmentManager) {
+        mContext = context;
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mFragmentManager = fragmentManager;
     }
 
     public void setBlocks(List<Block> blocks) {
@@ -45,8 +58,14 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_COUNTRY_WIDGET:
+                Logger.e(TAG,"country widget called");
                 BlockCountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_country_widget, parent, false);
+                // removed <fragment> tag from view cause of nested fragment issue.
+                // Used dynamic fragment inflation as per Android API
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.country_widget_fragment, CountryWidgetFragment.newInstance(), CountryWidgetFragment.TAG)
+                        .commit();
                 return new ViewHolder<>(widgetBinding);
             case VIEW_TYPE_NOTICE:
                 BlockNoticeDataBinding noticeBinding = DataBindingUtil.inflate(mInflater,

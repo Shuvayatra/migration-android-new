@@ -57,4 +57,8 @@ public class ApiRequest {
     public Observable<JsonElement> getWeather(String place, String unit) {
         return mApiService.getWeatherInfo(place, unit, BuildConfig.OPEN_WEATHER_APPID);
     }
+
+    public Observable<List<BlockEntity>> getJourneyContent(){
+        return mApiService.getJourneyContents();
+    }
 }
