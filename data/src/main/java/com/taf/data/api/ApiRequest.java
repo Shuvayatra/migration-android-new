@@ -61,4 +61,8 @@ public class ApiRequest {
     public Observable<List<BlockEntity>> getJourneyContent(){
         return mApiService.getJourneyContents();
     }
+
+	public Observable<JsonElement> getForex() {
+        return mApiService.getForex();
+    }
 }

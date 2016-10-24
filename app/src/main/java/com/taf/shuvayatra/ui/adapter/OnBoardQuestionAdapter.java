@@ -19,17 +19,17 @@ public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
     ButtonPressListener mButtonPressListener;
     public static final int TOTAL_QUESTION_NUM = 5;
 
-    public OnBoardQuestionAdapter(FragmentManager fm,ButtonPressListener buttonPressListener) {
+    public OnBoardQuestionAdapter(FragmentManager fm, ButtonPressListener buttonPressListener) {
         super(fm);
         mButtonPressListener = buttonPressListener;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Logger.e(TAG,"position: "+ position );
+        Logger.e(TAG, "position: " + position);
         Fragment fragment = null;
-        switch(position){
-            case MyConstants.OnBoarding.USERNAME :
+        switch (position) {
+            case MyConstants.OnBoarding.USERNAME:
                 fragment = UserNameFragment.newInstance(mButtonPressListener);
                 break;
             case MyConstants.OnBoarding.GENDER:
@@ -57,8 +57,9 @@ public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
         return TOTAL_QUESTION_NUM;
     }
 
-    public interface ButtonPressListener{
+    public interface ButtonPressListener {
         public void onNextButtonPressed(int pos);
+
         public void onBackButtonPressed(int pos);
     }
 }

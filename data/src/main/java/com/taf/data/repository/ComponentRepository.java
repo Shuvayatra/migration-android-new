@@ -10,7 +10,6 @@ import com.taf.model.CountryWidgetData;
 import com.taf.repository.IWidgetComponentRepository;
 
 import java.util.Calendar;
-import java.util.List;
 
 import rx.Observable;
 
@@ -47,11 +46,17 @@ public class ComponentRepository implements IWidgetComponentRepository {
 
                 return Observable.just(component);
             case CountryWidgetData.COMPONENT_FOREX:
+                // create base url here
+
+                return mDataStoreFactory.createRestDataStore(BuildConfig.HAMRO_PATRO_URL)
+                        .getForexInfo()
+                        .map(jsonElement -> mDataMapper.transformForexInfo(jsonElement));
+
             case CountryWidgetData.COMPONENT_WEATHER:
                 Logger.e(TAG, ">>> component " + type);
                 return mDataStoreFactory.createRestDataStore(BuildConfig.OPEN_WEATHER_URL)
-                        .getWeatherInfo(mAppPreferences.getLocation(),unit)
-                        .map(jsonElement -> mDataMapper.transformWeaherInfo(jsonElement));
+                        .getWeatherInfo(mAppPreferences.getLocation(), unit)
+                        .map(jsonElement -> mDataMapper.transformWeatherInfo(jsonElement));
         }
         return null;
     }

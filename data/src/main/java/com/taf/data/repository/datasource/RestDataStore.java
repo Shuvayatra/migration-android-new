@@ -115,6 +115,13 @@ public class RestDataStore implements IDataStore {
         }
     }
 
+    public Observable<JsonElement> getForexInfo() {
+        if (isThereInternetConnection())
+            return mApiRequest.getForex();
+        else
+            return Observable.error(new NetworkConnectionException());
+    }
+
     private boolean isThereInternetConnection() {
         boolean isConnected;
 

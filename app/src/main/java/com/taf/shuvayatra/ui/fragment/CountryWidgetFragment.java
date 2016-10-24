@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.taf.data.utils.DateUtils;
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.CountryWidgetData;
 import com.taf.shuvayatra.R;
@@ -94,6 +95,10 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
                 tvEnglishDate.setText(englishDate);
                 break;
             case CountryWidgetData.COMPONENT_FOREX:
+                // TODO: 10/24/16 adjust api for forex with preference
+                String location = ((BaseActivity) getActivity()).getPreferences().getLocation();
+                Logger.e(TAG, ">>> ");
+//                tvForex.setText(component.toString());
                 break;
             case CountryWidgetData.COMPONENT_WEATHER:
                 tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() +" "+ (char) 0x00B0 + "C");

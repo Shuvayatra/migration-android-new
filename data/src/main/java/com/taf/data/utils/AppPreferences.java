@@ -67,68 +67,67 @@ public class AppPreferences {
         return references.contains(String.valueOf(pReference));
     }
 
-    public void setPreviousWorkStatus(int workStatus){
+    public void setPreviousWorkStatus(int workStatus) {
         editor.putInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
         editor.apply();
     }
 
-    // it returns the position of the text in array work status of xml
-    public int getPreviousWorkStatus(){
-        return pref.getInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS,Integer.MIN_VALUE);
+    public int getPreviousWorkStatus() {
+        return pref.getInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, Integer.MIN_VALUE);
     }
 
-    public void setGender(String gender){
+    public void setGender(String gender) {
         editor.putString(MyConstants.Preferences.GENDER, gender);
         editor.apply();
     }
 
-    public String getGender(){
-        return pref.getString(MyConstants.Preferences.GENDER,null);
+    public String getGender() {
+        return pref.getString(MyConstants.Preferences.GENDER, null);
     }
 
-    public void setFirstLaunch(boolean isFirstLaunch){
+    public void setFirstLaunch(boolean isFirstLaunch) {
         editor.putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch);
         editor.apply();
     }
 
-    public boolean getFirstLaunch(){
-        return pref.getBoolean(MyConstants.Preferences.FIRST_LAUNCH,true);
+    public boolean getFirstLaunch() {
+        return pref.getBoolean(MyConstants.Preferences.FIRST_LAUNCH, true);
     }
 
-    public void setLocation(String location){
+    public void setLocation(String location) {
         editor.putString(MyConstants.Preferences.LOCATION, location);
         editor.apply();
     }
 
-    public String getLocation(){
-        return pref.getString(MyConstants.Preferences.LOCATION,"Nepal");
+    public String getLocation() {
+        return pref.getString(MyConstants.Preferences.LOCATION, MyConstants.Preferences.DEFAULT_LOCATION);
     }
 
-    public void setUserName(String userName){
+    public void setUserName(String userName) {
         editor.putString(MyConstants.Preferences.USERNAME, userName);
         editor.apply();
     }
 
-    public String getUserName(){
-        return pref.getString(MyConstants.Preferences.USERNAME,null);
+    public String getUserName() {
+        return pref.getString(MyConstants.Preferences.USERNAME, null);
     }
 
-    public void setBirthday(Long birthday){
+    public void setBirthday(Long birthday) {
         editor.putLong(MyConstants.Preferences.BIRTHDAY, birthday);
         editor.apply();
     }
 
-    public Long getBirthday(){
+    public Long getBirthday() {
         return pref.getLong(MyConstants.Preferences.BIRTHDAY, Long.MIN_VALUE);
     }
 
     // saves position of the zones in string array zones
-    public void setOriginalLocation(int location){
+    public void setOriginalLocation(int location) {
         editor.putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location);
         editor.apply();
     }
 
-    public int getOriginalLocation(){
+    public int getOriginalLocation() {
         return pref.getInt(MyConstants.Preferences.ORIGINAL_LOCATION, Integer.MIN_VALUE);
     }
 }

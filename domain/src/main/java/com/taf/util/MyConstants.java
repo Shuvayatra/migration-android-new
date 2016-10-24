@@ -28,6 +28,8 @@ public class MyConstants {
         public static final String PREVIOUS_WORK_STATUS = "past-work-status";
         public static final String FIRST_LAUNCH = "first-launch";
         public static final String LOCATION = "location";
+        public static final String DEFAULT_LOCATION = "Nepal";
+
     }
 
     public static final class Language {
@@ -42,6 +44,7 @@ public class MyConstants {
 
         public static final String HOME = "test/try.php";
         public static final String OPEN_WEATHER = "data/2.5/weather";
+        public static final String FOREX = "fetchForex";
         public static final String JOURNEY = "test/try.php";
     }
 
