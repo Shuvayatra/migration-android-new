@@ -49,11 +49,15 @@
             android:lineSpacingExtra="@dimen/text_xxlarge"
             android:textSize="@dimen/text_small"
             android:textColor="@color/light_grey"
-            android:text="By answer question below will help us provide you better information"/>
+            android:text="@string/msg_onboard"/>
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager_questions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/spacing_xxxlarge"
+            android:paddingRight="@dimen/spacing_xxxlarge"
+            android:paddingTop="@dimen/spacing_xxxxxlarge"
+            android:paddingBottom="@dimen/spacing_xxxlarge"
             />
 
     </LinearLayout>

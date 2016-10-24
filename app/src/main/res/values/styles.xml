@@ -102,4 +102,13 @@
 	<style name="AppTheme.Block.Slider.Item">
 
 	</style>
+	<style name="StyleNextBack">
+		<item name="android:background">@drawable/bg_round_corner_green</item>
+		<item name="android:paddingTop">@dimen/spacing_small</item>
+		<item name="android:paddingBottom">@dimen/spacing_small</item>
+		<item name="android:paddingLeft">@dimen/spacing_xxxxxlarge</item>
+		<item name="android:paddingRight">@dimen/spacing_xxxxxlarge</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">@dimen/text_default</item>
+	</style>
 </resources>

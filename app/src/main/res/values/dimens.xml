@@ -70,5 +70,5 @@
 	<dimen name="nav_header_height">160dp</dimen>
 
 	<dimen name="onboard_header_height">206dp</dimen>
-	<dimen name="onboard_content_margin_top">300dp</dimen>
+	<dimen name="onboard_content_margin_top">250dp</dimen>
 </resources>

@@ -67,13 +67,14 @@ public class AppPreferences {
         return references.contains(String.valueOf(pReference));
     }
 
-    public void setPreviousWorkStatus(boolean workStatus){
-        editor.putBoolean(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
+    public void setPreviousWorkStatus(int workStatus){
+        editor.putInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
         editor.apply();
     }
 
-    public boolean getPreviousWorkStatus(){
-        return pref.getBoolean(MyConstants.Preferences.PREVIOUS_WORK_STATUS,false);
+    // it returns the position of the text in array work status of xml
+    public int getPreviousWorkStatus(){
+        return pref.getInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS,Integer.MIN_VALUE);
     }
 
     public void setGender(String gender){
@@ -101,5 +102,33 @@ public class AppPreferences {
 
     public String getLocation(){
         return pref.getString(MyConstants.Preferences.LOCATION,"Nepal");
+    }
+
+    public void setUserName(String userName){
+        editor.putString(MyConstants.Preferences.USERNAME, userName);
+        editor.apply();
+    }
+
+    public String getUserName(){
+        return pref.getString(MyConstants.Preferences.USERNAME,null);
+    }
+
+    public void setBirthday(Long birthday){
+        editor.putLong(MyConstants.Preferences.BIRTHDAY, birthday);
+        editor.apply();
+    }
+
+    public Long getBirthday(){
+        return pref.getLong(MyConstants.Preferences.BIRTHDAY, Long.MIN_VALUE);
+    }
+
+    // saves position of the zones in string array zones
+    public void setOriginalLocation(int location){
+        editor.putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location);
+        editor.apply();
+    }
+
+    public int getOriginalLocation(){
+        return pref.getInt(MyConstants.Preferences.ORIGINAL_LOCATION, Integer.MIN_VALUE);
     }
 }

@@ -39,4 +39,5 @@
     <color name="profile_image_placeholder">#e0e0e0</color>
     <color name="nav_text_highlight">#4285f4</color>
     <color name="warm_grey">#9b9b9b</color>
+    <color name="grey_white">#dddddd</color>
 </resources>

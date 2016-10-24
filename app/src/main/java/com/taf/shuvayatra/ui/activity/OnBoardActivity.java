@@ -21,7 +21,6 @@ import butterknife.BindView;
 public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdapter.ButtonPressListener {
 
     public static final String TAG = "OnBoardActivity";
-    private static final int TOTAL_QUESTION_NUM = 2;
     @BindView(R.id.viewpager_questions)
     ViewPager mQuestionPager;
 
@@ -51,14 +50,20 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     @Override
     public void onNextButtonPressed(int pos) {
         Logger.e(TAG,"pos: "+ pos);
-        pos++;
-        if(pos<TOTAL_QUESTION_NUM) {
-            mQuestionPager.setCurrentItem(pos);
+        if(pos<OnBoardQuestionAdapter.TOTAL_QUESTION_NUM -1) {
+            mQuestionPager.setCurrentItem(pos+1);
         }else{
             getPreferences().setFirstLaunch(false);
             Intent intent = new Intent(this,HomeActivity.class);
             startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    public void onBackButtonPressed(int pos) {
+        Logger.e(TAG,"pos: "+ pos);
+        mQuestionPager.setCurrentItem(--pos);
+
     }
 }
