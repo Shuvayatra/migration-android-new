@@ -1,11 +1,10 @@
-package com.taf.shuvayatra.ui.fragment;
+package com.taf.shuvayatra.ui.fragment.onboarding;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.taf.data.utils.Logger;
@@ -13,6 +12,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter.ButtonPressListener;
+import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
@@ -21,6 +21,8 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
     Button mButtonNext;
+    @BindView(R.id.button_back)
+    Button mButtonBack;
     @BindView(R.id.radiogroup_previous_work_status)
     RadioGroup mRadioGroupPreviousWorkStatus;
 
@@ -39,6 +41,13 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mButtonNext.setOnClickListener(onNextClicked());
+
+        mButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
+            }
+        });
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {
@@ -51,8 +60,6 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         switch (id){
             case R.id.button_next:
                 onNextClicked();
-
-
         }
     }
 
@@ -62,17 +69,26 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
             public void onClick(View v) {
                 int selectedId = mRadioGroupPreviousWorkStatus.getCheckedRadioButtonId();
                 if(selectedId == -1){
-                    Snackbar.make(mButtonNext,getString(R.string.error_onboard),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mButtonNext,getString(R.string.error_option),Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                if(selectedId == R.id.radiobutton_yes) {
-                    ((BaseActivity) getActivity()).getPreferences().setPreviousWorkStatus(true);
-                } else {
-                    ((BaseActivity) getActivity()).getPreferences().setPreviousWorkStatus(false);
+                if(selectedId == R.id.rb_working) {
+                    ((BaseActivity) getActivity()).getPreferences()
+                            .setPreviousWorkStatus(0);
+                } else if(selectedId == R.id.rb_back_from_abroad){
+                    ((BaseActivity) getActivity()).getPreferences()
+                            .setPreviousWorkStatus(1);
+                } else if(selectedId == R.id.rb_planing){
+                    ((BaseActivity) getActivity()).getPreferences()
+                            .setPreviousWorkStatus(2);
+                } else if(selectedId == R.id.rb_not_going){
+                    ((BaseActivity) getActivity()).getPreferences()
+                            .setPreviousWorkStatus(3);
                 }
+
                 Logger.e(TAG," ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();: "+
                         ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus());
-                mButtonPressListener.onNextButtonPressed(0);
+                mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }
         };
     }

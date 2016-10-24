@@ -21,8 +21,11 @@ public class MyConstants {
         public static final String DOWNLOAD_REFERENCES = "download_references";
 
         // --------- new preferences --------------
-        public static final String PREVIOUS_WORK_STATUS = "past-work-status";
+        public static final String USERNAME = "username";
+        public static final String BIRTHDAY = "birthday";
         public static final String GENDER = "gender";
+        public static final String ORIGINAL_LOCATION = "original-district";
+        public static final String PREVIOUS_WORK_STATUS = "past-work-status";
         public static final String FIRST_LAUNCH = "first-launch";
         public static final String LOCATION = "location";
     }
@@ -99,5 +102,17 @@ public class MyConstants {
         public static final String JOURNEY = "journey";
         public static final String COUNTRY = "country";
         public static final String INFO = "info";
+    }
+
+    public static class OnBoarding {
+
+        public static final int USERNAME = 0;
+        public static final int BIRTHDAY = 1;
+        public static final int GENDER = 2;
+        public static final int ORIGINAL_LOCATION = 3;
+        public static final int WORK_STATUS = 4;
+
+
+
     }
 }

@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.ui.fragment;
+package com.taf.shuvayatra.ui.fragment.onboarding;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter.ButtonPressListener;
+import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
@@ -22,6 +23,8 @@ public class GenderFragment extends BaseFragment {
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
     Button mButtonNext;
+    @BindView(R.id.button_back)
+    Button mButtonBack;
     @BindView(R.id.radiogroup_gender)
     RadioGroup mRadioGroupGender;
 
@@ -35,6 +38,14 @@ public class GenderFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mButtonNext.setOnClickListener(onNextClicked());
+
+        mButtonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.GENDER);
+            }
+        });
+
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {
@@ -52,7 +63,7 @@ public class GenderFragment extends BaseFragment {
             public void onClick(View v) {
                 int selectedId = mRadioGroupGender.getCheckedRadioButtonId();
                 if(selectedId == -1){
-                    Snackbar.make(mButtonNext,"Please select an option",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mButtonNext,getString(R.string.error_option),Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 RadioButton selectedButton = (RadioButton) getActivity().findViewById(selectedId);
@@ -60,7 +71,7 @@ public class GenderFragment extends BaseFragment {
 
                 Logger.e(TAG," ((BaseActivity) getActivity()).getPreferences().getGender();: "+
                         ((BaseActivity) getActivity()).getPreferences().getGender());
-                mButtonPressListener.onNextButtonPressed(1);
+                mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         };
     }

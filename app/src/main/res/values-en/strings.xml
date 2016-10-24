@@ -88,7 +88,53 @@
 	<string name="contact">Contact</string>
 	<string name="about">About Shuvayatra</string>
 
-	<string name="error_onboard">Please select an option</string>
+	<string name="error_option">Please select an option</string>
+	<string name="error_name">Please enter your Name </string>
+	<string name="error_date">Please select your birthday</string>
 	<string name="message_welcome">welcome</string>
+
+	<string name="next">Next</string>
+	<string name="back">Back</string>
+	<string name="finish">Finish</string>
+
+	<string name="question_name">What\'s your name</string>
+	<string name="question_birthday">Please input your birthday</string>
+	<string name="question_gender">Please select your gender</string>
+	<string name="question_work_status">Have you work abroad before?</string>
+	<string name="question_original_location">Which region you\’re originally from?</string>
+
+	<string name="info_select_region">Please select a region</string>
+	<string name="msg_onboard">By answer question below will help us provide you better information</string>
+	<string name="gender_male">Male</string>
+	<string name="gender_female">Female</string>
+
+	<string name="work_status_working_abroad">Yes, I still work now</string>
+	<string name="work_status_back_from_abroad">Yes, but now I’m back to Nepal</string>
+	<string name="work_status_planning">No, i plan to go</string>
+	<string name="work_status_not_going">No, i don’t have any plan to go</string>
+
+	<string-array name="work_status">
+		<item>@string/work_status_working_abroad</item>
+		<item>@string/work_status_back_from_abroad</item>
+		<item>@string/work_status_planning</item>
+		<item>@string/work_status_not_going</item>
+	</string-array>
+
+	<string-array name="zones">
+		<item>Mechi</item>
+		<item>Koshi</item>
+		<item>Sagarmatha</item>
+		<item>Janakpur</item>
+		<item>Bagmati</item>
+		<item>Narayani</item>
+		<item>Gandaki</item>
+		<item>Lumbini</item>
+		<item>Dhaulagiri</item>
+		<item>Rapti</item>
+		<item>Karnali</item>
+		<item>Bheri</item>
+		<item>Seti</item>
+		<item>Mahakali</item>
+	</string-array>
 
 </resources>
