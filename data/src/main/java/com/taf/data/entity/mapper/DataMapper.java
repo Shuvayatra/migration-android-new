@@ -1,8 +1,5 @@
 package com.taf.data.entity.mapper;
 
-import android.util.Log;
-import android.util.SparseArray;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -37,7 +34,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -340,10 +336,13 @@ public class DataMapper {
     public Block transformBlockEntity(BlockEntity entity) {
         if (entity != null) {
             Block block = new Block();
-            block.setOrder(entity.getOrder());
+            block.setOrder(entity.getPosition());
             block.setTitle(entity.getTitle());
             block.setDescription(entity.getDescription());
             block.setLayout(entity.getLayout());
+            block.setShowViewMore(entity.isShowViewMore());
+            block.setViewMoreTitle(entity.getViewMoreTitle());
+            block.setDeeplink(entity.getDeeplink());
             block.setData(transformPost(entity.getData()));
             block.setNotice(transformNotice(entity.getNotice()));
             return block;
