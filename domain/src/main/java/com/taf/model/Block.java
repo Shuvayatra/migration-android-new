@@ -13,6 +13,9 @@ public class Block {
     private String mDescription;
     private List<Post> mData;
     private Notice mNotice;
+    private boolean showViewMore;
+    private String viewMoreTitle;
+    private String deeplink;
 
     public int getOrder() {
         return mOrder;
@@ -60,5 +63,29 @@ public class Block {
 
     public void setNotice(Notice notice) {
         mNotice = notice;
+    }
+
+    public boolean isShowViewMore() {
+        return showViewMore;
+    }
+
+    public void setShowViewMore(boolean showViewMore) {
+        this.showViewMore = showViewMore;
+    }
+
+    public String getViewMoreTitle() {
+        return viewMoreTitle;
+    }
+
+    public void setViewMoreTitle(String viewMoreTitle) {
+        this.viewMoreTitle = viewMoreTitle;
+    }
+
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
     }
 }

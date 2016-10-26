@@ -72,6 +72,7 @@
 
 	<style name="AppTheme.Block.Link">
 		<item name="android:textColor">#239ac7</item>
+		<item name="android:textColorLink">#239ac7</item>
 		<item name="android:gravity">center</item>
 		<item name="android:textSize">@dimen/text_default</item>
 		<item name="android:padding">@dimen/spacing_12</item>
@@ -102,6 +103,7 @@
 	<style name="AppTheme.Block.Slider.Item">
 
 	</style>
+
 	<style name="StyleNextBack">
 		<item name="android:background">@drawable/bg_round_corner_green</item>
 		<item name="android:paddingTop">@dimen/spacing_small</item>
@@ -110,5 +112,9 @@
 		<item name="android:paddingRight">@dimen/spacing_xxxxxlarge</item>
 		<item name="android:textColor">@android:color/white</item>
 		<item name="android:textSize">@dimen/text_default</item>
+	</style>
+
+	<style name="AppTheme.RadioWidget">
+		<item name="colorAccent">#009688</item>
 	</style>
 </resources>

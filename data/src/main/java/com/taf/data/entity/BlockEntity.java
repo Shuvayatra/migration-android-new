@@ -9,20 +9,27 @@ import java.util.List;
  */
 
 public class BlockEntity {
-    private int order;
+    private int position;
     private String layout;
     private String title;
     private String description;
+    @SerializedName("view_more")
+    private boolean showViewMore;
+    @SerializedName("view_more_title")
+    private String viewMoreTitle;
+    @SerializedName("view_more_deeplink")
+    private String deeplink;
+
     @SerializedName("content")
     private List<PostEntity> data;
     private NoticeEntity notice;
 
-    public int getOrder() {
-        return order;
+    public int getPosition() {
+        return position;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public String getLayout() {
@@ -63,5 +70,29 @@ public class BlockEntity {
 
     public void setNotice(NoticeEntity notice) {
         this.notice = notice;
+    }
+
+    public boolean isShowViewMore() {
+        return showViewMore;
+    }
+
+    public void setShowViewMore(boolean showViewMore) {
+        this.showViewMore = showViewMore;
+    }
+
+    public String getViewMoreTitle() {
+        return viewMoreTitle;
+    }
+
+    public void setViewMoreTitle(String viewMoreTitle) {
+        this.viewMoreTitle = viewMoreTitle;
+    }
+
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
     }
 }

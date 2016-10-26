@@ -1,11 +1,14 @@
 package com.taf.shuvayatra.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.data.utils.Logger;
@@ -14,6 +17,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
+import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 
@@ -31,6 +35,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     public static final int VIEW_TYPE_SLIDER = 1;
     public static final int VIEW_TYPE_COUNTRY_WIDGET = 2;
     public static final int VIEW_TYPE_NOTICE = 3;
+    public static final int VIEW_TYPE_RADIO_WIDGET = 4;
 
     private List<Block> mBlocks;
     private LayoutInflater mInflater;
@@ -58,7 +63,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_COUNTRY_WIDGET:
-                Logger.e(TAG,"country widget called");
+                Logger.e(TAG, "country widget called");
                 BlockCountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_country_widget, parent, false);
                 // removed <fragment> tag from view cause of nested fragment issue.
@@ -75,6 +80,10 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 BlockListDataBinding listBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_list, parent, false);
                 return new ViewHolder<>(listBinding);
+            case VIEW_TYPE_RADIO_WIDGET:
+                BlockRadioWidgetDataBinding radioBinding = DataBindingUtil.inflate(mInflater, R
+                        .layout.view_block_radio_widget, parent, false);
+                return new ViewHolder<>(radioBinding);
             default:
             case VIEW_TYPE_SLIDER:
                 BlockSliderDataBinding sliderBinding = DataBindingUtil.inflate(mInflater,
@@ -98,6 +107,10 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 ((BlocksAdapter.ViewHolder<BlockListDataBinding>) holder).mBinding
                         .setBlock(mBlocks.get(position));
                 break;
+            case BlocksAdapter.VIEW_TYPE_RADIO_WIDGET:
+                ((ViewHolder<BlockRadioWidgetDataBinding>) holder).mBinding
+                        .setBlock(mBlocks.get(position));
+                break;
             default:
             case BlocksAdapter.VIEW_TYPE_SLIDER:
                 ((BlocksAdapter.ViewHolder<BlockSliderDataBinding>) holder).mBinding
@@ -116,6 +129,8 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             return VIEW_TYPE_COUNTRY_WIDGET;
         } else if (mBlocks.get(position).getLayout().equals("notice")) {
             return VIEW_TYPE_NOTICE;
+        } else if (mBlocks.get(position).getLayout().equals("radio_widget")) {
+            return VIEW_TYPE_RADIO_WIDGET;
         }
         return VIEW_TYPE_LIST;
     }
@@ -131,6 +146,26 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         public ViewHolder(T binding) {
             super(binding.getRoot());
             mBinding = binding;
+
+            View view = null;
+            if (mBinding instanceof BlockListDataBinding) {
+                view = ((BlockListDataBinding) mBinding).deeplink;
+            } else if (mBinding instanceof BlockSliderDataBinding) {
+                view = ((BlockSliderDataBinding) mBinding).deeplink;
+            }else if (mBinding instanceof BlockRadioWidgetDataBinding) {
+                view = ((BlockRadioWidgetDataBinding) mBinding).play;
+            }
+
+            if (view != null) {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mContext.startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(((BlockListDataBinding) mBinding).getBlock()
+                                        .getDeeplink())));
+                    }
+                });
+            }
         }
     }
 }
