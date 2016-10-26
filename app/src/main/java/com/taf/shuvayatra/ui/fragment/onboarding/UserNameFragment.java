@@ -38,7 +38,6 @@ public class UserNameFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

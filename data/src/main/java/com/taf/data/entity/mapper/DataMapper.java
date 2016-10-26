@@ -21,6 +21,7 @@ import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Category;
+import com.taf.model.Country;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
@@ -36,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import rx.Observable;
 
 @PerActivity
 public class DataMapper {
@@ -144,6 +147,16 @@ public class DataMapper {
             return category;
         }
         return null;
+    }
+
+    public List<Country> transformCountryList(JsonElement element) {
+        Gson gson = new Gson();
+        List<Country> countryList = new ArrayList<>();
+        for (JsonElement jsonElement : element.getAsJsonArray()) {
+            Country country = gson.fromJson(jsonElement, Country.class);
+            countryList.add(country);
+        }
+        return countryList;
     }
 
     public List<Post> transformPostFromDb(Map<String, Object> pObjectMap) {

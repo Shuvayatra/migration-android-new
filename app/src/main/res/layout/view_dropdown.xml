@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_xxsmall"
+    android:background="@color/grey_white"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/spacing_18"
+    android:paddingLeft="@dimen/spacing_xlarge"
+    android:paddingRight="@dimen/spacing_xlarge"
+    android:paddingTop="@dimen/spacing_18"
+    android:weightSum="5">
+
+    <TextView
+        android:id="@+id/filterText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/spacing_standard"
+        android:layout_weight="4"
+        android:background="@color/grey_white"
+        android:gravity="left"
+        android:textColor="@color/text_main"
+        android:textSize="@dimen/text_default"
+        tools:text="What is passport for?" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/drop_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@color/grey_white"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:src="@drawable/ic_arrow_drop_down"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+
+</LinearLayout>

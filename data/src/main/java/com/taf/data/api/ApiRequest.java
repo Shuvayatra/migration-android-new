@@ -58,11 +58,15 @@ public class ApiRequest {
         return mApiService.getWeatherInfo(place, unit, BuildConfig.OPEN_WEATHER_APPID);
     }
 
-    public Observable<List<BlockEntity>> getJourneyContent(){
+    public Observable<JsonElement> getCountryList() {
+        return mApiService.getCountryList();
+    }
+
+    public Observable<List<BlockEntity>> getJourneyContent() {
         return mApiService.getJourneyContents();
     }
 
-	public Observable<JsonElement> getForex() {
+    public Observable<JsonElement> getForex() {
         return mApiService.getForex();
     }
 }

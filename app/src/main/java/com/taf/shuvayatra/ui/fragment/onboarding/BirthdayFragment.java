@@ -16,6 +16,7 @@ import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter.ButtonPressListener;
 import com.taf.util.MyConstants;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -35,7 +36,7 @@ public class BirthdayFragment extends BaseFragment {
         return R.layout.fragment_birthday;
     }
 
-    public static BirthdayFragment newInstance(ButtonPressListener buttonPressListener){
+    public static BirthdayFragment newInstance(ButtonPressListener buttonPressListener) {
         BirthdayFragment fragment = new BirthdayFragment();
         fragment.setButtonPressListener(buttonPressListener);
         return fragment;
@@ -48,7 +49,7 @@ public class BirthdayFragment extends BaseFragment {
         mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(birthday == null){
+                if (birthday == null) {
                     Snackbar.make(getView(), getString(R.string.error_date), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
@@ -69,16 +70,19 @@ public class BirthdayFragment extends BaseFragment {
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 DatePickerDialog dialog = new DatePickerDialog(getContext(),
+
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                if(birthday == null) birthday = Calendar.getInstance();
-                                birthday.set(Calendar.YEAR,year);
-                                birthday.set(Calendar.MONTH,month);
+                                if (birthday == null) birthday = Calendar.getInstance();
+                                birthday.set(Calendar.YEAR, year);
+                                birthday.set(Calendar.MONTH, month);
                                 birthday.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                mTextViewBirthday.setText(year+" / "+(month+1)+" / "+ dayOfMonth);
+                                mTextViewBirthday.setText(year + " / " + birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " / " + dayOfMonth);
                             }
-                        }, calendar.get(Calendar.YEAR),
+                        },
+
+                        calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                 );
@@ -87,11 +91,11 @@ public class BirthdayFragment extends BaseFragment {
             }
         });
 
-        if(birthday != null){
+        if (birthday != null) {
             int year = birthday.get(Calendar.YEAR);
-            int month = birthday.get(Calendar.MONTH);
+//            int month = birthday.get(Calendar.MONTH);
             int dayOfMonth = birthday.get(Calendar.DAY_OF_MONTH);
-            mTextViewBirthday.setText(year+" / "+(month+1)+" / "+ dayOfMonth);
+            mTextViewBirthday.setText(year + " / " + birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " / " + dayOfMonth);
         }
     }
 

@@ -20,13 +20,13 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     public static final String TAG = "AbroadQuestionFragment";
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
-    Button mButtonNext;
+    public Button mButtonNext;
     @BindView(R.id.button_back)
     Button mButtonBack;
     @BindView(R.id.radiogroup_previous_work_status)
     RadioGroup mRadioGroupPreviousWorkStatus;
 
-    public static AbroadQuestionFragment newInstance(ButtonPressListener buttonPressListener){
+    public static AbroadQuestionFragment newInstance(ButtonPressListener buttonPressListener) {
         AbroadQuestionFragment fragment = new AbroadQuestionFragment();
         fragment.setButtonPressListener(buttonPressListener);
         return fragment;
@@ -42,6 +42,8 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         super.onActivityCreated(savedInstanceState);
         mButtonNext.setOnClickListener(onNextClicked());
 
+        if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())
+            mButtonNext.setText("NEXT");
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,36 +59,36 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.button_next:
                 onNextClicked();
         }
     }
 
-    private View.OnClickListener onNextClicked(){
+    private View.OnClickListener onNextClicked() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = mRadioGroupPreviousWorkStatus.getCheckedRadioButtonId();
-                if(selectedId == -1){
-                    Snackbar.make(mButtonNext,getString(R.string.error_option),Snackbar.LENGTH_SHORT).show();
+                if (selectedId == -1) {
+                    Snackbar.make(mButtonNext, getString(R.string.error_option), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                if(selectedId == R.id.rb_working) {
+                if (selectedId == R.id.rb_working) {
                     ((BaseActivity) getActivity()).getPreferences()
                             .setPreviousWorkStatus(0);
-                } else if(selectedId == R.id.rb_back_from_abroad){
+                } else if (selectedId == R.id.rb_back_from_abroad) {
                     ((BaseActivity) getActivity()).getPreferences()
                             .setPreviousWorkStatus(1);
-                } else if(selectedId == R.id.rb_planing){
+                } else if (selectedId == R.id.rb_planing) {
                     ((BaseActivity) getActivity()).getPreferences()
                             .setPreviousWorkStatus(2);
-                } else if(selectedId == R.id.rb_not_going){
+                } else if (selectedId == R.id.rb_not_going) {
                     ((BaseActivity) getActivity()).getPreferences()
                             .setPreviousWorkStatus(3);
                 }
 
-                Logger.e(TAG," ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();: "+
+                Logger.e(TAG, " ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();: " +
                         ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }

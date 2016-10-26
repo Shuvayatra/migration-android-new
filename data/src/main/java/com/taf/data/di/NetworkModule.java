@@ -34,7 +34,7 @@ public class NetworkModule {
     @Provides
     OkHttpClient provideHttpClient() {
         OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(new HeaderInterceptor())
+//                .addInterceptor(new HeaderInterceptor())
                 .build();
         return okClient;
     }

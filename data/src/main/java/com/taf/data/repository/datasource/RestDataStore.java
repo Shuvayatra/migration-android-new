@@ -104,6 +104,7 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
         }
     }
+
     public Observable<JsonElement> getWeatherInfo(String place, String unit) {
         if (isThereInternetConnection()) {
             return mApiRequest.getWeather(place, unit);
@@ -111,14 +112,23 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
         }
     }
-    public Observable<List<BlockEntity>> getJourneyContents(){
-        if(isThereInternetConnection()){
+
+    public Observable<JsonElement> getCountryList() {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getCountryList();
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<List<BlockEntity>> getJourneyContents() {
+        if (isThereInternetConnection()) {
             return mApiRequest.getJourneyContent()
                     .doOnNext(blockEntities -> {
                         // // TODO: 10/21/16 save offline cache
                         mCache.saveJourneyBlocks(blockEntities);
                     });
-        }else{
+        } else {
             return Observable.error(new NetworkConnectionException());
         }
     }

@@ -68,7 +68,7 @@
     <string name="similar_video">मिल्दोजुल्दो भिडियोहरु </string>
     <string name="select_category">यात्रा( रोजाइ छान्नु होस्)</string>
     <string name="message_buffering">(बफरिङ ...)</string>
-    
+
     <string name="just_now"> भर्खरै</string>
     <string name="a_minute_ago"> एक मिनेट अगाडि </string>
     <string name="minute_ago">  मिनेट अगाडि</string>
@@ -93,6 +93,7 @@
     <string name="question_name">What\'s your name</string>
     <string name="question_birthday">Please input your birthday</string>
     <string name="question_gender">Please select your gender</string>
+    <string name="question_destination">Preferred destination</string>
     <string name="question_work_status">Have you work abroad before?</string>
     <string name="question_original_location">Which region you\’re originally from?</string>
 

@@ -16,6 +16,22 @@ public class MyConstants {
         INFO
     }
 
+    public static final class Country {
+        public static final String MALAYSIA = "मलेशिय";
+        public static final String SAUDI_ARABIA = "साउदी अरेबि";
+        public static final String QATAR = "कतार";
+        public static final String UAE = "यूएई";
+        public static final String KUWAIT = "कुवेत";
+        public static final String NEPAL = "नेपाल";
+
+        public static final String[] COUNTRY_LIST = {MALAYSIA, SAUDI_ARABIA, QATAR, UAE, KUWAIT,
+                NEPAL};
+    }
+
+    public static final class UseCase {
+        public static final String CASE_COUNTRY_LIST = "country_list";
+    }
+
     public static final class Preferences {
         public static final String PREF_NAME = "nrna_app_preferences";
         public static final String LAST_UPDATE_STAMP = "last_update_stamp_1";
@@ -32,6 +48,8 @@ public class MyConstants {
         public static final String LOCATION = "location";
         public static final String DEFAULT_LOCATION = "Nepal";
 
+        public static final String COUNTRY_LIST_CALL = "country-list-call";
+        public static final String COUNTRY_LIST = "country-list";
     }
 
     public static final class Language {
@@ -43,6 +61,7 @@ public class MyConstants {
         public static final String LATEST_CONTENT = "api/latest";
         public static final String SYNC_DATA = "api/sync";
         public static final String DELETED_CONTENT = "api/trash";
+        public static final String DESTINATION = "api/destinations";
 
         public static final String HOME = "api/screen/home";
         public static final String OPEN_WEATHER = "data/2.5/weather";
@@ -117,5 +136,8 @@ public class MyConstants {
         public static final int GENDER = 2;
         public static final int ORIGINAL_LOCATION = 3;
         public static final int WORK_STATUS = 4;
+        public static final int PREFERRED_DESTINATION = 5;
+
+
     }
 }
