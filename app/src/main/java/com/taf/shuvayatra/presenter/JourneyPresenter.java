@@ -1,9 +1,11 @@
 package com.taf.shuvayatra.presenter;
 
+import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Block;
+import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
 import com.taf.shuvayatra.ui.views.JourneyView;
 
@@ -58,7 +60,8 @@ public class JourneyPresenter implements Presenter {
         public void onError(Throwable e) {
             e.printStackTrace();
             mView.hideLoadingView();
-            mView.showErrorView(e.getMessage());
+            mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
+                    DefaultErrorBundle((Exception) e).getException()));
         }
 
         @Override

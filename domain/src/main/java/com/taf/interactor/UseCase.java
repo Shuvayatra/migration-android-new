@@ -25,7 +25,7 @@ public abstract class UseCase<T> {
     public void execute(Subscriber pSubscriber, UseCaseData pData) {
         this.mSubscription = this.buildUseCaseObservable(pData)
                 .subscribeOn(Schedulers.from(mThreadExecutor))
-                .observeOn(mPostExecutionThread.getScheduler())
+                .observeOn(mPostExecutionThread.getScheduler(), true)
                 .subscribe(pSubscriber);
     }
 

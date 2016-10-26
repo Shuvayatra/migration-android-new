@@ -4,6 +4,8 @@ package com.taf.shuvayatra.di.component;
 import android.content.Context;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.taf.data.cache.CacheImpl;
+import com.taf.data.cache.SimpleDiskCache;
 import com.taf.data.database.dao.DaoSession;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
@@ -32,4 +34,6 @@ public interface ApplicationComponent {
     DaoSession getDaoSession();
 
     FirebaseAnalytics getAnalytics();
+
+    CacheImpl getCache();
 }

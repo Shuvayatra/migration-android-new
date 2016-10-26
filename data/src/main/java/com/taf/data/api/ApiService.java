@@ -27,13 +27,13 @@ public interface ApiService {
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);
 
-    @POST(MyConstants.API.HOME)
+    @GET(MyConstants.API.HOME)
     Observable<List<BlockEntity>> getHomeBlocks();
 
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId );
 
-    @POST(MyConstants.API.JOURNEY)
+    @GET(MyConstants.API.JOURNEY)
     Observable<List<BlockEntity>> getJourneyContents();
 
     @GET(MyConstants.API.FOREX)

@@ -79,6 +79,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
     @Override
     public void renderContents(List<Block> journeyContents) {
         Logger.e(TAG,": journey COntents: "+ journeyContents.size() );
+        // TODO: 10/26/16 after api of journey remove this block and send actual contents 
         List<Block> temp = new ArrayList<>();
         for (Block journeyContent : journeyContents) {
             if (!journeyContent.getLayout().equals("country_widget")) {

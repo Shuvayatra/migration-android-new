@@ -15,7 +15,7 @@ ext {
     daggerVersion = '2.6'
     butterKnifeVersion = '8.4.0'
     supportLibVersion = '24.2.1'
-    rxJavaVersion = '1.0.14'
+    rxJavaVersion = '1.2.1'
     rxAndroidVersion = '0.25.0'
     javaxAnnotationVersion = '1.0'
     androidAnnotationsVersion = '20.0.0'
@@ -32,6 +32,7 @@ ext {
     playServicesVersion = '9.6.1'
     firebaseVersion = '9.6.1'
     gravitySnapHelperVersion = '0.3'
+    disklrucache = '2.0.2'
 
     //Testing
     robolectricVersion = '3.0'
@@ -103,7 +104,8 @@ ext {
             androidAnnotations   : "com.android.support:support-annotations:${androidAnnotationsVersion}",
             retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
             retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
-            retrofitRxAdapter    : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+            retrofitRxAdapter    : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            disklrucache         : "com.jakewharton:disklrucache:${disklrucache}"
     ]
 
     dataTestDependencies = [

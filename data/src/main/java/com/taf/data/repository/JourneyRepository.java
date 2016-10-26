@@ -21,8 +21,15 @@ public class JourneyRepository implements IJourneyRepository {
 
     @Override
     public Observable<List<Block>> getBlocks() {
-        return mDataStoreFactory.createRestDataStore()
+
+        Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
+                .getJourneyBlocks()
+                .map(contents -> mDataMapper.transformBlockEntity(contents));
+
+        Observable apiObservable =  mDataStoreFactory.createRestDataStore()
                 .getJourneyContents()
                 .map(contents -> mDataMapper.transformBlockEntity(contents));
+
+        return Observable.concatDelayError(cacheObservable, apiObservable);
     }
 }

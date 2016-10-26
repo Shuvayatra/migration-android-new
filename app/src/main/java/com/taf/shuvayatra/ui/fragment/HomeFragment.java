@@ -96,4 +96,10 @@ public class HomeFragment extends BaseFragment implements
                 .inject(this);
         mPresenter.attachView(this);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
 }

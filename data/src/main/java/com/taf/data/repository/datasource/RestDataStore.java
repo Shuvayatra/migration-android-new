@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 
 import com.google.gson.JsonElement;
 import com.taf.data.api.ApiRequest;
+import com.taf.data.cache.CacheImpl;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
@@ -19,7 +20,6 @@ import com.taf.model.CountryWidgetData;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
@@ -28,11 +28,17 @@ public class RestDataStore implements IDataStore {
     private final Context mContext;
     private final ApiRequest mApiRequest;
     private final DatabaseHelper mDBHelper;
+    private final CacheImpl mCache;
 
-    public RestDataStore(Context pContext, ApiRequest pApiRequest, DatabaseHelper pDBHelper) {
+
+    public RestDataStore(Context pContext,
+                         ApiRequest pApiRequest,
+                         DatabaseHelper pDBHelper,
+                         CacheImpl cache) {
         mApiRequest = pApiRequest;
         mDBHelper = pDBHelper;
         mContext = pContext;
+        mCache = cache;
     }
 
     public Observable<LatestContentEntity> getLatestContents(Long pLastUpdatedStamp) {
@@ -84,6 +90,7 @@ public class RestDataStore implements IDataStore {
             return mApiRequest.getHomeBlocks()
                     .doOnNext(blockEntities -> {
                         // TODO: 10/18/16 save to cache
+                        mCache.saveHomeBlocks(blockEntities);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -109,6 +116,7 @@ public class RestDataStore implements IDataStore {
             return mApiRequest.getJourneyContent()
                     .doOnNext(blockEntities -> {
                         // // TODO: 10/21/16 save offline cache
+                        mCache.saveJourneyBlocks(blockEntities);
                     });
         }else{
             return Observable.error(new NetworkConnectionException());
