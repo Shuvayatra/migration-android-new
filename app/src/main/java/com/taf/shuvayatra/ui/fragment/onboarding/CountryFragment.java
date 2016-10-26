@@ -3,23 +3,23 @@ package com.taf.shuvayatra.ui.fragment.onboarding;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.AdapterView;
+import android.support.design.widget.Snackbar;
 import android.widget.Spinner;
 
 import com.taf.data.utils.AppPreferences;
-import com.taf.model.Country;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
 import com.taf.shuvayatra.ui.adapter.DropDownAdapter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
+import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * This fragment is seen in {@link OnBoardActivity} as a part of the on-boarding question and is
@@ -36,8 +36,8 @@ public class CountryFragment extends BaseFragment {
     Spinner spinnerCountry;
 
     private OnBoardQuestionAdapter.ButtonPressListener mButtonListener;
-    private boolean isInvalid = true;
-    private String selectedCountry;
+
+    List<String> dataList = new ArrayList<>();
 
     public static CountryFragment newInstance(OnBoardQuestionAdapter.ButtonPressListener listener) {
         CountryFragment fragment = new CountryFragment();
@@ -54,22 +54,32 @@ public class CountryFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final List<String> dataList = new ArrayList<>();
         dataList.add(getString(R.string.question_destination));
         dataList.addAll(new ArrayList<>(((BaseActivity) getActivity())
                 .getPreferences().getCountryList()));
 
         DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
         spinnerCountry.setAdapter(adapter);
-        spinnerCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long itemId) {
-
-                isInvalid = position != 0;
-                selectedCountry = dataList.get(position);
-            }
-        });
     }
+
+    @OnClick(R.id.button_back)
+    void onBack() {
+        mButtonListener.onBackButtonPressed(MyConstants.OnBoarding.PREFERRED_DESTINATION);
+    }
+
+    @OnClick(R.id.button_next)
+    void onNext() {
+
+        if (spinnerCountry.getSelectedItemPosition() == 0) {
+            Snackbar.make(getView(), R.string.error_option, Snackbar.LENGTH_LONG).show();
+        } else {
+            ((BaseActivity) getActivity()).getPreferences().setLocation(dataList.get(spinnerCountry
+                    .getSelectedItemPosition()));
+            mButtonListener.onNextButtonPressed(MyConstants.OnBoarding.PREFERRED_DESTINATION);
+        }
+    }
+
+    private static final String TAG = "CountryFragment";
 
     public class CountryDropDownAdapter extends DropDownAdapter {
 

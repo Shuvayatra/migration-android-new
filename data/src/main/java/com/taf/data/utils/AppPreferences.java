@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.OnBoarding;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -141,6 +142,9 @@ public class AppPreferences {
     }
 
     /**
+     * Only used while {@link OnBoarding} as all of the fragments present in the activity might not
+     * have been loaded.
+     *
      * @return returns country list as [id],[name]
      */
     public Set<String> getCountryList() {

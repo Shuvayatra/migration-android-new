@@ -43,7 +43,8 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         mButtonNext.setOnClickListener(onNextClicked());
 
         if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())
-            mButtonNext.setText("NEXT");
+            mButtonNext.setText(getString(R.string.next));
+
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
