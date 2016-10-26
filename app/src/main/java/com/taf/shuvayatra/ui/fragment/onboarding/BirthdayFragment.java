@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-public class BirthdayFragment extends BaseFragment {
+public class BirthdayFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.button_next)
     Button mButtonNext;
@@ -28,6 +28,7 @@ public class BirthdayFragment extends BaseFragment {
     Button mButtonBack;
     @BindView(R.id.textview_birthday)
     TextView mTextViewBirthday;
+
     ButtonPressListener mButtonPressListener;
     Calendar birthday;
 
@@ -70,18 +71,7 @@ public class BirthdayFragment extends BaseFragment {
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 DatePickerDialog dialog = new DatePickerDialog(getContext(),
-
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                if (birthday == null) birthday = Calendar.getInstance();
-                                birthday.set(Calendar.YEAR, year);
-                                birthday.set(Calendar.MONTH, month);
-                                birthday.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                mTextViewBirthday.setText(year + " / " + birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " / " + dayOfMonth);
-                            }
-                        },
-
+                        BirthdayFragment.this,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
@@ -90,13 +80,17 @@ public class BirthdayFragment extends BaseFragment {
                 dialog.show();
             }
         });
+    }
 
-        if (birthday != null) {
-            int year = birthday.get(Calendar.YEAR);
-//            int month = birthday.get(Calendar.MONTH);
-            int dayOfMonth = birthday.get(Calendar.DAY_OF_MONTH);
-            mTextViewBirthday.setText(year + " / " + birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " / " + dayOfMonth);
-        }
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        // update birthday reference
+        if (birthday == null) birthday = Calendar.getInstance();
+        birthday.set(year, month, dayOfMonth);
+        // update view
+        mTextViewBirthday.setText(String.format(Locale.getDefault(),
+                "%d/%s/%d", year, birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US),
+                dayOfMonth));
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {
