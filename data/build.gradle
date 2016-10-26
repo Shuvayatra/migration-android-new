@@ -29,6 +29,7 @@ android {
         buildConfigField("String", "OPEN_WEATHER_URL", "\"http://api.openweathermap.org/\"")
         buildConfigField("String", "OPEN_WEATHER_APPID", "\"07824720b667303cc16885d917a071c3\"")
         buildConfigField("String", "HAMRO_PATRO_URL", "\"http://hamropatro-android.appspot.com/\"")
+        buildConfigField("String", "SHUVAYATRA_BASE_URL", "\"http://api.shuvayatra.org/\"")
     }
 
     compileOptions {
@@ -48,7 +49,7 @@ dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
     //def testDependencies = rootProject.ext.dataTestDependencies
 
-    compile project (':domain')
+    compile project(':domain')
 
     compile dataDependencies.retrofit
     compile dataDependencies.retrofitGsonConverter

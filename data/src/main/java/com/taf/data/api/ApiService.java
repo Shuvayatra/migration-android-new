@@ -6,6 +6,7 @@ import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
+import com.taf.model.Country;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -30,8 +31,11 @@ public interface ApiService {
     @GET(MyConstants.API.HOME)
     Observable<List<BlockEntity>> getHomeBlocks();
 
+    @GET(MyConstants.API.DESTINATION)
+    Observable<JsonElement> getCountryList();
+
     @GET(MyConstants.API.OPEN_WEATHER)
-    Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId );
+    Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);
 
     @GET(MyConstants.API.JOURNEY)
     Observable<List<BlockEntity>> getJourneyContents();

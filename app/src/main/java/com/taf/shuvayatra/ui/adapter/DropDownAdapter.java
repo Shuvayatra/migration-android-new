@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.adapter;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,26 +11,36 @@ import android.widget.TextView;
 
 import com.taf.shuvayatra.R;
 
-public class ZoneAdapter extends BaseAdapter {
+import java.util.List;
 
-    String mZones[];
-    LayoutInflater mLayoutInflater;
-    Context mContext;
+public class DropDownAdapter extends BaseAdapter {
 
-    public ZoneAdapter(Context context, String[] zones){
+    private List<String> mData;
+    private LayoutInflater mLayoutInflater;
+    private Context mContext;
+
+    public DropDownAdapter(Context context, List<String> data) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
-        mZones = zones;
+        mData = data;
+    }
+
+    public void setData(List<String> mData) {
+        this.mData = mData;
+    }
+
+    public List<String> getData() {
+        return mData;
     }
 
     @Override
     public int getCount() {
-        return mZones.length;
+        return mData.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mZones[position+1];
+        return mData.get(position);
     }
 
     @Override
@@ -39,36 +50,35 @@ public class ZoneAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      return getCUstomView(parent, position, false);
+        return getCustomView(parent, position, false);
     }
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return getCUstomView(parent,position, true);
+        return getCustomView(parent, position, true);
     }
 
-    public View getCUstomView(ViewGroup parent, int position, boolean dropdown){
-        View spinner = mLayoutInflater.inflate(R.layout.view_zone, parent, false);
+    public View getCustomView(ViewGroup parent, int position, boolean dropdown) {
+        View spinner = mLayoutInflater.inflate(R.layout.view_dropdown, parent, false);
         TextView textView = (TextView) spinner.findViewById(R.id.filterText);
-        if(position == 0) {
-            textView.setText(mContext.getString(R.string.info_select_region));
-        }else{
-            textView.setText(mZones[position-1]);
-        }
+        textView.setText(getSpinnerText(position));
 
         ImageView imageView = (ImageView) spinner.findViewById(R.id.drop_arrow);
-        if(!dropdown) {
+        if (!dropdown) {
             imageView.setImageResource(R.drawable.ic_arrow_drop_down);
             imageView.setVisibility(View.VISIBLE);
             return spinner;
         }
-        if(position == 0){
+        if (position == 0) {
             imageView.setImageResource(R.drawable.ic_arrow_drop_up);
             imageView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             imageView.setVisibility(View.GONE);
         }
-
         return spinner;
+    }
+
+    public String getSpinnerText(int position) {
+        return mData.get(position);
     }
 }

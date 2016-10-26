@@ -130,4 +130,26 @@ public class AppPreferences {
     public int getOriginalLocation() {
         return pref.getInt(MyConstants.Preferences.ORIGINAL_LOCATION, Integer.MIN_VALUE);
     }
+
+    public boolean isOnBoardingCountryListLoaded() {
+        return pref.getBoolean(MyConstants.Preferences.COUNTRY_LIST_CALL, false);
+    }
+
+    public void updateCountryListCallStatus(boolean status) {
+        editor.putBoolean(MyConstants.Preferences.COUNTRY_LIST_CALL, status);
+        editor.apply();
+    }
+
+    /**
+     * @return returns country list as [id],[name]
+     */
+    public Set<String> getCountryList() {
+        return pref.getStringSet(MyConstants.Preferences.COUNTRY_LIST, new HashSet<>());
+    }
+
+    public void updateCountryList(Set<String> countrySet) {
+        editor.putStringSet(MyConstants.Preferences.COUNTRY_LIST, countrySet);
+        editor.apply();
+    }
+
 }

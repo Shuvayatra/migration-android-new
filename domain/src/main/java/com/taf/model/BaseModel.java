@@ -3,15 +3,15 @@ package com.taf.model;
 import java.io.Serializable;
 
 public abstract class BaseModel implements Serializable {
-    Long mId;
+    Long id;
     int mDataType;
 
     public Long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(Long pId) {
-        mId = pId;
+        id = pId;
     }
 
     public int getDataType() {

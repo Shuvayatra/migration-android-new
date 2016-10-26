@@ -17,6 +17,7 @@
     <EditText
         android:id="@+id/edittext_username"
         android:layout_below="@id/question"
+        android:inputType="textPersonName|textCapWords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

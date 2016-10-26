@@ -1,79 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/question1"
+    <FrameLayout
+        android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/question_work_status"
-        android:textColor="@color/grey_87"
-        android:textSize="@dimen/text_big"/>
+        android:layout_alignParentBottom="true">
 
-    <RadioGroup
-        android:id="@+id/radiogroup_previous_work_status"
+        <Button
+            android:id="@+id/button_back"
+            style="@style/StyleNextBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="@string/back"
+            tools:text="BACK" />
+
+
+        <Button
+            android:id="@+id/button_next"
+            style="@style/StyleNextBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/finish"
+            tools:text="NEXT"/>
+    </FrameLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/question1"
-        android:layout_marginTop="@dimen/spacing_xxxlarge"
-        android:gravity="left"
-        android:orientation="vertical">
+        android:layout_above="@id/button_container"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/spacing_standard">
 
-        <RadioButton
-            android:id="@+id/rb_working"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/work_status_working_abroad"
-            android:textColor="@color/grey_87"
-            android:textSize="@dimen/text_default"/>
+            android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/rb_back_from_abroad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/work_status_back_from_abroad"
-            android:textColor="@color/grey_87"
-            />
+            <TextView
+                android:id="@+id/question1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/question_work_status"
+                android:textColor="@color/grey_87"
+                android:textSize="@dimen/text_big" />
 
-        <RadioButton
-            android:id="@+id/rb_planing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/work_status_planning"
-            android:textColor="@color/grey_87"/>
+            <RadioGroup
+                android:id="@+id/radiogroup_previous_work_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxxlarge"
+                android:gravity="left"
+                android:orientation="vertical">
 
-        <RadioButton
-            android:id="@+id/rb_not_going"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/work_status_not_going"
-            android:textColor="@color/grey_87"/>
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/rb_working"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_status_working_abroad"
+                    android:textColor="@color/grey_87"
+                    android:textSize="@dimen/text_default" />
 
+                <RadioButton
+                    android:id="@+id/rb_back_from_abroad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_status_back_from_abroad"
+                    android:textColor="@color/grey_87" />
 
-    <Button
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true"
-        style="@style/StyleNextBack"
-        android:text="@string/back"/>
+                <RadioButton
+                    android:id="@+id/rb_planing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_status_planning"
+                    android:textColor="@color/grey_87" />
 
-    <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentRight="true"
-        style="@style/StyleNextBack"
-        android:text="@string/finish"/>
-
+                <RadioButton
+                    android:id="@+id/rb_not_going"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_status_not_going"
+                    android:textColor="@color/grey_87" />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

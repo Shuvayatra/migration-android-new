@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_xxxlarge"
         android:gravity="center"
-        android:text="@string/question_birthday"
+        android:text="@string/question_destination"
         android:textColor="@color/grey_87"
         android:textSize="@dimen/text_big" />
 
@@ -22,7 +22,7 @@
         app:elevation="4dp">
 
         <Spinner
-            android:id="@+id/spinner_zone"
+            android:id="@+id/spinner_country"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/question"

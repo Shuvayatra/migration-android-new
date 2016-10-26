@@ -8,6 +8,7 @@ import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.ComponentRepository;
+import com.taf.data.repository.CountryRepository;
 import com.taf.data.repository.DeletedContentRepository;
 import com.taf.data.repository.HomeRepository;
 import com.taf.data.repository.JourneyRepository;
@@ -20,6 +21,7 @@ import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.GetJourneyUseCase;
@@ -40,6 +42,7 @@ import com.taf.interactor.deprecated.UpdateFavouriteStateUseCase;
 import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
 import com.taf.repository.IBaseRepository;
+import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
 import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INotificationRepository;
@@ -75,7 +78,6 @@ public class DataModule {
 
     public DataModule() {
     }
-
 
 
     public DataModule(Long pId) {
@@ -339,22 +341,38 @@ public class DataModule {
 
     @Provides
     @PerActivity
+    IWidgetComponentRepository provideComponentRepository(DataStoreFactory factory, DataMapper mapper, AppPreferences preferences) {
+        return new ComponentRepository(factory, mapper, preferences);
+    }
+
+    @Provides
+    @PerActivity
+    @Named(MyConstants.UseCase.CASE_COUNTRY_LIST)
+    UseCase provideCountryUseCase(ICountryRepository pRepository, ThreadExecutor pThreadExecutor,
+                                  PostExecutionThread pPostExecutionThread) {
+        return new GetCountryUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    ICountryRepository provideCountryRepository(DataStoreFactory factory, DataMapper mapper) {
+        return new CountryRepository(factory, mapper);
+    }
+
+    @Provides
+    @PerActivity
     @Named("journey")
     UseCase provideJourneyUseCase(IJourneyRepository repository,
                                   ThreadExecutor threadExecutor,
-                                  PostExecutionThread postExecutionThread){
+                                  PostExecutionThread postExecutionThread) {
         return new GetJourneyUseCase(repository, threadExecutor, postExecutionThread);
     }
 
     @Provides
     @PerActivity
-    IJourneyRepository provideIJourneyRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
-        return  new JourneyRepository(dataStoreFactory, dataMapper);
+    IJourneyRepository provideIJourneyRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper) {
+        return new JourneyRepository(dataStoreFactory, dataMapper);
     }
 
-    @Provides
-    @PerActivity
-    IWidgetComponentRepository provideComponentRepository(DataStoreFactory factory, DataMapper mapper,AppPreferences preferences) {
-        return new ComponentRepository(factory, mapper, preferences);
-    }
+
 }

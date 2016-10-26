@@ -16,24 +16,28 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract int getLayout();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayout(), container, false);
+        return inflater.inflate(getLayout(), container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mUnbinder = ButterKnife.bind(this, view);
-        setHasOptionsMenu(true);
-        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState == null) {
-            // TODO: 4/18/16
-            //((BaseActivity) getActivity()).getPreferences().removeFilterChoices();
-        }
-        //setRetainInstance(true);
     }
 
     @Override
@@ -45,9 +49,5 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    public void showNewContentInfo() {
-
     }
 }

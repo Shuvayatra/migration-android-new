@@ -16,7 +16,6 @@ public class HeaderInterceptor implements Interceptor {
                 .addHeader("Accept", "application/json")
                 .addHeader("Token", BuildConfig.API_KEY)
                 .build();
-        Response response = chain.proceed(request);
-        return response;
+        return chain.proceed(request);
     }
 }
