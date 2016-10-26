@@ -2,6 +2,8 @@ package com.taf.shuvayatra.di.module;
 
 import android.content.Context;
 
+import com.taf.data.cache.CacheImpl;
+import com.taf.data.cache.SimpleDiskCache;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
@@ -50,6 +52,7 @@ import com.taf.util.MyConstants;
 import java.util.List;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -129,8 +132,8 @@ public class DataModule {
     @Provides
     @PerActivity
     DataStoreFactory provideDataStoreFactory(Context pContext, DataMapper pDataMapper,
-                                             DatabaseHelper pHelper) {
-        return new DataStoreFactory(pContext, pDataMapper, pHelper);
+                                             DatabaseHelper pHelper, CacheImpl cache) {
+        return new DataStoreFactory(pContext, pDataMapper, pHelper, cache);
     }
 
     @Provides

@@ -6,6 +6,8 @@ package com.taf.util;
 public class MyConstants {
 
     public static final String YOUTUBE_API_KEY = "AIzaSyAbqEgRif7zCL7R_OoK0rJK1Cc2LzOTWVE";
+    public static final int APP_CACHE_VERSION = 1;
+    public static final long MAX_CACHE_SIZE = Long.MAX_VALUE;
 
     public enum DataParent {
         COUNTRY,
@@ -42,10 +44,10 @@ public class MyConstants {
         public static final String SYNC_DATA = "api/sync";
         public static final String DELETED_CONTENT = "api/trash";
 
-        public static final String HOME = "test/try.php";
+        public static final String HOME = "api/screen/home";
         public static final String OPEN_WEATHER = "data/2.5/weather";
         public static final String FOREX = "fetchForex";
-        public static final String JOURNEY = "test/try.php";
+        public static final String JOURNEY = "api/screen/home";
     }
 
     public static final class Adapter {
@@ -115,8 +117,5 @@ public class MyConstants {
         public static final int GENDER = 2;
         public static final int ORIGINAL_LOCATION = 3;
         public static final int WORK_STATUS = 4;
-
-
-
     }
 }

@@ -3,6 +3,7 @@ package com.taf.data.repository.datasource;
 import android.content.Context;
 
 import com.taf.data.BuildConfig;
+import com.taf.data.cache.CacheImpl;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.DaggerNetworkComponent;
 import com.taf.data.di.NetworkComponent;
@@ -17,13 +18,14 @@ public class DataStoreFactory {
     private final Context mContext;
     private final DataMapper mDataMapper;
     private final DatabaseHelper mHelper;
+    CacheImpl mCache;
 
-    @Inject
     public DataStoreFactory(Context pContext, DataMapper pDataMapper, DatabaseHelper
-            pHelper) {
+            pHelper, CacheImpl cache) {
         mContext = pContext;
         mDataMapper = pDataMapper;
         mHelper = pHelper;
+        mCache = cache;
     }
 
     public DBDataStore createDBDataStore() {
@@ -35,7 +37,7 @@ public class DataStoreFactory {
                 .builder()
                 .networkModule(new NetworkModule(BuildConfig.BASE_URL))
                 .build();
-        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper);
+        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper,mCache);
     }
 
     public RestDataStore createRestDataStore(String baseUrl) {
@@ -43,6 +45,10 @@ public class DataStoreFactory {
                 .builder()
                 .networkModule(new NetworkModule(baseUrl))
                 .build();
-        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper);
+        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper, mCache);
+    }
+
+    public CacheDataStore createCacheDataStore(){
+        return new CacheDataStore(mCache);
     }
 }

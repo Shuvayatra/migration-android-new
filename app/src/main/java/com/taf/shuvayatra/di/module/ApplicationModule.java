@@ -2,8 +2,11 @@ package com.taf.shuvayatra.di.module;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.taf.data.cache.CacheImpl;
+import com.taf.data.cache.SimpleDiskCache;
 import com.taf.data.database.MyOpenHelper;
 import com.taf.data.database.dao.DaoMaster;
 import com.taf.data.database.dao.DaoSession;
@@ -13,6 +16,9 @@ import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.data.utils.AppPreferences;
 import com.taf.shuvayatra.util.UIThread;
+import com.taf.util.MyConstants;
+
+import java.io.IOException;
 
 import javax.inject.Singleton;
 
@@ -67,4 +73,11 @@ public class ApplicationModule {
         //analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG);
         return analytics;
     }
+
+    @Provides
+    @Singleton
+    CacheImpl provideCacheImpl(Context context){
+        return  new CacheImpl(context);
+    }
+
 }

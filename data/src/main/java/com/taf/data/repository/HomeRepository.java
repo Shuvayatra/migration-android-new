@@ -6,8 +6,12 @@ import com.taf.model.Block;
 import com.taf.repository.IHomeRepository;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class HomeRepository implements IHomeRepository {
 
@@ -21,16 +25,15 @@ public class HomeRepository implements IHomeRepository {
 
     @Override
     public Observable<List<Block>> getBlocks() {
+
+        Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
+                .getHomeBlocks()
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getHomeBlocks()
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
 
-        /*Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
-                .getHomeBlocks()
-                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
-
-        return Observable.concat(cacheObservable, apiObservable);*/
-
-        return apiObservable;
+        return Observable.concatDelayError(cacheObservable, apiObservable);
     }
 }

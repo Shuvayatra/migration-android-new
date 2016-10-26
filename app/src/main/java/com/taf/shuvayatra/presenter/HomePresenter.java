@@ -1,5 +1,6 @@
 package com.taf.shuvayatra.presenter;
 
+import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -19,6 +20,8 @@ import javax.inject.Named;
  */
 
 public class HomePresenter implements Presenter {
+
+    public static final String TAG = "HomePresenter";
 
     final UseCase mUseCase;
     HomeView mView;
