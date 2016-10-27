@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ItemCountryListSelectedDataBinding">
+
+        <variable
+            name="country"
+            type="com.taf.model.Country"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_xxlarge">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/country_list_selected_image"
+            app:imageUrl="@{country.featuredImage}"
+            app:actualImageScaleType="centerCrop"
+            app:placeholderImage="@drawable/default_gradient"
+            app:progressBarAutoRotateInterval="1000"
+            app:progressBarImage="@drawable/ic_refresh"
+            app:progressBarImageScaleType="fitCenter"/>
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/spacing_standard"
+            android:paddingRight="@dimen/spacing_standard"
+            android:paddingTop="@dimen/spacing_large"
+            android:paddingBottom="@dimen/spacing_large"
+            android:orientation="horizontal">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/image_view_flag"
+                android:layout_width="@dimen/country_list_selected_flag_width"
+                android:layout_height="@dimen/country_list_selected_flag_height"
+                app:imageUrl="@{country.icon}"
+                app:actualImageScaleType="centerInside"
+                android:layout_marginRight="@dimen/spacing_large"
+                app:progressBarAutoRotateInterval="1000"
+                app:progressBarImage="@drawable/ic_refresh"
+                app:progressBarImageScaleType="fitCenter"/>
+        <TextView
+            android:id="@+id/country_name"
+            android:layout_toRightOf="@id/image_view_flag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{country.title}"
+            android:textColor="@color/warm_grey"
+            android:textSize="@dimen/text_xxlarge"
+            tools:text="Qatar"/>
+            <TextView
+                android:layout_below="@id/country_name"
+                android:layout_toRightOf="@id/image_view_flag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{country.firstInformation}'
+                tools:text="Currency: Ringit"/>
+            </RelativeLayout>
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

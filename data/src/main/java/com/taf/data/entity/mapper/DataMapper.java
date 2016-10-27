@@ -12,6 +12,7 @@ import com.taf.data.database.dao.DbTag;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PodcastEntity;
@@ -151,12 +152,30 @@ public class DataMapper {
         return null;
     }
 
-    public List<Country> transformCountryList(JsonElement element) {
+    public List<Country> transformCountryList(List<CountryEntity> countries) {
         Gson gson = new Gson();
         List<Country> countryList = new ArrayList<>();
-        for (JsonElement jsonElement : element.getAsJsonArray()) {
-            Country country = gson.fromJson(jsonElement, Country.class);
+        for (CountryEntity countryEntity : countries) {
+            Country country = new Country();
+            country.setId(countryEntity.getId());
+            country.setTitle(countryEntity.getTitle());
+            country.setTitleEnglish(countryEntity.getTitleEnglish());
+            country.setDescription(countryEntity.getDescription());
+            country.setFeaturedImage(countryEntity.getFeaturedImage());
+            country.setIcon(countryEntity.getIcon());
+            country.setSmallIcon(countryEntity.getSmallIcon());
+            Logger.e(TAG,"countryEntity.getInformation(): "+ countryEntity.getInformation().toString());
+            HashMap<String, String> information = new HashMap<>();
+            for (JsonElement jsonElement : countryEntity.getInformation()) {
+                // TODO: 10/27/16 check for key of attributes and values
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String key = jsonObject.get("attrib").getAsString();
+                String value = jsonObject.get("value").getAsString();
+                information.put(key, value);
+            }
+            country.setInformations(information);
             countryList.add(country);
+
         }
         return countryList;
     }

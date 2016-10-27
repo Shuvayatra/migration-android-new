@@ -84,6 +84,8 @@ public class MyConstants {
         public static final int TYPE_INFO = 10;
         public static final int TYPE_CATEGORY_HEADER = 11;
         public static final int TYPE_PODCAST = 12;
+        public static final int TYPE_COUNTRY_SELECTED = 13;
+        public static final int TYPE_COUNTRY_HEADER = 14;
     }
 
 

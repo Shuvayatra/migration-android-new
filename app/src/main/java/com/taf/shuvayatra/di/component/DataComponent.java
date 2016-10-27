@@ -17,11 +17,11 @@ import com.taf.shuvayatra.ui.deprecated.activity.SearchListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.SplashScreenActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.TagListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
+import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
@@ -51,7 +51,7 @@ public interface DataComponent extends ActivityComponent {
 
     void inject(com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment pFragment);
 
-    void inject(DestinationFragment pFragment);
+    void inject(com.taf.shuvayatra.ui.deprecated.fragment.DestinationFragment pFragment);
 
     void inject(DownloadStateReceiver pReceiver);
 
@@ -76,4 +76,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(FeedActivity activity);
 
     void inject(PodcastsActivity activity);
+
+    void inject(DestinationFragment fragment);
 }

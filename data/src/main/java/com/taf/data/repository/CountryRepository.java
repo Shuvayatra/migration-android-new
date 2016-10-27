@@ -31,7 +31,7 @@ public class CountryRepository implements ICountryRepository {
 
     @Override
     public Observable<List<Country>> getCountryList() {
-        return mDataStoreFactory.createRestDataStore(BuildConfig.SHUVAYATRA_BASE_URL).getCountryList().map(
+        return mDataStoreFactory.createRestDataStore(BuildConfig.BASE_URL).getCountryList().map(
                 jsonElement -> {
                     return mDataMapper.transformCountryList(jsonElement);
                 }

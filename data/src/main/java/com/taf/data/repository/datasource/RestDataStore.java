@@ -10,6 +10,7 @@ import com.taf.data.api.ApiRequest;
 import com.taf.data.cache.CacheImpl;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
@@ -136,7 +137,7 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<JsonElement> getCountryList() {
+    public Observable<List<CountryEntity>> getCountryList() {
         if (isThereInternetConnection()) {
             return mApiRequest.getCountryList();
         } else {
