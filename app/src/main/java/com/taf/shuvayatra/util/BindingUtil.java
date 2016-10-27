@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
@@ -83,7 +82,6 @@ public class BindingUtil {
 
     @BindingAdapter("bind:elapsedTime")
     public static void setElapsedTime(TextView pView, Long elapsedTime) {
-        Logger.e("BindingUtil", "createdAt: " + elapsedTime);
         if (elapsedTime != null) {
             pView.setText(getTimeAgo(elapsedTime, pView.getContext()));
         }
@@ -173,7 +171,6 @@ public class BindingUtil {
     public static void showSimilarAudioVideo(final Context pContext, LinearLayout pContainer, final Post
             pPost, final ListItemClickListener pListener) {
         if (pPost != null) {
-            Logger.e("BindingUtil", "category");
             AudioVideoDataBinding audioDataBinding = DataBindingUtil.inflate
                     (LayoutInflater.from(pContext), R.layout.view_audio_video_list, pContainer,
                             false);
@@ -289,10 +286,11 @@ public class BindingUtil {
     @BindingAdapter({"bind:imageUrl"})
     public static void setImage(SimpleDraweeView pView, Post post) {
         String url;
-        if (post != null) {;
-            if(post.getType().equals("audio") || post.getType().equals("video")) {
+        if (post != null) {
+            ;
+            if (post.getType().equals("audio") || post.getType().equals("video")) {
                 url = post.getData().getThumbnail();
-            }else{
+            } else {
                 url = post.getFeaturedImage();
             }
             pView.setImageURI(Uri.parse(url));

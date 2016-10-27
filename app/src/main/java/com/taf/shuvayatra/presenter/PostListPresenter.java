@@ -67,7 +67,6 @@ public class PostListPresenter implements Presenter {
         @Override
         public void onNext(PostResponse response) {
             mView.renderPostList(response);
-            onCompleted();
         }
     }
 }
