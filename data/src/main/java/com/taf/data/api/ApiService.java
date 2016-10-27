@@ -2,6 +2,7 @@ package com.taf.data.api;
 
 import com.google.gson.JsonElement;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
@@ -34,7 +35,7 @@ public interface ApiService {
     Observable<List<BlockEntity>> getHomeBlocks();
 
     @GET(MyConstants.API.DESTINATION)
-    Observable<JsonElement> getCountryList();
+    Observable<List<CountryEntity>> getCountryList();
 
     @GET(MyConstants.API.PODCASTS)
     Observable<List<PodcastEntity>> getPodcasts(@Query("channel_id") Long channelId);

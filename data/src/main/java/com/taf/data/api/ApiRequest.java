@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
@@ -68,7 +69,7 @@ public class ApiRequest {
         return mApiService.getWeatherInfo(place, unit, BuildConfig.OPEN_WEATHER_APPID);
     }
 
-    public Observable<JsonElement> getCountryList() {
+    public Observable<List<CountryEntity>> getCountryList() {
         return mApiService.getCountryList();
     }
 

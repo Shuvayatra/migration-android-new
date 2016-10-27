@@ -45,7 +45,7 @@ public class DestinationFragment extends BaseFragment implements
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_destination;
+        return R.layout.fragment_destination_old;
     }
 
     public static DestinationFragment newInstance() {

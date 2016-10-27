@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
@@ -79,6 +80,11 @@ public class HomeActivity extends BaseActivity implements
                 break;
 	    case R.id.nav_radio:
 		break;
+            case R.id.nav_destination:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, DestinationFragment.newInstance(),DestinationFragment.TAG)
+                        .commit();
+                break;
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

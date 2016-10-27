@@ -71,4 +71,8 @@
 
 	<dimen name="onboard_header_height">206dp</dimen>
 	<dimen name="onboard_content_margin_top">250dp</dimen>
+	<dimen name="country_list_flag_height">115dp</dimen>
+	<dimen name="country_list_selected_image">194dp</dimen>
+	<dimen name="country_list_selected_flag_height">54dp</dimen>
+	<dimen name="country_list_selected_flag_width">90dp</dimen>
 </resources>
