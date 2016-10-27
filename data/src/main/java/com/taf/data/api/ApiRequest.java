@@ -7,6 +7,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.exception.NetworkConnectionException;
@@ -46,6 +47,10 @@ public class ApiRequest {
 
     public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
         return mApiService.getPodcasts(channelId);
+    }
+
+    public Observable<PostResponseEntity> getPosts(int limit, int offset, String params) {
+        return mApiService.getPosts(limit, offset, params);
     }
 
     public Observable<CountryWidgetData.Component> getComponent(int componentType) {

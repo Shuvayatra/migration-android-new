@@ -10,6 +10,7 @@ public class Podcast extends BaseModel {
     String title;
     String description;
     String source;
+    String image;
 
     public String getTitle() {
         return title;
@@ -33,6 +34,14 @@ public class Podcast extends BaseModel {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

@@ -30,12 +30,10 @@ public class PodcastRepository implements IPodcastRepository {
                 .getPodcasts(mChannelId)
                 .map(podcastEntities -> mDataMapper.transformPodcastEntity(podcastEntities));
 
-        /*Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
-                .getHomeBlocks()
-                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+        Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
+                .getPodcasts(mChannelId)
+                .map(podcastEntities -> mDataMapper.transformPodcastEntity(podcastEntities));
 
-        return Observable.concat(cacheObservable, apiObservable);*/
-
-        return apiObservable;
+        return Observable.concatDelayError(cacheObservable, apiObservable);
     }
 }

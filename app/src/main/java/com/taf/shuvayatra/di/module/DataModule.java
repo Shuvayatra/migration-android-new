@@ -3,36 +3,35 @@ package com.taf.shuvayatra.di.module;
 import android.content.Context;
 
 import com.taf.data.cache.CacheImpl;
-import com.taf.data.cache.SimpleDiskCache;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.ComponentRepository;
 import com.taf.data.repository.CountryRepository;
-import com.taf.data.repository.DeletedContentRepository;
 import com.taf.data.repository.HomeRepository;
 import com.taf.data.repository.JourneyRepository;
-import com.taf.data.repository.LatestContentRepository;
-import com.taf.data.repository.NotificationRepository;
 import com.taf.data.repository.PodcastRepository;
 import com.taf.data.repository.PostRepository;
-import com.taf.data.repository.SectionCategoryRepository;
-import com.taf.data.repository.TagRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.repository.deprecated.DeletedContentRepository;
+import com.taf.data.repository.deprecated.LatestContentRepository;
+import com.taf.data.repository.deprecated.NotificationRepository;
+import com.taf.data.repository.deprecated.SectionCategoryRepository;
+import com.taf.data.repository.deprecated.TagRepository;
 import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
-import com.taf.interactor.GetPodcastListUseCase;
-import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.GetJourneyUseCase;
+import com.taf.interactor.GetPodcastListUseCase;
+import com.taf.interactor.GetPostListUseCase;
+import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
 import com.taf.interactor.deprecated.GetLatestContentUseCase;
 import com.taf.interactor.deprecated.GetNotificationListUseCase;
-import com.taf.interactor.deprecated.GetPostListUseCase;
 import com.taf.interactor.deprecated.GetSectionCategoryUseCase;
 import com.taf.interactor.deprecated.GetSimilarPostsUseCase;
 import com.taf.interactor.deprecated.GetSinglePostUseCase;
@@ -47,18 +46,17 @@ import com.taf.repository.IBaseRepository;
 import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
 import com.taf.repository.IJourneyRepository;
-import com.taf.repository.INotificationRepository;
 import com.taf.repository.IPodcastRepository;
 import com.taf.repository.IPostRepository;
-import com.taf.repository.ISectionRepository;
-import com.taf.repository.ITagRepository;
 import com.taf.repository.IWidgetComponentRepository;
+import com.taf.repository.deprecated.INotificationRepository;
+import com.taf.repository.deprecated.ISectionRepository;
+import com.taf.repository.deprecated.ITagRepository;
 import com.taf.util.MyConstants;
 
 import java.util.List;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -78,12 +76,18 @@ public class DataModule {
     boolean mIsCategory = false;
     String mTitle = null;
 
+    String mFilterParams;
+
+
     public DataModule() {
     }
 
-
     public DataModule(Long pId) {
         mId = pId;
+    }
+
+    public DataModule(String filterParams) {
+        mFilterParams = filterParams;
     }
 
     public DataModule(String pTitle, List<String> pTags) {
@@ -152,7 +156,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("favouritesSync")
-    UseCase provideFavouritesSyncUseCase(IPostRepository pDataRepository,
+    UseCase provideFavouritesSyncUseCase(com.taf.repository.deprecated.IPostRepository pDataRepository,
                                          ThreadExecutor pThreadExecutor, PostExecutionThread
                                                  pPostExecutionThread) {
         return new SyncFavouritesUseCase(pThreadExecutor, pPostExecutionThread, pDataRepository);
@@ -161,7 +165,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("favouriteUpdate")
-    UseCase provideFavouriteUpdateUseCase(IPostRepository pDataRepository,
+    UseCase provideFavouriteUpdateUseCase(com.taf.repository.deprecated.IPostRepository pDataRepository,
                                           ThreadExecutor pThreadExecutor, PostExecutionThread
                                                   pPostExecutionThread) {
         return new UpdateFavouriteStateUseCase(mId, pThreadExecutor, pPostExecutionThread,
@@ -195,8 +199,9 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("similarPostList")
-    UseCase provideSimilarPostListUseCase(IPostRepository pDataRepository, ThreadExecutor
-            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+    UseCase provideSimilarPostListUseCase(com.taf.repository.deprecated.IPostRepository
+                                                  pDataRepository, ThreadExecutor
+                                                  pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         return new GetSimilarPostsUseCase(mPostType, mTags, mId, pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
@@ -204,9 +209,11 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("postList")
-    UseCase providePostListUseCase(IPostRepository pDataRepository, ThreadExecutor pThreadExecutor,
+    UseCase provideDeprecaPostListUseCase(com.taf.repository.deprecated.IPostRepository
+                                            pDataRepository, ThreadExecutor pThreadExecutor,
                                    PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(mParentId, mPostType, mFavouriteOnly,
+        return new com.taf.interactor.deprecated.GetPostListUseCase(mParentId, mPostType,
+                mFavouriteOnly,
                 mUnSyncedOnly, mTitle, mTags, mExcludeTypes, pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
@@ -220,9 +227,9 @@ public class DataModule {
 
     @Provides
     @PerActivity
-    IPostRepository providePostDataRepository(DataStoreFactory pDataStoreFactory, DataMapper
+    com.taf.repository.deprecated.IPostRepository providePostDataRepository(DataStoreFactory pDataStoreFactory, DataMapper
             pDataMapper) {
-        return new PostRepository(pDataStoreFactory, pDataMapper);
+        return new com.taf.data.repository.deprecated.PostRepository(pDataStoreFactory, pDataMapper);
     }
 
     @Provides
@@ -238,7 +245,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("download_start")
-    UseCase provideDownloadStartUseCase(IPostRepository pDataRepository, ThreadExecutor
+    UseCase provideDownloadStartUseCase(com.taf.repository.deprecated.IPostRepository pDataRepository, ThreadExecutor
             pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         return new DownloadAudioUseCase(mId, pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
@@ -248,7 +255,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("download_complete")
-    UseCase provideDownloadCompleteUseCase(IPostRepository pDataRepository, ThreadExecutor
+    UseCase provideDownloadCompleteUseCase(com.taf.repository.deprecated.IPostRepository pDataRepository, ThreadExecutor
             pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         return new UpdateDownloadStatusUseCase(pDataRepository, pThreadExecutor,
                 pPostExecutionThread);
@@ -280,7 +287,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("view_count_update")
-    UseCase providePostViewCountUseCase(IPostRepository pRepository,
+    UseCase providePostViewCountUseCase(com.taf.repository.deprecated.IPostRepository pRepository,
                                         ThreadExecutor pThreadExecutor, PostExecutionThread
                                                 pPostExecutionThread) {
         return new UpdatePostViewCountUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
@@ -289,7 +296,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("share_count_update")
-    UseCase providePostShareCountUseCase(IPostRepository pRepository,
+    UseCase providePostShareCountUseCase(com.taf.repository.deprecated.IPostRepository pRepository,
                                          ThreadExecutor pThreadExecutor, PostExecutionThread pPostExecutionThread) {
         return new UpdatePostShareCountUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
     }
@@ -312,7 +319,7 @@ public class DataModule {
     @Provides
     @PerActivity
     @Named("single_post")
-    UseCase provideSinglePostUseCase(IPostRepository pRepository, ThreadExecutor pThreadExecutor,
+    UseCase provideSinglePostUseCase(com.taf.repository.deprecated.IPostRepository pRepository, ThreadExecutor pThreadExecutor,
                                      PostExecutionThread pPostExecutionThread) {
         return new GetSinglePostUseCase(mId, pRepository, pThreadExecutor, pPostExecutionThread);
     }
@@ -338,7 +345,7 @@ public class DataModule {
     @Named("podcast_list")
     UseCase providePodcastListUseCase(IPodcastRepository pRepository, ThreadExecutor
             pThreadExecutor,
-                               PostExecutionThread pPostExecutionThread) {
+                                      PostExecutionThread pPostExecutionThread) {
         return new GetPodcastListUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
@@ -392,5 +399,19 @@ public class DataModule {
         return new JourneyRepository(dataStoreFactory, dataMapper);
     }
 
+    @Provides
+    @PerActivity
+    @Named("post_list")
+    UseCase providePostListUseCase(IPostRepository pRepository, ThreadExecutor
+            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new GetPostListUseCase(mFilterParams, pRepository, pThreadExecutor,
+                pPostExecutionThread);
+    }
 
+    @Provides
+    @PerActivity
+    IPostRepository providePostRepository(DataStoreFactory dataStoreFactory, DataMapper
+            dataMapper) {
+        return new PostRepository(dataStoreFactory, dataMapper);
+    }
 }

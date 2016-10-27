@@ -23,7 +23,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="share_audio">Share Audio Post</string>
-    <string name="error_bluetooth_share">You need to download the audio in order to share</string>
+    <string name="error_bluetooth_share">You need to download the audio in position to share</string>
 
     <string name="default_empty_message">No feeds available currently.</string>
     <string name="similar_audios">similar audios</string>

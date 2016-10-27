@@ -17,8 +17,8 @@ import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
 import butterknife.BindView;
 
-public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
@@ -77,10 +77,8 @@ public class HomeActivity extends BaseActivity
                         .replace(R.id.content_home, JourneyFragment.getInstance(),JourneyFragment.TAG)
                         .commit();
                 break;
-            case R.id.nav_radio:
-                Logger.d("HomeActivity_onNavigationItemSelected", "radio");
-                startActivity(new Intent(this, PodcastsActivity.class));
-                break;
+	    case R.id.nav_radio:
+		break;
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

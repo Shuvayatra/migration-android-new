@@ -4,7 +4,7 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
-import com.taf.repository.ITagRepository;
+import com.taf.repository.deprecated.ITagRepository;
 
 import java.util.List;
 

@@ -49,7 +49,7 @@ dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
     //def testDependencies = rootProject.ext.dataTestDependencies
 
-    compile project(':domain')
+    compile project (':domain')
 
     compile dataDependencies.retrofit
     compile dataDependencies.retrofitGsonConverter
@@ -65,4 +65,5 @@ dependencies {
     compile dataDependencies.rxAndroid
     compile dataDependencies.androidAnnotations
     compile dataDependencies.disklrucache
+    compile dataDependencies.okhttpLogger
 }

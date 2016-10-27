@@ -122,14 +122,6 @@
 			android:name=".ui.deprecated.activity.FacebookParseActivity"
 			android:label="@string/title_activity_facebook_parse"
 			android:theme="@style/AppTheme.NoActionBar">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-
-				<category android:name="android.intent.category.DEFAULT"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
-
-				<data android:scheme="shuvayatra"/>
-			</intent-filter>
 		</activity>
 		<activity
 			android:name=".ui.deprecated.activity.SearchListActivity"
@@ -142,9 +134,75 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
+			android:name=".ui.activity.DeepLinkActivity"
+			android:label="@string/title_activity_deep_link"
+			android:theme="@style/AppTheme.NoActionBar">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+
+				<data
+					android:host="journey"
+					android:scheme="shuvayatra"/>
+				<data
+					android:host="destination"
+					android:scheme="shuvayatra"/>
+				<data
+					android:host="radio"
+					android:scheme="shuvayatra"/>
+				<data
+					android:host="qna"
+					android:scheme="shuvayatra"/>
+				<data
+					android:host="news"
+					android:scheme="shuvayatra"/>
+			</intent-filter>
+		</activity>
+		<activity
 			android:name=".ui.activity.OnBoardActivity"
 			android:label="@string/title_activity_on_board"
 			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
+		</activity>
+		<activity
+			android:name=".ui.activity.FeedActivity"
+			android:label="@string/title_activity_feed"
+			android:parentActivityName=".ui.activity.HomeActivity"
+			android:theme="@style/AppTheme.NoActionBar">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+
+				<data
+					android:host="feed"
+					android:scheme="shuvayatra"/>
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".ui.activity.PodcastsActivity"
+			android:label="@string/title_activity_podcasts"
+			android:parentActivityName=".ui.activity.HomeActivity"
+			android:theme="@style/AppTheme.NoActionBar">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+
+				<data
+					android:host="podcasts"
+					android:scheme="shuvayatra"/>
+			</intent-filter>
 		</activity>
 
 		<activity-alias
@@ -157,16 +215,5 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity-alias>
-
-		<activity
-			android:name=".ui.activity.PodcastsActivity"
-			android:label="@string/title_activity_podcasts"
-			android:parentActivityName=".ui.activity.HomeActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
-		</activity>
 	</application>
-
 </manifest>

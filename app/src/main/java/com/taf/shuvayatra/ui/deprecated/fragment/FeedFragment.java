@@ -29,18 +29,18 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.DeletedContentPresenter;
 import com.taf.shuvayatra.presenter.deprecated.LatestContentPresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostListPresenter;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.deprecated.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.TagListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.adapter.CustomArrayAdapter;
-import com.taf.shuvayatra.ui.adapter.ListAdapter;
-import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.DeletedInfoView;
 import com.taf.shuvayatra.ui.deprecated.interfaces.LatestContentView;
-import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.deprecated.interfaces.PostListView;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -180,6 +180,14 @@ public class FeedFragment extends BaseFragment implements
             mFilterSpinner.setOnItemSelectedListener(this);
             mFilterSpinner.setSelection(subCategorySelection);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        mPresenter.destroy();
+        mLatestPresenter.destroy();
+        mDeletePresenter.destroy();
+        super.onDestroyView();
     }
 
     @OnClick(R.id.search_action)
@@ -473,13 +481,5 @@ public class FeedFragment extends BaseFragment implements
         outState.putBoolean(MyConstants.Extras.KEY_FILTER_FAVOURITES_ONLY, filterFavouritesOnly);
         outState.putLong(MyConstants.Extras.KEY_SUB_CATEGORY, subCategoryId);
         outState.putString(MyConstants.Extras.KEY_TYPE, postType);
-    }
-
-    @Override
-    public void onDestroyView() {
-        mPresenter.destroy();
-        mLatestPresenter.destroy();
-        mDeletePresenter.destroy();
-        super.onDestroyView();
     }
 }

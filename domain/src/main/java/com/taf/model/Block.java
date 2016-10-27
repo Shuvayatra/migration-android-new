@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public class Block {
-    private int mOrder;
+    private int mPosition;
     private String mLayout;
     private String mTitle;
     private String mDescription;
@@ -16,13 +16,14 @@ public class Block {
     private boolean showViewMore;
     private String viewMoreTitle;
     private String deeplink;
+    private List<Long> filterIds;
 
-    public int getOrder() {
-        return mOrder;
+    public int getPosition() {
+        return mPosition;
     }
 
-    public void setOrder(int order) {
-        this.mOrder = order;
+    public void setPosition(int position) {
+        this.mPosition = position;
     }
 
     public String getLayout() {
@@ -87,5 +88,13 @@ public class Block {
 
     public void setDeeplink(String deeplink) {
         this.deeplink = deeplink;
+    }
+
+    public List<Long> getFilterIds() {
+        return filterIds;
+    }
+
+    public void setFilterIds(List<Long> filterIds) {
+        this.filterIds = filterIds;
     }
 }

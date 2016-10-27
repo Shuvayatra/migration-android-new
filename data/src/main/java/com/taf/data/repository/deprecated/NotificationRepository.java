@@ -1,9 +1,9 @@
-package com.taf.data.repository;
+package com.taf.data.repository.deprecated;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.model.Notification;
-import com.taf.repository.INotificationRepository;
+import com.taf.repository.deprecated.INotificationRepository;
 
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package com.taf.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by julian on 10/18/16.
  */
@@ -7,6 +9,8 @@ package com.taf.data.entity;
 public class NoticeEntity {
     String title;
     String description;
+    @SerializedName("image_url")
+    String image;
 
     public String getTitle() {
         return title;
@@ -22,5 +26,13 @@ public class NoticeEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

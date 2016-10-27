@@ -13,6 +13,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
@@ -90,7 +91,6 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getHomeBlocks()
                     .doOnNext(blockEntities -> {
-                        // TODO: 10/18/16 save to cache
                         mCache.saveHomeBlocks(blockEntities);
                     });
         } else {
@@ -101,8 +101,19 @@ public class RestDataStore implements IDataStore {
     public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
         if (isThereInternetConnection()) {
             return mApiRequest.getPodcasts(channelId)
-                    .doOnNext(blockEntities -> {
-                        // TODO: 10/18/16 save to cache
+                    .doOnNext(entities -> {
+                        mCache.savePodcastsByChannelId(entities, channelId);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<PostResponseEntity> getPosts(int limit, int offset, String filterParams) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getPosts(limit, offset, filterParams)
+                    .doOnNext(responseEntity -> {
+                        mCache.savePosts(filterParams, responseEntity.getData(), (offset != 1));
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -138,7 +149,6 @@ public class RestDataStore implements IDataStore {
             return mApiRequest.getJourneyContent()
                     .doOnNext(blockEntities -> {
                         // // TODO: 10/21/16 save offline cache
-                        mCache.saveJourneyBlocks(blockEntities);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());

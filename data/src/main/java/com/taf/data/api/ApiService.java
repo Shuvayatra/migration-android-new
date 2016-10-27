@@ -5,6 +5,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.model.Country;
@@ -47,4 +48,8 @@ public interface ApiService {
     @GET(MyConstants.API.FOREX)
     Observable<JsonElement> getForex();
 
+    @GET(MyConstants.API.POSTS)
+    Observable<PostResponseEntity> getPosts(@Query("per_page") int limit,
+                                            @Query("page") int offset,
+                                            @Query("category_id") String params);
 }

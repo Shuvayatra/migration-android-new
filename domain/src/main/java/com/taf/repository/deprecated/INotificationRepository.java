@@ -1,6 +1,7 @@
-package com.taf.repository;
+package com.taf.repository.deprecated;
 
 import com.taf.model.Notification;
+import com.taf.repository.IBaseRepository;
 
 import rx.Observable;
 

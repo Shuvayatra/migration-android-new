@@ -68,6 +68,7 @@ public class MyConstants {
         public static final String FOREX = "fetchForex";
         public static final String JOURNEY = "api/screen/home";
         public static final String PODCASTS = "api/podcasts";
+        public static final String POSTS = "api/posts";
     }
 
     public static final class Adapter {
