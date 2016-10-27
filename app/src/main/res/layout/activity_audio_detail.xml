@@ -6,7 +6,7 @@
 
         <variable
             name="listener"
-            type="com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener"/>
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
 
         <variable
             name="similarAudios"

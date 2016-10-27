@@ -38,7 +38,7 @@
 				android:layout_height="wrap_content"
 				android:ellipsize="end"
 				android:lines="2"
-				android:text="@{post.description}"/>
+				app:htmlContent="@{post.description}"/>
 		</LinearLayout>
 
 		<com.facebook.drawee.view.SimpleDraweeView

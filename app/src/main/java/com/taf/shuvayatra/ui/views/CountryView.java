@@ -1,7 +1,6 @@
 package com.taf.shuvayatra.ui.views;
 
 import com.taf.model.Country;
-import com.taf.shuvayatra.ui.deprecated.interfaces.LoadDataView;
 
 import java.util.List;
 

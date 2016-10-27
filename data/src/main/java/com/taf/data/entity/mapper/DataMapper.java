@@ -1,5 +1,7 @@
 package com.taf.data.entity.mapper;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,6 +16,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.NoticeEntity;
+import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -26,6 +29,7 @@ import com.taf.model.CountryWidgetData;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
 import com.taf.model.Notification;
+import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.model.PostData;
 import com.taf.model.SyncData;
@@ -383,6 +387,30 @@ public class DataMapper {
         weatherComponent.setTemperature(temperature);
         weatherComponent.setWeatherInfo(weather);
         return weatherComponent;
+
+    }
+
+    public List<Podcast> transformPodcastEntity(List<PodcastEntity> entities) {
+        List<Podcast> podcasts = new ArrayList<>();
+        if (entities != null) {
+            for (PodcastEntity entity : entities) {
+                Podcast podcast = transformPodcastEntity(entity);
+                if (podcast != null) podcasts.add(podcast);
+            }
+        }
+        return podcasts;
+    }
+
+    public Podcast transformPodcastEntity(PodcastEntity entity) {
+        if (entity != null) {
+            Podcast podcast = new Podcast();
+            podcast.setId(entity.getId());
+            podcast.setTitle(entity.getTitle());
+            podcast.setDescription(entity.getDescription());
+            podcast.setSource(entity.getSource());
+            return podcast;
+        }
+        return null;
     }
 
     public CountryWidgetData.ForexComponent transformForexInfo(JsonElement json) {
@@ -426,5 +454,4 @@ public class DataMapper {
         }
         return null;
     }
-
 }

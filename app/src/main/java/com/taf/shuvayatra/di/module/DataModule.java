@@ -14,6 +14,7 @@ import com.taf.data.repository.HomeRepository;
 import com.taf.data.repository.JourneyRepository;
 import com.taf.data.repository.LatestContentRepository;
 import com.taf.data.repository.NotificationRepository;
+import com.taf.data.repository.PodcastRepository;
 import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.SectionCategoryRepository;
 import com.taf.data.repository.TagRepository;
@@ -23,6 +24,7 @@ import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
+import com.taf.interactor.GetPodcastListUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.UseCase;
@@ -46,6 +48,7 @@ import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
 import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INotificationRepository;
+import com.taf.repository.IPodcastRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.ISectionRepository;
 import com.taf.repository.ITagRepository;
@@ -63,6 +66,7 @@ import dagger.Provides;
 @Module
 public class DataModule {
 
+    public static final String NAMED_COUNTRY_WIDGET = "country_widget";
     Long mId = null;
     Long mParentId = null;
     MyConstants.DataParent mParentType;
@@ -73,8 +77,6 @@ public class DataModule {
     boolean mUnSyncedOnly = false;
     boolean mIsCategory = false;
     String mTitle = null;
-
-    public static final String NAMED_COUNTRY_WIDGET = "country_widget";
 
     public DataModule() {
     }
@@ -329,6 +331,22 @@ public class DataModule {
     IHomeRepository provideHomeRepository(DataStoreFactory dataStoreFactory, DataMapper
             dataMapper) {
         return new HomeRepository(dataStoreFactory, dataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("podcast_list")
+    UseCase providePodcastListUseCase(IPodcastRepository pRepository, ThreadExecutor
+            pThreadExecutor,
+                               PostExecutionThread pPostExecutionThread) {
+        return new GetPodcastListUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    IPodcastRepository providePodcastRepository(DataStoreFactory dataStoreFactory, DataMapper
+            dataMapper) {
+        return new PodcastRepository(mId, dataStoreFactory, dataMapper);
     }
 
     @Provides

@@ -1,6 +1,6 @@
-package com.taf.shuvayatra.ui.deprecated.interfaces;
+package com.taf.shuvayatra.ui.views;
 
-public interface PostDetailView extends MvpView{
+public interface PostDetailView extends MvpView {
     void onPostFavouriteStateUpdated(Boolean status);
     void onViewCountUpdated();
     void onShareCountUpdate();

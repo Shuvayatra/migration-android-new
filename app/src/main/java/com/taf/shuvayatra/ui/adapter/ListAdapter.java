@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.ui.deprecated.adapter;
+package com.taf.shuvayatra.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -12,6 +12,7 @@ import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.model.HeaderItem;
 import com.taf.model.Notification;
+import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
@@ -22,7 +23,8 @@ import com.taf.shuvayatra.databinding.InfoListDataBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.NotificationDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
-import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.databinding.PodcastDataBinding;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
 import java.util.List;
@@ -120,6 +122,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         R.layout.view_place, parent, false);
                 viewHolder = new PlaceViewHolder(placeDataBinding);
                 break;
+            case Adapter.TYPE_PODCAST:
+                PodcastDataBinding podcastDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.view_podcast, parent, false);
+                viewHolder = new PodcastViewHolder(podcastDataBinding);
+                break;
             case Adapter.TYPE_COUNTRY:
                 DestinationDataBinding destinationDataBinding = DataBindingUtil.inflate
                         (mLayoutInflater, R.layout.view_destination_list, parent, false);
@@ -164,6 +171,10 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 break;
             case Adapter.TYPE_PLACE:
                 ((PlaceViewHolder) holder).mBinding.setPlace((Post) mDataCollection.get(position));
+                break;
+            case Adapter.TYPE_PODCAST:
+                ((PodcastViewHolder) holder).mBinding.setPodcast((Podcast) mDataCollection.get
+                        (position));
                 break;
             case Adapter.TYPE_COUNTRY:
                 ((DestinationViewHolder) holder).mBinding.setCategory((Category) mDataCollection
@@ -326,5 +337,23 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             super(pBinding.getRoot());
             mBinding = pBinding;
         }
+    }
+
+    public class PodcastViewHolder extends RecyclerView.ViewHolder {
+
+        PodcastDataBinding mBinding;
+
+        public PodcastViewHolder(PodcastDataBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
+            mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onListItemSelected(mBinding.getPodcast(), getDataCollection()
+                            .indexOf(mBinding.getPodcast()));
+                }
+            });
+        }
+
     }
 }

@@ -2,7 +2,7 @@ package com.taf.shuvayatra.presenter;
 
 
 import com.taf.interactor.UseCaseData;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 public interface Presenter {
     void resume();

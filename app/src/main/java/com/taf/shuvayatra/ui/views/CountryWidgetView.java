@@ -3,7 +3,6 @@ package com.taf.shuvayatra.ui.views;
 
 import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetData.Component;
-import com.taf.shuvayatra.ui.deprecated.interfaces.LoadDataView;
 
 /**
  * Corresponding view interface for {@link CountryWidgetData}

@@ -8,6 +8,7 @@ import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.ui.adapter.BlockItemAdapter;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -278,5 +279,10 @@ public class BindingUtil {
 //            //LinearSnapHelper snapHelper = new LinearSnapHelper();
 //            snapHelper.attachToRecyclerView(recyclerView);
 //        }
+    }
+
+    @BindingAdapter("bind:htmlContent")
+    public static void setHtmlContent(TextView view, String content) {
+        view.setText(Html.fromHtml(content));
     }
 }

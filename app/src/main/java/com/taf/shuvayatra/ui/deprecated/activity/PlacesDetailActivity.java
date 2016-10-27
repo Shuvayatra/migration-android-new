@@ -20,7 +20,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.PlacesListPresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostFavouritePresenter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.PlacesListView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.PostDetailView;
+import com.taf.shuvayatra.ui.views.PostDetailView;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;

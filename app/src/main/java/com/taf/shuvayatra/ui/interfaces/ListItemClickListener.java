@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.ui.deprecated.interfaces;
+package com.taf.shuvayatra.ui.interfaces;
 
 import com.taf.model.BaseModel;
 

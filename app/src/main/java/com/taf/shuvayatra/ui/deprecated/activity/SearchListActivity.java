@@ -16,9 +16,9 @@ import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.PostListPresenter;
-import com.taf.shuvayatra.ui.deprecated.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.deprecated.interfaces.PostListView;
 import com.taf.util.MyConstants;
 

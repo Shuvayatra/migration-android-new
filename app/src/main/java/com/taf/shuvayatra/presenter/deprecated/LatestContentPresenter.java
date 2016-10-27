@@ -10,7 +10,7 @@ import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.presenter.Presenter;
 import com.taf.shuvayatra.ui.deprecated.interfaces.LatestContentView;
-import com.taf.shuvayatra.ui.deprecated.interfaces.MvpView;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 import java.util.Calendar;
 
