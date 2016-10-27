@@ -8,8 +8,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
@@ -54,7 +56,7 @@ public class FeedActivity extends BaseActivity implements
     LinearLayoutManager mLayoutManager;
     ListAdapter<Post> mListAdapter;
     UseCaseData mUseCaseData = new UseCaseData();
-    Integer mPage = 0;
+    Integer mPage = INITIAL_OFFSET;
     Integer mTotalDataCount = 0;
     int listItemSelection;
     boolean mIsLoading = false;
@@ -82,6 +84,14 @@ public class FeedActivity extends BaseActivity implements
         setUpAdapter();
 
         loadPostsList(INITIAL_OFFSET);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initialize(String params) {
@@ -116,9 +126,8 @@ public class FeedActivity extends BaseActivity implements
 
                 if (!mIsLoading && !mIsLastPage) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                            && firstVisibleItemPosition >= 0
-                            && totalItemCount >= PAGE_LIMIT) {
-                        loadPostsList(mPage);
+                            && firstVisibleItemPosition >= 0) {
+                        loadPostsList(mPage + 1);
                     }
                 }
             }
@@ -132,7 +141,7 @@ public class FeedActivity extends BaseActivity implements
         mPage = pPage;
         mSwipeContainer.setRefreshing(true);
         mUseCaseData.clearAll();
-        mUseCaseData.putInteger(UseCaseData.OFFSET, mPage);
+        mUseCaseData.putInteger(UseCaseData.OFFSET, pPage);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
 
         mPresenter.initialize(mUseCaseData);
@@ -190,6 +199,15 @@ public class FeedActivity extends BaseActivity implements
 
     @Override
     public void renderPostList(PostResponse response) {
+        if (response.isFromCache()) {
+            if (mListAdapter.getItemCount() == 0) {
+                mListAdapter.setDataCollection(response.getData());
+                mIsLastPage = true;
+            }
+            return;
+        }
+
+        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
         if (mPage == INITIAL_OFFSET) {
             mListAdapter.setDataCollection(response.getData());
         } else {
@@ -197,17 +215,20 @@ public class FeedActivity extends BaseActivity implements
         }
         mTotalDataCount = response.getTotal();
         mIsLastPage = (mPage == response.getLastPage());
-        mPage++;
+        mPage = response.getCurrentPage();
+        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
     }
 
     @Override
     public void showLoadingView() {
+        Logger.d("FeedActivity_showLoadingView", "pagination start");
         mIsLoading = true;
         mSwipeContainer.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingView() {
+        Logger.d("FeedActivity_hideLoadingView", "pagination end");
         mIsLoading = false;
         mSwipeContainer.setRefreshing(false);
     }

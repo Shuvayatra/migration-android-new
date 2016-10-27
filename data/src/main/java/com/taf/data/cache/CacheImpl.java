@@ -113,15 +113,18 @@ public class CacheImpl {
 
     // TODO: 10/26/16 define key as per categories/blocks
     public void savePosts(String params, List<PostEntity> entities, boolean append) {
+        String suffix = params.replaceAll(",", "-");
         if (append) {
-            appendPosts(POST_LIST_PREFIX + params, entities);
+            Logger.d("CacheImpl_savePosts", "append");
+            appendPosts(POST_LIST_PREFIX + suffix, entities);
         } else {
-            savePosts(POST_LIST_PREFIX + params, entities);
+            savePosts(POST_LIST_PREFIX + suffix, entities);
         }
     }
 
     public Observable<List<PostEntity>> getPostsByParams(String params) {
-        return getPosts(POST_LIST_PREFIX + params);
+        String suffix = params.replaceAll(",", "-");
+        return Observable.just(getPosts(POST_LIST_PREFIX + suffix));
     }
 
     public void savePosts(String key, List<PostEntity> posts) {
@@ -133,13 +136,12 @@ public class CacheImpl {
     }
 
     public void appendPosts(String key, List<PostEntity> posts) {
-        getPosts(key).doOnNext(postsEntities -> {
-            postsEntities.addAll(posts);
-            savePosts(POSTS, postsEntities);
-        });
+        List<PostEntity> list = getPosts(key);
+        list.addAll(posts);
+        savePosts(key, list);
     }
 
-    public Observable<List<PostEntity>> getPosts(String key) {
+    public List<PostEntity> getPosts(String key) {
         List<PostEntity> posts = new ArrayList<>();
         try {
             if (mSimpleDiskCache.contains(key)) {
@@ -152,7 +154,7 @@ public class CacheImpl {
             e.printStackTrace();
         }
 
-        return Observable.just(posts);
+        return posts;
     }
 
     public Observable<PostEntity> getPost(long id) {

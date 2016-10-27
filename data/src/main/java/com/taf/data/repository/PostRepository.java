@@ -29,6 +29,7 @@ public class PostRepository implements IPostRepository {
                     PostResponse response = new PostResponse(1, 1);
                     response.setData(mDataMapper.transformPost(entities));
                     response.setTotal(entities.size());
+                    response.setFromCache(true);
                     return response;
                 });
 

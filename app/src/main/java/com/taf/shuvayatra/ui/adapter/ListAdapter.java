@@ -27,6 +27,7 @@ import com.taf.shuvayatra.databinding.PodcastDataBinding;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants.Adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -44,6 +45,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
         this.mListener = pListener;
+        mDataCollection = new ArrayList<>();
     }
 
     public ListAdapter(Context pContext, ListItemClickListener pListener, String pDefaultCategory) {

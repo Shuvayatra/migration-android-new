@@ -13,6 +13,8 @@ public class PostResponse {
     int lastPage;
     List<Post> data;
 
+    boolean fromCache = false;
+
     public PostResponse() {
     }
 
@@ -59,5 +61,13 @@ public class PostResponse {
 
     public void setData(List<Post> data) {
         this.data = data;
+    }
+
+    public boolean isFromCache() {
+        return fromCache;
+    }
+
+    public void setFromCache(boolean fromCache) {
+        this.fromCache = fromCache;
     }
 }
