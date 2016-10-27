@@ -62,7 +62,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             mBinding = DataBindingUtil.setContentView(this, getLayout());
             ButterKnife.bind(this, mBinding.getRoot());
         }
-        initializeToolbar();
+        if (mToolbar != null)
+            initializeToolbar();
     }
 
     @Override
@@ -115,7 +116,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void initializeToolbar() {
-        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar == null) {
             throw new IllegalStateException("Layout is required to include a Toolbar with id " +
                     "'toolbar'");

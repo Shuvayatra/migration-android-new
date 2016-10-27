@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.utils.Logger;
@@ -27,6 +28,7 @@ public class CacheImpl {
     private static final String HOME_BLOCKS = "home-cache";
     private static final String JOURNEY_BLOCKS = "journey-blocks";
     private static final String POSTS = "posts";
+    private static final String COUNTRY_LIST = "country-list";
     private SimpleDiskCache mSimpleDiskCache;
 
     @Inject
@@ -57,6 +59,21 @@ public class CacheImpl {
         return getBlocks(JOURNEY_BLOCKS);
     }
 
+    public Observable<List<CountryEntity>> getCountryList() {
+        List<CountryEntity> countryEntities = new ArrayList<>();
+        try {
+            if (mSimpleDiskCache.contains(COUNTRY_LIST)) {
+                String json = mSimpleDiskCache.getCachedString(COUNTRY_LIST).getValue();
+                countryEntities = new Gson().fromJson(json,
+                        new TypeToken<List<CountryEntity>>() {
+                        }.getType());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Observable.just(countryEntities);
+    }
+
     private void saveBlocks(String key, List<BlockEntity> blockEntities) {
         Logger.e(TAG, "========= saving into cache: ========");
         Logger.e(TAG, "blockEntities: " + blockEntities.size());
@@ -66,6 +83,14 @@ public class CacheImpl {
             e.printStackTrace();
         }
         Logger.e(TAG, "======= saved into cache =========");
+    }
+
+    public void saveCountryList(List<CountryEntity> countryList) {
+        try {
+            mSimpleDiskCache.put(COUNTRY_LIST, new Gson().toJson(countryList));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Observable<List<BlockEntity>> getBlocks(String key) {

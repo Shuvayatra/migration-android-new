@@ -169,7 +169,7 @@ public class DataMapper {
             for (JsonElement jsonElement : countryEntity.getInformation()) {
                 // TODO: 10/27/16 check for key of attributes and values
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
-                String key = jsonObject.get("attrib").getAsString();
+                String key = jsonObject.get("attribute").getAsString();
                 String value = jsonObject.get("value").getAsString();
                 information.put(key, value);
             }

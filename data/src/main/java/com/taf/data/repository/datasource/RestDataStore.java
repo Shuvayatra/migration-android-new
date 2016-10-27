@@ -139,7 +139,11 @@ public class RestDataStore implements IDataStore {
 
     public Observable<List<CountryEntity>> getCountryList() {
         if (isThereInternetConnection()) {
-            return mApiRequest.getCountryList();
+            return mApiRequest.getCountryList().doOnNext(
+                    countryEntities -> {
+                        mCache.saveCountryList(countryEntities);
+                    }
+            );
         } else {
             return Observable.error(new NetworkConnectionException());
         }

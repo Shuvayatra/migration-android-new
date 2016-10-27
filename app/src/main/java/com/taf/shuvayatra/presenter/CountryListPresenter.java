@@ -8,6 +8,7 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
+import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.util.MyConstants;
@@ -24,6 +25,7 @@ import javax.inject.Named;
  * Simply lists out available countries, nothing more.
  *
  * @see OnBoardActivity
+ * @see DestinationFragment
  */
 
 public class CountryListPresenter implements Presenter {

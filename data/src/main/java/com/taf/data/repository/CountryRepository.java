@@ -1,9 +1,7 @@
 package com.taf.data.repository;
 
-import com.taf.data.BuildConfig;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
-import com.taf.data.utils.AppPreferences;
 import com.taf.model.Country;
 import com.taf.repository.ICountryRepository;
 
@@ -31,10 +29,22 @@ public class CountryRepository implements ICountryRepository {
 
     @Override
     public Observable<List<Country>> getCountryList() {
-        return mDataStoreFactory.createRestDataStore(BuildConfig.BASE_URL).getCountryList().map(
-                jsonElement -> {
-                    return mDataMapper.transformCountryList(jsonElement);
-                }
-        );
+
+        Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
+                .getCountryList()
+                .map(countryEntities -> mDataMapper.transformCountryList(countryEntities));
+
+        Observable apiObservable = mDataStoreFactory.createRestDataStore().getCountryList()
+                .map(countryEntities -> mDataMapper.transformCountryList(countryEntities));
+
+        return Observable.concatDelayError(cacheObservable, apiObservable);
+    }
+
+
+    @Override
+    public Observable<List<Country>> getCachedCountryList() {
+        return mDataStoreFactory.createCacheDataStore()
+                .getCountryList()
+                .map(countryEntities -> mDataMapper.transformCountryList(countryEntities));
     }
 }

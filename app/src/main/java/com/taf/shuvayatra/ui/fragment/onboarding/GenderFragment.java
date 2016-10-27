@@ -42,6 +42,7 @@ public class GenderFragment extends BaseFragment {
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         });
@@ -71,6 +72,7 @@ public class GenderFragment extends BaseFragment {
 
                 Logger.e(TAG," ((BaseActivity) getActivity()).getPreferences().getGender();: "+
                         ((BaseActivity) getActivity()).getPreferences().getGender());
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         };

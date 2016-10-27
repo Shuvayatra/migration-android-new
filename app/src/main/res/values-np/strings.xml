@@ -18,6 +18,7 @@
     <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
 
     <string name="action_download">डाउनलोड</string>
+    <string name="action_on">Turn on</string>
     <string name="action_share">शेयर</string>
     <string name="action_share_facebook">शेयर</string>
     <string name="action_share_bluetooth">ब्लुतूथबाट शेयर</string>

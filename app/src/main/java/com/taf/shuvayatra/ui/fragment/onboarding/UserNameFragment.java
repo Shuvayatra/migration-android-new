@@ -21,7 +21,7 @@ public class UserNameFragment extends BaseFragment {
     @BindView(R.id.edittext_username)
     EditText etUserName;
 
-    ButtonPressListener mButtonPressListener;
+    private ButtonPressListener mButtonPressListener;
 
     @Override
     public int getLayout() {
@@ -47,6 +47,7 @@ public class UserNameFragment extends BaseFragment {
                     return;
                 }
                 ((BaseActivity) getActivity()).getPreferences().setUserName(name.trim());
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(0);
             }
         });
