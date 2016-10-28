@@ -2,6 +2,7 @@ package com.taf.shuvayatra.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taf.data.utils.DateUtils;
@@ -15,6 +16,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryWidgetPresenter;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
+import com.taf.util.MyConstants;
 
 import java.util.Calendar;
 
@@ -38,6 +40,10 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     TextView tvEnglishDate;
     @BindView(R.id.textview_temperature)
     TextView tvTemperature;
+    @BindView(R.id.imageview_weather)
+    ImageView mImageViewWeather;
+    @BindView(R.id.textview_country_name)
+    TextView tvCountryName;
 
     // Different use cases for different components
     UseCaseData caseCalendar = new UseCaseData();
@@ -59,6 +65,10 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
         super.onActivityCreated(savedInstanceState);
 
         initialize();
+
+        String selectedCOuntry = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        String countryName = selectedCOuntry.substring(selectedCOuntry.indexOf(",")+1);
+        tvCountryName.setText(countryName);
     }
 
     public void initialize() {
@@ -102,6 +112,32 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
                 break;
             case CountryWidgetData.COMPONENT_WEATHER:
                 tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() +" "+ (char) 0x00B0 + "C");
+                String pWeather = ((CountryWidgetData.WeatherComponent) component).getWeatherInfo();
+                if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_CLEAR_SKY)) {
+                    Calendar cal = Calendar.getInstance();
+                    if (cal.get(Calendar.HOUR_OF_DAY) < 19)
+                        //// TODO: 6/29/2016 clear day
+                        mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_day);
+                    else
+                        mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_night);
+                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_BROKEN_CLOUDS) ||
+                        pWeather.contains(MyConstants.WEATHER.TYPE_SCATTERED_CLOUDS)) {
+                    mImageViewWeather.setImageResource(R.drawable.ic_scattered_clouds);
+                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_FEW_CLOUDS)) {
+                    Calendar cal = Calendar.getInstance();
+                    if (cal.get(Calendar.HOUR_OF_DAY) < 19)
+                        mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_day);
+                    else
+                        mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_night);
+                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_SHOWER_RAIN)) {
+                    mImageViewWeather.setImageResource(R.drawable.ic_shower_rain);
+                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_THUNDERSTORM)) {
+                    mImageViewWeather.setImageResource(R.drawable.ic_thunderstorm);
+                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_RAIN)) {
+                    mImageViewWeather.setImageResource(R.drawable.ic_rain);
+                } else {
+                    //// TODO: 6/23/2016 unknown weather type
+                }
                 break;
         }
     }
@@ -161,5 +197,11 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     @Override
     public void showErrorView(String pErrorMessage) {
         // ignore this callback
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        widgetPresenter.destroy();
     }
 }

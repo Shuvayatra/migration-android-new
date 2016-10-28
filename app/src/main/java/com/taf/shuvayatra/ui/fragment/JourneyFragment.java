@@ -53,6 +53,8 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Journey");
+
         initialize();
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mBlocksAdapter = new BlocksAdapter(getContext());

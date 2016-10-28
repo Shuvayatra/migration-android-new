@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
@@ -60,6 +61,9 @@ public class DestinationDetailActivity extends BaseActivity implements Destinati
             Logger.e(TAG,": "+ bundle.containsKey(MyConstants.Extras.KEY_COUNTRY) );
             mCountry = (Country) bundle.get(MyConstants.Extras.KEY_COUNTRY);
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(mCountry.getTitle());
         initialize();
     }
 
@@ -82,6 +86,16 @@ public class DestinationDetailActivity extends BaseActivity implements Destinati
 
         mPresenter.initialize(null);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override

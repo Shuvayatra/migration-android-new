@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.taf.data.utils.Logger;
@@ -53,9 +54,17 @@ public class HomeActivity extends BaseActivity implements
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+            return;
         }
+        if(!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
+                    .commit();
+            mNavigationView.setCheckedItem(R.id.nav_home);
+            return;
+        }
+            super.onBackPressed();
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -66,7 +75,7 @@ public class HomeActivity extends BaseActivity implements
         switch (id) {
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-                if(fragment == null) {
+                if (fragment == null) {
                     fragment = HomeFragment.getInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
@@ -75,14 +84,14 @@ public class HomeActivity extends BaseActivity implements
                 break;
             case R.id.nav_journey:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_home, JourneyFragment.getInstance(),JourneyFragment.TAG)
+                        .replace(R.id.content_home, JourneyFragment.getInstance(), JourneyFragment.TAG)
                         .commit();
                 break;
-	    case R.id.nav_radio:
-		break;
+            case R.id.nav_radio:
+                break;
             case R.id.nav_destination:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_home, DestinationFragment.newInstance(),DestinationFragment.TAG)
+                        .replace(R.id.content_home, DestinationFragment.newInstance(), DestinationFragment.TAG)
                         .commit();
                 break;
         }

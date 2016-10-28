@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
@@ -62,6 +63,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Destination");
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initialize();
     }
@@ -133,12 +135,12 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             @Override
             public int compare(Country o1, Country o2) {
                 // TODO: 10/26/16 check if the english title is null or not. if not remove
-                if(o2.getTitleEnglish() == null){
-                    return -1;
-                } else if (o1.getTitleEnglish() == null){
-                    return 1;
-                }
-                return o1.getTitleEnglish().toUpperCase().compareTo(o2.getTitleEnglish().toUpperCase());
+//                if(o2.getTitleEnglish() == null){
+//                    return -1;
+//                } else if (o1.getTitleEnglish() == null){
+//                    return 1;
+//                }
+                return o1.getTitleEnglish().trim().toUpperCase().compareTo(o2.getTitleEnglish().trim().toUpperCase());
             }
         });
 
@@ -155,13 +157,14 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 
             allList.add(0, headerItem);
         } else {
-            long id = Long.parseLong(selectedCountry.substring(0,1));
+            long id = Long.parseLong(selectedCountry.substring(0,selectedCountry.indexOf(",")));
             Logger.e(TAG," selected id: "+ id);
             for (Country country : countryList) {
                 Logger.e(TAG,"country: "+ country);
                 if (country.getId() == id) {
                     country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
-                    Collections.swap(allList, 0, countryList.indexOf(country));
+                    allList.remove(countryList.indexOf(country));
+                    allList.add(0, country);
                     HeaderItem headerItem = new HeaderItem("All Country");
                     headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
                     allList.add(1, headerItem);
