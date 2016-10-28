@@ -88,6 +88,11 @@ public class MyConstants {
         public static final int TYPE_COUNTRY_SELECTED = 13;
         public static final int TYPE_COUNTRY_HEADER = 14;
         public static final int TYPE_BLOCK = 15;
+        public static final int TYPE_COUNTRY_WIDGET = 16;
+        public static final int VIEW_TYPE_LIST = 17;
+        public static final int VIEW_TYPE_SLIDER = 18;
+        public static final int VIEW_TYPE_NOTICE = 19;
+        public static final int VIEW_TYPE_RADIO_WIDGET = 20;
     }
 
 
@@ -145,7 +150,18 @@ public class MyConstants {
         public static final int ORIGINAL_LOCATION = 3;
         public static final int WORK_STATUS = 4;
         public static final int PREFERRED_DESTINATION = 5;
+    }
 
+    public static final class WEATHER{
 
+        public static final String TYPE_CLEAR_SKY = "clear sky";
+        public static final String TYPE_FEW_CLOUDS = "few clouds";
+        public static final String TYPE_SCATTERED_CLOUDS = "scattered clouds";
+        public static final String TYPE_BROKEN_CLOUDS = "broken clouds";
+        public static final String TYPE_SHOWER_RAIN  = "shower rain";
+        public static final String TYPE_RAIN = "rain";
+        public static final String TYPE_THUNDERSTORM = "thunderstorm";
+        public static final String TYPE_SNOW = "snow";
+        public static final String TYPE_MIST = "mist";
     }
 }

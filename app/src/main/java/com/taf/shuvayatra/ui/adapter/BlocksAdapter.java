@@ -35,12 +35,6 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
 
     public static final String TAG = "BlocksAdapter";
 
-    public static final int VIEW_TYPE_LIST = 0;
-    public static final int VIEW_TYPE_SLIDER = 1;
-    public static final int VIEW_TYPE_COUNTRY_WIDGET = 2;
-    public static final int VIEW_TYPE_NOTICE = 3;
-    public static final int VIEW_TYPE_RADIO_WIDGET = 4;
-
     private List<BaseModel> mBlocks;
     private LayoutInflater mInflater;
     private Context mContext;
@@ -66,7 +60,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case VIEW_TYPE_COUNTRY_WIDGET:
+            case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
                 Logger.e(TAG, "country widget called");
                 BlockCountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_country_widget, parent, false);
@@ -76,20 +70,20 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                         .replace(R.id.country_widget_fragment, CountryWidgetFragment.newInstance(), CountryWidgetFragment.TAG)
                         .commit();
                 return new ViewHolder<>(widgetBinding);
-            case VIEW_TYPE_NOTICE:
+            case MyConstants.Adapter.VIEW_TYPE_NOTICE:
                 BlockNoticeDataBinding noticeBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_notice, parent, false);
                 return new ViewHolder<>(noticeBinding);
-            case VIEW_TYPE_LIST:
+            case MyConstants.Adapter.VIEW_TYPE_LIST:
                 BlockListDataBinding listBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_list, parent, false);
                 return new ViewHolder<>(listBinding);
-            case VIEW_TYPE_RADIO_WIDGET:
+            case MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET:
                 BlockRadioWidgetDataBinding radioBinding = DataBindingUtil.inflate(mInflater, R
                         .layout.view_block_radio_widget, parent, false);
                 return new ViewHolder<>(radioBinding);
             default:
-            case VIEW_TYPE_SLIDER:
+            case MyConstants.Adapter.VIEW_TYPE_SLIDER:
                 BlockSliderDataBinding sliderBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_slider, parent, false);
                 return new ViewHolder<>(sliderBinding);
@@ -107,24 +101,24 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 ((ViewHolder<ItemCountryInformationDataBinding>) holder).mBinding
                         .setCountry((Country) mBlocks.get(position));
                 break;
-            case BlocksAdapter.VIEW_TYPE_COUNTRY_WIDGET:
+            case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
                 ((BlocksAdapter.ViewHolder<BlockCountryWidgetDataBinding>) holder).mBinding
-                        .setBlock((Block) mBlocks.get(position));
+                        .setModel(mBlocks.get(position));
                 break;
-            case BlocksAdapter.VIEW_TYPE_NOTICE:
+            case MyConstants.Adapter.VIEW_TYPE_NOTICE:
                 ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding
                         .setBlock((Block) mBlocks.get(position));
                 break;
-            case BlocksAdapter.VIEW_TYPE_LIST:
+            case MyConstants.Adapter.VIEW_TYPE_LIST:
                 ((BlocksAdapter.ViewHolder<BlockListDataBinding>) holder).mBinding
                         .setBlock((Block) mBlocks.get(position));
                 break;
-            case BlocksAdapter.VIEW_TYPE_RADIO_WIDGET:
+            case MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET:
                 ((ViewHolder<BlockRadioWidgetDataBinding>) holder).mBinding
                         .setBlock((Block) mBlocks.get(position));
                 break;
             default:
-            case BlocksAdapter.VIEW_TYPE_SLIDER:
+            case MyConstants.Adapter.VIEW_TYPE_SLIDER:
                 ((BlocksAdapter.ViewHolder<BlockSliderDataBinding>) holder).mBinding
                         .setBlock((Block) mBlocks.get(position));
                 break;
@@ -136,22 +130,22 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_BLOCK) {
             Block block = (Block) mBlocks.get(position);
             if (block.getLayout().equals("list")) {
-                return VIEW_TYPE_LIST;
+                return MyConstants.Adapter.VIEW_TYPE_LIST;
             } else if (block.getLayout().equals("slider")) {
-                return VIEW_TYPE_SLIDER;
-            } else if (block.getLayout().equals("country_widget")) {
-                return VIEW_TYPE_COUNTRY_WIDGET;
-            } else if (block.getLayout().equals("notice")) {
+                return MyConstants.Adapter.VIEW_TYPE_SLIDER;
+            }else if (block.getLayout().equals("notice")) {
                 Logger.e(TAG,"has notice");
-                return VIEW_TYPE_NOTICE;
+                return MyConstants.Adapter.VIEW_TYPE_NOTICE;
             } else if (block.getLayout().equals("radio_widget")) {
-                return VIEW_TYPE_RADIO_WIDGET;
+                return MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET;
             }
         } else if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY ||
                 mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_SELECTED){
             return MyConstants.Adapter.TYPE_COUNTRY;
+        } else if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_WIDGET){
+            return MyConstants.Adapter.TYPE_COUNTRY_WIDGET;
         }
-        return VIEW_TYPE_LIST;
+        return MyConstants.Adapter.VIEW_TYPE_LIST;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.taf.model;
 
 import java.io.Serializable;
 
-public abstract class BaseModel implements Serializable {
+public class BaseModel implements Serializable {
     Long id;
     int mDataType;
 

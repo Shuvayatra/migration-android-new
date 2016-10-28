@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
@@ -18,6 +19,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.HomePresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.views.HomeView;
+import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,7 @@ public class HomeFragment extends BaseFragment implements
         mRecyclerView.setAdapter(mAdapter);
         mSwipeContainer.setOnRefreshListener(this);
         mPresenter.initialize(null);
+        ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
     }
 
     @Override
@@ -73,6 +76,16 @@ public class HomeFragment extends BaseFragment implements
     public void renderBlocks(List<Block> data) {
         List<BaseModel> baseModels = new ArrayList<>();
         baseModels.addAll(data);
+        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        if(!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)){
+            BaseModel countryWidget = new BaseModel();
+            countryWidget.setDataType(MyConstants.Adapter.TYPE_COUNTRY_WIDGET);
+            if(!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")){
+                baseModels.add(1,countryWidget);
+            }else{
+                baseModels.add(0,countryWidget);
+            }
+        }
         mAdapter.setBlocks(baseModels);
     }
 
