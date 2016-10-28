@@ -1,22 +1,30 @@
 package com.taf.shuvayatra.ui.fragment.onboarding;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.widget.Spinner;
 
 import com.taf.data.utils.AppPreferences;
+import com.taf.interactor.UseCaseData;
+import com.taf.model.Country;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.di.component.DaggerDataComponent;
+import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.CountryListPresenter;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
+import com.taf.shuvayatra.ui.adapter.CountryDropDownAdapter;
 import com.taf.shuvayatra.ui.adapter.DropDownAdapter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
+import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,10 +38,12 @@ import butterknife.OnClick;
  * @see OnBoardActivity
  */
 
-public class CountryFragment extends BaseFragment {
+public class CountryFragment extends BaseFragment implements CountryView {
 
     @BindView(R.id.spinner_country)
     Spinner spinnerCountry;
+    @Inject
+    CountryListPresenter presenter;
 
     private OnBoardQuestionAdapter.ButtonPressListener mButtonListener;
 
@@ -53,17 +63,24 @@ public class CountryFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initialize();
+    }
 
-        dataList.add(getString(R.string.question_destination));
-        dataList.addAll(new ArrayList<>(((BaseActivity) getActivity())
-                .getPreferences().getCountryList()));
-
-        DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
-        spinnerCountry.setAdapter(adapter);
+    public void initialize() {
+        DaggerDataComponent.builder().dataModule(new DataModule())
+                .activityModule(((BaseActivity) getActivity()).getActivityModule())
+                .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
+                .build().inject(this);
+        presenter.attachView(this);
+        UseCaseData metaData = new UseCaseData();
+        metaData.putBoolean(UseCaseData.CACHED_DATA, true);
+        presenter.initialize(metaData);
     }
 
     @OnClick(R.id.button_back)
     void onBack() {
+        if (mButtonListener == null)
+            mButtonListener = ((OnBoardQuestionAdapter.ButtonPressListener) getActivity());
         mButtonListener.onBackButtonPressed(MyConstants.OnBoarding.PREFERRED_DESTINATION);
     }
 
@@ -75,25 +92,38 @@ public class CountryFragment extends BaseFragment {
         } else {
             ((BaseActivity) getActivity()).getPreferences().setLocation(dataList.get(spinnerCountry
                     .getSelectedItemPosition()));
+            if (mButtonListener == null)
+                mButtonListener = ((OnBoardQuestionAdapter.ButtonPressListener) getActivity());
             mButtonListener.onNextButtonPressed(MyConstants.OnBoarding.PREFERRED_DESTINATION);
         }
     }
 
-    private static final String TAG = "CountryFragment";
-
-    public class CountryDropDownAdapter extends DropDownAdapter {
-
-        public CountryDropDownAdapter(Context context, List<String> dataList) {
-            super(context, dataList);
+    @Override
+    public void renderCountries(List<Country> countryList) {
+        dataList.add(getString(R.string.question_destination));
+        List<String> countries = new ArrayList<>();
+        for (Country country : countryList) {
+            countries.add(country.toString());
         }
+        dataList.addAll(countries);
 
-        @Override
-        public String getSpinnerText(int position) {
-            if (position == 0)
-                return super.getSpinnerText(position);
-            else
-                return getData().get(position).split(",")[1];
-        }
+        DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
+        spinnerCountry.setAdapter(adapter);
+    }
+
+    @Override
+    public void showLoadingView() {
+        // do nothing
+    }
+
+    @Override
+    public void hideLoadingView() {
+        // do nothing
+    }
+
+    @Override
+    public void showErrorView(String pErrorMessage) {
+        // do nothing
     }
 
 }

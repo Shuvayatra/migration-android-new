@@ -71,6 +71,7 @@ public class OriginalLocationFragment extends BaseFragment {
                 }
 
                 ((BaseActivity) getActivity()).getPreferences().setOriginalLocation(mSpinner.getSelectedItemPosition() - 1);
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.ORIGINAL_LOCATION);
             }
         });
@@ -78,6 +79,7 @@ public class OriginalLocationFragment extends BaseFragment {
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.ORIGINAL_LOCATION);
             }
         });

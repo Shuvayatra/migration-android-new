@@ -13,4 +13,5 @@ import rx.Observable;
 public interface ICountryRepository {
 
     Observable<List<Country>> getCountryList();
+    Observable<List<Country>> getCachedCountryList();
 }

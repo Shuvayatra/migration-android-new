@@ -17,6 +17,7 @@
     <string name="exception_message_no_connection">Please check your internet connection</string>
 
     <string name="action_download">Download</string>
+    <string name="action_on">Turn on</string>
     <string name="action_share">Share</string>
     <string name="action_share_facebook">Share On Facebook</string>
     <string name="action_share_bluetooth">Share via Bluetooth</string>

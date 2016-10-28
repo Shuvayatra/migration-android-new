@@ -3,9 +3,7 @@ package com.taf.model;
 import com.taf.util.MyConstants;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by rakeeb on 10/25/16.
@@ -82,7 +80,7 @@ public class Country extends BaseModel {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "id: %d, title: %s", getId(), getTitle());
+        return String.format(Locale.getDefault(), "%d,%s", getId(), getTitle());
     }
 
     public HashMap<String, String> getInformations() {

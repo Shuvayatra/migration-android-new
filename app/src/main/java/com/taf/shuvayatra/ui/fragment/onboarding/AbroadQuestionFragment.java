@@ -48,6 +48,7 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }
         });
@@ -91,6 +92,7 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
 
                 Logger.e(TAG, " ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();: " +
                         ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus());
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }
         };

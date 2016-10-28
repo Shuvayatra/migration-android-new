@@ -3,6 +3,7 @@ package com.taf.data.repository.datasource;
 
 import com.taf.data.cache.CacheImpl;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
 
@@ -24,6 +25,10 @@ public class CacheDataStore implements IDataStore {
 
     public Observable<List<BlockEntity>> getJourneyBlocks() {
         return mCache.getJourneyBlocks();
+    }
+
+    public Observable<List<CountryEntity>> getCountryList() {
+        return mCache.getCountryList();
     }
 
     public Observable<PostEntity> getPostById(long id) {

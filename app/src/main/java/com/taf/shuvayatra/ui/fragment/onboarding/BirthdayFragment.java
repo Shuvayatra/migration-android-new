@@ -17,6 +17,7 @@ import com.taf.util.MyConstants;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 
@@ -29,8 +30,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
     @BindView(R.id.textview_birthday)
     TextView mTextViewBirthday;
 
-    ButtonPressListener mButtonPressListener;
-    Calendar birthday;
+    private ButtonPressListener mButtonPressListener;
+    private Calendar birthday;
 
     @Override
     public int getLayout() {
@@ -55,6 +56,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
                     return;
                 }
                 ((BaseActivity) getActivity()).getPreferences().setBirthday(birthday.getTimeInMillis());
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.BIRTHDAY);
             }
         });
@@ -62,6 +64,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.BIRTHDAY);
             }
         });
@@ -69,14 +72,14 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         mTextViewBirthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                DatePickerDialog dialog = new DatePickerDialog(getContext(),
+
+                Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)
                 );
-
                 dialog.show();
             }
         });
@@ -89,7 +92,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         birthday.set(year, month, dayOfMonth);
         // update view
         mTextViewBirthday.setText(String.format(Locale.getDefault(),
-                "%d/%s/%d", year, birthday.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US),
+                "%d/%s/%d", year, birthday.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US),
                 dayOfMonth));
     }
 

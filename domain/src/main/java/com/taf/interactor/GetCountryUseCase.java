@@ -28,6 +28,10 @@ public class GetCountryUseCase extends UseCase<List<Country>> {
 
     @Override
     protected Observable<List<Country>> buildUseCaseObservable(UseCaseData pData) {
+
+        if (pData != null && pData.getBoolean(UseCaseData.CACHED_DATA, false))
+            return mCountryRepository.getCachedCountryList();
+
         return mCountryRepository.getCountryList();
     }
 }
