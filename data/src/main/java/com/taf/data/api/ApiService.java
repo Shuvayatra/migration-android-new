@@ -9,7 +9,7 @@ import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
-import com.taf.model.Country;
+import com.taf.model.Block;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -53,4 +54,7 @@ public interface ApiService {
     Observable<PostResponseEntity> getPosts(@Query("per_page") int limit,
                                             @Query("page") int offset,
                                             @Query("category_id") String params);
+
+    @GET(MyConstants.API.DESTINATION_DETAIL)
+    Observable<List<BlockEntity>> getDestinationBlocks(@Path("id") long id);
 }

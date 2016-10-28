@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -18,6 +19,7 @@ import com.taf.shuvayatra.presenter.HomePresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.views.HomeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,7 +71,9 @@ public class HomeFragment extends BaseFragment implements
 
     @Override
     public void renderBlocks(List<Block> data) {
-        mAdapter.setBlocks(data);
+        List<BaseModel> baseModels = new ArrayList<>();
+        baseModels.addAll(data);
+        mAdapter.setBlocks(baseModels);
     }
 
     @Override

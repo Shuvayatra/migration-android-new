@@ -21,6 +21,7 @@ import com.taf.data.repository.deprecated.TagRepository;
 import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.GetDestinationBlocksUseCase;
 import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
 import com.taf.interactor.GetJourneyUseCase;
@@ -413,5 +414,15 @@ public class DataModule {
     IPostRepository providePostRepository(DataStoreFactory dataStoreFactory, DataMapper
             dataMapper) {
         return new PostRepository(dataStoreFactory, dataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("destination-blocks")
+    UseCase provideDestinationBlocksUseCase(ICountryRepository repository,
+                                            ThreadExecutor threadExecutor,
+                                            PostExecutionThread postExecutionThread){
+        return new GetDestinationBlocksUseCase(mId, repository, threadExecutor, postExecutionThread);
+
     }
 }

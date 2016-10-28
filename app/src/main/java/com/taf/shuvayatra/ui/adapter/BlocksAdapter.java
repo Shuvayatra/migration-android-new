@@ -12,14 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.data.utils.Logger;
+import com.taf.model.BaseModel;
 import com.taf.model.Block;
+import com.taf.model.Country;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
 import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
+import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
+import com.taf.util.MyConstants;
 
 import java.util.List;
 
@@ -37,7 +41,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     public static final int VIEW_TYPE_NOTICE = 3;
     public static final int VIEW_TYPE_RADIO_WIDGET = 4;
 
-    private List<Block> mBlocks;
+    private List<BaseModel> mBlocks;
     private LayoutInflater mInflater;
     private Context mContext;
     private FragmentManager mFragmentManager;
@@ -54,7 +58,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         mFragmentManager = fragmentManager;
     }
 
-    public void setBlocks(List<Block> blocks) {
+    public void setBlocks(List<BaseModel> blocks) {
         mBlocks = blocks;
         notifyDataSetChanged();
     }
@@ -89,48 +93,63 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 BlockSliderDataBinding sliderBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_slider, parent, false);
                 return new ViewHolder<>(sliderBinding);
+            case MyConstants.Adapter.TYPE_COUNTRY:
+                ItemCountryInformationDataBinding countryBinding = DataBindingUtil.inflate(mInflater,
+                        R.layout.item_country_information, parent, false);
+                return new ViewHolder<>(countryBinding);
         }
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
+            case MyConstants.Adapter.TYPE_COUNTRY:
+                ((ViewHolder<ItemCountryInformationDataBinding>) holder).mBinding
+                        .setCountry((Country) mBlocks.get(position));
+                break;
             case BlocksAdapter.VIEW_TYPE_COUNTRY_WIDGET:
                 ((BlocksAdapter.ViewHolder<BlockCountryWidgetDataBinding>) holder).mBinding
-                        .setBlock(mBlocks.get(position));
+                        .setBlock((Block) mBlocks.get(position));
                 break;
             case BlocksAdapter.VIEW_TYPE_NOTICE:
                 ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding
-                        .setBlock(mBlocks.get(position));
+                        .setBlock((Block) mBlocks.get(position));
                 break;
             case BlocksAdapter.VIEW_TYPE_LIST:
                 ((BlocksAdapter.ViewHolder<BlockListDataBinding>) holder).mBinding
-                        .setBlock(mBlocks.get(position));
+                        .setBlock((Block) mBlocks.get(position));
                 break;
             case BlocksAdapter.VIEW_TYPE_RADIO_WIDGET:
                 ((ViewHolder<BlockRadioWidgetDataBinding>) holder).mBinding
-                        .setBlock(mBlocks.get(position));
+                        .setBlock((Block) mBlocks.get(position));
                 break;
             default:
             case BlocksAdapter.VIEW_TYPE_SLIDER:
                 ((BlocksAdapter.ViewHolder<BlockSliderDataBinding>) holder).mBinding
-                        .setBlock(mBlocks.get(position));
+                        .setBlock((Block) mBlocks.get(position));
                 break;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mBlocks.get(position).getLayout().equals("list")) {
-            return VIEW_TYPE_LIST;
-        } else if (mBlocks.get(position).getLayout().equals("slider")) {
-            return VIEW_TYPE_SLIDER;
-        } else if (mBlocks.get(position).getLayout().equals("country_widget")) {
-            return VIEW_TYPE_COUNTRY_WIDGET;
-        } else if (mBlocks.get(position).getLayout().equals("notice")) {
-            return VIEW_TYPE_NOTICE;
-        } else if (mBlocks.get(position).getLayout().equals("radio_widget")) {
-            return VIEW_TYPE_RADIO_WIDGET;
+        if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_BLOCK) {
+            Block block = (Block) mBlocks.get(position);
+            if (block.getLayout().equals("list")) {
+                return VIEW_TYPE_LIST;
+            } else if (block.getLayout().equals("slider")) {
+                return VIEW_TYPE_SLIDER;
+            } else if (block.getLayout().equals("country_widget")) {
+                return VIEW_TYPE_COUNTRY_WIDGET;
+            } else if (block.getLayout().equals("notice")) {
+                Logger.e(TAG,"has notice");
+                return VIEW_TYPE_NOTICE;
+            } else if (block.getLayout().equals("radio_widget")) {
+                return VIEW_TYPE_RADIO_WIDGET;
+            }
+        } else if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY ||
+                mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_SELECTED){
+            return MyConstants.Adapter.TYPE_COUNTRY;
         }
         return VIEW_TYPE_LIST;
     }

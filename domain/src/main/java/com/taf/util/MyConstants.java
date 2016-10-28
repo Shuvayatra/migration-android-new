@@ -69,6 +69,7 @@ public class MyConstants {
         public static final String JOURNEY = "api/screen/home";
         public static final String PODCASTS = "api/podcasts";
         public static final String POSTS = "api/posts";
+        public static final String DESTINATION_DETAIL = "api/screen/destination/{id}";
     }
 
     public static final class Adapter {
@@ -86,6 +87,7 @@ public class MyConstants {
         public static final int TYPE_PODCAST = 12;
         public static final int TYPE_COUNTRY_SELECTED = 13;
         public static final int TYPE_COUNTRY_HEADER = 14;
+        public static final int TYPE_BLOCK = 15;
     }
 
 
@@ -122,6 +124,7 @@ public class MyConstants {
         public static final String KEY_FILTER_FAVOURITES_ONLY = "key_filter_fav_only";
         public static final String KEY_SUB_CATEGORY = "key_sub_category";
         public static final String KEY_TYPE = "key_post_type";
+        public static final String KEY_COUNTRY = "key_country";
     }
 
     public static final class Intent {

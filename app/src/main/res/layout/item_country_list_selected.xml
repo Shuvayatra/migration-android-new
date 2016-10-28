@@ -14,6 +14,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="4dp"
         android:layout_marginBottom="@dimen/spacing_xxlarge">
 
     <LinearLayout
@@ -29,7 +30,7 @@
             app:placeholderImage="@drawable/default_gradient"
             app:progressBarAutoRotateInterval="1000"
             app:progressBarImage="@drawable/ic_refresh"
-            app:progressBarImageScaleType="fitCenter"/>
+            app:progressBarImageScaleType="centerInside"/>
 
         <RelativeLayout
             android:layout_height="wrap_content"
@@ -48,7 +49,7 @@
                 android:layout_marginRight="@dimen/spacing_large"
                 app:progressBarAutoRotateInterval="1000"
                 app:progressBarImage="@drawable/ic_refresh"
-                app:progressBarImageScaleType="fitCenter"/>
+                app:progressBarImageScaleType="centerCrop"/>
         <TextView
             android:id="@+id/country_name"
             android:layout_toRightOf="@id/image_view_flag"

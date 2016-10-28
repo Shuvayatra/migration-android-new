@@ -1,12 +1,14 @@
 package com.taf.model;
 
+import com.taf.util.MyConstants;
+
 import java.util.List;
 
 /**
  * Created by julian on 10/18/16.
  */
 
-public class Block {
+public class Block extends BaseModel {
     private int mPosition;
     private String mLayout;
     private String mTitle;
@@ -96,5 +98,10 @@ public class Block {
 
     public void setFilterIds(List<Long> filterIds) {
         this.filterIds = filterIds;
+    }
+
+    @Override
+    public int getDataType() {
+        return MyConstants.Adapter.TYPE_BLOCK;
     }
 }

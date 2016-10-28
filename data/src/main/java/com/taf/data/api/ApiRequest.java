@@ -80,4 +80,8 @@ public class ApiRequest {
     public Observable<JsonElement> getForex() {
         return mApiService.getForex();
     }
+
+    public Observable<List<BlockEntity>> getDestinationBlock(long id){
+        return mApiService.getDestinationBlocks(id);
+    }
 }

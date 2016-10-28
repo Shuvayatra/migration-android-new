@@ -3,6 +3,9 @@ package com.taf.data.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import com.taf.model.CountryInfo;
+
+import java.util.List;
 
 public class CountryEntity {
 
@@ -16,7 +19,7 @@ public class CountryEntity {
     @SerializedName("small_icon")
     String smallIcon;
     String icon;
-    JsonArray information;
+    List<CountryInfoEntity> information;
 
     public long getId() {
         return id;
@@ -74,11 +77,11 @@ public class CountryEntity {
         this.icon = icon;
     }
 
-    public void setInformation(JsonArray information) {
+    public void setInformation(List<CountryInfoEntity> information) {
         this.information = information;
     }
 
-    public JsonArray getInformation() {
+    public List<CountryInfoEntity> getInformation() {
         return information;
     }
 }

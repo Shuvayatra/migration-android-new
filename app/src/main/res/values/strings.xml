@@ -30,5 +30,6 @@
 	<string name="title_activity_podcasts">Podcasts</string>
 	<string name="title_activity_deep_link">DeepLinkActivity</string>
 	<string name="title_activity_feed">All Posts</string>
+    <string name="title_activity_destination_detail">DestinationDetailActivity</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.repository.ICountryRepository;
 
@@ -46,5 +47,17 @@ public class CountryRepository implements ICountryRepository {
         return mDataStoreFactory.createCacheDataStore()
                 .getCountryList()
                 .map(countryEntities -> mDataMapper.transformCountryList(countryEntities));
+    }
+
+    @Override
+    public Observable<List<Block>> getCountryBlocks(long id) {
+        Observable<List<Block>> cacheObservable = mDataStoreFactory.createCacheDataStore()
+                .getDestinationBlocks(id)
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+        Observable<List<Block>> apiObservable =  mDataStoreFactory.createRestDataStore()
+                .getDestinationBlocks(id)
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+
+        return Observable.concatDelayError(cacheObservable,apiObservable);
     }
 }

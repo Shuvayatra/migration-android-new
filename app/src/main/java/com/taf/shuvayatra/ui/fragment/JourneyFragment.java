@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.taf.data.utils.Logger;
+import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -78,7 +79,9 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
 
     @Override
     public void renderContents(List<Block> journeyContents) {
-        mBlocksAdapter.setBlocks(journeyContents);
+        List<BaseModel> models = new ArrayList<>();
+        models.addAll(journeyContents);
+        mBlocksAdapter.setBlocks(models);
     }
 
     @Override

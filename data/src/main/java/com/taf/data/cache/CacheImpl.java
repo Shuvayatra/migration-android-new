@@ -29,6 +29,7 @@ public class CacheImpl {
     private static final String JOURNEY_BLOCKS = "journey-blocks";
     private static final String POSTS = "posts";
     private static final String COUNTRY_LIST = "country-list";
+    public static final String DESTINATION_BLOCKS_SUFFIX = "destination-blocks-";
     private SimpleDiskCache mSimpleDiskCache;
 
     @Inject
@@ -53,6 +54,14 @@ public class CacheImpl {
 
     public void saveJourneyBlocks(List<BlockEntity> blockEntities) {
         saveBlocks(JOURNEY_BLOCKS, blockEntities);
+    }
+
+    public void saveDestinationBlocks(long id, List<BlockEntity> blockEntities){
+        saveBlocks(DESTINATION_BLOCKS_SUFFIX +id, blockEntities);
+    }
+
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
+       return getBlocks(DESTINATION_BLOCKS_SUFFIX+id);
     }
 
     public Observable<List<BlockEntity>> getJourneyBlocks() {

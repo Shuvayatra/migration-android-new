@@ -28,6 +28,7 @@ import rx.schedulers.Schedulers;
 
 public class RestDataStore implements IDataStore {
 
+    public static final String TAG = "RestDataStore";
     private final Context mContext;
     private final ApiRequest mApiRequest;
     private final DatabaseHelper mDBHelper;
@@ -154,6 +155,7 @@ public class RestDataStore implements IDataStore {
             return mApiRequest.getJourneyContent()
                     .doOnNext(blockEntities -> {
                         // // TODO: 10/21/16 save offline cache
+                        mCache.saveJourneyBlocks(blockEntities);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -165,6 +167,17 @@ public class RestDataStore implements IDataStore {
             return mApiRequest.getForex();
         else
             return Observable.error(new NetworkConnectionException());
+    }
+
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
+        if(isThereInternetConnection()){
+            return mApiRequest.getDestinationBlock(id)
+                    .doOnNext(blockEntities -> {
+                        mCache.saveDestinationBlocks(id, blockEntities);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
     }
 
     private boolean isThereInternetConnection() {
