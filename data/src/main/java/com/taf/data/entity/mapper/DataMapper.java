@@ -13,6 +13,7 @@ import com.taf.data.di.PerActivity;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.CountryEntity;
+import com.taf.data.entity.CountryInfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PodcastEntity;
@@ -25,6 +26,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Category;
 import com.taf.model.Country;
+import com.taf.model.CountryInfo;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
@@ -164,16 +166,14 @@ public class DataMapper {
             country.setFeaturedImage(countryEntity.getFeaturedImage());
             country.setIcon(countryEntity.getIcon());
             country.setSmallIcon(countryEntity.getSmallIcon());
-            Logger.e(TAG,"countryEntity.getInformation(): "+ countryEntity.getInformation().toString());
-            HashMap<String, String> information = new HashMap<>();
-            for (JsonElement jsonElement : countryEntity.getInformation()) {
-                // TODO: 10/27/16 check for key of attributes and values
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-                String key = jsonObject.get("attribute").getAsString();
-                String value = jsonObject.get("value").getAsString();
-                information.put(key, value);
+            List<CountryInfo> countryInfos = new ArrayList<>();
+            for (CountryInfoEntity countryInfoEntity : countryEntity.getInformation()) {
+                CountryInfo countryInfo = new CountryInfo();
+                countryInfo.setAttribute(countryInfoEntity.getAttribute());
+                countryInfo.setValue(countryInfoEntity.getValue());
+                countryInfos.add(countryInfo);
             }
-            country.setInformations(information);
+            country.setInformations(countryInfos);
             countryList.add(country);
 
         }

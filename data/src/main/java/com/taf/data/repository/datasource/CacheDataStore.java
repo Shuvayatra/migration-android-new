@@ -43,4 +43,8 @@ public class CacheDataStore implements IDataStore {
         return mCache.getPostsByParams(params);
     }
 
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
+        return mCache.getDestinationBlocks(id);
+    }
+
 }

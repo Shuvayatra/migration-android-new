@@ -3,6 +3,7 @@ package com.taf.model;
 import com.taf.util.MyConstants;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -21,8 +22,7 @@ public class Country extends BaseModel {
     String icon;
     String smallIcon;
     String titleEnglish;
-    String isSelected;
-    HashMap<String, String> informations;
+    List<CountryInfo> informations;
 
     @Override
     public int getDataType() {
@@ -83,23 +83,30 @@ public class Country extends BaseModel {
         return String.format(Locale.getDefault(), "%d,%s", getId(), getTitle());
     }
 
-    public HashMap<String, String> getInformations() {
+    public List<CountryInfo> getInformations() {
         return informations;
     }
 
-    public void setInformations(HashMap<String, String> informations) {
+    public void setInformations(List<CountryInfo> informations) {
         this.informations = informations;
     }
 
     // if information is avilable gets the first key and value to show for the selected country in country list screen
     public String getFirstInformation(){
         if(!informations.isEmpty()) {
-            String key = (String) informations.keySet().toArray()[0];
-            if(informations.containsKey(key)) {
-                return key + " : " + informations.get(key);
-            }
+           CountryInfo info = informations.get(0);
+            return  info.getAttribute() +" : "+ info.getValue();
         }
         return "";
+    }
+
+    public String getAllInformations(){
+        String info = "";
+        System.out.println("informations = " + informations.isEmpty());
+            for (CountryInfo countryInfo  : informations) {
+                info += countryInfo.getAttribute()+" : " + countryInfo.getValue() + "\n";
+            }
+        return info;
     }
 
 }
