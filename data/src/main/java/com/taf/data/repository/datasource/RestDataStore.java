@@ -14,8 +14,10 @@ import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
+import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
@@ -122,6 +124,45 @@ public class RestDataStore implements IDataStore {
         }
     }
 
+    public Observable<PostEntity> getPost(Long id) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getPost(id)
+                    .doOnNext(entity -> {
+                        mCache.savePost(entity);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<UpdateResponseEntity> updateFavoriteCount(Long id, boolean status) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.updateFavoriteCount(id, status)
+                    .doOnNext(entity -> {
+                        if (!entity.getStatus().equals("success")) {
+                            mDBHelper.updateUnSyncedPost(id, status, false);
+                        }
+                    });
+        } else {
+            mDBHelper.updateUnSyncedPost(id, status, false);
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<UpdateResponseEntity> updateShareCount(Long id) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.updateShareCount(id)
+                    .doOnNext(entity -> {
+                        if (!entity.getStatus().equals("success")) {
+                            mDBHelper.updateUnSyncedPost(id, null, true);
+                        }
+                    });
+        } else {
+            mDBHelper.updateUnSyncedPost(id, null, true);
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
     public Observable<CountryWidgetData.Component> getComponent(int componentType) {
         if (isThereInternetConnection()) {
             return mApiRequest.getComponent(componentType);
@@ -169,12 +210,27 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
-        if(isThereInternetConnection()){
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id) {
+        if (isThereInternetConnection()) {
             return mApiRequest.getDestinationBlock(id)
                     .doOnNext(blockEntities -> {
                         mCache.saveDestinationBlocks(id, blockEntities);
                     });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<Boolean> syncUserActions(List<SyncDataEntity> entities) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.syncUserAtions(entities)
+                    .doOnNext(responseEntity -> {
+                        Observable.create(pSubscriber -> {
+                            mDBHelper.deleteSyncedPosts(responseEntity.getSuccessIdList());
+                            pSubscriber.onCompleted();
+                        }).subscribeOn(Schedulers.computation()).subscribe();
+                    })
+                    .map(responseEntity -> responseEntity.getFailedIdList().isEmpty());
         } else {
             return Observable.error(new NetworkConnectionException());
         }

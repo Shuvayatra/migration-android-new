@@ -83,7 +83,7 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
         AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
                 .getType(), status);
-        
+
         mFavouritePresenter.initialize(data);
     }
 
@@ -125,6 +125,16 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mPost != null) {
+            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
+                    .isFavourite()) ? R.drawable.icon_favourite : R.drawable.icon_not_favourite);
+        }
+        return true;
+    }
+
     private void finishWithResult() {
         Intent data = new Intent();
         Logger.e("ArticleDetailActivity", "view count: " + mPost.getUnSyncedViewCount());
@@ -149,6 +159,27 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
+    public void showErrorView(String pErrorMessage) {
+        Snackbar.make(mBinding.getRoot(), pErrorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(KEY_POST, mPost);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void renderPost(Post post) {
+
+    }
+
+    @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
         boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
         mPost.setIsFavourite(newFavouriteState);
@@ -168,34 +199,18 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
     }
 
     @Override
-    public void onShareCountUpdate() {
+    public void onShareCountUpdate(boolean status) {
         mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount() + 1);
         ((ArticleDetailDataBinding) mBinding).setArticle(mPost);
     }
 
     @Override
-    public void showErrorView(String pErrorMessage) {
-        Snackbar.make(mBinding.getRoot(), pErrorMessage, Snackbar.LENGTH_SHORT).show();
+    public void showLoadingView() {
+
     }
 
     @Override
-    public Context getContext() {
-        return this;
-    }
+    public void hideLoadingView() {
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mPost != null) {
-            menu.findItem(R.id.action_favourite).setIcon((mPost.isFavourite() != null && mPost
-                    .isFavourite()) ? R.drawable.icon_favourite : R.drawable.icon_not_favourite);
-        }
-        return true;
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(KEY_POST, mPost);
-        super.onSaveInstanceState(outState);
     }
 }

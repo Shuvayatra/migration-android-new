@@ -21,13 +21,17 @@ import com.taf.data.repository.deprecated.TagRepository;
 import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
-import com.taf.interactor.GetDestinationBlocksUseCase;
 import com.taf.interactor.GetCountryUseCase;
+import com.taf.interactor.GetDestinationBlocksUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
 import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.GetPodcastListUseCase;
+import com.taf.interactor.GetPostDetailUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
+import com.taf.interactor.PostFavouriteUseCase;
+import com.taf.interactor.PostShareUseCase;
+import com.taf.interactor.SyncUserActionsUseCase;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
@@ -211,8 +215,8 @@ public class DataModule {
     @PerActivity
     @Named("postList")
     UseCase provideDeprecaPostListUseCase(com.taf.repository.deprecated.IPostRepository
-                                            pDataRepository, ThreadExecutor pThreadExecutor,
-                                   PostExecutionThread pPostExecutionThread) {
+                                                  pDataRepository, ThreadExecutor pThreadExecutor,
+                                          PostExecutionThread pPostExecutionThread) {
         return new com.taf.interactor.deprecated.GetPostListUseCase(mParentId, mPostType,
                 mFavouriteOnly,
                 mUnSyncedOnly, mTitle, mTags, mExcludeTypes, pDataRepository, pThreadExecutor,
@@ -411,9 +415,37 @@ public class DataModule {
 
     @Provides
     @PerActivity
+    @Named("post")
+    UseCase providePostDetailUseCase(IPostRepository pRepository, ThreadExecutor
+            pThreadExecutor, PostExecutionThread pPostExecutionThread) {
+        return new GetPostDetailUseCase(mId, pRepository, pThreadExecutor,
+                pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
     IPostRepository providePostRepository(DataStoreFactory dataStoreFactory, DataMapper
-            dataMapper) {
-        return new PostRepository(dataStoreFactory, dataMapper);
+            dataMapper, AppPreferences preferences) {
+        return new PostRepository(dataStoreFactory, dataMapper, preferences);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("post_favourite")
+    UseCase providePostFavouriteUseCase(IPostRepository pDataRepository,
+                                        ThreadExecutor pThreadExecutor, PostExecutionThread
+                                                pPostExecutionThread) {
+        return new PostFavouriteUseCase(mId, pThreadExecutor, pPostExecutionThread,
+                pDataRepository);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("post_share")
+    UseCase providePostShareUseCase(IPostRepository pDataRepository,
+                                    ThreadExecutor pThreadExecutor, PostExecutionThread
+                                            pPostExecutionThread) {
+        return new PostShareUseCase(mId, pThreadExecutor, pPostExecutionThread, pDataRepository);
     }
 
     @Provides
@@ -421,8 +453,16 @@ public class DataModule {
     @Named("destination-blocks")
     UseCase provideDestinationBlocksUseCase(ICountryRepository repository,
                                             ThreadExecutor threadExecutor,
-                                            PostExecutionThread postExecutionThread){
+                                            PostExecutionThread postExecutionThread) {
         return new GetDestinationBlocksUseCase(mId, repository, threadExecutor, postExecutionThread);
 
+    }
+
+    @Provides
+    @PerActivity
+    @Named("actions_sync")
+    UseCase proveUserActionsSyncUseCase(IPostRepository repository, ThreadExecutor threadExecutor,
+                                        PostExecutionThread postExecutionThread) {
+        return new SyncUserActionsUseCase(threadExecutor, postExecutionThread, repository);
     }
 }

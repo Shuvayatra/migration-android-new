@@ -13,6 +13,8 @@ import com.taf.data.database.dao.DbPostCategoryDao;
 import com.taf.data.database.dao.DbPostDao;
 import com.taf.data.database.dao.DbTag;
 import com.taf.data.database.dao.DbTagDao;
+import com.taf.data.database.dao.DbUnSynced;
+import com.taf.data.database.dao.DbUnSyncedDao;
 import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.DeletedContentEntity;
@@ -41,14 +43,49 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DaoSession pDaoSession, DataMapper pDataMapper) {
-        /*QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;*/
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
         mDaoSession = pDaoSession;
         mDataMapper = pDataMapper;
     }
 
     public void clearCache() {
         mDaoSession.clear();
+    }
+
+    public Observable<List<DbUnSynced>> getUnSyncedPosts() {
+        return Observable.defer(() -> Observable.just(mDaoSession.getDbUnSyncedDao()
+                .queryBuilder()
+                .list()));
+    }
+
+    public void deleteSyncedPosts(List<Long> ids) {
+        Logger.d("DatabaseHelper_deleteSyncedPosts", "test delete: " + ids);
+        DbUnSyncedDao unSyncedDao = mDaoSession.getDbUnSyncedDao();
+        List<DbUnSynced> syncedList = unSyncedDao.queryBuilder()
+                .where(DbUnSyncedDao.Properties.Id.in(ids))
+                .list();
+        for (DbUnSynced item : syncedList) {
+            unSyncedDao.delete(item);
+        }
+    }
+
+    public void updateUnSyncedPost(Long id, Boolean favStatus, boolean isShared) {
+        DbUnSyncedDao dao = mDaoSession.getDbUnSyncedDao();
+        DbUnSynced oldPost = dao.load(id);
+
+        if (oldPost == null) {
+            Logger.d("DatabaseHelper_updateUnSyncedPost", "test insert");
+            DbUnSynced post = new DbUnSynced(id, favStatus, isShared ? 1 : 0, false);
+            dao.insert(post);
+        } else {
+            Logger.d("DatabaseHelper_updateUnSyncedPost", "test update");
+            oldPost.setFavouriteStatus(favStatus);
+            if (isShared) oldPost.setShareCount(oldPost.getShareCount() + 1);
+            oldPost.setSyncedStatus(false);
+            Logger.d("DatabaseHelper_updateUnSyncedPost", "test share: " + oldPost.getShareCount());
+            dao.update(oldPost);
+        }
     }
 
     public void insertUpdate(LatestContentEntity pEntity) {
@@ -64,9 +101,9 @@ public class DatabaseHelper {
             if (post != null) {
                 Long insertId;
                 DbPost oldPOst = postDao.load(post.getId());
-                if(oldPOst==null) {
-                   insertId = postDao.insert(post);
-                } else{
+                if (oldPOst == null) {
+                    insertId = postDao.insert(post);
+                } else {
                     post.setIsFavourite(oldPOst.getIsFavourite());
                     post.setUnsyncedShareCount(oldPOst.getUnsyncedShareCount());
                     post.setUnsyncedViewCount(oldPOst.getUnsyncedViewCount());
@@ -144,7 +181,7 @@ public class DatabaseHelper {
     }
 
     public Observable<Map<String, Object>> getSimilarPosts(int pLimit, int pOffset, @NonNull
-    String pType, List<String> pTags, List<Long> pExcludeIds) {
+            String pType, List<String> pTags, List<Long> pExcludeIds) {
         if (pTags == null || pTags.isEmpty()) {
             return Observable.empty();
         }

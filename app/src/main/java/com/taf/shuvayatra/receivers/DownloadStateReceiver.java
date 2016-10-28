@@ -9,27 +9,17 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.widget.Toast;
 
-import com.taf.interactor.UseCaseData;
-import com.taf.shuvayatra.MyApplication;
-import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.di.component.DaggerApplicationComponent;
-import com.taf.shuvayatra.di.component.DaggerDataComponent;
-import com.taf.shuvayatra.di.module.ActivityModule;
-import com.taf.shuvayatra.di.module.ApplicationModule;
-import com.taf.shuvayatra.di.module.DataModule;
-import com.taf.shuvayatra.presenter.deprecated.DownloadCompletePresenter;
-import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.data.utils.AppPreferences;
-
-import javax.inject.Inject;
+import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 public class DownloadStateReceiver extends BroadcastReceiver implements MvpView {
     DownloadManager mDownloadManager;
     AppPreferences pref;
     Context mContext;
 
-    @Inject
-    DownloadCompletePresenter mPresenter;
+//    @Inject
+//    DownloadCompletePresenter mPresenter;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -38,7 +28,7 @@ public class DownloadStateReceiver extends BroadcastReceiver implements MvpView 
         mDownloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         pref = new AppPreferences(context);
 
-        initialize();
+        //initialize();
 
         if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
             long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, Long.MIN_VALUE);
@@ -57,16 +47,16 @@ public class DownloadStateReceiver extends BroadcastReceiver implements MvpView 
     }
 
     private void initialize() {
-        DaggerDataComponent.builder()
-                .activityModule(new ActivityModule())
-                .applicationComponent(DaggerApplicationComponent.builder()
-                        .applicationModule(new ApplicationModule((MyApplication) mContext
-                                .getApplicationContext()))
-                        .build())
-                .dataModule(new DataModule())
-                .build()
-                .inject(this);
-        mPresenter.attachView(this);
+//        DaggerDataComponent.builder()
+//                .activityModule(new ActivityModule())
+//                .applicationComponent(DaggerApplicationComponent.builder()
+//                        .applicationModule(new ApplicationModule((MyApplication) mContext
+//                                .getApplicationContext()))
+//                        .build())
+//                .dataModule(new DataModule())
+//                .build()
+//                .inject(this);
+//        mPresenter.attachView(this);
     }
 
     private void extractDataFromCursor(Context pContext, Long pReference, Cursor pCursor) {
@@ -106,13 +96,13 @@ public class DownloadStateReceiver extends BroadcastReceiver implements MvpView 
             updateDB = true;
         }
 
-        if (updateDB) {
+        /*if (updateDB) {
             pref.removeDownloadReference(pReference);
             UseCaseData data = new UseCaseData();
             data.putLong(UseCaseData.DOWNLOAD_REFERENCE, pReference);
             data.putBoolean(UseCaseData.DOWNLOAD_STATUS, success);
             mPresenter.initialize(data);
-        }
+        }*/
     }
 
     @Override

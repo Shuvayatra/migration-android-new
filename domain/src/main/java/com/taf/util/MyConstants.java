@@ -50,6 +50,8 @@ public class MyConstants {
 
         public static final String COUNTRY_LIST_CALL = "country-list-call";
         public static final String COUNTRY_LIST = "country-list";
+
+        public static final String FAV_POSTS = "favourite-posts";
     }
 
     public static final class Language {
@@ -69,6 +71,9 @@ public class MyConstants {
         public static final String JOURNEY = "api/screen/home";
         public static final String PODCASTS = "api/podcasts";
         public static final String POSTS = "api/posts";
+        public static final String POST = "api/posts/{id}";
+        public static final String POST_FAVOURITE = "api/post/{id}/favorite";
+        public static final String POST_SHARE = "api/post/{id}/share";
         public static final String DESTINATION_DETAIL = "api/screen/destination/{id}";
     }
 
@@ -109,6 +114,8 @@ public class MyConstants {
     }
 
     public static final class Extras {
+        public static final String KEY_ID = "key_id";
+        public static final String KEY_POST = "key_post";
         public static final String KEY_AUDIO = "key_audio";
         public static final String KEY_VIDEO = "key_video";
         public static final String KEY_ARTICLE = "key_article";
@@ -152,13 +159,13 @@ public class MyConstants {
         public static final int PREFERRED_DESTINATION = 5;
     }
 
-    public static final class WEATHER{
+    public static final class WEATHER {
 
         public static final String TYPE_CLEAR_SKY = "clear sky";
         public static final String TYPE_FEW_CLOUDS = "few clouds";
         public static final String TYPE_SCATTERED_CLOUDS = "scattered clouds";
         public static final String TYPE_BROKEN_CLOUDS = "broken clouds";
-        public static final String TYPE_SHOWER_RAIN  = "shower rain";
+        public static final String TYPE_SHOWER_RAIN = "shower rain";
         public static final String TYPE_RAIN = "rain";
         public static final String TYPE_THUNDERSTORM = "thunderstorm";
         public static final String TYPE_SNOW = "snow";

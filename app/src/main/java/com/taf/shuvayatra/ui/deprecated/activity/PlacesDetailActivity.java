@@ -196,7 +196,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     }
 
     @Override
-    public void onShareCountUpdate() {
+    public void onShareCountUpdate(boolean status) {
         mPlace.setUnSyncedShareCount(mPlace.getUnSyncedShareCount() + 1);
         ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
     }
@@ -209,5 +209,10 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void renderPost(Post post) {
+
     }
 }

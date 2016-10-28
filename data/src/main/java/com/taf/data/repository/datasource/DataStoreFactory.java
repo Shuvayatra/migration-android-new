@@ -10,6 +10,7 @@ import com.taf.data.di.NetworkComponent;
 import com.taf.data.di.NetworkModule;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.utils.AppPreferences;
 
 @PerActivity
 public class DataStoreFactory {
@@ -18,8 +19,8 @@ public class DataStoreFactory {
     private final DatabaseHelper mHelper;
     CacheImpl mCache;
 
-    public DataStoreFactory(Context pContext, DataMapper pDataMapper, DatabaseHelper
-            pHelper, CacheImpl cache) {
+    public DataStoreFactory(Context pContext,
+                            DataMapper pDataMapper, DatabaseHelper pHelper, CacheImpl cache) {
         mContext = pContext;
         mDataMapper = pDataMapper;
         mHelper = pHelper;
@@ -35,7 +36,8 @@ public class DataStoreFactory {
                 .builder()
                 .networkModule(new NetworkModule(BuildConfig.BASE_URL))
                 .build();
-        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper,mCache);
+        return new RestDataStore(mContext, networkComponent.getApiRequest(),
+                mHelper, mCache);
     }
 
     public RestDataStore createRestDataStore(String baseUrl) {
@@ -43,10 +45,11 @@ public class DataStoreFactory {
                 .builder()
                 .networkModule(new NetworkModule(baseUrl))
                 .build();
-        return new RestDataStore(mContext, networkComponent.getApiRequest(), mHelper, mCache);
+        return new RestDataStore(mContext, networkComponent.getApiRequest(),
+                mHelper, mCache);
     }
 
-    public CacheDataStore createCacheDataStore(){
+    public CacheDataStore createCacheDataStore() {
         return new CacheDataStore(mCache);
     }
 }

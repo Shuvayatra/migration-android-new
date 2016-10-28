@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.taf.util.MyConstants.Preferences.DOWNLOAD_REFERENCES;
+import static com.taf.util.MyConstants.Preferences.FAV_POSTS;
 import static com.taf.util.MyConstants.Preferences.LAST_DELETE_STAMP;
 import static com.taf.util.MyConstants.Preferences.LAST_UPDATE_STAMP;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
@@ -68,17 +69,12 @@ public class AppPreferences {
         return references.contains(String.valueOf(pReference));
     }
 
-    public void setPreviousWorkStatus(int workStatus) {
-        editor.putInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
-        editor.apply();
-    }
-
     public int getPreviousWorkStatus() {
         return pref.getInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, Integer.MIN_VALUE);
     }
 
-    public void setGender(String gender) {
-        editor.putString(MyConstants.Preferences.GENDER, gender);
+    public void setPreviousWorkStatus(int workStatus) {
+        editor.putInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
         editor.apply();
     }
 
@@ -86,8 +82,8 @@ public class AppPreferences {
         return pref.getString(MyConstants.Preferences.GENDER, null);
     }
 
-    public void setFirstLaunch(boolean isFirstLaunch) {
-        editor.putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch);
+    public void setGender(String gender) {
+        editor.putString(MyConstants.Preferences.GENDER, gender);
         editor.apply();
     }
 
@@ -95,8 +91,8 @@ public class AppPreferences {
         return pref.getBoolean(MyConstants.Preferences.FIRST_LAUNCH, true);
     }
 
-    public void setLocation(String location) {
-        editor.putString(MyConstants.Preferences.LOCATION, location);
+    public void setFirstLaunch(boolean isFirstLaunch) {
+        editor.putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch);
         editor.apply();
     }
 
@@ -104,8 +100,8 @@ public class AppPreferences {
         return pref.getString(MyConstants.Preferences.LOCATION, MyConstants.Preferences.DEFAULT_LOCATION);
     }
 
-    public void setUserName(String userName) {
-        editor.putString(MyConstants.Preferences.USERNAME, userName);
+    public void setLocation(String location) {
+        editor.putString(MyConstants.Preferences.LOCATION, location);
         editor.apply();
     }
 
@@ -113,8 +109,8 @@ public class AppPreferences {
         return pref.getString(MyConstants.Preferences.USERNAME, null);
     }
 
-    public void setBirthday(Long birthday) {
-        editor.putLong(MyConstants.Preferences.BIRTHDAY, birthday);
+    public void setUserName(String userName) {
+        editor.putString(MyConstants.Preferences.USERNAME, userName);
         editor.apply();
     }
 
@@ -122,14 +118,19 @@ public class AppPreferences {
         return pref.getLong(MyConstants.Preferences.BIRTHDAY, Long.MIN_VALUE);
     }
 
-    // saves position of the zones in string array zones
-    public void setOriginalLocation(int location) {
-        editor.putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location);
+    public void setBirthday(Long birthday) {
+        editor.putLong(MyConstants.Preferences.BIRTHDAY, birthday);
         editor.apply();
     }
 
     public int getOriginalLocation() {
         return pref.getInt(MyConstants.Preferences.ORIGINAL_LOCATION, Integer.MIN_VALUE);
+    }
+
+    // saves position of the zones in string array zones
+    public void setOriginalLocation(int location) {
+        editor.putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location);
+        editor.apply();
     }
 
     public boolean isOnBoardingCountryListLoaded() {
@@ -154,6 +155,35 @@ public class AppPreferences {
     public void updateCountryList(Set<String> countrySet) {
         editor.putStringSet(MyConstants.Preferences.COUNTRY_LIST, countrySet);
         editor.apply();
+    }
+
+    private void saveFavourites(Set<String> favourites) {
+        editor.putStringSet(FAV_POSTS, favourites);
+        editor.commit();
+    }
+
+    public void addToFavourites(Long postId) {
+        if (postId != null) {
+            Set<String> favourites = pref.getStringSet(FAV_POSTS, new HashSet<>());
+            favourites.add(String.valueOf(postId));
+            saveFavourites(favourites);
+        }
+    }
+
+    public void removeFromFavourites(Long postId) {
+        if (postId != null) {
+            Set<String> favourites = pref.getStringSet(FAV_POSTS, new HashSet<>());
+            favourites.remove(String.valueOf(postId));
+            saveFavourites(favourites);
+        }
+    }
+
+    public boolean isFavourite(Long postId) {
+        if (postId != null) {
+            Set<String> favourites = pref.getStringSet(FAV_POSTS, new HashSet<>());
+            return favourites.contains(String.valueOf(postId));
+        }
+        return false;
     }
 
 }

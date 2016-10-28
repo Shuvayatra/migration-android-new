@@ -33,7 +33,7 @@ public abstract class FacebookActivity extends BaseActivity {
             @Override
             public void onSuccess(Sharer.Result result) {
                 Logger.e("ArticleDetailActivity", "succcess");
-                mPostShareCountPresenter.initialize(null);
+                mSharePresenter.initialize(null);
             }
 
             @Override

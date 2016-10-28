@@ -61,7 +61,7 @@ public class PostShareCountPresenter implements Presenter {
 
         @Override
         public void onNext(Long pLong) {
-            mPostDetailView.onShareCountUpdate();
+            mPostDetailView.onShareCountUpdate(true);
         }
     }
 }

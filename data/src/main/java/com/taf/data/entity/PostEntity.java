@@ -29,6 +29,9 @@ public class PostEntity {
     @SerializedName("view_count")
     Integer viewCount;
 
+    @SerializedName("similar")
+    List<PostEntity> similarPosts;
+
     public Long getId() {
         return id;
     }
@@ -147,5 +150,13 @@ public class PostEntity {
 
     public void setShareUrl(String pShareUrl) {
         shareUrl = pShareUrl;
+    }
+
+    public List<PostEntity> getSimilarPosts() {
+        return similarPosts;
+    }
+
+    public void setSimilarPosts(List<PostEntity> similarPosts) {
+        this.similarPosts = similarPosts;
     }
 }

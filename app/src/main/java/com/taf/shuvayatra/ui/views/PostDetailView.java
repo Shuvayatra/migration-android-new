@@ -1,7 +1,13 @@
 package com.taf.shuvayatra.ui.views;
 
-public interface PostDetailView extends MvpView {
+import com.taf.model.Post;
+
+public interface PostDetailView extends LoadDataView {
+    void renderPost(Post post);
+
     void onPostFavouriteStateUpdated(Boolean status);
+
     void onViewCountUpdated();
-    void onShareCountUpdate();
+
+    void onShareCountUpdate(boolean status);
 }
