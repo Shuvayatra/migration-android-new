@@ -23,9 +23,6 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
-import com.taf.shuvayatra.ui.deprecated.activity.ArticleDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.activity.AudioDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PostListView;
 import com.taf.util.MyConstants;
@@ -159,15 +156,15 @@ public class FeedActivity extends BaseActivity implements
         switch (pModel.getDataType()) {
             case MyConstants.Adapter.TYPE_VIDEO:
                 intent = new Intent(getContext(), VideoDetailActivity.class);
-                intent.putExtra(MyConstants.Extras.KEY_VIDEO, pModel);
+                intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
                 break;
             case MyConstants.Adapter.TYPE_TEXT:
                 intent = new Intent(getContext(), ArticleDetailActivity.class);
-                intent.putExtra(MyConstants.Extras.KEY_ARTICLE, pModel);
+                intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
                 break;
             case MyConstants.Adapter.TYPE_AUDIO:
                 intent = new Intent(getContext(), AudioDetailActivity.class);
-                intent.putExtra(MyConstants.Extras.KEY_AUDIO, pModel);
+                intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
                 break;
         }
         if (intent != null)

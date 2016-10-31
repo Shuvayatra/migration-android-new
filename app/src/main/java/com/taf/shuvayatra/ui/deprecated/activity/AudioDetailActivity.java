@@ -34,7 +34,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.media.MediaHelper;
 import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.media.MediaService;
-import com.taf.shuvayatra.presenter.deprecated.AudioDetailPresenter;
+import com.taf.shuvayatra.presenter.AudioOperationsPresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.deprecated.PostViewCountPresenter;
 import com.taf.shuvayatra.presenter.deprecated.SimilarPostPresenter;
@@ -67,7 +67,7 @@ public class AudioDetailActivity extends FacebookActivity implements
     private static final String KEY_PROGRESS = "key_progress";
 
     @Inject
-    AudioDetailPresenter mPresenter;
+    AudioOperationsPresenter mPresenter;
     @Inject
     PostFavouritePresenter mFavouritePresenter;
     @Inject
@@ -511,6 +511,29 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void showErrorView(String pErrorMessage) {
+        Snackbar.make(mMiniPlayer, pErrorMessage, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void updateView(Post pAudio) {
+        mScrollView.scrollTo(0, 0);
+        mAppBar.setExpanded(true);
+        ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
+        mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
+        invalidateOptionsMenu();
+    }
+
+    private void updateSeekBar() {
+        seekbarHandler.removeCallbacks(updateSeekTime);
+        seekbarHandler.postDelayed(updateSeekTime, 100);
+    }
+
+    @Override
+    public void renderPost(Post post) {
+
+    }
+
+    @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
         boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
         mAudio.setIsFavourite(newFavouriteState);
@@ -529,26 +552,8 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
-    public void onShareCountUpdate() {
+    public void onShareCountUpdate(boolean status) {
         mAudio.setUnSyncedShareCount(mAudio.getUnSyncedShareCount() + 1);
         ((ActivityAudioDetailBinding) mBinding).setAudio(mAudio);
-    }
-
-    @Override
-    public void showErrorView(String pErrorMessage) {
-        Snackbar.make(mMiniPlayer, pErrorMessage, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void updateView(Post pAudio) {
-        mScrollView.scrollTo(0, 0);
-        mAppBar.setExpanded(true);
-        ((ActivityAudioDetailBinding) mBinding).setAudio(pAudio);
-        mOldFavouriteState = mAudio.isFavourite() != null ? mAudio.isFavourite() : false;
-        invalidateOptionsMenu();
-    }
-
-    private void updateSeekBar() {
-        seekbarHandler.removeCallbacks(updateSeekTime);
-        seekbarHandler.postDelayed(updateSeekTime, 100);
     }
 }

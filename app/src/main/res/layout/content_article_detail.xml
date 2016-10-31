@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="article"
-            type="com.taf.model.Post"/>
-    </data>
-<android.support.v4.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
-    tools:showIn="@layout/activity_article_detail">
+	<data>
 
-    <include
-        layout="@layout/view_content_head"
-        app:content="@{article}"/>
+		<variable
+			name="article"
+			type="com.taf.model.Post"/>
+	</data>
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/spacing_standard"
-        app:htmlContent="@{article.description}"
-        />
-</LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/swipe_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/main_background"
+		android:clipToPadding="false"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		tools:context="com.taf.shuvayatra.ui.activity.ArticleDetailActivity"
+		tools:showIn="@layout/activity_article_detail">
 
+		<android.support.v4.widget.NestedScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
+				tools:showIn="@layout/activity_article_detail">
+
+				<include
+					layout="@layout/view_content_head"
+					app:content="@{article}"/>
+
+				<WebView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/spacing_standard"
+					app:htmlContent="@{article.description}"
+					/>
+			</LinearLayout>
+		</android.support.v4.widget.NestedScrollView>
+	</android.support.v4.widget.SwipeRefreshLayout>
 </layout>

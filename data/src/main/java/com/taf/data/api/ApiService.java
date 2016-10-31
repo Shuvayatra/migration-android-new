@@ -6,10 +6,12 @@ import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
-import com.taf.model.Block;
+import com.taf.data.entity.UpdateRequestEntity;
+import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -55,6 +57,19 @@ public interface ApiService {
                                             @Query("page") int offset,
                                             @Query("category_id") String params);
 
+    @GET(MyConstants.API.POST)
+    Observable<PostEntity> getPost(@Path("id") Long id);
+
+    @POST(MyConstants.API.POST_FAVOURITE)
+    Observable<UpdateResponseEntity> updateFavouriteCount(@Path("id") Long id, @Body
+            UpdateRequestEntity requestEntity);
+
+    @POST(MyConstants.API.POST_SHARE)
+    Observable<UpdateResponseEntity> updateShareCount(@Path("id") Long id);
+
     @GET(MyConstants.API.DESTINATION_DETAIL)
     Observable<List<BlockEntity>> getDestinationBlocks(@Path("id") long id);
+
+    @POST(MyConstants.API.SYNC_DATA)
+    Observable<SyncResponseEntity> syncUserActions(@Body List<SyncDataEntity> pSyncDataList);
 }

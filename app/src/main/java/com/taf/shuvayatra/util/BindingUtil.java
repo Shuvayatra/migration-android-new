@@ -23,9 +23,9 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberDataBinding;
 import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
+import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.BlockItemAdapter;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
@@ -186,7 +186,7 @@ public class BindingUtil {
                 public void onClick(View v) {
                     if (pPost.getDataType() == MyConstants.Adapter.TYPE_VIDEO) {
                         Intent intent = new Intent(pContext, VideoDetailActivity.class);
-                        intent.putExtra(MyConstants.Extras.KEY_VIDEO, pPost);
+                        intent.putExtra(MyConstants.Extras.KEY_ID, pPost.getId());
                         pContext.startActivity(intent);
                     } else {
                         pListener.onListItemSelected(pPost, -1);

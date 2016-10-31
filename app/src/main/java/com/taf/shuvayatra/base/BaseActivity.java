@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     @Inject
-    AppPreferences mPreferences;
+    protected AppPreferences mPreferences;
     @Inject
     FirebaseAnalytics mAnalytics;
 

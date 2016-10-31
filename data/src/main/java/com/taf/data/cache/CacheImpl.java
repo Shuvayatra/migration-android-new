@@ -195,8 +195,9 @@ public class CacheImpl {
 
         PostEntity post = null;
         try {
-            if (mSimpleDiskCache.contains(POST_PREFIX + id)) {
-                String json = mSimpleDiskCache.getCachedString(String.valueOf(id)).getValue();
+            String key = POST_PREFIX + id;
+            if (mSimpleDiskCache.contains(key)) {
+                String json = mSimpleDiskCache.getCachedString(String.valueOf(key)).getValue();
                 post = new Gson().fromJson(json,
                         new TypeToken<PostEntity>() {
                         }.getType());

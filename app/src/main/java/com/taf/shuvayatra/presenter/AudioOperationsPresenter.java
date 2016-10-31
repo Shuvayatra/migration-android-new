@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.presenter.deprecated;
+package com.taf.shuvayatra.presenter;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.taf.data.utils.AppPreferences;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.presenter.Presenter;
 import com.taf.shuvayatra.ui.views.AudioDetailView;
 import com.taf.shuvayatra.ui.views.MvpView;
-import com.taf.data.utils.AppPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class AudioDetailPresenter implements Presenter {
+public class AudioOperationsPresenter implements Presenter {
 
     UseCase mUseCase;
     AudioDetailView mView;
@@ -32,7 +31,7 @@ public class AudioDetailPresenter implements Presenter {
     DownloadManager mDownloadManager;
 
     @Inject
-    public AudioDetailPresenter(@Named("download_start") UseCase pUseCase, AppPreferences
+    public AudioOperationsPresenter(@Named("download_start") UseCase pUseCase, AppPreferences
             pPreferences) {
         mUseCase = pUseCase;
         mPreferences = pPreferences;

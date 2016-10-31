@@ -186,7 +186,7 @@ public class VideoDetailActivity extends FacebookActivity implements
     }
 
     @Override
-    public void onShareCountUpdate() {
+    public void onShareCountUpdate(boolean status) {
         mPost.setUnSyncedShareCount(mPost.getUnSyncedShareCount() + 1);
         ((VideoDetailDataBinding) mBinding).setVideo(mPost);
     }
@@ -308,5 +308,10 @@ public class VideoDetailActivity extends FacebookActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(KEY_VIDEO, mPost);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void renderPost(Post post) {
+
     }
 }

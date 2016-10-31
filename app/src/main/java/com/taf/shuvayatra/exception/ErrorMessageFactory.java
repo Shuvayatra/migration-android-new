@@ -3,6 +3,7 @@ package com.taf.shuvayatra.exception;
 import android.content.Context;
 
 import com.taf.data.exception.NetworkConnectionException;
+import com.taf.data.exception.UserActionSyncException;
 import com.taf.shuvayatra.R;
 
 public class ErrorMessageFactory {
@@ -20,7 +21,8 @@ public class ErrorMessageFactory {
      */
     public static String create(Context context, Exception exception) {
         String message = context.getString(R.string.exception_message_generic);
-        if (exception instanceof NetworkConnectionException) {
+        if (exception instanceof UserActionSyncException) {
+        } else if (exception instanceof NetworkConnectionException) {
             message = context.getString(R.string.exception_message_no_connection);
         }
         return message;

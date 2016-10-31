@@ -130,12 +130,12 @@
 		</activity>
 		<activity
 			android:name=".ui.activity.HomeActivity"
-			android:label="@string/title_activity_home"
+			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
 			android:name=".ui.activity.DeepLinkActivity"
-			android:label="@string/title_activity_deep_link"
+			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW"/>
@@ -162,8 +162,14 @@
 		</activity>
 		<activity
 			android:name=".ui.activity.OnBoardActivity"
-			android:label="@string/title_activity_on_board"
+			android:label="@string/app_name"
 			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
 		</activity>
 		<activity
 			android:name=".ui.activity.FeedActivity"
@@ -205,21 +211,33 @@
 			</intent-filter>
 		</activity>
 
-        <activity
-            android:name=".ui.activity.DestinationDetailActivity"
-            android:label="@string/title_activity_destination_detail"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+		<activity
+			android:name=".ui.activity.DestinationDetailActivity"
+			android:label="@string/title_activity_destination_detail"
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
 
-		<activity-alias
-			android:name=".Launcher"
-			android:label="@string/app_name"
-			android:targetActivity=".ui.activity.OnBoardActivity">
+		<activity
+			android:name=".ui.activity.ArticleDetailActivity"
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
+		<activity
+			android:name=".ui.activity.VideoDetailActivity"
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
+		<activity
+			android:name=".ui.activity.AudioDetailActivity"
+			android:label=""
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
+
+		<service
+			android:name=".service.MyTaskService"
+			android:exported="true"
+			android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-
-				<category android:name="android.intent.category.LAUNCHER"/>
+				<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
 			</intent-filter>
-		</activity-alias>
+		</service>
 	</application>
 </manifest>

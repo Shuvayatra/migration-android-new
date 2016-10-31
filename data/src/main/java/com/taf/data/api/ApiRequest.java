@@ -1,6 +1,5 @@
 package com.taf.data.api;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
@@ -8,11 +7,13 @@ import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
+import com.taf.data.entity.UpdateRequestEntity;
+import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.data.exception.NetworkConnectionException;
-import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
 
 import java.util.List;
@@ -38,7 +39,6 @@ public class ApiRequest {
     }
 
     public Observable<SyncResponseEntity> updateFavouriteState(List<SyncDataEntity> pSyncDataList) {
-        Logger.e("ApiRequest", "send request: " + new Gson().toJson(pSyncDataList));
         return mApiService.syncLikes(pSyncDataList);
     }
 
@@ -52,6 +52,19 @@ public class ApiRequest {
 
     public Observable<PostResponseEntity> getPosts(int limit, int offset, String params) {
         return mApiService.getPosts(limit, offset, params);
+    }
+
+    public Observable<PostEntity> getPost(Long id) {
+        return mApiService.getPost(id);
+    }
+
+    public Observable<UpdateResponseEntity> updateFavoriteCount(Long id, boolean status) {
+        return mApiService.updateFavouriteCount(id,
+                new UpdateRequestEntity(status ? "up" : "down"));
+    }
+
+    public Observable<UpdateResponseEntity> updateShareCount(Long id) {
+        return mApiService.updateShareCount(id);
     }
 
     public Observable<CountryWidgetData.Component> getComponent(int componentType) {
@@ -81,7 +94,11 @@ public class ApiRequest {
         return mApiService.getForex();
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlock(long id){
+    public Observable<List<BlockEntity>> getDestinationBlock(long id) {
         return mApiService.getDestinationBlocks(id);
+    }
+
+    public Observable<SyncResponseEntity> syncUserAtions(List<SyncDataEntity> pSyncDataList) {
+        return mApiService.syncUserActions(pSyncDataList);
     }
 }

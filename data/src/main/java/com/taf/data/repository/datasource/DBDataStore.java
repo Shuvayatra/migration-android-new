@@ -8,6 +8,7 @@ import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbTag;
+import com.taf.data.database.dao.DbUnSynced;
 import com.taf.model.Notification;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class DBDataStore implements IDataStore {
     @Inject
     public DBDataStore(DatabaseHelper pHelper) {
         mHelper = pHelper;
+    }
+
+    public Observable<List<DbUnSynced>> getUnSyncedPosts() {
+        return mHelper.getUnSyncedPosts();
     }
 
     public Observable<Map<String, Object>> getPosts(int pLimit, int pOffset, @Nullable String
@@ -83,12 +88,12 @@ public class DBDataStore implements IDataStore {
         return mHelper.getPostWithExcludes(pLimit, pOffset, excludeTypes);
     }
 
-    public Observable<Map<String,Object>> getPostsByTitle(int pLimit, int pOffset, String pTitle){
-        return mHelper.getPostsByTitle(pLimit,pOffset,pTitle);
+    public Observable<Map<String, Object>> getPostsByTitle(int pLimit, int pOffset, String pTitle) {
+        return mHelper.getPostsByTitle(pLimit, pOffset, pTitle);
     }
 
-    public Observable<Map<String,Object>> getPostsByTags(int pLimit, int pOffset, List<String> pTags){
-        return mHelper.getPostByTags(pLimit,pOffset,pTags);
+    public Observable<Map<String, Object>> getPostsByTags(int pLimit, int pOffset, List<String> pTags) {
+        return mHelper.getPostByTags(pLimit, pOffset, pTags);
     }
 
     public long updateDownloadStatus(Long pReference, boolean pDownloadStatus) {

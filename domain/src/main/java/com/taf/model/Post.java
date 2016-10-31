@@ -31,6 +31,8 @@ public class Post extends BaseModel {
     // for pagination purpose
     Integer mTotalCount;
 
+    List<Post> mSimilarPosts;
+
 
     public Long getCreatedAt() {
         return mCreatedAt;
@@ -235,6 +237,14 @@ public class Post extends BaseModel {
 
     public void setShareUrl(String pShareUrl) {
         shareUrl = pShareUrl;
+    }
+
+    public List<Post> getSimilarPosts() {
+        return mSimilarPosts;
+    }
+
+    public void setSimilarPosts(List<Post> similarPosts) {
+        mSimilarPosts = similarPosts;
     }
 
     @Override

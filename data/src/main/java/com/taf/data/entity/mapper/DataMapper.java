@@ -9,6 +9,7 @@ import com.taf.data.database.dao.DbCategory;
 import com.taf.data.database.dao.DbNotification;
 import com.taf.data.database.dao.DbPost;
 import com.taf.data.database.dao.DbTag;
+import com.taf.data.database.dao.DbUnSynced;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
@@ -92,6 +93,7 @@ public class DataMapper {
             post.setShare(pEntity.getShareCount());
             post.setLikes(pEntity.getFavouriteCount());
             post.setViewCount(pEntity.getViewCount());
+            post.setSimilarPosts(transformPost(pEntity.getSimilarPosts()));
             return post;
         }
         return null;
@@ -486,5 +488,17 @@ public class DataMapper {
             return response;
         }
         return null;
+    }
+
+    public List<SyncDataEntity> transformUnSyncedData(List<DbUnSynced> dbPosts) {
+        List<SyncDataEntity> unSyncedPosts = new ArrayList<>();
+        if (dbPosts != null) {
+            for (DbUnSynced dbPost : dbPosts) {
+                SyncDataEntity entity = new SyncDataEntity(dbPost.getId(), dbPost
+                        .getFavouriteStatus(), 0, dbPost.getShareCount());
+                unSyncedPosts.add(entity);
+            }
+        }
+        return unSyncedPosts;
     }
 }
