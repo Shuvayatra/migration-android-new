@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Environment;
 
 import com.taf.data.utils.AppPreferences;
-import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
@@ -84,9 +83,9 @@ public class AudioOperationsPresenter implements Presenter {
             pAudio.setDownloadReference(reference);
             mPreferences.addDownloadReference(reference);
 
-            UseCaseData data = new UseCaseData();
+            /*UseCaseData data = new UseCaseData();
             data.putLong(UseCaseData.DOWNLOAD_REFERENCE, reference);
-            mUseCase.execute(new DefaultSubscriber(), data);
+            mUseCase.execute(new DefaultSubscriber(), data);*/
         } else {
             mView.onAudioDownloadStarted(mView.getContext().getString(R.string
                     .message_already_downloaded, pAudio.getTitle()));

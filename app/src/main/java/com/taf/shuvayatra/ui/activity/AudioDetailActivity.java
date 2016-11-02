@@ -422,6 +422,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     public void requestForPermissions() throws IOException {
+        Logger.d("AudioDetailActivity_requestForPermissions", "request permission");
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission
                 .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -432,7 +433,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
                         " to the device.", Snackbar.LENGTH_LONG).show();
             }
             this.requestPermissions(new String[]{Manifest.permission
-                    .READ_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+                    .WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
         } else {
             mPresenter.downloadAudioPost(mPost);
         }
