@@ -147,22 +147,22 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_BLOCK) {
+        if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_BLOCK) {
             Block block = (Block) mBlocks.get(position);
-            if (block.getLayout().equals("list")) {
+            if (block.getLayout().equalsIgnoreCase(Block.TYPE_LIST)) {
                 return MyConstants.Adapter.VIEW_TYPE_LIST;
-            } else if (block.getLayout().equals("slider")) {
+            } else if (block.getLayout().equalsIgnoreCase(Block.TYPE_SLIDER)) {
                 return MyConstants.Adapter.VIEW_TYPE_SLIDER;
-            } else if (block.getLayout().equals("notice")) {
-                Logger.e(TAG, "has notice");
+            }else if (block.getLayout().equalsIgnoreCase(Block.TYPE_NOTICE)) {
+                Logger.e(TAG,"has notice");
                 return MyConstants.Adapter.VIEW_TYPE_NOTICE;
-            } else if (block.getLayout().equals("radio_widget")) {
+            } else if (block.getLayout().equalsIgnoreCase(Block.TYPE_RADIO)) {
                 return MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET;
             }
-        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY ||
-                mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_SELECTED) {
+        } else if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY ||
+                mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_SELECTED){
             return MyConstants.Adapter.TYPE_COUNTRY;
-        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_WIDGET) {
+        } else if(mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_WIDGET){
             return MyConstants.Adapter.TYPE_COUNTRY_WIDGET;
         }
         return MyConstants.Adapter.VIEW_TYPE_LIST;

@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<data class="BlockSliderItemDataBinding">
+    <data class="BlockSliderItemDataBinding">
 
-		<variable
-			name="post"
-			type="com.taf.model.Post"/>
-	</data>
+        <variable
+            name="post"
+            type="com.taf.model.Post" />
+    </data>
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginRight="@dimen/spacing_xxsmall"
-		android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/main_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/spacing_xxsmall"
+        android:background="@drawable/item_background"
+        android:orientation="vertical">
 
-		<com.facebook.drawee.view.SimpleDraweeView
-			android:layout_width="140dp"
-			android:layout_height="78dp"
-			android:layout_marginBottom="@dimen/spacing_xxsmall"
-			app:actualImageScaleType="centerCrop"
-			app:imageUrl="@{post}"
-			app:placeholderImage="@drawable/default_gradient"
-			app:progressBarAutoRotateInterval="1000"
-			app:progressBarImage="@drawable/ic_refresh"
-			app:progressBarImageScaleType="centerInside"/>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="140dp"
+            android:layout_height="78dp"
+            android:layout_marginBottom="@dimen/spacing_xxsmall"
+            app:actualImageScaleType="centerCrop"
+            app:imageUrl="@{post}"
+            app:placeholderImage="@drawable/default_gradient"
+            app:progressBarAutoRotateInterval="1000"
+            app:progressBarImage="@drawable/ic_refresh"
+            app:progressBarImageScaleType="centerInside" />
 
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:padding="@dimen/spacing_xsmall"
-			android:text="@{post.title}"/>
-	</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_xsmall"
+            android:text="@{post.title}" />
+    </LinearLayout>
 </layout>
