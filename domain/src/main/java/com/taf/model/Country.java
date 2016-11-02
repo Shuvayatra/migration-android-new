@@ -2,7 +2,6 @@ package com.taf.model;
 
 import com.taf.util.MyConstants;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,6 +15,14 @@ public class Country extends BaseModel {
      * use {@link #getId()} and {@link #setId(Long)} for id
      */
 
+    /**
+     * index for values stored in preference
+     */
+    public static final int INDEX_ID = 0;
+    public static final int INDEX_TITLE = 1;
+    public static final int INDEX_TITLE_EN = 2;
+    public static final int INDEX_INFO = 3;
+
     String title;
     String description;
     String featuredImage;
@@ -26,8 +33,8 @@ public class Country extends BaseModel {
 
     @Override
     public int getDataType() {
-        System.out.println("country data type: "+ mDataType);
-        return super.getDataType() == 0? MyConstants.Adapter.TYPE_COUNTRY: super.getDataType();
+        System.out.println("country data type: " + mDataType);
+        return super.getDataType() == 0 ? MyConstants.Adapter.TYPE_COUNTRY : super.getDataType();
     }
 
     public String getTitle() {
@@ -80,32 +87,44 @@ public class Country extends BaseModel {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "%d,%s", getId(), getTitle());
+        return String.format(Locale.getDefault(), "%d,%s,%s,%s", getId(), getTitle(), getTitleEnglish(), getAllInformation());
     }
 
-    public List<CountryInfo> getInformations() {
+    public List<CountryInfo> getInformation() {
         return informations;
     }
 
-    public void setInformations(List<CountryInfo> informations) {
-        this.informations = informations;
+    public void setInformation(List<CountryInfo> information) {
+        this.informations = information;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        System.out.println(">>> on equals()");
+        if (o instanceof String) {
+            System.out.println(">>> equals(): " + o);
+            System.out.println(String.format("comparison id %s, actual id %d",
+                    Long.valueOf(((String) o).split(",")[INDEX_ID]), getId()));
+            if (getId().equals(Long.valueOf(((String) o).split(",")[INDEX_ID])))
+                return true;
+        }
+        return super.equals(o);
     }
 
     // if information is avilable gets the first key and value to show for the selected country in country list screen
-    public String getFirstInformation(){
-        if(!informations.isEmpty()) {
-           CountryInfo info = informations.get(0);
-            return  info.getAttribute() +" : "+ info.getValue();
+    public String getFirstInformation() {
+        if (!informations.isEmpty()) {
+            CountryInfo info = informations.get(0);
+            return info.getAttribute() + " : " + info.getValue();
         }
         return "";
     }
 
-    public String getAllInformations(){
+    public String getAllInformation() {
         String info = "";
-        System.out.println("informations = " + informations.isEmpty());
-            for (CountryInfo countryInfo  : informations) {
-                info += countryInfo.getAttribute()+" : " + countryInfo.getValue() + "\n";
-            }
+        for (CountryInfo countryInfo : informations) {
+            info += countryInfo.getAttribute() + " : " + countryInfo.getValue() + "\n";
+        }
         return info;
     }
 

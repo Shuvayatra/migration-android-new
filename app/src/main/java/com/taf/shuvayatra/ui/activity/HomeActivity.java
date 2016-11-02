@@ -1,16 +1,13 @@
 package com.taf.shuvayatra.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
-import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
@@ -63,8 +60,7 @@ public class HomeActivity extends BaseActivity implements
             mNavigationView.setCheckedItem(R.id.nav_home);
             return;
         }
-            super.onBackPressed();
-
+        super.onBackPressed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -75,7 +71,7 @@ public class HomeActivity extends BaseActivity implements
         switch (id) {
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-                if (fragment == null) {
+                if(fragment == null) {
                     fragment = HomeFragment.getInstance();
                 }
                 getSupportFragmentManager().beginTransaction()

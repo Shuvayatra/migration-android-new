@@ -2,23 +2,28 @@ package com.taf.shuvayatra.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
+import com.taf.model.Country;
 import com.taf.model.CountryWidgetData;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.CountryListPresenter;
 import com.taf.shuvayatra.presenter.CountryWidgetPresenter;
+import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.util.MyConstants;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,12 +32,14 @@ import butterknife.BindView;
 /**
  * Created by rakeeb on 10/19/16.
  */
-public class CountryWidgetFragment extends BaseFragment implements CountryWidgetView {
+public class CountryWidgetFragment extends BaseFragment implements CountryWidgetView, CountryView {
 
     public static final String TAG = "CountryWidgetFragment";
 
     @Inject
     CountryWidgetPresenter widgetPresenter;
+    @Inject
+    CountryListPresenter countryListPresenter;
 
     @BindView(R.id.nepali_date)
     TextView tvNepaliDate;
@@ -40,24 +47,28 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     TextView tvEnglishDate;
     @BindView(R.id.textview_temperature)
     TextView tvTemperature;
-    @BindView(R.id.imageview_weather)
-    ImageView mImageViewWeather;
     @BindView(R.id.textview_country_name)
     TextView tvCountryName;
+    @BindView(R.id.forex)
+    TextView tvForex;
+    @BindView(R.id.imageview_weather)
+    ImageView mImageViewWeather;
 
     // Different use cases for different components
     UseCaseData caseCalendar = new UseCaseData();
-    UseCaseData caseForex = new UseCaseData();
+    UseCaseData caseForEx = new UseCaseData();
     UseCaseData caseWeather = new UseCaseData();
+    UseCaseData caseCachedCountry = new UseCaseData();
+
+//    private Country mSelectedDestination;
 
     @Override
     public int getLayout() {
         return R.layout.list_item_country_widget;
     }
 
-    public static CountryWidgetFragment newInstance(){
-        CountryWidgetFragment fragment = new CountryWidgetFragment();
-        return fragment;
+    public static CountryWidgetFragment newInstance() {
+        return new CountryWidgetFragment();
     }
 
     @Override
@@ -66,8 +77,8 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
 
         initialize();
 
-        String selectedCOuntry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        String countryName = selectedCOuntry.substring(selectedCOuntry.indexOf(",")+1);
+        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN];
         tvCountryName.setText(countryName);
     }
 
@@ -81,21 +92,25 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
                 .inject(this);
 
         widgetPresenter.attachView(this);
+        countryListPresenter.attachView(this);
 
         caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
         caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
-        caseForex.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+        caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
 
         // initialize each component for the country widget
         widgetPresenter.initialize(caseCalendar);
         widgetPresenter.initialize(caseWeather);
-        widgetPresenter.initialize(caseForex);
+
+        caseCachedCountry.putBoolean(UseCaseData.CACHED_DATA, true);
+        countryListPresenter.initialize(caseCachedCountry);
     }
 
     @Override
     public void onComponentLoaded(CountryWidgetData.Component component) {
         switch (component.componentType()) {
             case CountryWidgetData.COMPONENT_CALENDAR:
+
                 tvNepaliDate.setText(((CountryWidgetData.CalendarComponent) component).getNepaliDate());
 
                 Calendar instance = ((CountryWidgetData.CalendarComponent) component).getToday();
@@ -105,13 +120,25 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
                 tvEnglishDate.setText(englishDate);
                 break;
             case CountryWidgetData.COMPONENT_FOREX:
+
                 // TODO: 10/24/16 adjust api for forex with preference
-                String location = ((BaseActivity) getActivity()).getPreferences().getLocation();
-                Logger.e(TAG, ">>> ");
-//                tvForex.setText(component.toString());
+                if (!((BaseActivity) getActivity()).getPreferences().getLocation()
+                        .equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
+
+                    String country = ((BaseActivity) getActivity()).getPreferences().getLocation()
+                            .split(",")[Country.INDEX_TITLE];
+                    String foreignCurrency = ((CountryWidgetData.ForexComponent) component).getCurrencyMap().get(MyConstants
+                            .Country.getCurrencyKey(country));
+
+                    Logger.e(TAG, ">>> foreign currency: " + foreignCurrency);
+                    tvForex.setText(String.format("%s 1 = NPR %s", MyConstants.Country.getCurrency(country), foreignCurrency));
+                } else {
+                    tvForex.setVisibility(View.GONE);
+                }
                 break;
             case CountryWidgetData.COMPONENT_WEATHER:
-                tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() +" "+ (char) 0x00B0 + "C");
+
+                tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() + " " + (char) 0x00B0 + "C");
                 String pWeather = ((CountryWidgetData.WeatherComponent) component).getWeatherInfo();
                 if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_CLEAR_SKY)) {
                     Calendar cal = Calendar.getInstance();
@@ -136,7 +163,7 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
                 } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_RAIN)) {
                     mImageViewWeather.setImageResource(R.drawable.ic_rain);
                 } else {
-                    //// TODO: 6/23/2016 unknown weather type
+                    // TODO: 6/23/2016 unknown weather type
                 }
                 break;
         }
@@ -180,8 +207,20 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
             case CountryWidgetData.COMPONENT_WEATHER:
                 break;
         }
-//        Toast.makeText(getContext(), String.format("Error on %d, %s", type, error),
-//                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void renderCountries(List<Country> countryList) {
+        // TODO: 11/2/16 fetch related country from cache
+//        Logger.e(TAG, ">>> rendered countries: " + countryList);
+        // make request for forex here
+//        int index = countryList.indexOf(((BaseActivity) getActivity()).getPreferences().getLocation());
+//        Logger.e(TAG, ">>> index: " + index);
+//        if (index != -1) {
+//            mSelectedDestination = countryList.get(index);
+        caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+        widgetPresenter.initialize(caseForEx);
+//        }
     }
 
     @Override
@@ -203,5 +242,6 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     public void onDestroy() {
         super.onDestroy();
         widgetPresenter.destroy();
+        countryListPresenter.destroy();
     }
 }

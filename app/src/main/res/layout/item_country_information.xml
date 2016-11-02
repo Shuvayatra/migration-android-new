@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_default"
             android:textColor="@color/warm_grey"
-            android:text="@{country.allInformations}"
+            android:text="@{country.allInformation}"
             android:lineSpacingExtra="@dimen/text_xsmall"
             tool:text="Capital : Kuala Lumpur\nCurrency : Ringgit \nLanguage : Bahasa Malaysia English \nPopulation :31.220.000"/>
 
