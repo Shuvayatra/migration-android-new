@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.taf.util.MyConstants;
-import com.taf.util.MyConstants.OnBoarding;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -140,21 +139,6 @@ public class AppPreferences {
 
     public void updateCountryListCallStatus(boolean status) {
         editor.putBoolean(MyConstants.Preferences.COUNTRY_LIST_CALL, status);
-        editor.apply();
-    }
-
-    /**
-     * Only used while {@link OnBoarding} as all of the fragments present in the activity might not
-     * have been loaded.
-     *
-     * @return returns country list as [id],[name]
-     */
-    public Set<String> getCountryList() {
-        return pref.getStringSet(MyConstants.Preferences.COUNTRY_LIST, new HashSet<>());
-    }
-
-    public void updateCountryList(Set<String> countrySet) {
-        editor.putStringSet(MyConstants.Preferences.COUNTRY_LIST, countrySet);
         editor.apply();
     }
 
