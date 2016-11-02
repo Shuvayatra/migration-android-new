@@ -9,6 +9,12 @@ import java.util.List;
  */
 
 public class Block extends BaseModel {
+
+    public static final String TYPE_LIST = "list";
+    public static final String TYPE_SLIDER = "slider";
+    public static final String TYPE_NOTICE = "notice";
+    public static final String TYPE_RADIO = "radio_widget";
+
     private int mPosition;
     private String mLayout;
     private String mTitle;

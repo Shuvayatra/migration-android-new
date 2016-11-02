@@ -261,7 +261,7 @@ public class BindingUtil {
     }
 
     @BindingAdapter({"bind:data", "bind:orientation"})
-    public static void showBlockItems(RecyclerView recyclerView, List<com.taf.model.Post> posts,
+    public static void showBlockItems(RecyclerView recyclerView, List<Post> posts,
                                       int orientation) {
         BlockItemAdapter adapter = new BlockItemAdapter(recyclerView.getContext(), posts,
                 orientation);
@@ -270,12 +270,6 @@ public class BindingUtil {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
                 orientation, false));
-
-//        if (recyclerView.getOnFlingListener() == null) {
-//            GravitySnapHelper snapHelper = new GravitySnapHelper(Gravity.END, true);
-//            //LinearSnapHelper snapHelper = new LinearSnapHelper();
-//            snapHelper.attachToRecyclerView(recyclerView);
-//        }
     }
 
     @BindingAdapter("bind:htmlContent")

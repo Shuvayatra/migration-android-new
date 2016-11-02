@@ -4,8 +4,10 @@ package com.taf.model;
 import com.taf.util.MyConstants;
 
 import java.util.List;
+import java.util.Locale;
 
 public class Post extends BaseModel {
+
     String mTitle;
     String mDescription;
     String mType;
@@ -177,7 +179,6 @@ public class Post extends BaseModel {
         downloadReference = pDownloadReference;
     }
 
-
     public Integer getViewCount() {
         return mViewCount;
     }
@@ -249,6 +250,6 @@ public class Post extends BaseModel {
 
     @Override
     public String toString() {
-        return getTitle();
+        return String.format(Locale.getDefault(), "id: %d, title: %s, type: %s", getId(), getTitle(), getType());
     }
 }
