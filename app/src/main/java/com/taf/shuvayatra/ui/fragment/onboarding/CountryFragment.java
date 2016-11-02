@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.widget.Spinner;
 
-import com.taf.data.utils.AppPreferences;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.R;
@@ -33,7 +32,6 @@ import butterknife.OnClick;
  * This fragment is seen in {@link OnBoardActivity} as a part of the on-boarding question and is
  * only shown if {@link OnBoardActivity#renderCountries(List)} is called.
  * <p>
- * Uses {@link AppPreferences#getCountryList()} to get the list of available countries
  *
  * @see OnBoardActivity
  */

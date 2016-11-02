@@ -76,6 +76,7 @@ public class CountryListPresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            Logger.e(TAG, ">>> presenter onError() called <<<");
             mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
@@ -83,7 +84,7 @@ public class CountryListPresenter implements Presenter {
 
         @Override
         public void onNext(List<Country> pT) {
-            Logger.e(TAG, ">>> call to on next");
+            Logger.e(TAG, ">>> call to on next <<<");
             mView.renderCountries(pT);
             onCompleted();
         }

@@ -27,7 +27,6 @@ import com.taf.shuvayatra.ui.views.SwipeDisabledPager;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,11 +68,11 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if (!getPreferences().getFirstLaunch()) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
+//        if (!getPreferences().getFirstLaunch()) {
+//            Intent intent = new Intent(this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
 
         initialize();
 
@@ -91,9 +90,11 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void onNextButtonPressed(int pos) {
-        Logger.e(TAG, "pos: " + pos);
         // TODO: 10/26/16 refactor logic
         if (getPreferences().isOnBoardingCountryListLoaded()) {
+
+            Logger.e(TAG, ">>> COUNTRY LIST LOADED <<<");
+            Logger.e(TAG, ">>> POSITION: " + pos + " <<<");
 
             if (pos == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
@@ -104,6 +105,9 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
                 mQuestionPager.setCurrentItem(pos + 1);
             }
         } else {
+
+            Logger.e(TAG, ">>> COUNTRY LIST NOT LOADED <<<");
+            Logger.e(TAG, ">>> POSITION: " + pos + " <<<");
 
             if (pos == OnBoardQuestionAdapter.LIST_SIZE - 2) {
                 getPreferences().setFirstLaunch(false);
@@ -124,23 +128,24 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void renderCountries(List<Country> countryList) {
-
-        Logger.e(TAG, ">>> country size: " + countryList.size());
+        Logger.e(TAG, ">>> RENDER COUNTRY <<<");
         // update preference
         // add into preference key value map of country as JSON
-        List<String> countries = new ArrayList<>();
-        for (Country country : countryList) {
-            countries.add(String.valueOf(country.getId()) + "," + country.getTitle());
-        }
-        Logger.e(TAG, ">>> country list:\n" + countryList.toString());
-        Logger.e(TAG, ">>> countries:\n" + countries.toString());
-        getPreferences().updateCountryListCallStatus(true);
-        getPreferences().updateCountryList(new HashSet<>(countries));
+        if (!countryList.isEmpty()) {
+            Logger.e(TAG, ">>> ");
+            List<String> countries = new ArrayList<>();
+            for (Country country : countryList) {
+                countries.add(String.valueOf(country.getId()) + "," + country.getTitle());
+            }
+            Logger.e(TAG, ">>> country list:\n" + countryList.toString());
+            Logger.e(TAG, ">>> countries:\n" + countries.toString());
+            getPreferences().updateCountryListCallStatus(true);
 
-        // update fragment if created
-        if (pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
-            ((AbroadQuestionFragment) pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS))
-                    .mButtonNext.setText(getString(R.string.next));
+            // update fragment if created
+            if (pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
+                ((AbroadQuestionFragment) pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS))
+                        .mButtonNext.setText(getString(R.string.next));
+            }
         }
     }
 
@@ -156,6 +161,7 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void showErrorView(String pErrorMessage) {
+        Logger.e(TAG, ">>> SHOW ERROR VIEW <<<");
         // ask to check network via snackbar
         if (getString(R.string.exception_message_no_connection).equalsIgnoreCase(pErrorMessage)) {
             Snackbar.make(container, getString(R.string.exception_message_no_connection),
