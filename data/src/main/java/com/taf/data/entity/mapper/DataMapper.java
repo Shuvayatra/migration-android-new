@@ -175,7 +175,7 @@ public class DataMapper {
                 countryInfo.setValue(countryInfoEntity.getValue());
                 countryInfos.add(countryInfo);
             }
-            country.setInformations(countryInfos);
+            country.setInformation(countryInfos);
             countryList.add(country);
 
         }

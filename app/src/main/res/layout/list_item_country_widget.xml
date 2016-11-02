@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:padding="@dimen/spacing_standard"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_standard">
 
     <TextView
         android:id="@+id/textview_country_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_large"
         android:textColor="@color/greyish_brown"
+        android:textSize="@dimen/text_large"
         tools:text="Country Name" />
 
     <TextView
         android:id="@+id/nepali_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_xxlarge"
+        android:layout_marginTop="@dimen/spacing_small"
         android:textColor="@color/warm_grey"
+        android:textSize="@dimen/text_xxlarge"
         tools:text="१९ आश्विन २०७३, बुधवार" />
 
     <TextView
         android:id="@+id/forex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_large"
+        android:layout_marginTop="@dimen/spacing_small"
         android:textColor="@color/warm_grey"
+        android:textSize="@dimen/text_large"
         tools:text="Exchange Rate" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xxlarge"
         android:orientation="horizontal">
 
         <TextView
@@ -42,15 +45,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/text_large"
             android:textColor="@color/warm_grey"
+            android:textSize="@dimen/text_large"
             tools:text="Monday,\n 23 October 2o16" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="end|right|center_vertical"
             android:orientation="horizontal">
 
@@ -58,8 +61,8 @@
                 android:id="@+id/textview_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
                 android:textColor="@color/warm_grey"
+                android:textSize="24sp"
                 tools:text="3C" />
 
             <ImageView

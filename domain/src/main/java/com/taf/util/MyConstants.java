@@ -26,6 +26,56 @@ public class MyConstants {
 
         public static final String[] COUNTRY_LIST = {MALAYSIA, SAUDI_ARABIA, QATAR, UAE, KUWAIT,
                 NEPAL};
+
+        public static final String CURRENCY_KUWAIT = "Kuwaity Dinar";
+        public static final String ABV_CURRENCY_KUWAIT = "KWD";
+        public static final String CURRENCY_SAUDI_ARABIA = "Saudi Arabian riyal";
+        public static final String ABV_CURRENCY_SAUDI_ARABIA = "SAR";
+        public static final String CURRENCY_QATAR = "Qatari riyal";
+        public static final String ABV_CURRENCY_QATAR = "QR";
+        public static final String CURRENCY_MALAYSIA = "Malaysian ringgit";
+        public static final String ABV_CURRENCY_MALAYSIA = "MYR";
+        public static final String CURRENCY_UAE = "UAE Dirham";
+        public static final String ABV_CURRENCY_UAE = "AED";
+
+        public static final String[] CURRENCY_LIST = {CURRENCY_KUWAIT, CURRENCY_SAUDI_ARABIA,
+                CURRENCY_QATAR, CURRENCY_MALAYSIA, CURRENCY_UAE};
+
+        public static String getCurrencyKey(String country) {
+            switch (country) {
+                case MALAYSIA:
+                    return CURRENCY_MALAYSIA;
+                case SAUDI_ARABIA:
+                    return CURRENCY_SAUDI_ARABIA;
+                case QATAR:
+                    return CURRENCY_QATAR;
+                case UAE:
+                    return CURRENCY_UAE;
+                case KUWAIT:
+                    return CURRENCY_KUWAIT;
+                case NEPAL:
+                default:
+                    return "";
+            }
+        }
+
+        public static String getCurrency(String country) {
+            switch (country) {
+                case MALAYSIA:
+                    return ABV_CURRENCY_MALAYSIA;
+                case SAUDI_ARABIA:
+                    return ABV_CURRENCY_SAUDI_ARABIA;
+                case QATAR:
+                    return ABV_CURRENCY_QATAR;
+                case UAE:
+                    return ABV_CURRENCY_UAE;
+                case KUWAIT:
+                    return ABV_CURRENCY_KUWAIT;
+                case NEPAL:
+                default:
+                    return "NPR";
+            }
+        }
     }
 
     public static final class UseCase {
