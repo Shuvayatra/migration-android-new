@@ -391,6 +391,7 @@ public class DataMapper {
     public Notice transformNotice(NoticeEntity entity) {
         if (entity != null) {
             Notice notice = new Notice();
+            notice.setId(entity.getId());
             notice.setTitle(entity.getTitle());
             notice.setDescription(entity.getDescription());
             notice.setImage(entity.getImage());

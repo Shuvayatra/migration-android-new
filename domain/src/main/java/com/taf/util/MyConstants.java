@@ -102,6 +102,8 @@ public class MyConstants {
         public static final String COUNTRY_LIST = "country-list";
 
         public static final String FAV_POSTS = "favourite-posts";
+        public static final String NOTICE_DISMISS_ID = "home-notice-dismiss-id";
+        public static final String COUNTRY_NOTICE_DISMISS_ID = "country-notice-dismiss-id";
     }
 
     public static final class Language {
