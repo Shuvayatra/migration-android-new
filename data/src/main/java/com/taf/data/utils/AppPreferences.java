@@ -14,6 +14,7 @@ import static com.taf.util.MyConstants.Preferences.DOWNLOAD_REFERENCES;
 import static com.taf.util.MyConstants.Preferences.FAV_POSTS;
 import static com.taf.util.MyConstants.Preferences.LAST_DELETE_STAMP;
 import static com.taf.util.MyConstants.Preferences.LAST_UPDATE_STAMP;
+import static com.taf.util.MyConstants.Preferences.NOTICE_DISMISS_ID;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
 
 public class AppPreferences {
@@ -184,6 +185,15 @@ public class AppPreferences {
             return favourites.contains(String.valueOf(postId));
         }
         return false;
+    }
+
+    public Long getNoticeDismissId() {
+        return pref.getLong(NOTICE_DISMISS_ID, -1);
+    }
+
+    public void setNoticeDismissId(Long id) {
+        editor.putLong(NOTICE_DISMISS_ID, id);
+        editor.commit();
     }
 
 }
