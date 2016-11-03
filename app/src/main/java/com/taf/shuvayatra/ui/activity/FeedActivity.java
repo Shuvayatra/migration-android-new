@@ -176,19 +176,10 @@ public class FeedActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == BaseActivity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_POST_DETAIL) {
-                boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
-                        false);
-                int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
-                if (viewCount != 0) {
-                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedViewCount(viewCount);
-                }
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
-                if (shareCount != 0) {
-                    mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedShareCount(shareCount);
-                }
+                mListAdapter.getDataCollection().get(listItemSelection).setShare(shareCount);
                 int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
                 mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
-                mListAdapter.getDataCollection().get(listItemSelection).setIsFavourite(status);
                 mListAdapter.notifyDataSetChanged();
             }
         }

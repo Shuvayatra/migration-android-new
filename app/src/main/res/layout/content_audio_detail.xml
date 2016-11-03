@@ -23,27 +23,15 @@
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
-
-		<RelativeLayout
-			android:id="@+id/overlay"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:background="@color/black_alpha_55">
-
-			<ProgressBar
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerInParent="true"/>
-		</RelativeLayout>
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		tools:context=".ui.deprecated.activity.AudioDetailActivity"
+		tools:showIn="@layout/activity_audio_detail">
 
 		<android.support.v4.widget.NestedScrollView
 			android:id="@+id/scroll_view"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			app:layout_behavior="@string/appbar_scrolling_view_behavior"
-			tools:context=".ui.deprecated.activity.AudioDetailActivity"
-			tools:showIn="@layout/activity_audio_detail">
+			android:layout_height="match_parent">
 
 			<LinearLayout
 				android:layout_width="match_parent"
@@ -96,5 +84,17 @@
 				</RelativeLayout>
 			</LinearLayout>
 		</android.support.v4.widget.NestedScrollView>
+
+		<RelativeLayout
+			android:id="@+id/overlay"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:background="@color/black_alpha_55">
+
+			<ProgressBar
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"/>
+		</RelativeLayout>
 	</RelativeLayout>
 </layout>
