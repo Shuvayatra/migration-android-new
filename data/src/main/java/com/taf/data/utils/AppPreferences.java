@@ -47,7 +47,7 @@ public class AppPreferences {
     }
 
     public Set<String> getDownloadReferences() {
-        return pref.getStringSet(DOWNLOAD_REFERENCES, new HashSet<String>());
+        return pref.getStringSet(DOWNLOAD_REFERENCES, new HashSet<>());
     }
 
     public void addDownloadReference(Long pReference) {

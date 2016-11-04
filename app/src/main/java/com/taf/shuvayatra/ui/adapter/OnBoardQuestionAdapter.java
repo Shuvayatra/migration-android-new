@@ -15,6 +15,7 @@ import com.taf.shuvayatra.ui.fragment.onboarding.OriginalLocationFragment;
 import com.taf.shuvayatra.ui.fragment.onboarding.UserNameFragment;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +53,8 @@ public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
         Logger.e(TAG, "position: " + position);
 
         // TODO: 10/27/16 fix and refactor state instance for Fragments
-
         Fragment fragment;
-        if (manager.findFragmentByTag(fragmentTags.get(position)) != null) {
+        if (fragmentTags != null && manager.findFragmentByTag(fragmentTags.get(position)) != null) {
             Logger.e(TAG, ">>> found fragment by tag");
             fragment = manager.findFragmentByTag(fragmentTags.get(position));
         } else {
@@ -95,9 +95,8 @@ public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        final long itemId = getItemId(position);
-        if (!fragmentTags.contains(makeFragmentName(container.getId(), itemId))) {
-            fragmentTags.add(makeFragmentName(container.getId(), itemId));
+        if (!fragmentTags.contains(makeFragmentName(container.getId(), position))) {
+            fragmentTags.add(makeFragmentName(container.getId(), position));
         }
         return super.instantiateItem(container, position);
     }
@@ -116,7 +115,9 @@ public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
         return LIST_SIZE;
     }
 
-    public interface ButtonPressListener {
+    public interface ButtonPressListener extends Serializable {
+
+        String TAG = "button-press-listener";
 
         void onNextButtonPressed(int pos);
 

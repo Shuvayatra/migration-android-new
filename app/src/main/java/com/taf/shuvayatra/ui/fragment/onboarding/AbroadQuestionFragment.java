@@ -16,7 +16,7 @@ import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
-public class AbroadQuestionFragment extends BaseFragment implements View.OnClickListener {
+public class AbroadQuestionFragment extends BaseFragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     public static final String TAG = "AbroadQuestionFragment";
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
@@ -29,6 +29,7 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     public static AbroadQuestionFragment newInstance(ButtonPressListener buttonPressListener) {
         AbroadQuestionFragment fragment = new AbroadQuestionFragment();
         fragment.setButtonPressListener(buttonPressListener);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -40,7 +41,14 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mRadioGroupPreviousWorkStatus.setOnCheckedChangeListener(this);
         mButtonNext.setOnClickListener(onNextClicked());
+
+        if (((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus() != Integer.MIN_VALUE) {
+            mRadioGroupPreviousWorkStatus.check(((BaseActivity) getActivity()).getPreferences()
+                    .getPreviousWorkStatus());
+        }
 
         if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())
             mButtonNext.setText(getString(R.string.next));
@@ -48,10 +56,16 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }
         });
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        ((BaseActivity) getActivity()).getPreferences().setPreviousWorkStatus(checkedId);
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {
@@ -76,23 +90,11 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
                     Snackbar.make(mButtonNext, getString(R.string.error_option), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                if (selectedId == R.id.rb_working) {
-                    ((BaseActivity) getActivity()).getPreferences()
-                            .setPreviousWorkStatus(0);
-                } else if (selectedId == R.id.rb_back_from_abroad) {
-                    ((BaseActivity) getActivity()).getPreferences()
-                            .setPreviousWorkStatus(1);
-                } else if (selectedId == R.id.rb_planing) {
-                    ((BaseActivity) getActivity()).getPreferences()
-                            .setPreviousWorkStatus(2);
-                } else if (selectedId == R.id.rb_not_going) {
-                    ((BaseActivity) getActivity()).getPreferences()
-                            .setPreviousWorkStatus(3);
-                }
 
                 Logger.e(TAG, " ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();: " +
                         ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus());
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.WORK_STATUS);
             }
         };

@@ -16,8 +16,8 @@ import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter.ButtonPressListener;
 import com.taf.util.MyConstants;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 
@@ -33,6 +33,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
     private ButtonPressListener mButtonPressListener;
     private Calendar birthday;
 
+    private static final String TAG = "BirthdayFragment";
+
     @Override
     public int getLayout() {
         return R.layout.fragment_birthday;
@@ -41,12 +43,27 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
     public static BirthdayFragment newInstance(ButtonPressListener buttonPressListener) {
         BirthdayFragment fragment = new BirthdayFragment();
         fragment.setButtonPressListener(buttonPressListener);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        long savedBirthday = ((BaseActivity) getActivity()).getPreferences().getBirthday();
+
+        if (savedBirthday != Long.MIN_VALUE) {
+
+            birthday = Calendar.getInstance();
+            birthday.setTime(new Date(savedBirthday));
+            mTextViewBirthday.setText(String.format(
+                    Locale.getDefault(),
+                    "%d/%s/%d",
+                    birthday.get(Calendar.YEAR),
+                    birthday.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US),
+                    birthday.get(Calendar.DAY_OF_MONTH)));
+        }
 
         mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +73,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
                     return;
                 }
                 ((BaseActivity) getActivity()).getPreferences().setBirthday(birthday.getTimeInMillis());
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.BIRTHDAY);
             }
         });
@@ -64,7 +82,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.BIRTHDAY);
             }
         });
@@ -73,12 +92,12 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
 
-                Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+                if (birthday == null) birthday = Calendar.getInstance();
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
+                        birthday.get(Calendar.YEAR),
+                        birthday.get(Calendar.MONTH),
+                        birthday.get(Calendar.DAY_OF_MONTH)
                 );
                 dialog.show();
             }
@@ -88,9 +107,9 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         // update birthday reference
-        if (birthday == null) birthday = Calendar.getInstance();
         birthday.set(year, month, dayOfMonth);
-        // update view
+        // update preference and view
+        ((BaseActivity) getActivity()).getPreferences().setBirthday(birthday.getTimeInMillis());
         mTextViewBirthday.setText(String.format(Locale.getDefault(),
                 "%d/%s/%d", year, birthday.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US),
                 dayOfMonth));

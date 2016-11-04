@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -17,7 +16,7 @@ import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
-public class GenderFragment extends BaseFragment {
+public class GenderFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener {
 
     public static final String TAG = "GenderFragment";
     ButtonPressListener mButtonPressListener;
@@ -31,22 +30,36 @@ public class GenderFragment extends BaseFragment {
     public static GenderFragment newInstance(ButtonPressListener buttonPressListener) {
         GenderFragment fragment = new GenderFragment();
         fragment.setButtonPressListener(buttonPressListener);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mButtonNext.setOnClickListener(onNextClicked());
+        mRadioGroupGender.setOnCheckedChangeListener(this);
+
+        String gender = ((BaseActivity) getActivity()).getPreferences().getGender();
+        if (gender != null)
+            mRadioGroupGender.check(gender.equalsIgnoreCase(getString(R.string.gender_male)) ? R.id.choice_male :
+                    gender.equalsIgnoreCase(getString(R.string.gender_female)) ? R.id.choice_female : -1);
 
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         });
+    }
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        RadioButton selectedButton = (RadioButton) getActivity().findViewById(checkedId);
+        ((BaseActivity) getActivity()).getPreferences().setGender(selectedButton.getText().toString());
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {
@@ -58,23 +71,20 @@ public class GenderFragment extends BaseFragment {
         return R.layout.fragment_gender;
     }
 
-    private View.OnClickListener onNextClicked(){
+    private View.OnClickListener onNextClicked() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = mRadioGroupGender.getCheckedRadioButtonId();
-                if(selectedId == -1){
-                    Snackbar.make(mButtonNext,getString(R.string.error_option),Snackbar.LENGTH_SHORT).show();
+                if (selectedId == -1) {
+                    Snackbar.make(mButtonNext, getString(R.string.error_option), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                RadioButton selectedButton = (RadioButton) getActivity().findViewById(selectedId);
-                    ((BaseActivity) getActivity()).getPreferences().setGender(selectedButton.getText().toString());
-
-                Logger.e(TAG," ((BaseActivity) getActivity()).getPreferences().getGender();: "+
-                        ((BaseActivity) getActivity()).getPreferences().getGender());
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         };
     }
+
 }
