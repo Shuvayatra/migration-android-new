@@ -60,6 +60,7 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     UseCaseData caseWeather = new UseCaseData();
     UseCaseData caseCachedCountry = new UseCaseData();
 
+    // TODO: 11/4/16 use country object
 //    private Country mSelectedDestination;
 
     @Override
@@ -78,7 +79,9 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
         initialize();
 
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN];
+        String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
+                selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
+                        selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
         tvCountryName.setText(countryName);
     }
 
@@ -108,64 +111,67 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
 
     @Override
     public void onComponentLoaded(CountryWidgetData.Component component) {
-        switch (component.componentType()) {
-            case CountryWidgetData.COMPONENT_CALENDAR:
+        try {
+            switch (component.componentType()) {
+                case CountryWidgetData.COMPONENT_CALENDAR:
 
-                tvNepaliDate.setText(((CountryWidgetData.CalendarComponent) component).getNepaliDate());
+                    tvNepaliDate.setText(((CountryWidgetData.CalendarComponent) component).getNepaliDate());
 
-                Calendar instance = ((CountryWidgetData.CalendarComponent) component).getToday();
-                String date = DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN, instance.getTime());
-                String day = DateUtils.getEnglishDay(instance.get(Calendar.DAY_OF_WEEK));
-                String englishDate = day + ",\n" + date;
-                tvEnglishDate.setText(englishDate);
-                break;
-            case CountryWidgetData.COMPONENT_FOREX:
+                    Calendar instance = ((CountryWidgetData.CalendarComponent) component).getToday();
+                    String date = DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN, instance.getTime());
+                    String day = DateUtils.getEnglishDay(instance.get(Calendar.DAY_OF_WEEK));
+                    String englishDate = day + ",\n" + date;
+                    tvEnglishDate.setText(englishDate);
+                    break;
+                case CountryWidgetData.COMPONENT_FOREX:
 
-                // TODO: 10/24/16 adjust api for forex with preference
-                if (!((BaseActivity) getActivity()).getPreferences().getLocation()
-                        .equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
+                    if (!((BaseActivity) getActivity()).getPreferences().getLocation()
+                            .equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
 
-                    String country = ((BaseActivity) getActivity()).getPreferences().getLocation()
-                            .split(",")[Country.INDEX_TITLE];
-                    String foreignCurrency = ((CountryWidgetData.ForexComponent) component).getCurrencyMap().get(MyConstants
-                            .Country.getCurrencyKey(country));
+                        String country = ((BaseActivity) getActivity()).getPreferences().getLocation()
+                                .split(",")[Country.INDEX_TITLE];
+                        String foreignCurrency = ((CountryWidgetData.ForexComponent) component).getCurrencyMap().get(MyConstants
+                                .Country.getCurrencyKey(country));
 
-                    Logger.e(TAG, ">>> foreign currency: " + foreignCurrency);
-                    tvForex.setText(String.format("%s 1 = NPR %s", MyConstants.Country.getCurrency(country), foreignCurrency));
-                } else {
-                    tvForex.setVisibility(View.GONE);
-                }
-                break;
-            case CountryWidgetData.COMPONENT_WEATHER:
+                        Logger.e(TAG, ">>> foreign currency: " + foreignCurrency);
+                        tvForex.setText(String.format("%s 1 = NPR %s", MyConstants.Country.getCurrency(country), foreignCurrency));
+                    } else {
+                        tvForex.setVisibility(View.GONE);
+                    }
+                    break;
+                case CountryWidgetData.COMPONENT_WEATHER:
 
-                tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() + " " + (char) 0x00B0 + "C");
-                String pWeather = ((CountryWidgetData.WeatherComponent) component).getWeatherInfo();
-                if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_CLEAR_SKY)) {
-                    Calendar cal = Calendar.getInstance();
-                    if (cal.get(Calendar.HOUR_OF_DAY) < 19)
-                        //// TODO: 6/29/2016 clear day
-                        mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_day);
-                    else
-                        mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_night);
-                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_BROKEN_CLOUDS) ||
-                        pWeather.contains(MyConstants.WEATHER.TYPE_SCATTERED_CLOUDS)) {
-                    mImageViewWeather.setImageResource(R.drawable.ic_scattered_clouds);
-                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_FEW_CLOUDS)) {
-                    Calendar cal = Calendar.getInstance();
-                    if (cal.get(Calendar.HOUR_OF_DAY) < 19)
-                        mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_day);
-                    else
-                        mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_night);
-                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_SHOWER_RAIN)) {
-                    mImageViewWeather.setImageResource(R.drawable.ic_shower_rain);
-                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_THUNDERSTORM)) {
-                    mImageViewWeather.setImageResource(R.drawable.ic_thunderstorm);
-                } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_RAIN)) {
-                    mImageViewWeather.setImageResource(R.drawable.ic_rain);
-                } else {
-                    // TODO: 6/23/2016 unknown weather type
-                }
-                break;
+                    tvTemperature.setText(((CountryWidgetData.WeatherComponent) component).getTemperature() + " " + (char) 0x00B0 + "C");
+                    String pWeather = ((CountryWidgetData.WeatherComponent) component).getWeatherInfo();
+                    if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_CLEAR_SKY)) {
+                        Calendar cal = Calendar.getInstance();
+                        if (cal.get(Calendar.HOUR_OF_DAY) < 19)
+                            mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_day);
+                        else
+                            mImageViewWeather.setImageResource(R.drawable.ic_clear_sky_night);
+                    } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_BROKEN_CLOUDS) ||
+                            pWeather.contains(MyConstants.WEATHER.TYPE_SCATTERED_CLOUDS)) {
+                        mImageViewWeather.setImageResource(R.drawable.ic_scattered_clouds);
+                    } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_FEW_CLOUDS)) {
+                        Calendar cal = Calendar.getInstance();
+                        if (cal.get(Calendar.HOUR_OF_DAY) < 19)
+                            mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_day);
+                        else
+                            mImageViewWeather.setImageResource(R.drawable.ic_few_clouds_night);
+                    } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_SHOWER_RAIN)) {
+                        mImageViewWeather.setImageResource(R.drawable.ic_shower_rain);
+                    } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_THUNDERSTORM)) {
+                        mImageViewWeather.setImageResource(R.drawable.ic_thunderstorm);
+                    } else if (pWeather.toLowerCase().contains(MyConstants.WEATHER.TYPE_RAIN)) {
+                        mImageViewWeather.setImageResource(R.drawable.ic_rain);
+                    } else {
+                        // TODO: 6/23/2016 unknown weather type
+                    }
+                    break;
+            }
+        } catch (NullPointerException e) {
+            // TODO: 11/4/16 proper fix for context's NPE
+            e.printStackTrace();
         }
     }
 
@@ -211,16 +217,8 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
 
     @Override
     public void renderCountries(List<Country> countryList) {
-        // TODO: 11/2/16 fetch related country from cache
-//        Logger.e(TAG, ">>> rendered countries: " + countryList);
-        // make request for forex here
-//        int index = countryList.indexOf(((BaseActivity) getActivity()).getPreferences().getLocation());
-//        Logger.e(TAG, ">>> index: " + index);
-//        if (index != -1) {
-//            mSelectedDestination = countryList.get(index);
         caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
         widgetPresenter.initialize(caseForEx);
-//        }
     }
 
     @Override

@@ -68,7 +68,6 @@ public class ApiRequest {
     }
 
     public Observable<CountryWidgetData.Component> getComponent(int componentType) {
-        // todo add api request for each component
         switch (componentType) {
             case CountryWidgetData.COMPONENT_FOREX:
                 return Observable.error(new NetworkConnectionException());

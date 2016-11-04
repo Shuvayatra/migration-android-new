@@ -36,7 +36,6 @@ public class ComponentRepository implements IWidgetComponentRepository {
     public Observable<CountryWidgetData.Component> getComponent(int type) {
         switch (type) {
             case CountryWidgetData.COMPONENT_CALENDAR:
-                // TODO: 10/20/16 add calendar implementation
                 Logger.e(TAG, ">>> component calendar");
                 CountryWidgetData.CalendarComponent component = new CountryWidgetData.CalendarComponent();
                 Calendar today = Calendar.getInstance();

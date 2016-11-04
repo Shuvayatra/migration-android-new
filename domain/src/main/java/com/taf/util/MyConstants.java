@@ -166,6 +166,7 @@ public class MyConstants {
     }
 
     public static final class Extras {
+        public static final String KEY_PAGER_POSITION = "pager-position";
         public static final String KEY_ID = "key_id";
         public static final String KEY_POST = "key_post";
         public static final String KEY_AUDIO = "key_audio";
