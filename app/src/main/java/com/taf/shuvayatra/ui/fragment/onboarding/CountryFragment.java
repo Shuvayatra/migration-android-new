@@ -3,8 +3,11 @@ package com.taf.shuvayatra.ui.fragment.onboarding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.R;
@@ -36,12 +39,14 @@ import butterknife.OnClick;
  * @see OnBoardActivity
  */
 
-public class CountryFragment extends BaseFragment implements CountryView {
+public class CountryFragment extends BaseFragment implements CountryView, AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.spinner_country)
     Spinner spinnerCountry;
     @Inject
     CountryListPresenter presenter;
+
+    private static final String TAG = "CountryFragment";
 
     private OnBoardQuestionAdapter.ButtonPressListener mButtonListener;
 
@@ -50,6 +55,7 @@ public class CountryFragment extends BaseFragment implements CountryView {
     public static CountryFragment newInstance(OnBoardQuestionAdapter.ButtonPressListener listener) {
         CountryFragment fragment = new CountryFragment();
         fragment.mButtonListener = listener;
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -88,8 +94,6 @@ public class CountryFragment extends BaseFragment implements CountryView {
         if (spinnerCountry.getSelectedItemPosition() == 0) {
             Snackbar.make(getView(), R.string.error_option, Snackbar.LENGTH_LONG).show();
         } else {
-            ((BaseActivity) getActivity()).getPreferences().setLocation(dataList.get(spinnerCountry
-                    .getSelectedItemPosition()));
             if (mButtonListener == null)
                 mButtonListener = ((OnBoardQuestionAdapter.ButtonPressListener) getActivity());
             mButtonListener.onNextButtonPressed(MyConstants.OnBoarding.PREFERRED_DESTINATION);
@@ -98,6 +102,7 @@ public class CountryFragment extends BaseFragment implements CountryView {
 
     @Override
     public void renderCountries(List<Country> countryList) {
+
         dataList.add(getString(R.string.question_destination));
         List<String> countries = new ArrayList<>();
         for (Country country : countryList) {
@@ -105,8 +110,26 @@ public class CountryFragment extends BaseFragment implements CountryView {
         }
         dataList.addAll(countries);
 
+        Logger.e(TAG, ">>> country list: " + dataList);
+
         DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
         spinnerCountry.setAdapter(adapter);
+        if (!getTypedActivity().getPreferences().getLocation().equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
+            int index = dataList.indexOf(getTypedActivity().getPreferences().getLocation());
+            if (index != -1)
+                spinnerCountry.setSelection(index);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position != 0)
+            getTypedActivity().getPreferences().setLocation(dataList.get(spinnerCountry.getSelectedItemPosition()));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override

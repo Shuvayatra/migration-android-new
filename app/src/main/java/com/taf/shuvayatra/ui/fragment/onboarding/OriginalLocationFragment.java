@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -21,7 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class OriginalLocationFragment extends BaseFragment {
+public class OriginalLocationFragment extends BaseFragment<BaseActivity> implements AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.button_next)
     Button mButtonNext;
@@ -35,6 +36,7 @@ public class OriginalLocationFragment extends BaseFragment {
     public static OriginalLocationFragment newInstance(ButtonPressListener buttonPressListener) {
         OriginalLocationFragment fragment = new OriginalLocationFragment();
         fragment.setButtonPressListener(buttonPressListener);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -62,6 +64,12 @@ public class OriginalLocationFragment extends BaseFragment {
         DropDownAdapter adapter = new DropDownAdapter(getContext(), zoneList);
         mSpinner.setAdapter(adapter);
 
+        // check for preference and save
+        if (getTypedActivity().getPreferences().getOriginalLocation() != Integer.MIN_VALUE) {
+            mSpinner.setSelection(getTypedActivity().getPreferences().getOriginalLocation() + 1);
+        }
+        mSpinner.setOnItemSelectedListener(this);
+
         mButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +78,9 @@ public class OriginalLocationFragment extends BaseFragment {
                     return;
                 }
 
-                ((BaseActivity) getActivity()).getPreferences().setOriginalLocation(mSpinner.getSelectedItemPosition() - 1);
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
+
                 mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.ORIGINAL_LOCATION);
             }
         });
@@ -79,10 +88,23 @@ public class OriginalLocationFragment extends BaseFragment {
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mButtonPressListener == null) mButtonPressListener = ((ButtonPressListener) getActivity());
+                if (mButtonPressListener == null)
+                    mButtonPressListener = ((ButtonPressListener) getActivity());
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.ORIGINAL_LOCATION);
             }
         });
 
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != 0)
+            ((BaseActivity) getActivity()).getPreferences().setOriginalLocation(position - 1);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // do nothing
     }
 }

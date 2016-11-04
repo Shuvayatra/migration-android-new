@@ -76,7 +76,7 @@
                     android:textColor="@color/grey_87" />
 
                 <RadioButton
-                    android:id="@+id/rb_planing"
+                    android:id="@+id/rb_planning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/work_status_planning"

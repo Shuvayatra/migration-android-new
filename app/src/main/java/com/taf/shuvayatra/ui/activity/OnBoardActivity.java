@@ -49,7 +49,6 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     public static final String TAG = "OnBoardActivity";
     private static final int REQUEST_CODE_WIFI_SETTINGS = 1;
 
-    private OnBoardQuestionAdapter pagerAdapter;
 
     @Override
     public int getLayout() {
@@ -63,19 +62,18 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
         // add api request for country listing
         // api.shuvayatra.org/api/destinations
-        pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
+        initialize();
+
+        OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        if (!getPreferences().getFirstLaunch()) {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-
-        initialize();
-
+        if (!getPreferences().getFirstLaunch()) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void initialize() {
@@ -89,45 +87,47 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     }
 
     @Override
-    public void onNextButtonPressed(int pos) {
+    public void onNextButtonPressed(final int position) {
         // TODO: 10/26/16 refactor logic
+        // TODO: 11/3/16 Fix bug for setCurrentItem(int) not working
+        Logger.e(TAG, ">>> call to next button pressed: " + position);
         if (getPreferences().isOnBoardingCountryListLoaded()) {
 
-            Logger.e(TAG, ">>> COUNTRY LIST LOADED <<<");
-            Logger.e(TAG, ">>> POSITION: " + pos + " <<<");
-
-            if (pos == OnBoardQuestionAdapter.LIST_SIZE - 1) {
+            Logger.e(TAG, ">>> click action: country list loaded <<<");
+            if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                mQuestionPager.setCurrentItem(pos + 1);
+                Logger.e(TAG, String.format(">>> click action: set current item initial %d <<<", mQuestionPager.getCurrentItem()));
+                mQuestionPager.setCurrentItem(position + 1);
+                Logger.e(TAG, String.format(">>> click action: set current item current %d <<<", mQuestionPager.getCurrentItem()));
             }
         } else {
-
-            Logger.e(TAG, ">>> COUNTRY LIST NOT LOADED <<<");
-            Logger.e(TAG, ">>> POSITION: " + pos + " <<<");
-
-            if (pos == OnBoardQuestionAdapter.LIST_SIZE - 2) {
+            Logger.e(TAG, ">>> click action: country list not loaded <<<");
+            if (position == OnBoardQuestionAdapter.LIST_SIZE - 2) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                mQuestionPager.setCurrentItem(pos + 1);
+                Logger.e(TAG, String.format(">>> click action: set current item initial %d <<<", mQuestionPager.getCurrentItem()));
+                mQuestionPager.setCurrentItem(position + 1);
+                Logger.e(TAG, String.format(">>> click action: set current item current %d <<<", mQuestionPager.getCurrentItem()));
             }
         }
     }
 
     @Override
-    public void onBackButtonPressed(int pos) {
-        Logger.e(TAG, "pos: " + pos);
-        mQuestionPager.setCurrentItem(--pos);
+    public void onBackButtonPressed(int position) {
+        Logger.e(TAG, ">>> call to back button pressed: " + position);
+        mQuestionPager.setCurrentItem(--position);
     }
 
     @Override
     public void renderCountries(List<Country> countryList) {
+
         Logger.e(TAG, ">>> RENDER COUNTRY <<<");
         // update preference
         // add into preference key value map of country as JSON
@@ -142,8 +142,9 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
             getPreferences().updateCountryListCallStatus(true);
 
             // update fragment if created
-            if (pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
-                ((AbroadQuestionFragment) pagerAdapter.getFragment(MyConstants.OnBoarding.WORK_STATUS))
+            if (((OnBoardQuestionAdapter) mQuestionPager.getAdapter()).getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
+                ((AbroadQuestionFragment) ((OnBoardQuestionAdapter) mQuestionPager.getAdapter())
+                        .getFragment(MyConstants.OnBoarding.WORK_STATUS))
                         .mButtonNext.setText(getString(R.string.next));
             }
         }

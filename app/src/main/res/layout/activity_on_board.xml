@@ -1,66 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/main_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@android:color/white"
+    android:fitsSystemWindows="true"
     tools:context="com.taf.shuvayatra.ui.activity.OnBoardActivity">
-        <FrameLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/onboard_header_height"
-                android:background="@drawable/onboarding_header"
-                android:src="@drawable/ic_destination_faded"/>
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/message_welcome"
-                android:textSize="@dimen/text_xxlarge"
-                android:textColor="@android:color/white"
-                android:textAllCaps="true"
-                android:layout_gravity="center"/>
 
-        </FrameLayout>
-
-    <LinearLayout
-        android:fitsSystemWindows="true"
+    <FrameLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/onboard_content_margin_top">
+        android:background="@android:color/black">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/onboard_header_height"
+            android:background="@drawable/onboarding_header"
+            android:src="@drawable/ic_destination_faded" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent" />
+
         <TextView
-            android:layout_marginLeft="@dimen/spacing_xxxxlarge"
-            android:layout_marginRight="@dimen/spacing_xxxxlarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/message_welcome"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_xxlarge" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/onboard_content_margin_top"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_xxxxlarge"
+            android:layout_marginRight="@dimen/spacing_xxxxlarge"
             android:gravity="center"
             android:lineSpacingExtra="@dimen/text_xxlarge"
-            android:textSize="@dimen/text_small"
+            android:text="@string/msg_onboard"
             android:textColor="@color/light_grey"
-            android:text="@string/msg_onboard"/>
+            android:textSize="@dimen/text_small" />
 
         <com.taf.shuvayatra.ui.views.SwipeDisabledPager
             android:id="@+id/viewpager_questions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_xxxlarge"
             android:paddingLeft="@dimen/spacing_xxxlarge"
             android:paddingRight="@dimen/spacing_xxxlarge"
-            android:paddingTop="@dimen/spacing_xxxxxlarge"
-            android:paddingBottom="@dimen/spacing_xxxlarge"
-            />
+            android:paddingTop="@dimen/spacing_xxxxxlarge" />
 
     </LinearLayout>
 
@@ -70,25 +73,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_top_round_white"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/spacing_standard"
+        android:paddingBottom="@dimen/spacing_standard"
         android:paddingLeft="@dimen/spacing_large"
         android:paddingRight="@dimen/spacing_large"
-        android:paddingBottom="@dimen/spacing_standard"
+        android:paddingTop="@dimen/spacing_standard"
         app:layout_anchor="@id/header"
-        app:layout_anchorGravity="bottom|center"
-        android:background="@drawable/bg_top_round_white">
+        app:layout_anchorGravity="bottom|center">
 
         <ImageView
             android:layout_width="@dimen/spacing_xxxxxlarge"
             android:layout_height="@dimen/spacing_xxxxxlarge"
-            android:src="@mipmap/ic_app_launcher"
-            android:layout_marginRight="@dimen/spacing_small"/>
+            android:layout_marginRight="@dimen/spacing_small"
+            android:src="@mipmap/ic_app_launcher" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
             android:layout_gravity="center_vertical"
-            android:textSize="@dimen/text_xxlarge"/>
+            android:text="@string/app_name"
+            android:textSize="@dimen/text_xxlarge" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
