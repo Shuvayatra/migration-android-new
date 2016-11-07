@@ -13,6 +13,7 @@ import com.taf.data.database.dao.DbUnSynced;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.CategoryEntity;
+import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.CountryInfoEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -26,6 +27,7 @@ import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Category;
+import com.taf.model.Channel;
 import com.taf.model.Country;
 import com.taf.model.CountryInfo;
 import com.taf.model.CountryWidgetData;
@@ -501,5 +503,21 @@ public class DataMapper {
             }
         }
         return unSyncedPosts;
+    }
+
+    public List<Channel> transformChannelList(List<ChannelEntity> channelEntityList){
+        List<Channel> channels = new ArrayList<>();
+
+        for (ChannelEntity channelEntity : channelEntityList) {
+            Channel channel = new Channel();
+
+            channel.setId(channelEntity.getId());
+            channel.setTitle(channelEntity.getTitle());
+            channel.setDescription(channelEntity.getDescription());
+
+            channels.add(channel);
+        }
+
+        return channels;
     }
 }

@@ -5,10 +5,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.utils.Logger;
+import com.taf.model.Channel;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
@@ -30,6 +32,8 @@ public class CacheImpl {
     private static final String POSTS = "posts";
     private static final String COUNTRY_LIST = "country-list";
     public static final String DESTINATION_BLOCKS_SUFFIX = "destination-blocks-";
+    public static final String CHANNEL_LIST = "channel-list";
+
     private SimpleDiskCache mSimpleDiskCache;
 
     @Inject
@@ -212,6 +216,32 @@ public class CacheImpl {
         try {
             mSimpleDiskCache.put(POST_PREFIX + post.getId(), new Gson().toJson(post));
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Observable<List<ChannelEntity>> getChannelList(){
+        List<ChannelEntity> channelEntities = new ArrayList<>();
+        try{
+            if(mSimpleDiskCache.contains(CHANNEL_LIST)){
+                String json = mSimpleDiskCache.getCachedString(CHANNEL_LIST).getValue();
+                channelEntities = new Gson().fromJson(json, new TypeToken<List<ChannelEntity>>(){
+
+                }.getType());
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return Observable.just(channelEntities);
+    }
+
+
+    public void saveChannelList(List<ChannelEntity> channelList){
+        try{
+            mSimpleDiskCache.put(CHANNEL_LIST, new Gson().toJson(channelList));
+        }catch (IOException e){
             e.printStackTrace();
         }
     }

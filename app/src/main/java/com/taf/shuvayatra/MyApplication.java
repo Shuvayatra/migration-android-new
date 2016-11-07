@@ -1,6 +1,7 @@
 package com.taf.shuvayatra;
 
 import android.app.Application;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
@@ -28,6 +29,7 @@ public class MyApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
         Fresco.initialize(this);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }

@@ -117,4 +117,8 @@
 	<style name="AppTheme.RadioWidget">
 		<item name="colorAccent">#009688</item>
 	</style>
+
+	<style name="AppTheme.ChannelFab" parent="AppTheme">
+		<item name="colorAccent">@color/teal</item>
+	</style>
 </resources>

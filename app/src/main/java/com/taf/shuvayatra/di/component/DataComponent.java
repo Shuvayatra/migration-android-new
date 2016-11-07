@@ -23,6 +23,7 @@ import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
+import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
@@ -92,4 +93,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(DestinationDetailActivity activity);
 
     void inject(MyTaskService service);
+
+    void inject(ChannelFragment fragment);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ItemChannelHeaderDataBinding">
+
+        <variable
+            name="title"
+            type="java.lang.String"/>
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_18"
+        android:gravity="center"
+        android:text="@{title}"
+        android:textSize="@dimen/text_large"
+        tools:text="Other Channels"/>
+</layout>

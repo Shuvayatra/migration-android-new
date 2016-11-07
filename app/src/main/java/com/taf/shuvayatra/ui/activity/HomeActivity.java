@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
+import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
@@ -85,6 +86,10 @@ public class HomeActivity extends MediaServiceActivity implements
                         .commit();
                 break;
             case R.id.nav_radio:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, ChannelFragment.getInstance(),
+                                ChannelFragment.TAG)
+                        .commit();
                 break;
             case R.id.nav_destination:
                 getSupportFragmentManager().beginTransaction()
