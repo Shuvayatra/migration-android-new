@@ -8,7 +8,9 @@
     <color name="text_color_primary_faded_70">#b32c3e50</color>
     <color name="white_alpha_40">#66ffffff</color>
     <color name="white_alpha_70">#b3ffffff</color>
+    <color name="black_alpha_54">#8b000000</color>
     <color name="black_alpha_55">#8C000000</color>
+    <color name="black_alpha_87">#de000000</color>
     <color name="nav_header_bg">#029baf</color>
     <color name="window_background">#ededed</color>
     <color name="rippleColor">#5000bbd3</color>
@@ -41,4 +43,5 @@
     <color name="warm_grey">#9b9b9b</color>
     <color name="grey_white">#dddddd</color>
     <color name="greyish_brown">#4a4a4a</color>
+    <color name="pinkish_grey">#bdbdbd</color>
 </resources>

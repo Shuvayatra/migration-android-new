@@ -2,6 +2,7 @@ package com.taf.data.api;
 
 import com.google.gson.JsonElement;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -72,4 +73,8 @@ public interface ApiService {
 
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncUserActions(@Body List<SyncDataEntity> pSyncDataList);
+
+    @GET(MyConstants.API.CHANNEL)
+    Observable<List<ChannelEntity>> getChannelList();
+
 }

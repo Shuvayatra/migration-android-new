@@ -11,4 +11,5 @@ import java.util.List;
 public interface CountryView extends LoadDataView {
 
     void renderCountries(List<Country> countryList);
+
 }

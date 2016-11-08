@@ -3,6 +3,7 @@ package com.taf.data.api;
 import com.google.gson.JsonElement;
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -100,4 +101,9 @@ public class ApiRequest {
     public Observable<SyncResponseEntity> syncUserAtions(List<SyncDataEntity> pSyncDataList) {
         return mApiService.syncUserActions(pSyncDataList);
     }
+
+    public Observable<List<ChannelEntity>> getChannelList(){
+        return mApiService.getChannelList();
+    }
+
 }

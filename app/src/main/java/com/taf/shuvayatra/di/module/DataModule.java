@@ -6,6 +6,7 @@ import com.taf.data.cache.CacheImpl;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.repository.ChannelRepository;
 import com.taf.data.repository.ComponentRepository;
 import com.taf.data.repository.CountryRepository;
 import com.taf.data.repository.HomeRepository;
@@ -21,6 +22,7 @@ import com.taf.data.repository.deprecated.TagRepository;
 import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.interactor.GetChannelUseCase;
 import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetDestinationBlocksUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
@@ -48,6 +50,7 @@ import com.taf.interactor.deprecated.UpdateFavouriteStateUseCase;
 import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
 import com.taf.repository.IBaseRepository;
+import com.taf.repository.IChannelRepository;
 import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
 import com.taf.repository.IJourneyRepository;
@@ -389,6 +392,7 @@ public class DataModule {
         return new CountryRepository(factory, mapper);
     }
 
+
     @Provides
     @PerActivity
     @Named("journey")
@@ -465,4 +469,21 @@ public class DataModule {
                                         PostExecutionThread postExecutionThread) {
         return new SyncUserActionsUseCase(threadExecutor, postExecutionThread, repository);
     }
+
+
+    @Provides
+    @PerActivity
+    @Named(MyConstants.UseCase.CASE_CHANNEL_LIST)
+    UseCase provideChannelUseCase(IChannelRepository pRepository, ThreadExecutor pThreadExecutor,
+                                  PostExecutionThread pPostExecutionThread){
+        return new GetChannelUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+
+    @Provides
+    @PerActivity
+    IChannelRepository provideChannelRepository(DataStoreFactory factory, DataMapper mapper){
+        return new ChannelRepository(factory, mapper);
+    }
+
 }

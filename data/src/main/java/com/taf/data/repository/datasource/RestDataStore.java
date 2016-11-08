@@ -10,6 +10,7 @@ import com.taf.data.api.ApiRequest;
 import com.taf.data.cache.CacheImpl;
 import com.taf.data.database.DatabaseHelper;
 import com.taf.data.entity.BlockEntity;
+import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
@@ -191,6 +192,18 @@ public class RestDataStore implements IDataStore {
         }
     }
 
+    public Observable<List<ChannelEntity>> getChannelList() {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getChannelList().doOnNext(
+                    channelEntityList -> {
+                        mCache.saveChannelList(channelEntityList);
+                    }
+            );
+        }else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
     public Observable<List<BlockEntity>> getJourneyContents() {
         if (isThereInternetConnection()) {
             return mApiRequest.getJourneyContent()
@@ -219,6 +232,7 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
         }
     }
+
 
     public Observable<Boolean> syncUserActions(List<SyncDataEntity> entities) {
         if (isThereInternetConnection()) {

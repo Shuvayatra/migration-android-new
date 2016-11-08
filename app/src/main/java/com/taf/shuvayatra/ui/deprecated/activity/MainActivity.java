@@ -13,6 +13,7 @@ import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.UserFragment;
+import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 
 import java.util.ArrayList;
 import java.util.List;

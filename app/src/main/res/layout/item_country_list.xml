@@ -39,7 +39,8 @@
             android:text="@{country.title}"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_big"
-            tools:text="Qatar"/>
+            tools:text="Qatar"
+            android:id="@+id/textView2"/>
 
     </LinearLayout>
 </layout>
