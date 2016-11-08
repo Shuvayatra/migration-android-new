@@ -87,7 +87,7 @@ public class Country extends BaseModel {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "%d,%s,%s,%s", getId(), getTitle(), getTitleEnglish(), getAllInformation());
+        return String.format(Locale.getDefault(), "%d,%s,%s", getId(), getTitle(), getTitleEnglish());
     }
 
     public List<CountryInfo> getInformation() {

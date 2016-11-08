@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
@@ -85,8 +84,8 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             @Override
             public int getSpanSize(int position) {
                 int type = mAdapter.getItemViewType(position);
-                Logger.e(TAG,"span type: "+ type);
-                if(type == MyConstants.Adapter.TYPE_COUNTRY){
+                Logger.e(TAG, "span type: " + type);
+                if (type == MyConstants.Adapter.TYPE_COUNTRY) {
                     return 1;
                 } else {
                     return 2;
@@ -107,7 +106,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                 // TODO: 10/27/16 set margin properly
                 int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
                 int type = mAdapter.getItemViewType(i);
-                if(type == MyConstants.Adapter.TYPE_COUNTRY){
+                if (type == MyConstants.Adapter.TYPE_COUNTRY) {
 
 //                    if (i % 2 == 0) {
 //                        outRect.left = margin;
@@ -149,7 +148,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         allList.addAll(countryList);
         Logger.e(TAG, "all.size(): " + allList.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        Logger.e(TAG,"selectedCountry.substring(0,1): "+ selectedCountry.substring(0,1));
+        Logger.e(TAG, "selectedCountry.substring(0,1): " + selectedCountry.substring(0, 1));
 
         if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
             HeaderItem headerItem = new HeaderItem("All Country");
@@ -157,10 +156,10 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 
             allList.add(0, headerItem);
         } else {
-            long id = Long.parseLong(selectedCountry.substring(0,selectedCountry.indexOf(",")));
-            Logger.e(TAG," selected id: "+ id);
+            long id = Long.parseLong(selectedCountry.substring(0, selectedCountry.indexOf(",")));
+            Logger.e(TAG, " selected id: " + id);
             for (Country country : countryList) {
-                Logger.e(TAG,"country: "+ country);
+                Logger.e(TAG, "country: " + country);
                 if (country.getId() == id) {
                     country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
                     allList.remove(countryList.indexOf(country));

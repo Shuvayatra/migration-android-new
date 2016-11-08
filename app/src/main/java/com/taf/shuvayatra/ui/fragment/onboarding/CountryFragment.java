@@ -50,7 +50,7 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
 
     private OnBoardQuestionAdapter.ButtonPressListener mButtonListener;
 
-    List<String> dataList = new ArrayList<>();
+    List<String> dataList;
 
     public static CountryFragment newInstance(OnBoardQuestionAdapter.ButtonPressListener listener) {
         CountryFragment fragment = new CountryFragment();
@@ -100,9 +100,13 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
         }
     }
 
+
     @Override
     public void renderCountries(List<Country> countryList) {
 
+        Logger.e(TAG, ">>> RENDERED COUNTRIES <<<");
+        Logger.e(TAG, "country list: " + countryList.toString());
+        dataList = new ArrayList<>();
         dataList.add(getString(R.string.question_destination));
         List<String> countries = new ArrayList<>();
         for (Country country : countryList) {
@@ -110,11 +114,13 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
         }
         dataList.addAll(countries);
 
-        Logger.e(TAG, ">>> country list: " + dataList);
+        Logger.e(TAG, ">>> data list: " + dataList);
 
         DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
         spinnerCountry.setAdapter(adapter);
+        spinnerCountry.setOnItemSelectedListener(this);
         if (!getTypedActivity().getPreferences().getLocation().equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
+            Logger.e(TAG, ">>> preference: " + getTypedActivity().getPreferences().getLocation());
             int index = dataList.indexOf(getTypedActivity().getPreferences().getLocation());
             if (index != -1)
                 spinnerCountry.setSelection(index);
@@ -125,6 +131,12 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position != 0)
             getTypedActivity().getPreferences().setLocation(dataList.get(spinnerCountry.getSelectedItemPosition()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
     }
 
     @Override

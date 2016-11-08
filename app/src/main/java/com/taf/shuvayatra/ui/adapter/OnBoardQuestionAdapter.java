@@ -2,7 +2,7 @@ package com.taf.shuvayatra.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.taf.data.utils.Logger;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnBoardQuestionAdapter extends FragmentPagerAdapter {
+public class OnBoardQuestionAdapter extends FragmentStatePagerAdapter {
 
     public static final String TAG = "OnBoardQuestionAdapter";
 

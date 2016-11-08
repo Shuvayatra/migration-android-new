@@ -2,7 +2,6 @@ package com.taf.model;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by rakeeb on 10/20/16.
@@ -13,14 +12,6 @@ public class CountryWidgetData extends BaseModel {
     public static final int COMPONENT_CALENDAR = 1;
     public static final int COMPONENT_FOREX = 2;
     public static final int COMPONENT_WEATHER = 3;
-
-    /**
-     * Calendar instance for today
-     */
-    CalendarComponent mCalendar;
-
-    // TODO: 10/20/16 Add exchange rate model
-    // TODO: 10/20/16 Add weather model
 
     public interface Component {
         int componentType();

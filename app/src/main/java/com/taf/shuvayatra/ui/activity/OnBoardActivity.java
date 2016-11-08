@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.R;
@@ -66,6 +65,13 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
         OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
+        // add off screen page limit to avoid context NPE on fragment
+        mQuestionPager.setOffscreenPageLimit(2);
+
+        if (savedInstanceState != null) {
+            mQuestionPager.setCurrentItem(savedInstanceState.getInt(MyConstants.Extras
+                    .KEY_PAGER_POSITION, 0));
+        }
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -89,56 +95,44 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     @Override
     public void onNextButtonPressed(final int position) {
         // TODO: 10/26/16 refactor logic
-        // TODO: 11/3/16 Fix bug for setCurrentItem(int) not working
-        Logger.e(TAG, ">>> call to next button pressed: " + position);
         if (getPreferences().isOnBoardingCountryListLoaded()) {
 
-            Logger.e(TAG, ">>> click action: country list loaded <<<");
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Logger.e(TAG, String.format(">>> click action: set current item initial %d <<<", mQuestionPager.getCurrentItem()));
                 mQuestionPager.setCurrentItem(position + 1);
-                Logger.e(TAG, String.format(">>> click action: set current item current %d <<<", mQuestionPager.getCurrentItem()));
             }
         } else {
-            Logger.e(TAG, ">>> click action: country list not loaded <<<");
+
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 2) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                Logger.e(TAG, String.format(">>> click action: set current item initial %d <<<", mQuestionPager.getCurrentItem()));
                 mQuestionPager.setCurrentItem(position + 1);
-                Logger.e(TAG, String.format(">>> click action: set current item current %d <<<", mQuestionPager.getCurrentItem()));
             }
         }
     }
 
     @Override
     public void onBackButtonPressed(int position) {
-        Logger.e(TAG, ">>> call to back button pressed: " + position);
         mQuestionPager.setCurrentItem(--position);
     }
 
     @Override
     public void renderCountries(List<Country> countryList) {
 
-        Logger.e(TAG, ">>> RENDER COUNTRY <<<");
         // update preference
         // add into preference key value map of country as JSON
         if (!countryList.isEmpty()) {
-            Logger.e(TAG, ">>> ");
             List<String> countries = new ArrayList<>();
             for (Country country : countryList) {
                 countries.add(String.valueOf(country.getId()) + "," + country.getTitle());
             }
-            Logger.e(TAG, ">>> country list:\n" + countryList.toString());
-            Logger.e(TAG, ">>> countries:\n" + countries.toString());
             getPreferences().updateCountryListCallStatus(true);
 
             // update fragment if created
@@ -148,6 +142,22 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
                         .mButtonNext.setText(getString(R.string.next));
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // bug fix for unresponsive page change
+        if (mQuestionPager != null) {
+            outState.putInt(MyConstants.Extras.KEY_PAGER_POSITION, mQuestionPager.getCurrentItem());
+            mQuestionPager.setAdapter(null);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.destroy();
     }
 
     @Override
@@ -162,7 +172,6 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Override
     public void showErrorView(String pErrorMessage) {
-        Logger.e(TAG, ">>> SHOW ERROR VIEW <<<");
         // ask to check network via snackbar
         if (getString(R.string.exception_message_no_connection).equalsIgnoreCase(pErrorMessage)) {
             Snackbar.make(container, getString(R.string.exception_message_no_connection),

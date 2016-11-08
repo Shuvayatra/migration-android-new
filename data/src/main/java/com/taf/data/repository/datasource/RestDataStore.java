@@ -195,7 +195,6 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getJourneyContent()
                     .doOnNext(blockEntities -> {
-                        // // TODO: 10/21/16 save offline cache
                         mCache.saveJourneyBlocks(blockEntities);
                     });
         } else {
