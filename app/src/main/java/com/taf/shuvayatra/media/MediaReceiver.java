@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.ui.views.AudioPlayerView;
 import com.taf.util.MyConstants;
 
@@ -18,7 +17,6 @@ public class MediaReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger.d("MediaReceiver_onReceive", "action: " + intent.getAction());
         if (intent.getAction().equals(MyConstants.Media.ACTION_MEDIA_BUFFER_START)) {
             mListener.onBufferStarted();
         } else if (intent.getAction().equals(MyConstants.Media.ACTION_MEDIA_BUFFER_STOP)) {
@@ -30,6 +28,13 @@ public class MediaReceiver extends BroadcastReceiver {
                     .KEY_PLAY_STATUS, false));
         } else if (intent.getAction().equals(MyConstants.Media.ACTION_MEDIA_COMPLETE)) {
             mListener.onMediaComplete();
+        } else if (intent.getAction().equals(MyConstants.Media.ACTION_PROGRESS_CHANGE)) {
+            long[] lengths = intent.getLongArrayExtra("lengths");
+            if (lengths == null) {
+                mListener.onMediaProgressReset();
+            } else {
+                mListener.onMediaProgressChanged(lengths);
+            }
         }
     }
 }

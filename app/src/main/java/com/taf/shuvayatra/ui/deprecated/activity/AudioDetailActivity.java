@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -79,26 +78,16 @@ public class AudioDetailActivity extends FacebookActivity implements
     NestedScrollView mScrollView;
     @BindView(R.id.audio_time)
     TextView mAudioTime;
-    @BindView(R.id.audio_time_mini)
-    TextView mAudioTimeMini;
     @BindView(R.id.play)
     ImageView mPlayBtn;
-    @BindView(R.id.play_mini)
-    ImageView mPlayBtnMini;
     @BindView(R.id.seekbar)
     SeekBar mSeekbar;
-    @BindView(R.id.seekbar_mini)
-    SeekBar mSeekbarMini;
-    @BindView(R.id.mini_player)
-    LinearLayout mMiniPlayer;
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.buffering)
     TextView bufferingText;
-    @BindView(R.id.buffering_mini)
-    TextView bufferingTextMini;
 
     private MediaService mService;
     private Intent mPlayIntent;
@@ -138,20 +127,14 @@ public class AudioDetailActivity extends FacebookActivity implements
                     mAudioTime.setText(getString(R.string.audio_time, MediaHelper
                             .getFormattedTime(lengths[0]), MediaHelper.getFormattedTime
                             (lengths[1])));
-                    mAudioTimeMini.setText(getString(R.string.audio_time, MediaHelper
-                            .getFormattedTime(lengths[0]), MediaHelper.getFormattedTime
-                            (lengths[1])));
 
                     int progress = MediaHelper.getProgressPercentage(lengths[0], lengths[1]);
                     mSeekbar.setProgress(progress);
-                    mSeekbarMini.setProgress(progress);
                     seekbarHandler.postDelayed(this, 500);
                 } else {
                     mCurrentProgress = 0;
                     mSeekbar.setProgress(0);
                     mSeekbar.removeCallbacks(updateSeekTime);
-                    mSeekbarMini.setProgress(0);
-                    mSeekbarMini.removeCallbacks(updateSeekTime);
                 }
             }
         }
@@ -193,7 +176,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void onPause() {
         mSeekbar.removeCallbacks(updateSeekTime);
-        mSeekbarMini.removeCallbacks(updateSeekTime);
         if (mediaReceiver != null)
             unregisterReceiver(mediaReceiver);
         super.onPause();
@@ -305,18 +287,16 @@ public class AudioDetailActivity extends FacebookActivity implements
         receiverFilter = new IntentFilter();
 
         mPlayBtn.setOnClickListener(this);
-        mPlayBtnMini.setOnClickListener(this);
         mSeekbar.setOnSeekBarChangeListener(this);
-        mSeekbarMini.setOnSeekBarChangeListener(this);
 
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
                         .getMinimumHeight(mCollapsingToolbar)) {
-                    mMiniPlayer.animate().alpha(1).setDuration(300);
+//                    mMiniPlayer.animate().alpha(1).setDuration(300);
                 } else {
-                    mMiniPlayer.animate().alpha(0).setDuration(300);
+//                    mMiniPlayer.animate().alpha(0).setDuration(300);
                 }
             }
         });
@@ -400,7 +380,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.play:
-            case R.id.play_mini:
                 updateSeekBar();
                 onMediaPlayPause();
                 break;
@@ -451,7 +430,6 @@ public class AudioDetailActivity extends FacebookActivity implements
     public void hideLoadingView() {
     }
 
-    @Override
     public void onMediaPlayPause() {
         mService.playPause();
     }
@@ -459,13 +437,11 @@ public class AudioDetailActivity extends FacebookActivity implements
     @Override
     public void onBufferStarted() {
         bufferingText.setVisibility(View.VISIBLE);
-        bufferingTextMini.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onBufferStopped() {
         bufferingText.setVisibility(View.GONE);
-        bufferingTextMini.setVisibility(View.GONE);
     }
 
     @Override
@@ -474,34 +450,40 @@ public class AudioDetailActivity extends FacebookActivity implements
         Logger.d("AudioDetailActivity_onMediaPrepared", "test: " + mCurrentProgress);
         mService.seekTo(mCurrentProgress);
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
-        mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
     }
 
     @Override
     public void onMediaComplete() {
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
-        mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
     }
 
     @Override
     public void playStatusChanged(boolean pIsPlaying) {
         if (pIsPlaying) {
             mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
-            mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         } else {
             mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
-            mPlayBtnMini.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
         }
     }
 
     @Override
+    public void onMediaProgressReset() {
+
+    }
+
+    @Override
+    public void onMediaProgressChanged(long[] lengths) {
+
+    }
+
+    @Override
     public void onAudioDownloadStarted(String pMessage) {
-        Snackbar.make(mMiniPlayer, pMessage, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mScrollView, pMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onAudioFileNotFoundToShare() {
-        Snackbar.make(mMiniPlayer, getString(R.string.error_bluetooth_share), Snackbar
+        Snackbar.make(mScrollView, getString(R.string.error_bluetooth_share), Snackbar
                 .LENGTH_SHORT).show();
     }
 
@@ -512,7 +494,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     public void showErrorView(String pErrorMessage) {
-        Snackbar.make(mMiniPlayer, pErrorMessage, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mScrollView, pErrorMessage, Snackbar.LENGTH_SHORT).show();
     }
 
     private void updateView(Post pAudio) {

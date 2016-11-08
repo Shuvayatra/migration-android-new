@@ -10,7 +10,9 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.taf.data.utils.Logger;
 import com.taf.model.Post;
+import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.base.PostDetailActivity;
 import com.taf.shuvayatra.databinding.VideoDetailDataBinding;
 import com.taf.util.MyConstants;
 
@@ -123,6 +125,8 @@ public class VideoDetailActivity extends PostDetailActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((MyApplication) getApplicationContext()).mService.stopPlayback();
 
         mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.youtube_fragment);

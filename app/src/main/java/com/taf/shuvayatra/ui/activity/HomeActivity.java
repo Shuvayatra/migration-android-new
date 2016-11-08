@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -9,14 +10,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 
 import butterknife.BindView;
 
-public class HomeActivity extends BaseActivity implements
+public class HomeActivity extends MediaServiceActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)
@@ -53,7 +54,7 @@ public class HomeActivity extends BaseActivity implements
             mDrawer.closeDrawer(GravityCompat.START);
             return;
         }
-        if(!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
+        if (!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
                     .commit();
@@ -65,13 +66,13 @@ public class HomeActivity extends BaseActivity implements
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment;
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-                if(fragment == null) {
+                if (fragment == null) {
                     fragment = HomeFragment.getInstance();
                 }
                 getSupportFragmentManager().beginTransaction()

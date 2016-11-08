@@ -18,6 +18,7 @@ import com.taf.model.Post;
 import com.taf.model.PostResponse;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
@@ -31,7 +32,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class FeedActivity extends BaseActivity implements
+public class FeedActivity extends PlayerFragmentActivity implements
         ListItemClickListener,
         PostListView,
         SwipeRefreshLayout.OnRefreshListener {

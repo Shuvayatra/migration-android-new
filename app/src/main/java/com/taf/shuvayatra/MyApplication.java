@@ -11,12 +11,15 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.component.DaggerApplicationComponent;
 import com.taf.shuvayatra.di.module.ApplicationModule;
+import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.service.MyTaskService;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 
 public class MyApplication extends Application {
     ApplicationComponent mApplicationComponent;
     private GcmNetworkManager mGcmNetworkManager;
+
+    public MediaService mService;
 
     @Override
     public void onCreate() {

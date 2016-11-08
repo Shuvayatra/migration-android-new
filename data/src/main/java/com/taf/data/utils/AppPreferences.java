@@ -144,7 +144,7 @@ public class AppPreferences {
 
     private void saveFavourites(Set<String> favourites) {
         editor.putStringSet(FAV_POSTS, favourites);
-        editor.commit();
+        editor.apply();
     }
 
     public void addToFavourites(Long postId) {
@@ -177,7 +177,6 @@ public class AppPreferences {
 
     public void setNoticeDismissId(Long id) {
         editor.putLong(NOTICE_DISMISS_ID, id);
-        editor.commit();
+        editor.apply();
     }
-
 }

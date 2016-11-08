@@ -30,60 +30,72 @@
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:background="#cccccc"
 			android:orientation="vertical">
 
-			<fragment
-				android:id="@+id/youtube_fragment"
-				android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+			<LinearLayout
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/video_height"/>
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:background="#cccccc"
+				android:orientation="vertical">
 
-			<ScrollView
-				android:layout_width="match_parent"
-				android:layout_height="fill_parent">
-
-				<LinearLayout
+				<fragment
+					android:id="@+id/youtube_fragment"
+					android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
 					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:orientation="vertical">
+					android:layout_height="@dimen/video_height"/>
 
-					<include
-						layout="@layout/view_content_head"
-						app:content="@{video}"/>
+				<ScrollView
+					android:layout_width="match_parent"
+					android:layout_height="fill_parent">
 
-					<WebView
+					<LinearLayout
 						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						app:htmlContent="@{video.description}"
-						tools:text="This is the description of the video."/>
+						android:layout_height="match_parent"
+						android:orientation="vertical">
 
-					<RelativeLayout
-						android:id="@+id/similar_video_section"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:visibility="@{(similarVideos == null || similarVideos.isEmpty()) ? View.GONE : View.VISIBLE}">
+						<include
+							layout="@layout/view_content_head"
+							app:content="@{video}"/>
 
-						<TextView
-							android:id="@+id/label"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:padding="@dimen/spacing_standard"
-							android:text="@string/similar_video"
-							android:textAllCaps="true"
-							android:textSize="@dimen/text_default"/>
-
-						<LinearLayout
-							android:id="@+id/video_container"
+						<WebView
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
-							android:layout_below="@id/label"
-							android:orientation="vertical"
-							android:padding="@dimen/spacing_xsmall"
-							app:similarPosts="@{similarVideos}"/>
-					</RelativeLayout>
-				</LinearLayout>
-			</ScrollView>
+							app:htmlContent="@{video.description}"
+							tools:text="This is the description of the video."/>
+
+						<RelativeLayout
+							android:id="@+id/similar_video_section"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:visibility="@{(similarVideos == null || similarVideos.isEmpty()) ? View.GONE : View.VISIBLE}">
+
+							<TextView
+								android:id="@+id/label"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:padding="@dimen/spacing_standard"
+								android:text="@string/similar_video"
+								android:textAllCaps="true"
+								android:textSize="@dimen/text_default"/>
+
+							<LinearLayout
+								android:id="@+id/video_container"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:layout_below="@id/label"
+								android:orientation="vertical"
+								android:padding="@dimen/spacing_xsmall"
+								app:similarPosts="@{similarVideos}"/>
+						</RelativeLayout>
+					</LinearLayout>
+				</ScrollView>
+			</LinearLayout>
+
+			<FrameLayout
+				android:id="@+id/content_player"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
 		</LinearLayout>
 	</android.support.v4.widget.SwipeRefreshLayout>
 </layout>

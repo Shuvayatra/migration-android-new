@@ -5,8 +5,6 @@ package com.taf.shuvayatra.ui.views;
  */
 
 public interface AudioPlayerView {
-    void onMediaPlayPause();
-
     void onBufferStarted();
 
     void onBufferStopped();
@@ -16,4 +14,8 @@ public interface AudioPlayerView {
     void onMediaComplete();
 
     void playStatusChanged(boolean isPlaying);
+
+    void onMediaProgressReset();
+
+    void onMediaProgressChanged(long[] lengths);
 }

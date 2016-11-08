@@ -104,6 +104,7 @@ public class MyConstants {
         public static final String FAV_POSTS = "favourite-posts";
         public static final String NOTICE_DISMISS_ID = "home-notice-dismiss-id";
         public static final String COUNTRY_NOTICE_DISMISS_ID = "country-notice-dismiss-id";
+        public static final String LAST_TRACK = "last_track";
     }
 
     public static final class Language {
@@ -157,12 +158,14 @@ public class MyConstants {
         public static final String ACTION_MEDIA_BUFFER_START = "media.action.BUFFER_START";
         public static final String ACTION_MEDIA_BUFFER_STOP = "media.action.BUFFER_STOP";
         public static final String ACTION_MEDIA_COMPLETE = "media.action.COMPLETE";
-        public static final String ACTION_MEDIA_CHANGE = "media.action.MEDIA_CHANGE";
         public static final String ACTION_STATUS_PREPARED = "media.action.STATUS_PREPARED";
-        public static final String ACTION_SHOW_HIDE_CONTROLS = "media.action.SHOW_HIDE_CONTROLS";
-        public static final String ACTION_STATUS_COMPLETION = "media.action.STATUS_COMPLETION";
-        public static final String ACTION_PREFERENCE_CHANGED = "media.action.PREF_CHANGED";
         public static final String ACTION_PLAY_STATUS_CHANGE = "media.action.PLAY_STATUS_CHANGED";
+        public static final String ACTION_PROGRESS_CHANGE = "media.action.PROGRESS";
+
+        public static final String ACTION_MEDIA_PLAYBACK_CHANGE = "media.action.MEDIA_CHANGE";
+        public static final String ACTION_MEDIA_SEEK_TO = "media.action.SEEK_TO";
+        public static final String ACTION_PLAY_PAUSE_TOGGLE = "media.action.MEDIA_PLAY_PAUSE";
+        public static final String ACTION_HIDE_MINI_PLAYER = "media.action.HIDE_PLAYER";
     }
 
     public static final class Extras {

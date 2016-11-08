@@ -12,7 +12,7 @@ import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
 import com.taf.shuvayatra.ui.activity.FeedActivity;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
 import com.taf.shuvayatra.ui.activity.PodcastsActivity;
-import com.taf.shuvayatra.ui.activity.PostDetailActivity;
+import com.taf.shuvayatra.base.PostDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.FacebookParseActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
