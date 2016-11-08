@@ -21,28 +21,40 @@
 		tools:context="com.taf.shuvayatra.ui.activity.ArticleDetailActivity"
 		tools:showIn="@layout/activity_article_detail">
 
-		<android.support.v4.widget.NestedScrollView
+		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="match_parent"
+			android:orientation="vertical">
 
-			<LinearLayout
+			<android.support.v4.widget.NestedScrollView
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="vertical"
-				tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
-				tools:showIn="@layout/activity_article_detail">
+				android:layout_height="0dp"
+				android:layout_weight="1">
 
-				<include
-					layout="@layout/view_content_head"
-					app:content="@{article}"/>
-
-				<WebView
+				<LinearLayout
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/spacing_standard"
-					app:htmlContent="@{article.description}"
-					/>
-			</LinearLayout>
-		</android.support.v4.widget.NestedScrollView>
+					android:layout_height="match_parent"
+					android:orientation="vertical"
+					tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
+					tools:showIn="@layout/activity_article_detail">
+
+					<include
+						layout="@layout/view_content_head"
+						app:content="@{article}"/>
+
+					<WebView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="@dimen/spacing_standard"
+						app:htmlContent="@{article.description}"
+						/>
+				</LinearLayout>
+			</android.support.v4.widget.NestedScrollView>
+
+			<FrameLayout
+				android:id="@+id/content_player"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+		</LinearLayout>
 	</android.support.v4.widget.SwipeRefreshLayout>
 </layout>

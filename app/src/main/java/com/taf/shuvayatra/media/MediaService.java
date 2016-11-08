@@ -7,9 +7,11 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 
+import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.Logger;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
@@ -27,28 +29,52 @@ public class MediaService extends Service implements
         MediaPlayer.OnInfoListener {
 
     private final IBinder mBinder = new MusicBinder();
+    Handler mHandler = new Handler();
     private MediaPlayer mPlayer;
     private Post mTrack;
     private List<Podcast> mPodcasts;
     private boolean mIsMediaValid = false;
-
     private PlayType mCurrentPlayType;
     private int mCurrentPodcastIndex = 0;
+    private long mCurrentDuration = 0;
     private boolean mStoppedByUser = false;
+
+    private String mCurrentTitle = "";
+
+    private AppPreferences mPreferences;
+
+    private Runnable updateSeekTime = new Runnable() {
+        @Override
+        public void run() {
+            if (isMediaValid()) {
+                long[] lengths = getSongLengths();
+                Intent intent = new Intent(MyConstants.Media.ACTION_PROGRESS_CHANGE);
+                if (lengths != null) {
+                    intent.putExtra("lengths", lengths);
+                }
+                sendBroadcast(intent);
+            }
+            mHandler.postDelayed(this, 500);
+        }
+    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Logger.d("MediaService_onStartCommand", "test");
         if (mPlayer != null) {
             mPlayer.reset();
         } else {
             mPlayer = new MediaPlayer();
             initMediaPlayer();
         }
+        mHandler.postDelayed(updateSeekTime, 1000);
+        mPreferences = new AppPreferences(getApplicationContext());
         return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        Logger.d("MediaService_onDestroy", "test");
         super.onDestroy();
         if (mPlayer != null) {
             mPlayer.release();
@@ -63,6 +89,7 @@ public class MediaService extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
+        Logger.d("MediaService_onUnbind", "test");
         if (mPlayer != null) {
             mPlayer.stop();
             mPlayer.release();
@@ -80,23 +107,29 @@ public class MediaService extends Service implements
     }
 
     public void setTrack(Post pTrack) {
+        stopPlayback();
         mTrack = pTrack;
         mCurrentPlayType = PlayType.POST;
+        startStreaming();
     }
 
     public void setPodcasts(List<Podcast> podcasts) {
+        stopPlayback();
         mPodcasts = podcasts;
         mCurrentPlayType = PlayType.PODCAST;
         mCurrentPodcastIndex = 0;
+        startStreaming();
     }
 
     @Override
     public void onPrepared(MediaPlayer pMediaPlayer) {
-        mIsMediaValid = true;
+        mHandler.postDelayed(updateSeekTime, 500);
         pMediaPlayer.start();
         pMediaPlayer.seekTo(0);
         Logger.d("MediaService_onPrepared", "test prepared");
         sendBroadcast(new Intent(MyConstants.Media.ACTION_STATUS_PREPARED));
+        mCurrentDuration = pMediaPlayer.getDuration();
+        mIsMediaValid = true;
     }
 
     @Override
@@ -104,6 +137,7 @@ public class MediaService extends Service implements
         sendBroadcast(new Intent(MyConstants.Media.ACTION_MEDIA_BUFFER_STOP));
         sendBroadcast(new Intent(MyConstants.Media.ACTION_MEDIA_COMPLETE));
 
+        mHandler.removeCallbacks(updateSeekTime);
         mIsMediaValid = false;
 
         if (mCurrentPlayType.equals(PlayType.PODCAST) && !mStoppedByUser) {
@@ -146,11 +180,13 @@ public class MediaService extends Service implements
     }
 
     private void setDataSource(Podcast podcast) throws IOException {
+        mCurrentTitle = podcast.getTitle();
         String mediaUrl = podcast.getSource().replace(" ", "%20");
         mPlayer.setDataSource(this, Uri.parse(mediaUrl));
     }
 
     private void setDataSource(Post pTrack) throws IOException {
+        mCurrentTitle = pTrack.getTitle();
         String mediaUrl = pTrack.getData().getMediaUrl().replace(" ", "%20");
         String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
@@ -185,8 +221,9 @@ public class MediaService extends Service implements
 
     public void stopPlayback() {
         mStoppedByUser = true;
+        if (mIsMediaValid)
+            mPlayer.stop();
         mIsMediaValid = false;
-        mPlayer.stop();
     }
 
     public void seekTo(int seekbarProgress) {
@@ -207,7 +244,7 @@ public class MediaService extends Service implements
     public long[] getSongLengths() {
         try {
             if (mIsMediaValid) {
-                return new long[]{mPlayer.getCurrentPosition(), mPlayer.getDuration()};
+                return new long[]{mPlayer.getCurrentPosition(), mCurrentDuration};
             } else {
                 return new long[]{0, 0};
             }
@@ -228,7 +265,11 @@ public class MediaService extends Service implements
         return mPlayer.isPlaying();
     }
 
-    private enum PlayType {
+    public String getCurrentTitle() {
+        return mCurrentTitle;
+    }
+
+    public enum PlayType {
         POST,
         PODCAST
     }

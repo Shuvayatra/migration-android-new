@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.ui.activity;
+package com.taf.shuvayatra.base;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.AudioOperationsPresenter;
@@ -26,7 +25,7 @@ import javax.inject.Inject;
 import static com.taf.util.MyConstants.Extras.KEY_ID;
 import static com.taf.util.MyConstants.Extras.KEY_POST;
 
-public abstract class PostDetailActivity extends BaseActivity implements PostDetailView {
+public abstract class PostDetailActivity extends PlayerFragmentActivity implements PostDetailView {
 
     public Long mId;
     @Inject

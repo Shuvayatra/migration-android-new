@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.base.PostDetailActivity;
 import com.taf.shuvayatra.databinding.ArticleDetailDataBinding;
 
 import butterknife.BindView;

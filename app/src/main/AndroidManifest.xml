@@ -53,10 +53,8 @@
 		<service
 			android:name=".media.MediaService"
 			android:exported="true"
+			android:process=""
 			tools:ignore="ExportedService">
-			<intent-filter>
-				<action android:name="android.media.browse.MediaBrowserService"/>
-			</intent-filter>
 		</service>
 
 		<receiver android:name=".receivers.DownloadStateReceiver">
