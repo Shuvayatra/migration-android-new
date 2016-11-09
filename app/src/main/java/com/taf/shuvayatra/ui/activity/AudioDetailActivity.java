@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -44,7 +45,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
         AudioPlayerView,
         View.OnClickListener,
         ListItemClickListener,
-        SeekBar.OnSeekBarChangeListener {
+        SeekBar.OnSeekBarChangeListener,
+        AppBarLayout.OnOffsetChangedListener {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 123;
     private static final int GROUP1 = 101;
@@ -76,6 +78,9 @@ public class AudioDetailActivity extends PostDetailActivity implements
     private int mCurrentProgress;
     private boolean seekbarChangeByUser = false;
 
+    private Post mainPost;
+
+
     @Override
     public int getLayout() {
         return R.layout.activity_audio_detail;
@@ -105,6 +110,43 @@ public class AudioDetailActivity extends PostDetailActivity implements
         }
     }
 
+    private static final String TAG = "AudioDetailActivity";
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+        // TODO: 11/9/16 apply title on collapsing bar  
+        if (appBarLayout.getTotalScrollRange() == Math.abs(verticalOffset)) {
+            if (mainPost != null) {
+                Logger.e(TAG, ">>> collapsing title set <<<");
+//                mCollapsingToolbar.setTitle(mainPost.getTitle());
+//                getSupportActionBar().setTitle(mainPost.getTitle());
+//                getSupportActionBar().setDisplayShowTitleEnabled(true);
+            }
+        } else {
+            if (mCollapsingToolbar.getTitle() != null) {
+                Logger.e(TAG, ">>> removing title <<<");
+//                mCollapsingToolbar.setTitle(null);
+//                getSupportActionBar().setTitle(null);
+//                getSupportActionBar().setDisplayShowTitleEnabled(false);
+            }
+        }
+
+
+        if (mPlayerFragment != null) {
+            if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
+                    .getMinimumHeight(mCollapsingToolbar)) {
+                getSupportFragmentManager().beginTransaction()
+                        .show(mPlayerFragment)
+                        .commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .hide(mPlayerFragment)
+                        .commit();
+            }
+        }
+    }
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -124,10 +166,28 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        mId = pModel.getId();
-        initialize();
 
-        loadPost();
+        Intent intent = null;
+
+        if(pModel.getDataType() == MyConstants.Adapter.TYPE_AUDIO) {
+            intent = new Intent(this, AudioDetailActivity.class);
+        } else if (pModel.getDataType() == MyConstants.Adapter.TYPE_VIDEO) {
+            intent = new Intent(this, VideoDetailActivity.class);
+        } else if (pModel.getDataType() == MyConstants.Adapter.TYPE_NEWS || pModel.getDataType()
+                == MyConstants.Adapter.TYPE_TEXT) {
+            intent = new Intent(this, ArticleDetailActivity.class);
+        }
+
+        if (intent != null) {
+            intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
+            startActivity(intent);
+        }
+
+        /*else if (pModel.getDataType() == MyConstants.Adapter.TYPE_AUDIO) {
+            mId = pModel.getId();
+            initialize();
+            loadPost();
+        }*/
     }
 
     @Override
@@ -199,6 +259,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     @Override
     public void updateView(Post post) {
+        mainPost = post;
         ((MyApplication) getApplicationContext()).mService.setTrack(post);
 
         mScrollView.scrollTo(0, 0);
@@ -211,8 +272,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getToolbar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState != null) {
             mCurrentProgress = savedInstanceState.getInt(KEY_PROGRESS, 0);
@@ -227,26 +288,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
         mPlayBtn.setOnClickListener(this);
         mSeekbar.setOnSeekBarChangeListener(this);
 
-        mPlayerFragment = (MiniPlayerFragment) getSupportFragmentManager()
-                .findFragmentByTag(MiniPlayerFragment.TAG);
-
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (mPlayerFragment != null) {
-                    if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
-                            .getMinimumHeight(mCollapsingToolbar)) {
-                        getSupportFragmentManager().beginTransaction()
-                                .show(mPlayerFragment)
-                                .commit();
-                    } else {
-                        getSupportFragmentManager().beginTransaction()
-                                .hide(mPlayerFragment)
-                                .commit();
-                    }
-                }
-            }
-        });
+        mAppBar.addOnOffsetChangedListener(this);
     }
 
     @Override

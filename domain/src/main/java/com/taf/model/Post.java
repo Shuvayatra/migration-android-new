@@ -35,6 +35,11 @@ public class Post extends BaseModel {
 
     List<Post> mSimilarPosts;
 
+    public static final String TYPE_AUDIO = "audio";
+    public static final String TYPE_VIDEO = "video";
+    public static final String TYPE_TEXT = "text";
+    public static final String TYPE_NEWS = "news";
+
 
     public Long getCreatedAt() {
         return mCreatedAt;
@@ -102,13 +107,13 @@ public class Post extends BaseModel {
 
     @Override
     public int getDataType() {
-        if (getType().equalsIgnoreCase("audio")) {
+        if (getType().equalsIgnoreCase(TYPE_AUDIO)) {
             return MyConstants.Adapter.TYPE_AUDIO;
-        } else if (getType().equalsIgnoreCase("video")) {
+        } else if (getType().equalsIgnoreCase(TYPE_VIDEO)) {
             return MyConstants.Adapter.TYPE_VIDEO;
-        } else if (getType().equalsIgnoreCase("text")) {
+        } else if (getType().equalsIgnoreCase(TYPE_TEXT)) {
             return MyConstants.Adapter.TYPE_TEXT;
-        } else if (getType().equalsIgnoreCase("news")) {
+        } else if (getType().equalsIgnoreCase(TYPE_NEWS)) {
             return MyConstants.Adapter.TYPE_NEWS;
         } else {
             return MyConstants.Adapter.TYPE_PLACE;
@@ -252,4 +257,5 @@ public class Post extends BaseModel {
     public String toString() {
         return String.format(Locale.getDefault(), "id: %d, title: %s, type: %s", getId(), getTitle(), getType());
     }
+
 }

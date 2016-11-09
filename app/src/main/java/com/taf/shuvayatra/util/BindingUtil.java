@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import com.taf.shuvayatra.databinding.PhoneNumberLargeDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.BlockItemAdapter;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
@@ -118,6 +120,47 @@ public class BindingUtil {
             }
         }
     }
+
+    @BindingAdapter({"bind:callback", "bind:posts"})
+    public static void loadSimilarPosts(final RecyclerView recyclerView, ListItemClickListener callback,
+                                        List<Post> similarPosts) {
+
+        if (similarPosts != null && !similarPosts.isEmpty()) {
+
+            if (recyclerView.getAdapter() == null) {
+
+                ListAdapter<Post> listAdapter = new ListAdapter<>(recyclerView.getContext(), callback);
+                LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
+                manager.setAutoMeasureEnabled(true);
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setNestedScrollingEnabled(false);
+
+                listAdapter.setDataCollection(similarPosts);
+                recyclerView.setAdapter(listAdapter);
+                recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+                    @Override
+                    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                        super.getItemOffsets(outRect, view, parent, state);
+
+                        int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
+                        int space = recyclerView.getContext().getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
+                        outRect.left = outRect.right = space;
+                        outRect.top = space / 2;
+                        outRect.bottom = space / 2;
+                        if (i == 0) {
+                            outRect.top = space;
+                        }
+                    }
+                });
+
+            } else {
+                ((ListAdapter) recyclerView.getAdapter()).setDataCollection(similarPosts);
+            }
+        }
+    }
+
+    private static final String TAG = "BindingUtil";
 
     @BindingAdapter("bind:phoneNumbers")
     public static void setPhoneNumbers(LinearLayout pContainer, List<String> pNumbers) {

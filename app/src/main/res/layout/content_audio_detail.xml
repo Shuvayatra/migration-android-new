@@ -1,112 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-	<data>
+    <data>
 
-		<import type="android.view.View"/>
+        <import type="android.view.View" />
 
-		<variable
-			name="listener"
-			type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
+        <variable
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
 
-		<variable
-			name="similarAudios"
-			type="java.util.List&lt;com.taf.model.Post>"/>
+        <variable
+            name="similarAudios"
+            type="java.util.List&lt;com.taf.model.Post&gt;" />
 
-		<variable
-			name="audio"
-			type="com.taf.model.Post"/>
-	</data>
+        <variable
+            name="audio"
+            type="com.taf.model.Post" />
+    </data>
 
-	<RelativeLayout
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"
-		tools:context=".ui.deprecated.activity.AudioDetailActivity"
-		tools:showIn="@layout/activity_audio_detail">
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".ui.deprecated.activity.AudioDetailActivity"
+        tools:showIn="@layout/activity_audio_detail">
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-			<android.support.v4.widget.NestedScrollView
-				android:id="@+id/scroll_view"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1">
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-				<LinearLayout
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-					<include
-						layout="@layout/view_content_head"
-						bind:content="@{audio}"/>
+                    <include
+                        layout="@layout/view_content_head"
+                        bind:content="@{audio}" />
 
-					<LinearLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:background="@android:color/white"
-						android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white"
+                        android:orientation="vertical">
 
-						<WebView
-							android:id="@+id/description"
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:layout_marginTop="@dimen/spacing_standard"
-							app:htmlContent="@{audio.getDescription()}"/>
-					</LinearLayout>
+                        <WebView
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/spacing_standard"
+                            app:htmlContent="@{audio.getDescription()}" />
+                    </LinearLayout>
 
-					<RelativeLayout
-						android:id="@+id/similar_audio_section"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_marginBottom="@dimen/player_control_section_height"
-						android:visibility="@{(similarAudios == null || similarAudios.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
+                    <LinearLayout
+                        android:id="@+id/similar_audio_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/player_control_section_height"
+                        android:orientation="vertical"
+                        android:visibility="@{(similarAudios == null || similarAudios.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
 
-						<TextView
-							android:id="@+id/label"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:padding="@dimen/spacing_standard"
-							android:text="@string/similar_audios"
-							android:textAllCaps="true"
-							android:textSize="@dimen/text_default"/>
+                        <TextView
+                            android:id="@+id/label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/spacing_standard"
+                            android:text="@string/similar_stories"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/text_default" />
 
-						<LinearLayout
-							android:id="@+id/audio_container"
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:layout_below="@id/label"
-							android:orientation="vertical"
-							android:padding="@dimen/spacing_xsmall"
-							app:clickListener="@{listener}"
-							app:similarPosts="@{similarAudios}"/>
-					</RelativeLayout>
-				</LinearLayout>
-			</android.support.v4.widget.NestedScrollView>
+                        <android.support.v7.widget.RecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            app:callback="@{listener}"
+                            app:posts="@{similarAudios}"
+                            tools:listitem="@layout/view_audio_video_list" />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
 
-			<FrameLayout
-				android:id="@+id/content_player"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-		</LinearLayout>
+            <FrameLayout
+                android:id="@+id/content_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-		<RelativeLayout
-			android:id="@+id/overlay"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:background="@color/black_alpha_55">
+        <RelativeLayout
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_alpha_55">
 
-			<ProgressBar
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerInParent="true"/>
-		</RelativeLayout>
-	</RelativeLayout>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </RelativeLayout>
 </layout>

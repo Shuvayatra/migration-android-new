@@ -1,60 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-	<data>
+    <data>
 
-		<variable
-			name="article"
-			type="com.taf.model.Post"/>
-	</data>
+        <import type="android.view.View" />
 
-	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/swipe_container"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/main_background"
-		android:clipToPadding="false"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"
-		tools:context="com.taf.shuvayatra.ui.activity.ArticleDetailActivity"
-		tools:showIn="@layout/activity_article_detail">
+        <variable
+            name="article"
+            type="com.taf.model.Post" />
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical">
+        <variable
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
 
-			<android.support.v4.widget.NestedScrollView
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1">
+        <variable
+            name="similarStories"
+            type="java.util.List&lt;com.taf.model.Post&gt;" />
 
-				<LinearLayout
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:orientation="vertical"
-					tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
-					tools:showIn="@layout/activity_article_detail">
+    </data>
 
-					<include
-						layout="@layout/view_content_head"
-						app:content="@{article}"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_background"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.taf.shuvayatra.ui.activity.ArticleDetailActivity"
+        tools:showIn="@layout/activity_article_detail">
 
-					<WebView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:padding="@dimen/spacing_standard"
-						app:htmlContent="@{article.description}"
-						/>
-				</LinearLayout>
-			</android.support.v4.widget.NestedScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-			<FrameLayout
-				android:id="@+id/content_player"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-		</LinearLayout>
-	</android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
+                    tools:showIn="@layout/activity_article_detail">
+
+                    <include
+                        layout="@layout/view_content_head"
+                        app:content="@{article}" />
+
+                    <WebView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/spacing_standard"
+                        app:htmlContent="@{article.description}" />
+
+                    <LinearLayout
+                        android:id="@+id/similar_video_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.GONE : View.VISIBLE}">
+
+                        <TextView
+                            android:id="@+id/label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/spacing_standard"
+                            android:text="@string/similar_stories"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/text_default" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/similar_story_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clipToPadding="false"
+                            app:callback="@{listener}"
+                            app:posts="@{similarStories}"
+                            tools:listitem="@layout/view_audio_video_list" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+            <FrameLayout
+                android:id="@+id/content_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
