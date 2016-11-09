@@ -90,4 +90,5 @@
 	<dimen name="channel_list_fab_margin_28">28dp</dimen>
 	<dimen name="spacing_45">45dp</dimen>
 
+	<dimen name="cardview_elevation_4dp">4dp</dimen>
 </resources>
