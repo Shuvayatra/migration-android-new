@@ -119,7 +119,7 @@ public class VideoDetailActivity extends FacebookActivity implements
             mPostViewCountPresenter.initialize(null);
             mSimilarPresenter.initialize(new UseCaseData());
         }
-        mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
+//        mYouTubePlayerFragment = (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube_fragment);
         mYouTubePlayerFragment.initialize(MyConstants.YOUTUBE_API_KEY, this);
     }
 
@@ -156,7 +156,7 @@ public class VideoDetailActivity extends FacebookActivity implements
 
     @Override
     public void renderPostList(List<Post> pPosts, int pTotalCount) {
-        ((VideoDetailDataBinding) mBinding).setSimilarVideos(pPosts);
+        ((VideoDetailDataBinding) mBinding).setSimilarStories(pPosts);
     }
 
     @Override

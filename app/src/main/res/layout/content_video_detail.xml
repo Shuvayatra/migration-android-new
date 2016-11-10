@@ -1,101 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-	<data>
+    <data>
 
-		<import type="android.view.View"/>
+        <import type="android.view.View" />
 
-		<variable
-			name="similarVideos"
-			type="java.util.List&lt;com.taf.model.Post>"/>
+        <variable
+            name="similarStories"
+            type="java.util.List&lt;com.taf.model.Post&gt;" />
 
-		<variable
-			name="video"
-			type="com.taf.model.Post"/>
-	</data>
+        <variable
+            name="video"
+            type="com.taf.model.Post" />
 
-	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/swipe_container"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/main_background"
-		android:clipToPadding="false"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior"
-		tools:context="com.taf.shuvayatra.ui.activity.VideoDetailActivity"
-		tools:showIn="@layout/activity_video_detail">
+        <variable
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
+    </data>
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_background"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.taf.shuvayatra.ui.activity.VideoDetailActivity"
+        tools:showIn="@layout/activity_video_detail">
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				android:layout_weight="1"
-				android:background="#cccccc"
-				android:orientation="vertical">
 
-				<fragment
-					android:id="@+id/youtube_fragment"
-					android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-					android:layout_width="match_parent"
-					android:layout_height="@dimen/video_height"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-				<ScrollView
-					android:layout_width="match_parent"
-					android:layout_height="fill_parent">
 
-					<LinearLayout
-						android:layout_width="match_parent"
-						android:layout_height="match_parent"
-						android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#cccccc"
+                android:orientation="vertical">
 
-						<include
-							layout="@layout/view_content_head"
-							app:content="@{video}"/>
+                <FrameLayout
+                    android:id="@+id/youtube_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/video_height" />
 
-						<WebView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							app:htmlContent="@{video.description}"
-							tools:text="This is the description of the video."/>
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent">
 
-						<RelativeLayout
-							android:id="@+id/similar_video_section"
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:visibility="@{(similarVideos == null || similarVideos.isEmpty()) ? View.GONE : View.VISIBLE}">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-							<TextView
-								android:id="@+id/label"
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								android:padding="@dimen/spacing_standard"
-								android:text="@string/similar_video"
-								android:textAllCaps="true"
-								android:textSize="@dimen/text_default"/>
+                        <include
+                            layout="@layout/view_content_head"
+                            app:content="@{video}" />
 
-							<LinearLayout
-								android:id="@+id/video_container"
-								android:layout_width="match_parent"
-								android:layout_height="wrap_content"
-								android:layout_below="@id/label"
-								android:orientation="vertical"
-								android:padding="@dimen/spacing_xsmall"
-								app:similarPosts="@{similarVideos}"/>
-						</RelativeLayout>
-					</LinearLayout>
-				</ScrollView>
-			</LinearLayout>
+                        <WebView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:htmlContent="@{video.description}"
+                            tools:text="This is the description of the video." />
 
-			<FrameLayout
-				android:id="@+id/content_player"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
-		</LinearLayout>
-	</android.support.v4.widget.SwipeRefreshLayout>
+                        <LinearLayout
+                            android:id="@+id/similar_video_section"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.GONE : View.VISIBLE}">
+
+                            <TextView
+                                android:id="@+id/label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/spacing_standard"
+                                android:text="@string/similar_stories"
+                                android:textAllCaps="true"
+                                android:textSize="@dimen/text_default" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/similar_story_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipToPadding="false"
+                                app:callback="@{listener}"
+                                app:posts="@{similarStories}"
+                                tools:listitem="@layout/view_audio_video_list" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/content_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

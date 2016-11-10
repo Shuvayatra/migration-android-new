@@ -29,6 +29,7 @@
 
     <string name="default_empty_message">कुनै सामाग्री उपलब्द छैन</string>
     <string name="similar_audios">मिल्दोजुल्दो अडियोहरु </string>
+    <string name="similar_stories">मिल्दोजुल्दो कथाहरु</string>
     <string name="audio_time">%1$s | %2$s</string>
 
     <string-array name="user_section_tabs">

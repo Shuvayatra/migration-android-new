@@ -7,8 +7,12 @@
     <data class="VideoDetailDataBinding">
 
         <variable
-            name="similarVideos"
-            type="java.util.List&lt;com.taf.model.Post>"/>
+            name="similarStories"
+            type="java.util.List&lt;com.taf.model.Post&gt;"/>
+
+        <variable
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
 
         <variable
             name="video"
@@ -35,7 +39,8 @@
 
         <include
             layout="@layout/content_video_detail"
-            app:similarVideos="@{similarVideos}"
+            app:similarStories="@{similarStories}"
+            app:listener="@{listener}"
             app:video="@{video}"/>
 
     </android.support.design.widget.CoordinatorLayout>

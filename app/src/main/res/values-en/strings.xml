@@ -27,7 +27,8 @@
     <string name="error_bluetooth_share">You need to download the audio in position to share</string>
 
     <string name="default_empty_message">No feeds available currently.</string>
-    <string name="similar_audios">similar audios</string>
+    <string name="similar_audios">Similar Audios</string>
+    <string name="similar_stories">Similar Stories</string>
     <string name="audio_time">%1$s | %2$s</string>
 
     <string-array name="user_section_tabs">
