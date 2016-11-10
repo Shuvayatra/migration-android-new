@@ -229,13 +229,20 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 
-		<service
-			android:name=".service.MyTaskService"
-			android:exported="true"
-			android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
-			<intent-filter>
-				<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
-			</intent-filter>
-		</service>
-	</application>
+        <service
+            android:name=".service.MyTaskService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+    </application>
+
 </manifest>

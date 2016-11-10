@@ -90,4 +90,11 @@ public class PostRepository implements IPostRepository {
             return Observable.defer(() -> Observable.just(true));
         }
     }
+
+    @Override
+    public Observable<PostResponse> getSearchPosts(int limit, int offset, String query, String type){
+        return mDataStoreFactory.createRestDataStore()
+                .getSearchPosts(limit, offset, query, type)
+                .map(postResponseEntity -> mDataMapper.transformPostResponse(postResponseEntity));
+    }
 }

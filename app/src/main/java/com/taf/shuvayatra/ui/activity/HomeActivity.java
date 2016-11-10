@@ -12,7 +12,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.LinearLayout;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
@@ -30,6 +31,8 @@ public class HomeActivity extends MediaServiceActivity implements
     DrawerLayout mDrawer;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
+    @BindView(R.id.searchbox_container)
+    LinearLayout mSearchBox;
 
     private BroadcastReceiver mRadioCallbackReceiver = new BroadcastReceiver() {
         @Override
@@ -71,6 +74,17 @@ public class HomeActivity extends MediaServiceActivity implements
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
                 .commit();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        mSearchBox
+                .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0,0);
+            }
+        });
     }
 
     protected void onResume() {

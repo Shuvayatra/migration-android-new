@@ -77,4 +77,9 @@ public interface ApiService {
     @GET(MyConstants.API.CHANNEL)
     Observable<List<ChannelEntity>> getChannelList();
 
+    @GET(MyConstants.API.SEARCH_POSTS)
+    Observable<PostResponseEntity> getSearchPosts(@Query("per_page") int limit,
+                                                  @Query("page") int offset,
+                                                  @Query("query") String query,
+                                                  @Query("post_type") String type);
 }

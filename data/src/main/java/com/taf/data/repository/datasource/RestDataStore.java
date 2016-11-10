@@ -250,6 +250,14 @@ public class RestDataStore implements IDataStore {
         }
     }
 
+    public Observable<PostResponseEntity> getSearchPosts(int limit, int offset, String query, String type) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getSearchPosts(limit, offset, query, type);
+        } else {
+            return  Observable.error(new NetworkConnectionException());
+        }
+    }
+
     private boolean isThereInternetConnection() {
         boolean isConnected;
 

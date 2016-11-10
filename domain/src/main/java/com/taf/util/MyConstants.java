@@ -133,6 +133,7 @@ public class MyConstants {
 
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";
+        public static final String SEARCH_POSTS = "api/posts";
     }
 
     public static final class Adapter {

@@ -15,15 +15,18 @@ import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
 import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.data.exception.NetworkConnectionException;
+import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import rx.Observable;
 
 public class ApiRequest {
+    public static final String TAG = "ApiRequest";
     ApiService mApiService;
 
     @Inject
@@ -106,4 +109,7 @@ public class ApiRequest {
         return mApiService.getChannelList();
     }
 
+    public Observable<PostResponseEntity> getSearchPosts(int limit, int offset, String query, String type){
+        return mApiService.getSearchPosts(limit, offset, query, type);
+    }
 }

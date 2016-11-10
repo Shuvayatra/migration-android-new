@@ -19,4 +19,6 @@ public interface IPostRepository {
     Observable<Boolean> updateShareCount(Long id);
 
     Observable<Boolean> syncUserActions();
+
+    Observable<PostResponse> getSearchPosts(int limit, int offset, String query, String type);
 }

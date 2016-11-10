@@ -13,6 +13,7 @@ import com.taf.shuvayatra.ui.activity.FeedActivity;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
 import com.taf.shuvayatra.ui.activity.PodcastsActivity;
 import com.taf.shuvayatra.base.PostDetailActivity;
+import com.taf.shuvayatra.ui.activity.SearchActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.FacebookParseActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
@@ -95,4 +96,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(MyTaskService service);
 
     void inject(ChannelFragment fragment);
+
+    void inject(SearchActivity activity);
 }

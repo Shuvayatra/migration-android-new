@@ -30,6 +30,7 @@ import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.GetPodcastListUseCase;
 import com.taf.interactor.GetPostDetailUseCase;
 import com.taf.interactor.GetPostListUseCase;
+import com.taf.interactor.GetSearchPostsUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.PostFavouriteUseCase;
 import com.taf.interactor.PostShareUseCase;
@@ -486,4 +487,12 @@ public class DataModule {
         return new ChannelRepository(factory, mapper);
     }
 
+    @Provides
+    @PerActivity
+    @Named("search-posts")
+    UseCase provideSearchPostsUseCase(IPostRepository repository,
+                                      ThreadExecutor threadExecutor,
+                                      PostExecutionThread postExecutionThread){
+        return new GetSearchPostsUseCase(repository,threadExecutor, postExecutionThread);
+    }
 }
