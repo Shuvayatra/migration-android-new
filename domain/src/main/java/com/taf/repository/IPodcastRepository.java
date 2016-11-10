@@ -1,8 +1,6 @@
 package com.taf.repository;
 
-import com.taf.model.Podcast;
-
-import java.util.List;
+import com.taf.model.PodcastResponse;
 
 import rx.Observable;
 
@@ -11,5 +9,5 @@ import rx.Observable;
  */
 
 public interface IPodcastRepository {
-    Observable<List<Podcast>> getPodcasts();
+    Observable<PodcastResponse> getPodcasts();
 }

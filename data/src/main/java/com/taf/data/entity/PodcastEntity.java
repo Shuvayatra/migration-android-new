@@ -1,7 +1,5 @@
 package com.taf.data.entity;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by julian on 10/24/16.
  */
@@ -11,7 +9,6 @@ public class PodcastEntity {
     String title;
     String description;
     String source;
-    @SerializedName("image_url")
     String image;
 
     public Long getId() {

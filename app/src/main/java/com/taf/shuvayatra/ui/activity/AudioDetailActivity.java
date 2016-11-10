@@ -34,6 +34,7 @@ import com.taf.shuvayatra.ui.fragment.MiniPlayerFragment;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.AudioDetailView;
 import com.taf.shuvayatra.ui.views.AudioPlayerView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
@@ -53,7 +54,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     private static final int SUBMENU_BLUETOOTH = 1001;
     private static final int SUBMENU_FACEBOOK = 1002;
     private static final String KEY_PROGRESS = "key_progress";
-
+    private static final String TAG = "AudioDetailActivity";
     @BindView(R.id.scroll_view)
     NestedScrollView mScrollView;
     @BindView(R.id.audio_time)
@@ -68,7 +69,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.buffering)
     TextView bufferingText;
-
     @BindView(R.id.overlay)
     RelativeLayout mOverlay;
     MiniPlayerFragment mPlayerFragment;
@@ -77,9 +77,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     private IntentFilter receiverFilter;
     private int mCurrentProgress;
     private boolean seekbarChangeByUser = false;
-
     private Post mainPost;
-
 
     @Override
     public int getLayout() {
@@ -109,8 +107,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
                 break;
         }
     }
-
-    private static final String TAG = "AudioDetailActivity";
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -169,7 +165,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
         Intent intent = null;
 
-        if(pModel.getDataType() == MyConstants.Adapter.TYPE_AUDIO) {
+        if (pModel.getDataType() == MyConstants.Adapter.TYPE_AUDIO) {
             intent = new Intent(this, AudioDetailActivity.class);
         } else if (pModel.getDataType() == MyConstants.Adapter.TYPE_VIDEO) {
             intent = new Intent(this, VideoDetailActivity.class);
@@ -212,6 +208,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     @Override
     public void onMediaPrepared() {
+        Logger.d("AudioDetailActivity_onMediaPrepared", "progress: " + mCurrentProgress);
         ((MyApplication) getApplicationContext()).mService.seekTo(mCurrentProgress);
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
     }
@@ -229,7 +226,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     public void onMediaProgressReset() {
         if (!seekbarChangeByUser) {
-            mCurrentProgress = 0;
             mSeekbar.setProgress(0);
         }
     }
@@ -241,8 +237,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
                     .getFormattedTime(lengths[0]), MediaHelper.getFormattedTime
                     (lengths[1])));
 
-            int progress = MediaHelper.getProgressPercentage(lengths[0], lengths[1]);
-            mSeekbar.setProgress(progress);
+            mCurrentProgress = MediaHelper.getProgressPercentage(lengths[0], lengths[1]);
+            mSeekbar.setProgress(mCurrentProgress);
         }
     }
 
@@ -277,6 +273,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
         if (savedInstanceState != null) {
             mCurrentProgress = savedInstanceState.getInt(KEY_PROGRESS, 0);
+        } else {
+            mCurrentProgress = 0;
         }
 
         ((ActivityAudioDetailBinding) mBinding).setListener(this);
@@ -311,8 +309,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
                 try {
                     if (!getPreferences().getDownloadReferences().contains(mPost
                             .getDownloadReference())) {
-                        /*AnalyticsUtil.logDownloadEvent(getAnalytics(), mAudio.getId(), mAudio
-                                .getTitle(), mAudio.getType());*/
                         requestForPermissions();
                     }
                 } catch (IOException e) {
@@ -339,6 +335,12 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_PROGRESS, mCurrentProgress);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean alwaysShowPlayer() {
         return true;
     }
@@ -347,6 +349,10 @@ public class AudioDetailActivity extends PostDetailActivity implements
     public void onResume() {
         super.onResume();
 
+        if (mPost != null) {
+            ((MyApplication) getApplicationContext()).mService.setTrack(mPost);
+        }
+
         receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_BUFFER_START);
         receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_BUFFER_STOP);
         receiverFilter.addAction(MyConstants.Media.ACTION_STATUS_PREPARED);
@@ -354,6 +360,12 @@ public class AudioDetailActivity extends PostDetailActivity implements
         receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_PLAYBACK_CHANGE);
         receiverFilter.addAction(MyConstants.Media.ACTION_PROGRESS_CHANGE);
         registerReceiver(mediaReceiver, receiverFilter);
+    }
+
+    private void downloadAudio() throws IOException {
+        mPresenter.downloadAudioPost(mPost);
+        AnalyticsUtil.logDownloadEvent(getAnalytics(), mPost.getId(), mPost
+                .getTitle(), mPost.getType());
     }
 
     @Override
@@ -365,7 +377,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
                 if (grantResults.length > 0 && grantResults[0] == PackageManager
                         .PERMISSION_GRANTED) {
                     try {
-                        mPresenter.downloadAudioPost(mPost);
+                        downloadAudio();
                     } catch (IOException e) {
                         Snackbar.make(mBinding.getRoot(), "Could not download the audio. Try " +
                                 "again later.", Snackbar.LENGTH_LONG).show();
@@ -389,7 +401,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
             this.requestPermissions(new String[]{Manifest.permission
                     .WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
         } else {
-            mPresenter.downloadAudioPost(mPost);
+            downloadAudio();
         }
     }
 }

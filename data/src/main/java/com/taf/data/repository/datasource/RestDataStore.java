@@ -14,7 +14,7 @@ import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
-import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -103,11 +103,12 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
+    public Observable<PodcastResponseEntity> getPodcasts(Long channelId) {
         if (isThereInternetConnection()) {
             return mApiRequest.getPodcasts(channelId)
-                    .doOnNext(entities -> {
-                        mCache.savePodcastsByChannelId(entities, channelId);
+                    .doOnNext(entity -> {
+                        if(entity.getData() != null)
+                            mCache.savePodcastsByChannelId(entity.getData().getData(), channelId);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());

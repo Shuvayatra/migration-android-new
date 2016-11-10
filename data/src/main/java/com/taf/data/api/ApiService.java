@@ -6,7 +6,7 @@ import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
-import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -42,7 +42,7 @@ public interface ApiService {
     Observable<List<CountryEntity>> getCountryList();
 
     @GET(MyConstants.API.PODCASTS)
-    Observable<List<PodcastEntity>> getPodcasts(@Query("channel_id") Long channelId);
+    Observable<PodcastResponseEntity> getPodcasts(@Query("category") Long channelId);
 
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);

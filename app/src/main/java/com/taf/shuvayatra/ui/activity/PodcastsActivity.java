@@ -20,6 +20,8 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.fragment.MiniPlayerFragment;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PodcastListView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.util.MyConstants;
 
 import java.util.List;
 
@@ -42,6 +44,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     ListAdapter<Podcast> mAdapter;
 
+    Long mId;
+    String mTitle;
+
     @Override
     public int getLayout() {
         return R.layout.activity_podcasts;
@@ -55,8 +60,16 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle data = getIntent().getExtras();
+        mId = data.getLong(MyConstants.Extras.KEY_ID, -1);
+        mTitle = data.getString(MyConstants.Extras.KEY_TITLE, "");
+
+        getSupportActionBar().setTitle(mTitle);
+        if (savedInstanceState != null) {
+            AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
+        }
 
         initialize();
 
@@ -125,7 +138,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         DaggerDataComponent.builder()
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
-                .dataModule(new DataModule(1L)) //// TODO: 10/24/16 get radio-channel id
+                .dataModule(new DataModule(mId))
                 .build()
                 .inject(this);
 

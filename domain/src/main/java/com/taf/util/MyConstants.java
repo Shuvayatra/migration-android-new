@@ -206,6 +206,7 @@ public class MyConstants {
 
     public static final class Intent {
         public static final String GCM_REGISTRATION_COMPLETE = "gcm_registration_complete";
+        public static final String ACTION_SHOW_RADIO = "intent.action.SHOW_RADIO";
     }
 
     public static class SECTION {

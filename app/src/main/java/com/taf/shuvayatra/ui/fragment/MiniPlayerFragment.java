@@ -27,7 +27,6 @@ public class MiniPlayerFragment extends BaseFragment implements
         SeekBar.OnSeekBarChangeListener {
 
     public static final String TAG = "MiniPlayerFragment";
-    private static int mCurrentProgress;
     @BindView(R.id.title)
     TextView mTitle;
     @BindView(R.id.audio_time)
@@ -38,6 +37,7 @@ public class MiniPlayerFragment extends BaseFragment implements
     SeekBar mSeekbar;
     @BindView(R.id.buffering)
     TextView mBufferingText;
+    private int mCurrentProgress;
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
     private boolean seekbarChangeByUser = false;
@@ -133,7 +133,7 @@ public class MiniPlayerFragment extends BaseFragment implements
 
     @Override
     public void onMediaPrepared() {
-        ((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
+        //((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
 
         updateView();

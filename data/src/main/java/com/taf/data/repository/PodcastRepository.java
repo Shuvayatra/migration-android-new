@@ -2,10 +2,9 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
-import com.taf.model.Podcast;
+import com.taf.model.PaginatedData;
+import com.taf.model.PodcastResponse;
 import com.taf.repository.IPodcastRepository;
-
-import java.util.List;
 
 import rx.Observable;
 
@@ -25,14 +24,21 @@ public class PodcastRepository implements IPodcastRepository {
     }
 
     @Override
-    public Observable<List<Podcast>> getPodcasts() {
+    public Observable<PodcastResponse> getPodcasts() {
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getPodcasts(mChannelId)
-                .map(podcastEntities -> mDataMapper.transformPodcastEntity(podcastEntities));
+                .map(response -> mDataMapper.transformPodcastResponse(response));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getPodcasts(mChannelId)
-                .map(podcastEntities -> mDataMapper.transformPodcastEntity(podcastEntities));
+                .map(entities -> {
+                    PodcastResponse response = new PodcastResponse(mChannelId);
+                    PaginatedData paginatedData = new PaginatedData(1, 1);
+                    paginatedData.setTotal(entities.size());
+                    paginatedData.setData(mDataMapper.transformPodcastEntity(entities));
+                    response.setData(paginatedData);
+                    return response;
+                });
 
         return Observable.concatDelayError(cacheObservable, apiObservable);
     }

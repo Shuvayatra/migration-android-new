@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
@@ -68,6 +67,12 @@ public class HomeFragment extends BaseFragment implements
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
+
+    @Override
     public void onRefresh() {
         mPresenter.initialize(null);
     }
@@ -77,13 +82,13 @@ public class HomeFragment extends BaseFragment implements
         List<BaseModel> baseModels = new ArrayList<>();
         baseModels.addAll(data);
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        if(!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)){
+        if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
             BaseModel countryWidget = new BaseModel();
             countryWidget.setDataType(MyConstants.Adapter.TYPE_COUNTRY_WIDGET);
-            if(!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")){
-                baseModels.add(1,countryWidget);
-            }else{
-                baseModels.add(0,countryWidget);
+            if (!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")) {
+                baseModels.add(1, countryWidget);
+            } else {
+                baseModels.add(0, countryWidget);
             }
         }
         mAdapter.setBlocks(baseModels);
@@ -112,11 +117,5 @@ public class HomeFragment extends BaseFragment implements
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.destroy();
     }
 }

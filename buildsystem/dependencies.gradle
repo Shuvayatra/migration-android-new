@@ -29,8 +29,8 @@ ext {
     iconicsGoogleVersion = '2.1.0.1.original@aar'
     showCaseVersion = '5.4.0'
     pdfViewerVersion = '1.0.4@aar'
-    playServicesVersion = '9.6.1'
-    firebaseVersion = '9.6.1'
+    playServicesVersion = '9.8.0'
+    firebaseVersion = '9.8.0'
     gravitySnapHelperVersion = '0.3'
     disklrucache = '2.0.2'
 
@@ -55,7 +55,7 @@ ext {
             designSupport       : "com.android.support:design:${supportLibVersion}",
             gcm                 : "com.google.android.gms:play-services-gcm:${playServicesVersion}",
             firebaseMessaging   : "com.google.firebase:firebase-messaging:${firebaseVersion}",
-            firebaseAnalytics   : "com.google.firebase:firebase-analytics:${firebaseVersion}",
+            firebaseAnalytics   : "com.google.firebase:firebase-core:${firebaseVersion}",
             firebaseDynamicLinks: "com.google.firebase:firebase-invites:${firebaseVersion}",
 
             daggerCompiler      : "com.google.dagger:dagger-compiler:${daggerVersion}",

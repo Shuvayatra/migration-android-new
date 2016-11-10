@@ -212,17 +212,27 @@ public class MediaService extends Service implements
             mPlayer.pause();
             intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, false);
         } else {
-            mIsMediaValid = true;
-            mPlayer.start();
-            intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, true);
+            if (!mIsMediaValid) {
+                playMedia();
+            } else {
+                mIsMediaValid = true;
+                mPlayer.start();
+                intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, true);
+            }
         }
         sendBroadcast(intent);
     }
 
     public void stopPlayback() {
+        mCurrentTitle = " ---- ";
         mStoppedByUser = true;
         if (mIsMediaValid)
             mPlayer.stop();
+
+        Intent intent = new Intent(MyConstants.Media.ACTION_PLAY_STATUS_CHANGE);
+        intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, false);
+        sendBroadcast(intent);
+
         mIsMediaValid = false;
     }
 

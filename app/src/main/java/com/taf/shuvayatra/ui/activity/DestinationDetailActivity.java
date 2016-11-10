@@ -19,6 +19,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.DestinationBlocksPresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.views.DestinationDetailView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -58,6 +59,11 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         if (bundle != null) {
             Logger.e(TAG, ": " + bundle.containsKey(MyConstants.Extras.KEY_COUNTRY));
             mCountry = (Country) bundle.get(MyConstants.Extras.KEY_COUNTRY);
+        }
+
+        if (savedInstanceState != null) {
+            AnalyticsUtil.logViewEvent(getAnalytics(), mCountry.getId(), mCountry.getTitle(),
+                    "destination");
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
