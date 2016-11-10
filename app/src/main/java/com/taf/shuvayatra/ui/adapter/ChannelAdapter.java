@@ -111,10 +111,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
                     public void onClick(View v) {
                         Log.e(TAG, "onClick: Channel with id >>"+mChannels.get(getAdapterPosition())
                                 .getId(), null);
+                        Channel channel = (Channel) mChannels.get(getAdapterPosition());
                         Intent intent = new Intent(context, PodcastsActivity.class);
-                        intent.putExtra(MyConstants.Extras.KEY_CHANNEL_ID, mChannels.get
-                                (getAdapterPosition())
-                                .getId());
+                        intent.putExtra(MyConstants.Extras.KEY_ID, channel.getId());
+                        intent.putExtra(MyConstants.Extras.KEY_TITLE, channel.getTitle());
                         context.startActivity(intent);
                     }
                 });

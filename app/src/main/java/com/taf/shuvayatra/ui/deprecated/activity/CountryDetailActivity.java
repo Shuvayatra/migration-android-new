@@ -37,7 +37,7 @@ public class CountryDetailActivity extends CategoryDetailActivity {
         ((CountryDetailDataBinding) mBinding).setCountry(mCategory);
         if (savedInstanceState == null) {
             AnalyticsUtil.logViewEvent(getAnalytics(), mCategory.getId(), mCategory.getTitle(),
-                    "section_country");
+                    "country");
         }
     }
 }

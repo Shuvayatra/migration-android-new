@@ -4,12 +4,10 @@ import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
-import com.taf.model.Podcast;
+import com.taf.model.PodcastResponse;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.shuvayatra.ui.views.PodcastListView;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -51,7 +49,7 @@ public class PodcastListPresenter implements Presenter {
         this.mView = (PodcastListView) view;
     }
 
-    private final class PodcastListSubscriber extends DefaultSubscriber<List<Podcast>> {
+    private final class PodcastListSubscriber extends DefaultSubscriber<PodcastResponse> {
         @Override
         public void onCompleted() {
             mView.hideLoadingView();
@@ -66,8 +64,10 @@ public class PodcastListPresenter implements Presenter {
         }
 
         @Override
-        public void onNext(List<Podcast> podcasts) {
-            mView.renderPodcasts(podcasts);
+        public void onNext(PodcastResponse response) {
+            if (response.getData() != null) {
+                mView.renderPodcasts(response.getData().getData());
+            }
             onCompleted();
         }
     }

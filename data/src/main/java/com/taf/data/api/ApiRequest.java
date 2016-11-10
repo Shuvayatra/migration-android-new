@@ -7,7 +7,7 @@ import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
 import com.taf.data.entity.LatestContentEntity;
-import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
@@ -47,7 +47,7 @@ public class ApiRequest {
         return mApiService.getHomeBlocks();
     }
 
-    public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
+    public Observable<PodcastResponseEntity> getPodcasts(Long channelId) {
         return mApiService.getPodcasts(channelId);
     }
 

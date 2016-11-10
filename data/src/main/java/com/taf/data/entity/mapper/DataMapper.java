@@ -18,7 +18,9 @@ import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.CountryInfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.NoticeEntity;
+import com.taf.data.entity.PaginatedEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
@@ -34,7 +36,9 @@ import com.taf.model.CountryWidgetData;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
 import com.taf.model.Notification;
+import com.taf.model.PaginatedData;
 import com.taf.model.Podcast;
+import com.taf.model.PodcastResponse;
 import com.taf.model.Post;
 import com.taf.model.PostData;
 import com.taf.model.PostResponse;
@@ -402,6 +406,28 @@ public class DataMapper {
         return null;
     }
 
+    public PodcastResponse transformPodcastResponse(PodcastResponseEntity entity) {
+        if (entity != null) {
+            PodcastResponse response = new PodcastResponse(entity.getId());
+            response.setTitle(entity.getTitle());
+            response.setData(transformPaginatedPodcasts(entity.getData()));
+            return response;
+        }
+        return null;
+    }
+
+    private PaginatedData<Podcast> transformPaginatedPodcasts(PaginatedEntity<PodcastEntity>
+                                                                      entity) {
+        if (entity != null) {
+            PaginatedData<Podcast> data = new PaginatedData<>(entity.getCurrentPage(), entity
+                    .getLastPage());
+            data.setLimit(entity.getLimit());
+            data.setTotal(entity.getTotal());
+            data.setData(transformPodcastEntity(entity.getData()));
+        }
+        return null;
+    }
+
     public List<Podcast> transformPodcastEntity(List<PodcastEntity> entities) {
         List<Podcast> podcasts = new ArrayList<>();
         if (entities != null) {
@@ -505,7 +531,7 @@ public class DataMapper {
         return unSyncedPosts;
     }
 
-    public List<Channel> transformChannelList(List<ChannelEntity> channelEntityList){
+    public List<Channel> transformChannelList(List<ChannelEntity> channelEntityList) {
         List<Channel> channels = new ArrayList<>();
 
         for (ChannelEntity channelEntity : channelEntityList) {

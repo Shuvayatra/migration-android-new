@@ -18,12 +18,14 @@ import com.taf.shuvayatra.presenter.PostDetailPresenter;
 import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostSharePresenter;
 import com.taf.shuvayatra.ui.views.PostDetailView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
 import static com.taf.util.MyConstants.Extras.KEY_ID;
 import static com.taf.util.MyConstants.Extras.KEY_POST;
+import static com.taf.util.MyConstants.Extras.KEY_VIDEO;
 
 public abstract class PostDetailActivity extends PlayerFragmentActivity implements PostDetailView {
 
@@ -40,7 +42,13 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
     protected Post mPost;
     private boolean mOldFavouriteState;
 
+    private boolean enableAnalytics = true;
+
     protected abstract void updateView(Post post);
+
+    protected void logAnalytics(Post post) {
+        AnalyticsUtil.logViewEvent(getAnalytics(), post.getId(), post.getTitle(), post.getType());
+    }
 
     @Override
     public boolean isDataBindingEnabled() {
@@ -68,7 +76,14 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         mId = bundle.getLong(KEY_ID);
 
         initialize();
-        loadPost();
+        if (savedInstanceState != null) {
+            enableAnalytics = false;
+            mPost = (Post) savedInstanceState.get(KEY_VIDEO);
+            renderPost(mPost);
+        } else {
+            enableAnalytics = true;
+            loadPost();
+        }
     }
 
     @Override
@@ -95,6 +110,9 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
         data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
 
+        AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                .getType(), status);
+
         mFavouritePresenter.initialize(data);
     }
 
@@ -105,6 +123,8 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
             mPost.setIsFavourite(mPreferences.isFavourite(mPost.getId()));
             mOldFavouriteState = mPost.isFavourite();
             updateView(mPost);
+
+            if (enableAnalytics) logAnalytics(mPost);
         }
     }
 
@@ -194,6 +214,8 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     public boolean share(final Post post) {
         mSharePresenter.initialize(null);
+        AnalyticsUtil.logShareEvent(getAnalytics(), mPost.getId(), mPost.getTitle(),
+                mPost.getType());
         try {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");

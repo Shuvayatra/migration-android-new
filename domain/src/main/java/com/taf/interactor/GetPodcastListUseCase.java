@@ -2,16 +2,14 @@ package com.taf.interactor;
 
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
-import com.taf.model.Podcast;
+import com.taf.model.PodcastResponse;
 import com.taf.repository.IPodcastRepository;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
 
-public class GetPodcastListUseCase extends UseCase<List<Podcast>> {
+public class GetPodcastListUseCase extends UseCase<PodcastResponse> {
 
     private final IPodcastRepository mRepository;
 
@@ -23,7 +21,7 @@ public class GetPodcastListUseCase extends UseCase<List<Podcast>> {
     }
 
     @Override
-    protected Observable<List<Podcast>> buildUseCaseObservable(UseCaseData pData) {
+    protected Observable<PodcastResponse> buildUseCaseObservable(UseCaseData pData) {
         return mRepository.getPodcasts();
     }
 }
