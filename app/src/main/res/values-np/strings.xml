@@ -126,5 +126,14 @@
         <item>Mahakali</item>
     </string-array>
 
+    <string name="search_type_header">Filter by content type</string>
+
+    <string-array name="search_type">
+        <item>@string/article</item>
+        <item>@string/audio</item>
+        <item>@string/video</item>
+    </string-array>
+
+    <string name="search_result">Search Result</string>
 
 </resources>
