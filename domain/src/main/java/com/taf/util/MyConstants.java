@@ -17,8 +17,8 @@ public class MyConstants {
     }
 
     public static final class Country {
-        public static final String MALAYSIA = "मलेशिय";
-        public static final String SAUDI_ARABIA = "साउदी अरेबि";
+        public static final String MALAYSIA = "मलेसिया";
+        public static final String SAUDI_ARABIA = "साउदी अरेबिया";
         public static final String QATAR = "कतार";
         public static final String UAE = "यूएई";
         public static final String KUWAIT = "कुवेत";

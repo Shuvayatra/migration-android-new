@@ -16,12 +16,14 @@ import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.model.Country;
+import com.taf.model.CountryWidgetModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
 import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
+import com.taf.shuvayatra.databinding.CountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.util.MyConstants;
@@ -82,13 +84,8 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         switch (viewType) {
             case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
                 Logger.e(TAG, "country widget called");
-                BlockCountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
-                        R.layout.view_block_country_widget, parent, false);
-                // removed <fragment> tag from view cause of nested fragment issue.
-                // Used dynamic fragment inflation as per Android API
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.country_widget_fragment, CountryWidgetFragment.newInstance(), CountryWidgetFragment.TAG)
-                        .commit();
+                CountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
+                        R.layout.list_item_country_widget, parent, false);
                 return new ViewHolder<>(widgetBinding);
             case MyConstants.Adapter.VIEW_TYPE_NOTICE:
                 BlockNoticeDataBinding noticeBinding = DataBindingUtil.inflate(mInflater,
@@ -122,8 +119,8 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                         .setCountry((Country) mBlocks.get(position));
                 break;
             case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
-                ((BlocksAdapter.ViewHolder<BlockCountryWidgetDataBinding>) holder).mBinding
-                        .setModel(mBlocks.get(position));
+                ((BlocksAdapter.ViewHolder<CountryWidgetDataBinding>) holder).mBinding
+                        .setWidgetModel((CountryWidgetModel) mBlocks.get(position));
                 break;
             case MyConstants.Adapter.VIEW_TYPE_NOTICE:
                 ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding

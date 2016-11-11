@@ -16,6 +16,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/spacing_large"
 		android:background="@android:color/white"
+		android:focusableInTouchMode="true"
 		app:cardElevation="4dp">
 
 		<LinearLayout

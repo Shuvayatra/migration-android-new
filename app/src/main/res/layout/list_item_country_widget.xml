@@ -1,78 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/spacing_standard">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools">
+	<data class="CountryWidgetDataBinding">
+		<variable
+			name="widgetModel"
+			type="com.taf.model.CountryWidgetModel"/>
+	</data>
 
-    <TextView
-        android:id="@+id/textview_country_name"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/greyish_brown"
-        android:textSize="@dimen/text_large"
-        tools:text="Country Name" />
+        app:cardElevation="@dimen/cardview_elevation_4dp">
 
-    <TextView
-        android:id="@+id/nepali_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:textColor="@color/warm_grey"
-        android:textSize="@dimen/text_xxlarge"
-        tools:text="१९ आश्विन २०७३, बुधवार" />
+	<LinearLayout
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:orientation="vertical"
+				  android:padding="@dimen/spacing_standard">
 
-    <TextView
-        android:id="@+id/forex"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:textColor="@color/warm_grey"
-        android:textSize="@dimen/text_large"
-        tools:text="Exchange Rate" />
+		<TextView
+			android:id="@+id/textview_country_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textColor="@color/greyish_brown"
+			android:textSize="@dimen/text_large"
+			android:text="@{widgetModel.countryName}"
+			tools:text="Country Name"/>
+
+		<TextView
+			android:id="@+id/nepali_date"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/spacing_small"
+			android:textColor="@color/warm_grey"
+			android:textSize="@dimen/text_xxlarge"
+			android:text="@{widgetModel.nepaliDate}"
+			tools:text="१९ आश्विन २०७३, बुधवार"/>
+
+		<TextView
+			android:id="@+id/forex"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/spacing_small"
+			android:textColor="@color/warm_grey"
+			android:textSize="@dimen/text_large"
+			android:text="@{widgetModel.forex}"
+			tools:text="Exchange Rate"/>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_xxlarge"
-        android:orientation="horizontal">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/spacing_xxlarge"
+			android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/english_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/warm_grey"
-            android:textSize="@dimen/text_large"
-            tools:text="Monday,\n 23 October 2o16" />
+			<TextView
+				android:id="@+id/english_date"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textColor="@color/warm_grey"
+				android:textSize="@dimen/text_large"
+				android:text="@{widgetModel.englishDate}"
+				tools:text="Monday,\n 23 October 2o16"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="end|right|center_vertical"
-            android:orientation="horizontal">
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:gravity="end|right|center_vertical"
+				android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textview_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/warm_grey"
-                android:textSize="24sp"
-                tools:text="3C" />
+				<TextView
+					android:id="@+id/textview_temperature"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textColor="@color/warm_grey"
+					android:textSize="24sp"
+					android:text="@{widgetModel.temperature}"
+					tools:text="3C"/>
 
-            <ImageView
-                android:id="@+id/imageview_weather"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/spacing_xxxsmall"
-                tools:src="@drawable/ic_rain" />
+				<ImageView
+					android:id="@+id/imageview_weather"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="@dimen/spacing_xxxsmall"
+					tools:src="@drawable/ic_rain"/>
 
-        </LinearLayout>
-    </LinearLayout>
+			</LinearLayout>
+		</LinearLayout>
 
-</LinearLayout>
+	</LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>
