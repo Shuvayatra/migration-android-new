@@ -72,7 +72,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @BindView(R.id.overlay)
     RelativeLayout mOverlay;
     MiniPlayerFragment mPlayerFragment;
-    private Handler seekbarHandler = new Handler();
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
     private int mCurrentProgress;
@@ -111,21 +110,11 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-        // TODO: 11/9/16 apply title on collapsing bar  
         if (appBarLayout.getTotalScrollRange() == Math.abs(verticalOffset)) {
-            if (mainPost != null) {
-                Logger.e(TAG, ">>> collapsing title set <<<");
-//                mCollapsingToolbar.setTitle(mainPost.getTitle());
-//                getSupportActionBar().setTitle(mainPost.getTitle());
-//                getSupportActionBar().setDisplayShowTitleEnabled(true);
-            }
+            if (mainPost != null && getToolbar().getTitle() == null)
+                getToolbar().setTitle(mainPost.getTitle());
         } else {
-            if (mCollapsingToolbar.getTitle() != null) {
-                Logger.e(TAG, ">>> removing title <<<");
-//                mCollapsingToolbar.setTitle(null);
-//                getSupportActionBar().setTitle(null);
-//                getSupportActionBar().setDisplayShowTitleEnabled(false);
-            }
+            if (getToolbar().getTitle() != null) getToolbar().setTitle(null);
         }
 
 
@@ -236,7 +225,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
             mAudioTime.setText(getString(R.string.audio_time, MediaHelper
                     .getFormattedTime(lengths[0]), MediaHelper.getFormattedTime
                     (lengths[1])));
-
             mCurrentProgress = MediaHelper.getProgressPercentage(lengths[0], lengths[1]);
             mSeekbar.setProgress(mCurrentProgress);
         }
@@ -258,6 +246,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
         mainPost = post;
         ((MyApplication) getApplicationContext()).mService.setTrack(post);
 
+        Logger.e(TAG, ">>> COLLAPSING TOOLBAR TITLE: " + mCollapsingToolbar.getTitle() + " <<<");
+
         mScrollView.scrollTo(0, 0);
         mAppBar.setExpanded(true);
         ((ActivityAudioDetailBinding) mBinding).setAudio(post);
@@ -268,9 +258,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         if (savedInstanceState != null) {
             mCurrentProgress = savedInstanceState.getInt(KEY_PROGRESS, 0);
         } else {

@@ -37,6 +37,7 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/audio_toolbar_image_height"
+                app:titleEnabled="false"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:statusBarScrim="?attr/colorPrimaryDark">
@@ -95,7 +96,6 @@
                                 android:id="@+id/title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
                                 android:text="@{audio.getTitle()}"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/text_large"
@@ -134,7 +134,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:gravity="top"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
             </android.support.design.widget.CollapsingToolbarLayout>
