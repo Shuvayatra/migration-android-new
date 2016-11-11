@@ -41,17 +41,17 @@ public class CountryWidgetFragment extends BaseFragment implements CountryWidget
     @Inject
     CountryListPresenter countryListPresenter;
 
-    @BindView(R.id.nepali_date)
+//    @BindView(R.id.nepali_date)
     TextView tvNepaliDate;
-    @BindView(R.id.english_date)
+//    @BindView(R.id.english_date)
     TextView tvEnglishDate;
-    @BindView(R.id.textview_temperature)
+//    @BindView(R.id.textview_temperature)
     TextView tvTemperature;
-    @BindView(R.id.textview_country_name)
+//    @BindView(R.id.textview_country_name)
     TextView tvCountryName;
-    @BindView(R.id.forex)
+//    @BindView(R.id.forex)
     TextView tvForex;
-    @BindView(R.id.imageview_weather)
+//    @BindView(R.id.imageview_weather)
     ImageView mImageViewWeather;
 
     // Different use cases for different components
