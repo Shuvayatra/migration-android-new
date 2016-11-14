@@ -54,7 +54,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         super.onActivityCreated(savedInstanceState);
 
         long savedBirthday = ((BaseActivity) getActivity()).getPreferences().getBirthday();
-
+        // to correct the date picker format
+        Locale.setDefault(Locale.ENGLISH);
         if (savedBirthday != Long.MIN_VALUE) {
 
             birthday = Calendar.getInstance(Locale.ENGLISH);
@@ -94,10 +95,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
 
-                Logger.e(TAG, String.format("%d,%d,%d", birthday.get(Calendar.DAY_OF_WEEK),
-                        birthday.get(Calendar.MONTH), birthday.get(Calendar.YEAR)));
-
-                if (birthday == null) birthday = Calendar.getInstance(Locale.ENGLISH);
+                if (birthday == null) birthday = Calendar.getInstance();
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
                         birthday.get(Calendar.YEAR),
