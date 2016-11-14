@@ -9,9 +9,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.R;
@@ -48,6 +50,8 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     public static final String TAG = "OnBoardActivity";
     private static final int REQUEST_CODE_WIFI_SETTINGS = 1;
 
+    private int currentItem;
+
 
     @Override
     public int getLayout() {
@@ -59,6 +63,8 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
         super.onCreate(savedInstanceState);
 
+        Logger.e(TAG, ">>> ON CREATE <<<");
+
         // add api request for country listing
         // api.shuvayatra.org/api/destinations
         initialize();
@@ -67,10 +73,16 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
         mQuestionPager.setAdapter(pagerAdapter);
         // add off screen page limit to avoid context NPE on fragment
         mQuestionPager.setOffscreenPageLimit(2);
+        mQuestionPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                currentItem = position;
+            }
+        });
 
         if (savedInstanceState != null) {
-            mQuestionPager.setCurrentItem(savedInstanceState.getInt(MyConstants.Extras
-                    .KEY_PAGER_POSITION, 0));
+            currentItem = savedInstanceState.getInt(MyConstants.Extras.KEY_PAGER_POSITION, 0);
+            mQuestionPager.setCurrentItem(currentItem);
         }
 
         if (getSupportActionBar() != null)
@@ -149,8 +161,24 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
         super.onSaveInstanceState(outState);
         // bug fix for unresponsive page change
         if (mQuestionPager != null) {
-            outState.putInt(MyConstants.Extras.KEY_PAGER_POSITION, mQuestionPager.getCurrentItem());
+            Logger.e(TAG, ">>> on save instance state called <<<");
+            outState.putInt(MyConstants.Extras.KEY_PAGER_POSITION, currentItem);
+            Logger.e(TAG, ">>> set adapter null<<<");
             mQuestionPager.setAdapter(null);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Logger.e(TAG, ">>> RESUME <<<");
+
+        // because we used saved instance to set adapter as null, there are instances where onCreate()
+        // is never called. For those instances, this change was made
+        if (mQuestionPager.getAdapter() == null) {
+            OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
+            mQuestionPager.setAdapter(pagerAdapter);
+            mQuestionPager.setCurrentItem(currentItem);
         }
     }
 

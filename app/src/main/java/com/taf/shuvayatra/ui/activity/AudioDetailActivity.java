@@ -167,12 +167,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
             intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
             startActivity(intent);
         }
-
-        /*else if (pModel.getDataType() == MyConstants.Adapter.TYPE_AUDIO) {
-            mId = pModel.getId();
-            initialize();
-            loadPost();
-        }*/
     }
 
     @Override

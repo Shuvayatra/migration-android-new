@@ -1,22 +1,28 @@
 <resources>
 
-	<style name="AppTheme.NoActionBar">
-		<item name="windowActionBar">false</item>
-		<item name="windowNoTitle">true</item>
-		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
-		<item name="android:statusBarColor">@android:color/transparent</item>
-		<item name="android:timePickerDialogTheme">@style/AlertDialogCustom</item>
-		<item name="android:datePickerDialogTheme">@style/AlertDialogCustom</item>
-		<item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
-	</style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:timePickerDialogTheme">@style/AlertDialogCustom</item>
+        <item name="android:datePickerDialogTheme">@style/AlertDialogCustom</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+    </style>
 
-	<style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
-		<item name="android:colorAccent">@color/colorPrimaryDark</item>
-	</style>
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:datePickerStyle">@style/DatePickerStyle</item>
+    </style>
 
-	<style name="AppTheme.AppThemeOnBoardActivity" parent="AppTheme.NoActionBar">
-		<item name="colorAccent">@color/teal</item>
-		<item name="colorControlNormal">@color/teal</item>
+    <style name="AppTheme.AppThemeOnBoardActivity" parent="AppTheme.NoActionBar">
+        <item name="colorAccent">@color/teal</item>
+        <item name="colorControlNormal">@color/teal</item>
+    </style>
 
-	</style>
+    <!-- For dialog -->
+    <style name="DatePickerStyle" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
 </resources>

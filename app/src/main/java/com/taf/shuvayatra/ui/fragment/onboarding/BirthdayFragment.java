@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.fragment.onboarding;
 
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -55,7 +57,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
 
         if (savedBirthday != Long.MIN_VALUE) {
 
-            birthday = Calendar.getInstance();
+            birthday = Calendar.getInstance(Locale.ENGLISH);
             birthday.setTime(new Date(savedBirthday));
             mTextViewBirthday.setText(String.format(
                     Locale.getDefault(),
@@ -92,13 +94,20 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
 
-                if (birthday == null) birthday = Calendar.getInstance();
+                Logger.e(TAG, String.format("%d,%d,%d", birthday.get(Calendar.DAY_OF_WEEK),
+                        birthday.get(Calendar.MONTH), birthday.get(Calendar.YEAR)));
+
+                if (birthday == null) birthday = Calendar.getInstance(Locale.ENGLISH);
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
                         birthday.get(Calendar.YEAR),
                         birthday.get(Calendar.MONTH),
                         birthday.get(Calendar.DAY_OF_MONTH)
                 );
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    dialog.getDatePicker().setSpinnersShown(true);
+                    dialog.getDatePicker().setCalendarViewShown(false);
+                }
                 dialog.show();
             }
         });
