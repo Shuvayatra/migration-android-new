@@ -1,61 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tool="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <data class="ItemCountryInformationDataBinding">
 
         <variable
             name="country"
-            type="com.taf.model.Country"/>
+            type="com.taf.model.Country" />
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp"
-        android:layout_marginBottom="@dimen/spacing_small">
+        app:cardElevation="4dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/spacing_standard"
-        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_standard">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/image_view_flag"
-            android:layout_width="@dimen/country_list_selected_flag_width"
-            android:layout_height="@dimen/country_list_selected_flag_height"
-            android:layout_marginRight="@dimen/spacing_large"
-            app:actualImageScaleType="centerInside"
-            app:imageUrl="@{country.icon}"
-            app:progressBarAutoRotateInterval="1000"
-            app:progressBarImage="@drawable/ic_refresh"
-            app:progressBarImageScaleType="fitCenter"/>
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/image_view_flag"
+                android:layout_width="@dimen/country_list_selected_flag_width"
+                android:layout_height="@dimen/country_list_selected_flag_height"
+                android:layout_marginRight="@dimen/spacing_large"
+                app:actualImageScaleType="centerInside"
+                app:imageUrl="@{country.icon}"
+                app:progressBarAutoRotateInterval="1000"
+                app:progressBarImage="@drawable/ic_refresh"
+                app:progressBarImageScaleType="fitCenter" />
 
-        <TextView
-            android:id="@+id/textview_country_name"
-            android:layout_toRightOf="@id/image_view_flag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_xxlarge"
-            android:layout_marginBottom="@dimen/spacing_xxsmall"
-            android:textColor="@color/warm_grey"
-            android:text="@{country.title}"
-            tool:text="Malaysia"/>
+            <TextView
+                android:id="@+id/textview_country_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_xxsmall"
+                android:layout_toRightOf="@id/image_view_flag"
+                android:text="@{country.title}"
+                android:textColor="@color/warm_grey"
+                android:textSize="@dimen/text_xxlarge"
+                tool:text="Malaysia" />
 
-        <TextView
-            android:layout_below="@id/textview_country_name"
-            android:layout_toRightOf="@id/image_view_flag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/text_default"
-            android:textColor="@color/warm_grey"
-            android:text="@{country.allInformation}"
-            android:lineSpacingExtra="@dimen/text_xsmall"
-            tool:text="Capital : Kuala Lumpur\nCurrency : Ringgit \nLanguage : Bahasa Malaysia English \nPopulation :31.220.000"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textview_country_name"
+                android:layout_toRightOf="@id/image_view_flag"
+                android:lineSpacingExtra="@dimen/text_xsmall"
+                android:text="@{country.allInformation}"
+                android:textColor="@color/warm_grey"
+                android:textSize="@dimen/text_default"
+                tool:text="Capital : Kuala Lumpur\nCurrency : Ringgit \nLanguage : Bahasa Malaysia English \nPopulation :31.220.000" />
 
-    </RelativeLayout>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 </layout>
