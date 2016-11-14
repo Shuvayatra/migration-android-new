@@ -54,7 +54,8 @@ public class OnBoardQuestionAdapter extends FragmentStatePagerAdapter {
 
         // TODO: 10/27/16 fix and refactor state instance for Fragments
         Fragment fragment;
-        if (fragmentTags != null && manager.findFragmentByTag(fragmentTags.get(position)) != null) {
+        if (fragmentTags != null && fragmentTags.size() >= position + 1 && manager
+                .findFragmentByTag(fragmentTags.get(position)) != null) {
             Logger.e(TAG, ">>> found fragment by tag");
             fragment = manager.findFragmentByTag(fragmentTags.get(position));
         } else {
@@ -81,7 +82,6 @@ public class OnBoardQuestionAdapter extends FragmentStatePagerAdapter {
                 default:
                     fragment = null;
                     break;
-
             }
         }
         return fragment;
