@@ -24,6 +24,9 @@ public class GetHomeBlocksUseCase extends UseCase<List<Block>> {
 
     @Override
     protected Observable<List<Block>> buildUseCaseObservable(UseCaseData pData) {
-        return mHomeRepository.getBlocks();
+        boolean noCache = false;
+        if(pData != null) noCache = pData.getBoolean(UseCaseData.NO_CACHE, false);
+
+        return mHomeRepository.getBlocks(noCache);
     }
 }

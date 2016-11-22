@@ -10,13 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.taf.data.utils.AppPreferences;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
-import com.taf.data.utils.AppPreferences;
-import com.taf.shuvayatra.util.Utils;
-import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
@@ -26,12 +24,11 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public ViewDataBinding mBinding;
+    @Inject
+    protected AppPreferences mPreferences;
     @Nullable
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
-    @Inject
-    protected AppPreferences mPreferences;
     @Inject
     FirebaseAnalytics mAnalytics;
 
@@ -73,18 +70,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        initLanguage();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initLanguage();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         if (containsShareOption()) {
@@ -108,11 +93,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void updateFavouriteState() {
-    }
-
-    private void initLanguage() {
-        Utils.setLanguage(MyConstants.Language.NEPALI, getApplicationContext());
-
     }
 
     private void initializeToolbar() {

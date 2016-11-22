@@ -158,16 +158,21 @@
 					android:scheme="shuvayatra"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".ui.activity.OnBoardActivity"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
 
+		<activity
+			android:name=".ui.activity.SplashActivity"
+			android:theme="@style/SplashTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".ui.activity.OnBoardActivity"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
 		</activity>
 		<activity
 			android:name=".ui.activity.FeedActivity"
@@ -177,6 +182,7 @@
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW"/>
 
@@ -208,13 +214,11 @@
 					android:scheme="shuvayatra"/>
 			</intent-filter>
 		</activity>
-
 		<activity
 			android:name=".ui.activity.DestinationDetailActivity"
 			android:label="@string/title_activity_destination_detail"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
-
 		<activity
 			android:name=".ui.activity.ArticleDetailActivity"
 			android:theme="@style/AppTheme.NoActionBar">
@@ -229,20 +233,20 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 
-        <service
-            android:name=".service.MyTaskService"
-            android:exported="true"
-            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
-            <intent-filter>
-                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
-            </intent-filter>
-        </service>
+		<service
+			android:name=".service.MyTaskService"
+			android:exported="true"
+			android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+			<intent-filter>
+				<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
+			</intent-filter>
+		</service>
 
-        <activity
-            android:name=".ui.activity.SearchActivity"
-            android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-    </application>
+		<activity
+			android:name=".ui.activity.SearchActivity"
+			android:label="@string/title_activity_search"
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
+	</application>
 
 </manifest>

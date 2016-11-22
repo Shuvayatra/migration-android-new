@@ -123,7 +123,7 @@ public class MyConstants {
         public static final String HOME = "api/screen/home";
         public static final String OPEN_WEATHER = "data/2.5/weather";
         public static final String FOREX = "fetchForex";
-        public static final String JOURNEY = "api/screen/home";
+        public static final String JOURNEY = "api/screen/journey";
         public static final String PODCASTS = "api/podcasts";
         public static final String POSTS = "api/posts";
         public static final String POST = "api/posts/{id}";

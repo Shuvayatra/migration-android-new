@@ -1,14 +1,13 @@
 package com.taf.shuvayatra.presenter;
 
-import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Block;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
-import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.shuvayatra.ui.views.HomeView;
+import com.taf.shuvayatra.ui.views.MvpView;
 
 import java.util.List;
 
@@ -71,7 +70,6 @@ public class HomePresenter implements Presenter {
         @Override
         public void onNext(List<Block> blocks) {
             mView.renderBlocks(blocks);
-            onCompleted();
         }
     }
 }

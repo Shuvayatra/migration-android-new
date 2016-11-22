@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Podcast;
 import com.taf.shuvayatra.MyApplication;
@@ -100,7 +101,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-
+        ((MyApplication) getApplicationContext()).mService.changeCurrentPodcast(pIndex);
     }
 
     @Override
@@ -111,7 +112,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     @Override
     public void renderPodcasts(List<Podcast> podcasts) {
         mAdapter.setDataCollection(podcasts);
-        ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
+        if(!podcasts.isEmpty()) {
+            ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
+        }
     }
 
     @Override

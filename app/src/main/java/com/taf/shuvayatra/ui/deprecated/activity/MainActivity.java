@@ -13,7 +13,6 @@ import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.UserFragment;
-import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class MainActivity extends BaseActivity {
     private void setUpTabs() {
         String[] tabTitles = getResources().getStringArray(R.array.home_tabs);
         final int[] tabIcons = {
-                R.drawable.ic_journey,
+                R.drawable.ic_nav_journey,
                 R.drawable.ic_destination,
                 R.drawable.ic_info,
                 R.drawable.ic_user

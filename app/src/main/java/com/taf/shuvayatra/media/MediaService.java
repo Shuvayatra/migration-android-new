@@ -279,6 +279,14 @@ public class MediaService extends Service implements
         return mCurrentTitle;
     }
 
+    public void changeCurrentPodcast(int index) {
+        if (mCurrentPlayType.equals(PlayType.PODCAST)) {
+            stopPlayback();
+            mCurrentPodcastIndex = index;
+            playMedia();
+        }
+    }
+
     public enum PlayType {
         POST,
         PODCAST

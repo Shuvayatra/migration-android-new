@@ -42,6 +42,7 @@ public class PodcastListPresenter implements Presenter {
     @Override
     public void initialize(UseCaseData pData) {
         mUseCase.execute(new PodcastListSubscriber(), pData);
+        mView.showLoadingView();
     }
 
     @Override
@@ -68,7 +69,6 @@ public class PodcastListPresenter implements Presenter {
             if (response.getData() != null) {
                 mView.renderPodcasts(response.getData().getData());
             }
-            onCompleted();
         }
     }
 }

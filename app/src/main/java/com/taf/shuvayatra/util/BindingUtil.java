@@ -34,6 +34,8 @@ import com.taf.util.MyConstants;
 import java.util.List;
 
 public class BindingUtil {
+    private static final String TAG = "BindingUtil";
+
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
@@ -159,8 +161,6 @@ public class BindingUtil {
             }
         }
     }
-
-    private static final String TAG = "BindingUtil";
 
     @BindingAdapter("bind:phoneNumbers")
     public static void setPhoneNumbers(LinearLayout pContainer, List<String> pNumbers) {
@@ -306,13 +306,17 @@ public class BindingUtil {
     @BindingAdapter({"bind:data", "bind:orientation"})
     public static void showBlockItems(RecyclerView recyclerView, List<Post> posts,
                                       int orientation) {
-        BlockItemAdapter adapter = new BlockItemAdapter(recyclerView.getContext(), posts,
-                orientation);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setClipToPadding(false);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
-                orientation, false));
+        BlockItemAdapter adapter = (BlockItemAdapter) recyclerView.getAdapter();
+        if (adapter == null) {
+            adapter = new BlockItemAdapter(recyclerView.getContext(), posts, orientation);
+
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setClipToPadding(false);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
+                    orientation, false));
+        }
+        adapter.setItems(posts);
     }
 
     @BindingAdapter("bind:htmlContent")

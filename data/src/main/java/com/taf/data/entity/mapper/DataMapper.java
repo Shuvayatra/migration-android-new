@@ -424,6 +424,7 @@ public class DataMapper {
             data.setLimit(entity.getLimit());
             data.setTotal(entity.getTotal());
             data.setData(transformPodcastEntity(entity.getData()));
+            return data;
         }
         return null;
     }

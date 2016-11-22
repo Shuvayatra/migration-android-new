@@ -20,7 +20,7 @@
 	<dimen name="spacing_tiny">1dp</dimen>
 
 
-	<dimen name="splash_icon_size">100dp</dimen>
+	<dimen name="splash_icon_size">150dp</dimen>
 
 	<dimen name="recent_question_section_height">203dp</dimen>
 	<dimen name="recent_audio_section_height">100dp</dimen>

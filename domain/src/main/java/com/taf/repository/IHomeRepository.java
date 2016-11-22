@@ -11,5 +11,5 @@ import rx.Observable;
  */
 
 public interface IHomeRepository {
-    Observable<List<Block>> getBlocks();
+    Observable<List<Block>> getBlocks(boolean noCache);
 }

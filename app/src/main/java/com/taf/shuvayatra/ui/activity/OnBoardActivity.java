@@ -87,11 +87,6 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if (!getPreferences().getFirstLaunch()) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     public void initialize() {

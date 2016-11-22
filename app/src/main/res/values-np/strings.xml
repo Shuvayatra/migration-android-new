@@ -57,7 +57,6 @@
     <string name="audio">अडियो</string>
     <string name="video">भिडियो</string>
     <string name="article">लेख</string>
-    <string name="news">समाचार</string>
     <string name="favourite">मलाई मनपर्न</string>
 
     <string name="like">लाइक </string>
@@ -83,50 +82,61 @@
     <string name="read_more">Read more...</string>
 
     <!--new-->
-    <string name="error_option">Please select an option</string>
-    <string name="message_welcome">welcome</string>
-    <string name="error_name">Please enter your Name </string>
-    <string name="error_date">Please select your birthday</string>
+    <string name="home">गृह</string>
+    <string name="journey">यात्रा</string>
+    <string name="destination">गन्तब्य</string>
+    <string name="news">समाचार</string>
+    <string name="radio">रेडियो</string>
+    <string name="question_answer">जानकारी</string>
+    <string name="account">खाता</string>
+    <string name="help_feedback">सहायता र प्रतिक्रिया</string>
+    <string name="contact">सम्पर्क</string>
+    <string name="about">शुभयात्राको बारे</string>
 
-    <string name="next">Next</string>
-    <string name="back">Back</string>
-    <string name="finish">Finish</string>
+    <string name="error_option">कृपया एक विकल्प चयन गर्नुहोस्</string>
+    <string name="message_welcome">स्वागतम्</string>
+    <string name="error_name">कृपया आफ्नो नाम उपलब्ब्ध गराउनुहोस्</string>
+    <string name="error_date">कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्</string>
 
-    <string name="question_name">What\'s your name</string>
-    <string name="question_birthday">Please input your birthday</string>
-    <string name="question_gender">Please select your gender</string>
-    <string name="question_destination">Preferred destination</string>
-    <string name="question_work_status">Have you work abroad before?</string>
-    <string name="question_original_location">Which region you\’re originally from?</string>
+    <string name="next">अर्को</string>
+    <string name="back">अघिल्लो</string>
+    <string name="finish">समाप्त</string>
 
-    <string name="info_select_region">Please select a region</string>
-    <string name="msg_onboard">By answer question below will help us provide you better information</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_female">Female</string>
+    <string name="question_name">तपाईंको नाम के हो</string>
+    <string name="question_birthday">तपाईंको जन्म मिती चयन गर्नुहोस्</string>
+    <string name="question_gender">तपाईंको लिङ्ग चयन गर्नुहोस्</string>
+    <string name="question_destination">मनपरेको गन्तव्य</string>
+    <string name="question_work_status">तपाईंले एस अघि बिदेश मा काम गर्नुभएको छ ?</string>
+    <string name="question_original_location">तपाईंको मुल क्षेत्र कुन हो ?</string>
 
-    <string name="work_status_working_abroad">Yes, I still work now</string>
-    <string name="work_status_back_from_abroad">Yes, but now I’m back to Nepal</string>
-    <string name="work_status_planning">No, i plan to go</string>
-    <string name="work_status_not_going">No, i don’t have any plan to go</string>
+    <string name="info_select_region">कृपया क्षेत्र चयन गर्नुहोस्</string>
+    <string name="msg_onboard">निम्न प्रश्न का जवाफ दिएर तपाईं हामीलाई सन्दर्भिक जान्कारी दिना मद्दत गर्दै हुनुहुन्छ </string>
+    <string name="gender_male">पुरुष</string>
+    <string name="gender_female">महिला</string>
+
+    <string name="work_status_working_abroad">छ, म अझै काम गर्छु</string>
+    <string name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ</string>
+    <string name="work_status_planning">छैन, जाने सोचाइ मा छु</string>
+    <string name="work_status_not_going">छैन, जाने सोचाइ छैन</string>
 
     <string-array name="zones">
-        <item>Mechi</item>
-        <item>Koshi</item>
-        <item>Sagarmatha</item>
-        <item>Janakpur</item>
-        <item>Bagmati</item>
-        <item>Narayani</item>
-        <item>Gandaki</item>
-        <item>Lumbini</item>
-        <item>Dhaulagiri</item>
-        <item>Rapti</item>
-        <item>Karnali</item>
-        <item>Bheri</item>
-        <item>Seti</item>
-        <item>Mahakali</item>
+        <item>मेची</item>
+        <item>कोशी</item>
+        <item>सगरमाथा</item>
+        <item>जनकपुर्</item>
+        <item>बागमती</item>
+        <item>नारायनि</item>
+        <item>गण्डकी</item>
+        <item>लुम्बिनि</item>
+        <item>धौलागिरि</item>
+        <item>राप्ती</item>
+        <item>कर्णाली</item>
+        <item>भेरी</item>
+        <item>सेती</item>
+        <item>माहाकाली</item>
     </string-array>
 
-    <string name="search_type_header">Filter by content type</string>
+    <string name="search_type_header">सामगृको प्रकर बाट हेर्नुहोस</string>
 
     <string-array name="search_type">
         <item>@string/article</item>
@@ -134,6 +144,6 @@
         <item>@string/video</item>
     </string-array>
 
-    <string name="search_result">Search Result</string>
+    <string name="search_result">खोजको परिणाम</string>
 
 </resources>

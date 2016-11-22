@@ -15,12 +15,13 @@ import com.taf.shuvayatra.di.module.ApplicationModule;
 import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.service.MyTaskService;
 import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.shuvayatra.util.Utils;
+import com.taf.util.MyConstants;
 
 public class MyApplication extends Application {
+    public MediaService mService;
     ApplicationComponent mApplicationComponent;
     private GcmNetworkManager mGcmNetworkManager;
-
-    public MediaService mService;
 
     @Override
     public void onCreate() {
@@ -28,6 +29,9 @@ public class MyApplication extends Application {
         this.mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
+
+        setLocale();
+
         Fresco.initialize(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (BuildConfig.DEBUG) {
@@ -43,6 +47,10 @@ public class MyApplication extends Application {
         AnalyticsUtil.logAppOpenEvent(mApplicationComponent.getAnalytics());
 
         scheduleSyncTask();
+    }
+
+    private void setLocale() {
+        Utils.setLanguage(MyConstants.Language.NEPALI, this);
     }
 
     private void scheduleSyncTask() {

@@ -107,7 +107,8 @@
     <string name="question_original_location">Which region you\’re originally from?</string>
 
     <string name="info_select_region">Please select a region</string>
-    <string name="msg_onboard">By answer question below will help us provide you better information</string>
+    <string name="msg_onboard">Answering the question below will help us provide you better
+        information</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
 

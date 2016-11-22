@@ -31,6 +31,6 @@
 	<string name="title_activity_deep_link">DeepLinkActivity</string>
 	<string name="title_activity_feed">All Posts</string>
 	<string name="title_activity_destination_detail">DestinationDetailActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
+	<string name="title_activity_search">SearchActivity</string>
 
 </resources>

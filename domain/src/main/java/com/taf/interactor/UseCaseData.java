@@ -26,11 +26,19 @@ public class UseCaseData implements Serializable {
 
     public static final String COMPONENT_TYPE = "component_type";
 
+    public static final String NO_CACHE = "no_cache";
+
     Map<String, Object> data = null;
 
     public UseCaseData() {
         data = new HashMap<>();
     }
+
+    public UseCaseData(String key, Boolean value) {
+        data = new HashMap<>();
+        putBoolean(key, value);
+    }
+
 
     public void clearAll() {
         data.clear();

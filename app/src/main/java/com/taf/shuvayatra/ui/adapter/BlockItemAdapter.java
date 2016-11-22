@@ -28,18 +28,22 @@ import java.util.List;
 
 public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.ViewHolder> {
 
-    final List<Post> mItems;
+    private static final String TAG = "BlockItemAdapter";
     final LayoutInflater mInflater;
     final int mOrientation;
+    List<Post> mItems;
     private Context mContext;
-
-    private static final String TAG = "BlockItemAdapter";
 
     public BlockItemAdapter(Context context, List<Post> items, int orientation) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mItems = items;
         this.mOrientation = orientation;
+    }
+
+    public void setItems(List<Post> items) {
+        mItems = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -66,6 +70,11 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
             ((BlockItemAdapter.ViewHolder<BlockSliderItemDataBinding>) holder).mBinding
                     .setPost(mItems.get(position));
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
