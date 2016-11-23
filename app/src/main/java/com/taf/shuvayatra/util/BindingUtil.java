@@ -18,7 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
@@ -40,7 +45,17 @@ public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
-            pView.setImageURI(Uri.parse(url));
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
+                    .setResizeOptions(new ResizeOptions(pView.getWidth(), pView.getHeight()))
+                    .build();
+
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request)
+                    .setOldController(pView.getController())
+                    .build();
+
+            pView.setController(controller);
+            //pView.setImageURI(Uri.parse(url));
         }
     }
 

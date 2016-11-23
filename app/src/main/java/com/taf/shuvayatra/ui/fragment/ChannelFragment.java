@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.taf.model.BaseModel;
 import com.taf.model.Channel;
@@ -85,7 +84,7 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if(mAdapter.getItemViewType(position) == MyConstants.Adapter.TYPE_CHANNEL){
+                if (mAdapter.getItemViewType(position) == MyConstants.Adapter.TYPE_CHANNEL) {
                     return 1;
                 }
                 return 2;
@@ -99,11 +98,6 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
     @Override
     public void renderChannel(List<Channel> channelList) {
-        Log.e(TAG, "renderChannel: channelList.size()>>" + channelList.size());
-
-
-//        final long selctedChannelId = 4;
-
         Collections.sort(channelList, new Comparator<Channel>() {
             @Override
             public int compare(Channel o1, Channel o2) {
@@ -119,29 +113,8 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
         List<BaseModel> allChannelList = new ArrayList<>();
         allChannelList.addAll(channelList);
-
-
-//        for (Channel channel : channelList) {
-//            if(channel.getId() == selctedChannelItem){
-//                channel.setDataType(MyConstants.Adapter.TYPE_CHANNEL_SELECTED);
-//                allChannelList.remove(channelList.indexOf(channel));
-//                allChannelList.add(0, channel);
 //
-//                HeaderItem headerItem = new HeaderItem("Other Channels");
-//                headerItem.setDataType(MyConstants.Adapter.TYPE_CHANNEL_HEADER);
-//                allChannelList.add(1, headerItem);
-//                break;
-//            }
-//        }
-
-
-//        Channel selectedChannel = channelList.get(0);
-//        selectedChannel.setDataType(MyConstants.Adapter
-//                .TYPE_CHANNEL_SELECTED);
-//        allChannelList.remove(0);
-//        allChannelList.add(0, selectedChannel);
-//
-        HeaderItem headerItem = new HeaderItem("Channels");
+        HeaderItem headerItem = new HeaderItem(getString(R.string.channels));
         headerItem.setDataType(MyConstants.Adapter.TYPE_CHANNEL_HEADER);
         allChannelList.add(0, headerItem);
 

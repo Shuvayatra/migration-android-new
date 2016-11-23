@@ -11,6 +11,7 @@ public class Channel extends BaseModel {
 
     String title;
     String description;
+    String imageUrl;
 
     @Override
     public int getDataType() {
@@ -31,5 +32,13 @@ public class Channel extends BaseModel {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -145,5 +145,7 @@
     </string-array>
 
     <string name="search_result">खोजको परिणाम</string>
+    <string name="all_country">सबै गन्तब्यहरु </string>
+    <string name="channels">च्यानलहरू</string>
 
 </resources>
