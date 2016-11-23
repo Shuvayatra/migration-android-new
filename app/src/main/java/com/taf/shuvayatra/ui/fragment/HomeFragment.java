@@ -85,7 +85,7 @@ public class HomeFragment extends BaseFragment implements
         String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
                 selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
                         selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
-        Logger.e(TAG,"selectedCountry.split(): "+ Arrays.toString(selectedCountry.split(",")));
+        Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
         mCountryWidget = new CountryWidgetModel(countryName);
         mPresenter.initialize(null);
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);

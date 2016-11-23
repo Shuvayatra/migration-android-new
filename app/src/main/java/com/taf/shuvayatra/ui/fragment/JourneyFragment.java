@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
@@ -45,7 +44,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
         return R.layout.fragment_journey;
     }
 
-    public static JourneyFragment getInstance(){
+    public static JourneyFragment getInstance() {
         return new JourneyFragment();
     }
 
@@ -62,7 +61,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder()
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .activityModule(((BaseActivity) getActivity()).getActivityModule())
@@ -76,7 +75,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
 
     @Override
     public void showErrorView(String pErrorMessage) {
-        Snackbar.make(getView(), pErrorMessage,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getView(), pErrorMessage, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
