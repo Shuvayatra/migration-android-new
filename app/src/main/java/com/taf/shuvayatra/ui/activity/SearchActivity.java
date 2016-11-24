@@ -227,7 +227,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
 
     private void searchPosts(int page, String query, String type) {
         mPage = page;
-        mUseCaseData.clearAll();
+        mPresenter.destroy();       //cancel any pending query before initating new one
         mUseCaseData.putInteger(UseCaseData.OFFSET, page);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
         mUseCaseData.putString(UseCaseData.SEARCH_QUERY, query);

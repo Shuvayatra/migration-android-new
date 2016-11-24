@@ -83,14 +83,14 @@
                         android:textColor="@color/warm_grey"
                         android:textSize="24sp"
                         tools:text="3C" />
-
-                    <ImageView
-                        android:id="@+id/imageview_weather"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_xxxsmall"
-                        tools:src="@drawable/ic_rain" />
-
+					
+					<ImageView
+						android:id="@+id/imageview_weather"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginLeft="@dimen/spacing_xxxsmall"
+						app:resourceId="@{widgetModel.imageResource}"
+						tools:src="@drawable/ic_rain"/>
                 </LinearLayout>
             </LinearLayout>
 

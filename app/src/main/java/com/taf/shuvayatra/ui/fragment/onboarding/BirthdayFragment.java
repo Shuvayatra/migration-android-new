@@ -95,12 +95,13 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
             @Override
             public void onClick(View v) {
 
-                if (birthday == null) birthday = Calendar.getInstance();
+                Calendar current = Calendar.getInstance();
+                if(birthday!=null) current = birthday;
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
-                        birthday.get(Calendar.YEAR),
-                        birthday.get(Calendar.MONTH),
-                        birthday.get(Calendar.DAY_OF_MONTH)
+                        current.get(Calendar.YEAR),
+                        current.get(Calendar.MONTH),
+                        current.get(Calendar.DAY_OF_MONTH)
                 );
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                     dialog.getDatePicker().setSpinnersShown(true);
@@ -114,6 +115,7 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         // update birthday reference
+        birthday = Calendar.getInstance();
         birthday.set(year, month, dayOfMonth);
         // update preference and view
         ((BaseActivity) getActivity()).getPreferences().setBirthday(birthday.getTimeInMillis());

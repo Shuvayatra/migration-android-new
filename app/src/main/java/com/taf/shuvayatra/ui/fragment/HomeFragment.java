@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
@@ -214,6 +215,10 @@ public class HomeFragment extends BaseFragment implements
                         // TODO: 6/23/2016 unknown weather type
                     }
                     break;
+            }
+            // make the change in model reflect in widget
+            if(mAdapter!= null && mAdapter.getBlocks() !=null && mAdapter.getBlocks().contains(mCountryWidget)){
+                mAdapter.notifyItemChanged(mAdapter.getBlocks().indexOf(mCountryWidget));
             }
         } catch (NullPointerException e) {
             // TODO: 11/4/16 proper fix for context's NPE

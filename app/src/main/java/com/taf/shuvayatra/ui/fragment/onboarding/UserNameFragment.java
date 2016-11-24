@@ -12,6 +12,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter.ButtonPressListener;
+import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
@@ -58,7 +59,7 @@ public class UserNameFragment extends BaseFragment<BaseActivity> {
                 }
                 ((BaseActivity) getActivity()).getPreferences().setUserName(name.trim());
                 if (mButtonPressListener == null) mButtonPressListener = (ButtonPressListener) getActivity();
-                mButtonPressListener.onNextButtonPressed(0);
+                mButtonPressListener.onNextButtonPressed(MyConstants.OnBoarding.USERNAME);
             }
         });
     }
