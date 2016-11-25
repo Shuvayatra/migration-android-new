@@ -149,5 +149,6 @@
     </string-array>
 
     <string name="search_result">Search Result</string>
-
+    <string name="all_country">All Country</string>
+    <string name="channels">Channels</string>
 </resources>

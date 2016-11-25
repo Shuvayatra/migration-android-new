@@ -541,6 +541,7 @@ public class DataMapper {
             channel.setId(channelEntity.getId());
             channel.setTitle(channelEntity.getTitle());
             channel.setDescription(channelEntity.getDescription());
+            channel.setImageUrl(channelEntity.getImageUrl());
 
             channels.add(channel);
         }

@@ -67,6 +67,12 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         initialize();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
+
     private void initialize() {
         DaggerDataComponent.builder()
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
@@ -151,7 +157,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         Logger.e(TAG, "selectedCountry.substring(0,1): " + selectedCountry.substring(0, 1));
 
         if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
-            HeaderItem headerItem = new HeaderItem("All Country");
+            HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
             headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
 
             allList.add(0, headerItem);
@@ -164,7 +170,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                     country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
                     allList.remove(countryList.indexOf(country));
                     allList.add(0, country);
-                    HeaderItem headerItem = new HeaderItem("All Country");
+                    HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
                     headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
                     allList.add(1, headerItem);
                     break;
@@ -184,12 +190,6 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     @Override
     public void hideLoadingView() {
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPresenter.destroy();
     }
 
     @Override
