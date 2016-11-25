@@ -65,6 +65,10 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public List<BaseModel> getBlocks() {
+        return mBlocks;
+    }
+
     private List<BaseModel> filterNotice(List<BaseModel> blocks) {
         List<BaseModel> models = new ArrayList<>();
         for (BaseModel block : blocks) {

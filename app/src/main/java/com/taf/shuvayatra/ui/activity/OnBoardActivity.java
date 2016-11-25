@@ -72,6 +72,7 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
         OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
         // add off screen page limit to avoid context NPE on fragment
+        //todo fix for setOffscreenPageLimit is taking min value 2 by default.
         mQuestionPager.setOffscreenPageLimit(2);
         mQuestionPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override

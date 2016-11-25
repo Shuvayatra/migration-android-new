@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -42,18 +43,54 @@ public class GenderFragment extends BaseFragment implements RadioGroup.OnChecked
         mRadioGroupGender.setOnCheckedChangeListener(this);
 
         String gender = ((BaseActivity) getActivity()).getPreferences().getGender();
-        if (gender != null)
+        if (gender != null) {
             mRadioGroupGender.check(gender.equalsIgnoreCase(getString(R.string.gender_male)) ? R.id.choice_male :
                     gender.equalsIgnoreCase(getString(R.string.gender_female)) ? R.id.choice_female : -1);
+//            mRadioGroupGender.refreshDrawableState();
+        }
 
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mButtonPressListener == null)
+                if (mButtonPressListener == null) {
                     mButtonPressListener = ((ButtonPressListener) getActivity());
+                }
                 mButtonPressListener.onBackButtonPressed(MyConstants.OnBoarding.GENDER);
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // TODO: 11/24/16 no effect from here. fix issue later
+//        final String gender = ((BaseActivity) getActivity()).getPreferences().getGender();
+
+//        if (gender != null) {
+////            mRadioGroupGender.postDelayed(new Runnable() {
+////                @Override
+////                public void run() {
+//            mRadioGroupGender.check(gender.equalsIgnoreCase(getString(R.string.gender_male)) ? R.id.choice_male :
+//                    gender.equalsIgnoreCase(getString(R.string.gender_female)) ? R.id.choice_female : -1);
+//            mRadioGroupGender.refreshDrawableState();
+//
+////                    if (gender.equalsIgnoreCase(getString(R.string.gender_male))) {
+////                        RadioButton btn = (RadioButton) mRadioGroupGender.findViewById(R.id.choice_male);
+////                        btn.setChecked(true);
+////
+////                    } else if (gender.equalsIgnoreCase(getString(R.string.gender_female))) {
+////                        RadioButton btn = (RadioButton) mRadioGroupGender.findViewById(R.id.choice_female);
+////                        btn.setChecked(true);
+////                    }
+//            for (int i = 0; i < mRadioGroupGender.getChildCount(); i++) {
+//
+//                RadioButton btn = (RadioButton) mRadioGroupGender.getChildAt(i);
+//                Logger.e(TAG, "text: " + btn.getText() + " value " + btn.isChecked());
+//            }
+////                }
+////            }, 2000);
+//        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -335,6 +336,14 @@ public class BindingUtil {
                 url = post.getFeaturedImage();
             }
             pView.setImageURI(Uri.parse(url));
+        }
+    }
+
+    @BindingAdapter({"bind:resourceId"})
+    public static void setImageResource(ImageView view, int resourceId){
+//        if(view.getContext().getResources().getDrawable())
+        if(resourceId != Integer.MIN_VALUE) {
+            view.setImageResource(resourceId);
         }
     }
 }
