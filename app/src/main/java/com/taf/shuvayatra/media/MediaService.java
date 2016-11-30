@@ -1,7 +1,13 @@
 package com.taf.shuvayatra.media;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,12 +16,14 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
+import android.widget.RemoteViews;
 
-import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.Logger;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.util.MyConstants;
 
 import java.io.File;
@@ -28,8 +36,12 @@ public class MediaService extends Service implements
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnInfoListener {
 
+    public static final int NOTIFICATION_ID = 1234;
+
     private final IBinder mBinder = new MusicBinder();
     Handler mHandler = new Handler();
+    NotificationManager manager;
+    NotificationEventReceiver notificationEventReceiver;
     private MediaPlayer mPlayer;
     private Post mTrack;
     private List<Podcast> mPodcasts;
@@ -38,11 +50,7 @@ public class MediaService extends Service implements
     private int mCurrentPodcastIndex = 0;
     private long mCurrentDuration = 0;
     private boolean mStoppedByUser = false;
-
     private String mCurrentTitle = "";
-
-    private AppPreferences mPreferences;
-
     private Runnable updateSeekTime = new Runnable() {
         @Override
         public void run() {
@@ -62,20 +70,28 @@ public class MediaService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         Logger.d("MediaService_onStartCommand", "test");
         if (mPlayer != null) {
-            mPlayer.reset();
+//            mPlayer.reset();
         } else {
             mPlayer = new MediaPlayer();
             initMediaPlayer();
         }
         mHandler.postDelayed(updateSeekTime, 1000);
-        mPreferences = new AppPreferences(getApplicationContext());
-        return START_NOT_STICKY;
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NotificationEventReceiver.ACTION_DISMISS);
+        filter.addAction(NotificationEventReceiver.ACTION_PAUSE_PLAY);
+        notificationEventReceiver = new NotificationEventReceiver();
+
+        registerReceiver(notificationEventReceiver, filter);
+
+        return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         Logger.d("MediaService_onDestroy", "test");
         super.onDestroy();
+        unregisterReceiver(notificationEventReceiver);
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
@@ -90,10 +106,6 @@ public class MediaService extends Service implements
     @Override
     public boolean onUnbind(Intent intent) {
         Logger.d("MediaService_onUnbind", "test");
-        if (mPlayer != null) {
-            mPlayer.stop();
-            mPlayer.release();
-        }
         return true;
     }
 
@@ -173,6 +185,8 @@ public class MediaService extends Service implements
             if (mCurrentPlayType.equals(PlayType.POST)) setDataSource(mTrack);
             else setDataSource(mPodcasts.get(mCurrentPodcastIndex));
 
+            createNotification(mCurrentTitle, true);
+
             mPlayer.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();
@@ -220,6 +234,7 @@ public class MediaService extends Service implements
                 intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, true);
             }
         }
+        createNotification(mCurrentTitle, mPlayer.isPlaying());
         sendBroadcast(intent);
     }
 
@@ -287,9 +302,61 @@ public class MediaService extends Service implements
         }
     }
 
+    private void createNotification(String title, boolean isPlaying) {
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent notificationIntent = new Intent(MediaService.this, HomeActivity.class);
+        PendingIntent toOpen = PendingIntent.getActivity(getApplicationContext(), 0,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent cancelNotification = new Intent(NotificationEventReceiver.ACTION_DISMISS);
+        PendingIntent cancel = PendingIntent
+                .getBroadcast(getApplicationContext(), 0, cancelNotification, 0);
+
+        Intent pausePlayNotification = new Intent(NotificationEventReceiver.ACTION_PAUSE_PLAY);
+        PendingIntent pausePlay = PendingIntent
+                .getBroadcast(getApplicationContext(), 0, pausePlayNotification, 0);
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.view_notification);
+        contentView.setTextViewText(R.id.notificationTitle, title);
+
+        if (isPlaying) {
+            contentView.setImageViewResource(R.id.playpause, R.drawable.ic_pause);
+        } else {
+            contentView.setImageViewResource(R.id.playpause, R.drawable.ic_play);
+        }
+        contentView.setOnClickPendingIntent(R.id.playpause, pausePlay);
+        contentView.setOnClickPendingIntent(R.id.cancel, cancel);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentIntent(toOpen)
+                .setContent(contentView)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setLights(0x000000FF, 300, 1000).build();
+
+        startForeground(NOTIFICATION_ID, notification);
+    }
+
     public enum PlayType {
         POST,
         PODCAST
+    }
+
+    private class NotificationEventReceiver extends BroadcastReceiver {
+        private static final String ACTION_DISMISS = "action.NOTIFICATION_DISMISS";
+        private static final String ACTION_PAUSE_PLAY = "action.NOTIFICATION_PLAY_PAUSE";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_DISMISS)) {
+                stopPlayback();
+                stopForeground(true);
+//                stopSelf();
+            } else if (intent.getAction().equals(ACTION_PAUSE_PLAY)) {
+                playPause();
+            }
+        }
     }
 
     public class MusicBinder extends Binder {

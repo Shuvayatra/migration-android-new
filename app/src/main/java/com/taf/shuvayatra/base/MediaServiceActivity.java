@@ -45,15 +45,11 @@ public abstract class MediaServiceActivity extends PlayerFragmentActivity {
 
     @Override
     protected void onDestroy() {
-        ((MyApplication) getApplicationContext()).mService.stopPlayback();
         // Unbind from the service
         if (mMusicBound) {
             unbindService(mConnection);
             mMusicBound = false;
         }
-
-        stopService(mPlayIntent);
-        ((MyApplication) getApplicationContext()).mService = null;
         super.onDestroy();
     }
 }

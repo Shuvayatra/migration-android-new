@@ -18,14 +18,12 @@ import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetModel;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.databinding.BlockCountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
 import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
 import com.taf.shuvayatra.databinding.CountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
-import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -60,13 +58,13 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         mPreferences = new AppPreferences(context);
     }
 
+    public List<BaseModel> getBlocks() {
+        return mBlocks;
+    }
+
     public void setBlocks(List<BaseModel> blocks) {
         mBlocks = filterNotice(blocks);
         notifyDataSetChanged();
-    }
-
-    public List<BaseModel> getBlocks() {
-        return mBlocks;
     }
 
     private List<BaseModel> filterNotice(List<BaseModel> blocks) {
@@ -174,20 +172,19 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         return mBlocks == null ? 0 : mBlocks.size();
     }
 
-    private String getFormattedDeeplink(Block block) {
-        String deeplink = block.getDeeplink();
-        if (block.getFilterIds() != null && !block.getFilterIds().isEmpty()) {
-            deeplink += "?category_id=";
+    private String getFormattedDeeplink(String deepLink, List<Long> filterIds) {
+        if (filterIds != null && !filterIds.isEmpty()) {
+            deepLink += "?category_id=";
             int index = 0;
-            for (Long filterId : block.getFilterIds()) {
+            for (Long filterId : filterIds) {
                 index++;
-                deeplink += filterId;
-                if (index < block.getFilterIds().size()) {
-                    deeplink += ",";
+                deepLink += filterId;
+                if (index < filterIds.size()) {
+                    deepLink += ",";
                 }
             }
         }
-        return deeplink;
+        return deepLink;
     }
 
     public class ViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
@@ -205,7 +202,18 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
                 view = ((BlockRadioWidgetDataBinding) mBinding).play;
             } else if (mBinding instanceof BlockNoticeDataBinding) {
-                view = ((BlockNoticeDataBinding) mBinding).dismiss;
+                view = ((BlockNoticeDataBinding) mBinding).getRoot();
+                ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
+                        mBlocks.remove(block);
+
+                        mPreferences.setNoticeDismissId(block.getNotice().getId());
+                        BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
+                        return;
+                    }
+                });
             }
 
             if (view != null) {
@@ -213,27 +221,30 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                     @Override
                     public void onClick(View view) {
                         Block block = null;
+                        String deepLink = null;
                         if (mBinding instanceof BlockNoticeDataBinding) {
                             block = ((BlockNoticeDataBinding) mBinding).getBlock();
-                            mBlocks.remove(block);
-
-                            mPreferences.setNoticeDismissId(block.getNotice().getId());
-                            BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
-                            return;
-                        } else if (mBinding instanceof BlockListDataBinding) {
-                            block = ((BlockListDataBinding) mBinding).getBlock();
-                        } else if (mBinding instanceof BlockSliderDataBinding) {
-                            block = ((BlockSliderDataBinding) mBinding).getBlock();
-                        } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
-                            Logger.d("ViewHolder_onClick", "tst broadcast");
-                            mContext.sendBroadcast(new Intent(MyConstants.Intent
-                                    .ACTION_SHOW_RADIO));
-                            return;
+                            deepLink = block.getNotice().getDeeplink();
+                        } else {
+                            if (mBinding instanceof BlockListDataBinding) {
+                                block = ((BlockListDataBinding) mBinding).getBlock();
+                            } else if (mBinding instanceof BlockSliderDataBinding) {
+                                block = ((BlockSliderDataBinding) mBinding).getBlock();
+                            } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
+                                mContext.sendBroadcast(new Intent(MyConstants.Intent
+                                        .ACTION_SHOW_RADIO));
+                                return;
+                            }
+                            deepLink = block.getDeeplink();
                         }
-                        Intent intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(getFormattedDeeplink(block)));
-                        intent.putExtra("title", block.getTitle());
-                        mContext.startActivity(intent);
+
+                        deepLink = getFormattedDeeplink(deepLink, block.getFilterIds());
+                        if (deepLink != null && !deepLink.isEmpty()) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(deepLink));
+                            intent.putExtra("title", block.getTitle());
+                            mContext.startActivity(intent);
+                        }
                     }
                 });
             }

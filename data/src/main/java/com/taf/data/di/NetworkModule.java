@@ -37,7 +37,7 @@ public class NetworkModule {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+//                .addInterceptor(interceptor)
                 .addInterceptor(new HeaderInterceptor())
                 .build();
     }

@@ -400,6 +400,7 @@ public class DataMapper {
             notice.setId(entity.getId());
             notice.setTitle(entity.getTitle());
             notice.setDescription(entity.getDescription());
+            notice.setDeeplink(entity.getDeeplink());
             notice.setImage(entity.getImage());
             return notice;
         }

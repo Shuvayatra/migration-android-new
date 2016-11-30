@@ -12,6 +12,7 @@ public class NoticeEntity {
     String description;
     @SerializedName("image_url")
     String image;
+    String deeplink;
 
     public Long getId() {
         return id;
@@ -43,5 +44,13 @@ public class NoticeEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
     }
 }

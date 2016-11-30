@@ -8,6 +8,7 @@ public class Notice extends BaseModel {
     String title;
     String description;
     String image;
+    String deeplink;
 
     public String getTitle() {
         return title;
@@ -31,5 +32,13 @@ public class Notice extends BaseModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDeeplink() {
+        return deeplink;
+    }
+
+    public void setDeeplink(String deeplink) {
+        this.deeplink = deeplink;
     }
 }

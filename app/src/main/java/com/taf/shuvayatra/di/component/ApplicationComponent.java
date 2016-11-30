@@ -5,13 +5,13 @@ import android.content.Context;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.taf.data.cache.CacheImpl;
-import com.taf.data.cache.SimpleDiskCache;
 import com.taf.data.database.dao.DaoSession;
+import com.taf.data.utils.AppPreferences;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.module.ApplicationModule;
-import com.taf.data.utils.AppPreferences;
+import com.taf.shuvayatra.media.MediaService;
 
 import javax.inject.Singleton;
 
@@ -21,7 +21,7 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
     void inject(BaseActivity pBaseActivity);
-    //void inject(MediaService pMediaService);
+    void inject(MediaService pMediaService);
 
     Context getContext();
 

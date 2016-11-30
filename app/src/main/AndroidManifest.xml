@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.taf.shuvayatra"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+	>
 
 	<uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -51,11 +51,7 @@
 		</activity>
 
 		<service
-			android:name=".media.MediaService"
-			android:exported="true"
-			android:process=""
-			tools:ignore="ExportedService">
-		</service>
+			android:name=".media.MediaService"/>
 
 		<receiver android:name=".receivers.DownloadStateReceiver">
 			<intent-filter>
@@ -141,6 +137,9 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 				<category android:name="android.intent.category.BROWSABLE"/>
 
+				<data
+					android:host="post"
+					android:scheme="shuvayatra"/>
 				<data
 					android:host="journey"
 					android:scheme="shuvayatra"/>

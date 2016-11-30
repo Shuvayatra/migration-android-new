@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
@@ -99,13 +100,13 @@ public class HomeActivity extends MediaServiceActivity implements
             mDrawer.closeDrawer(GravityCompat.START);
             return;
         }
-        if (!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
+        /*if (!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
                     .commit();
             mNavigationView.setCheckedItem(R.id.nav_home);
             return;
-        }
+        }*/
         super.onBackPressed();
     }
 
