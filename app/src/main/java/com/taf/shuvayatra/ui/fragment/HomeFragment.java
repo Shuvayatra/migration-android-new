@@ -66,6 +66,8 @@ public class HomeFragment extends BaseFragment implements
 
 
     public static HomeFragment getInstance() {
+        Logger.e(TAG,"instance created");
+
         return new HomeFragment();
     }
 
@@ -240,5 +242,12 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onErrorView(int type, String error) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Logger.e(TAG,"onDestroyViewCalled: ");
+        mPresenter.destroy();
     }
 }

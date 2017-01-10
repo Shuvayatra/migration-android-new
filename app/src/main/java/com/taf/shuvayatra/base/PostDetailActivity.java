@@ -180,9 +180,13 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     private void finishWithResult() {
         Intent data = new Intent();
-        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
-        data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
-        setResult(RESULT_OK, data);
+        if(mPost!= null) {
+            data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
+            data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
+            setResult(RESULT_OK, data);
+        }else{
+            setResult(RESULT_CANCELED,data);
+        }
         finish();
     }
 

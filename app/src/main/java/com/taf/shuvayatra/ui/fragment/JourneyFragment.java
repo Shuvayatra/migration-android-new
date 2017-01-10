@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.shuvayatra.R;
@@ -45,6 +46,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
     }
 
     public static JourneyFragment getInstance() {
+        Logger.e(TAG,"instance created");
         return new JourneyFragment();
     }
 
