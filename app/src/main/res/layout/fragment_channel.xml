@@ -5,10 +5,21 @@
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/spacing_xsmall" />
+        android:padding="@dimen/spacing_xsmall" >
+
+        <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/spacing_xsmall" />
+
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_list_view"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

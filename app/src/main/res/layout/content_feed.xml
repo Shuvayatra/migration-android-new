@@ -23,7 +23,7 @@
 			android:layout_weight="1">
 
 			<com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-				android:id="@+id/recyclerView"
+				android:id="@+id/recycler_view"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:padding="@dimen/spacing_small"

@@ -46,8 +46,8 @@ public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
-            Logger.e(TAG,"url: "+ url);
-            Logger.e(TAG,"pView.getWidth(): "+ pView.getWidth() +" / "+ pView.getHeight());
+            Logger.e(TAG, "url: " + url);
+            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
 //            int height = 150;
 //            int width = 150;
 //
@@ -58,7 +58,7 @@ public class BindingUtil {
 //                width = pView.getWidth();
 //            }
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
-                    .setResizeOptions(new ResizeOptions(pView.getWidth(), pView.getHeight()))
+//                    .setResizeOptions(new ResizeOptions(pView.getWidth(), pView.getHeight()))
                     .build();
 
             DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -86,7 +86,13 @@ public class BindingUtil {
     @BindingAdapter("bind:htmlContent")
     public static void setHtmlContent(WebView pView, String content) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>");
+        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body " +
+                "style='margin:0;padding:0;'>");
+//        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
+//                "<style></style>" +
+//                "</HEAD><body style=\"padding-left:" + Utils.dpToPx(pView.getResources()
+//                .getDimensionPixelOffset(R.dimen.spacing_standard)) + "\">");
+        sb.append("");
         sb.append(content);
         sb.append("</body></HTML>");
         pView.loadDataWithBaseURL("file:///android_asset/", sb.toString(), "text/html",
@@ -112,10 +118,14 @@ public class BindingUtil {
         }
     }
 
-    @BindingAdapter("bind:elapsedTime")
-    public static void setElapsedTime(TextView pView, Long elapsedTime) {
+    @BindingAdapter({"bind:elapsedTime", "bind:isHeader"})
+    public static void setElapsedTime(TextView pView, Long elapsedTime, boolean isHeader) {
         if (elapsedTime != null) {
-            pView.setText(getTimeAgo(elapsedTime, pView.getContext()));
+            if (isHeader) {
+                pView.setText("\u2022 " + getTimeAgo(elapsedTime, pView.getContext()));
+            } else {
+                pView.setText(getTimeAgo(elapsedTime, pView.getContext()));
+            }
         }
     }
 
@@ -355,7 +365,7 @@ public class BindingUtil {
     @BindingAdapter({"bind:imageUrl"})
     public static void setImage(SimpleDraweeView pView, Post post) {
         String url;
-        
+
         if (post != null) {
 
             if (post.getType().equals("audio") || post.getType().equals("video")) {
@@ -363,16 +373,16 @@ public class BindingUtil {
             } else {
                 url = post.getFeaturedImage();
             }
-            if(url != null && !url.isEmpty()) {
+            if (url != null && !url.isEmpty()) {
                 pView.setImageURI(Uri.parse(url));
             }
         }
     }
 
     @BindingAdapter({"bind:resourceId"})
-    public static void setImageResource(ImageView view, int resourceId){
+    public static void setImageResource(ImageView view, int resourceId) {
 //        if(view.getContext().getResources().getDrawable())
-        if(resourceId != Integer.MIN_VALUE) {
+        if (resourceId != Integer.MIN_VALUE) {
             view.setImageResource(resourceId);
         }
     }

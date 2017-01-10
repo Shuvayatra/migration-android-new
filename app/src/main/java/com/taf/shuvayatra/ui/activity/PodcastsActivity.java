@@ -20,6 +20,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PodcastListPresenter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.fragment.MiniPlayerFragment;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PodcastListView;
@@ -44,10 +45,13 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     PodcastListPresenter mPresenter;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
     MiniPlayerFragment miniPlayerFragment;
+    @BindView(R.id.empty_view)
+    RecyclerView mEmptyView;
+
     ListAdapter<Podcast> mAdapter;
 
     Long mId;
@@ -77,6 +81,8 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mAdapter = new ListAdapter(getContext(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
+        mRecyclerView.setEmptyMessage(getResources().getString(R.string.facebook_app_id));
         mSwipeContainer.setOnRefreshListener(this);
 
         getSupportActionBar().setTitle(mTitle);

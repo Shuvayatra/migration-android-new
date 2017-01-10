@@ -32,7 +32,7 @@ public class DestinationFragment extends BaseFragment implements
         CategoryView,
         ListItemClickListener {
 
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;

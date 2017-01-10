@@ -7,7 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import android.widget.RelativeLayout;
 
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
@@ -25,6 +25,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryWidgetPresenter;
 import com.taf.shuvayatra.presenter.HomePresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
 import com.taf.util.MyConstants;

@@ -37,7 +37,7 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     String mTitle;
     String mTags;
 
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;

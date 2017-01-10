@@ -38,7 +38,7 @@ public class InfoFragment extends BaseFragment implements CategoryView, ListItem
 
     @Inject
     CategoryPresenter mPresenter;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;

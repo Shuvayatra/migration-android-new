@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="content"
-            type="com.taf.model.Post"/>
+            type="com.taf.model.Post" />
     </data>
 
     <RelativeLayout
@@ -29,9 +28,9 @@
             android:paddingBottom="@dimen/large_line_height"
             android:text="@{content.title}"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_large"
+            android:textSize="@dimen/text_xlarge"
             android:visibility="@{(content.dataType == 1) ? View.GONE : View.VISIBLE}"
-            tools:text="How migrants control over world and this is just another "/>
+            tools:text="How migrants control over world and this is just another " />
 
         <TextView
             android:id="@+id/category"
@@ -42,18 +41,8 @@
             android:text='@{content.getCategory!=null ?(content.getCategory() + " - "):""}'
             android:textColor="@color/text_main"
             android:textSize="@dimen/text_small"
-            tools:text="Work Permit"/>
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_toRightOf="@id/category"
-            app:elapsedTime="@{content.getCreatedAt()}"
-            android:textSize="@dimen/text_small"
-            android:textColor="@color/text_main"
-            tools:text="3 days ago"/>
+            android:visibility="@{content.getCategory!=null?View.VISIBLE:View.GONE}"
+            tools:text="Work Permit" />
 
         <ImageView
             android:id="@+id/like"
@@ -62,7 +51,7 @@
             android:layout_below="@id/category"
             android:layout_marginRight="@dimen/spacing_small"
             android:padding="@dimen/spacing_xxxsmall"
-            app:srcCompat="@drawable/ic_like"/>
+            app:srcCompat="@drawable/ic_like" />
 
         <TextView
             android:id="@+id/like_count"
@@ -71,12 +60,12 @@
             android:layout_alignBottom="@id/like"
             android:layout_alignTop="@id/like"
             android:layout_below="@id/category"
-            android:layout_marginRight="@dimen/spacing_xxxlarge"
+            android:layout_marginRight="@dimen/spacing_standard"
             android:layout_toRightOf="@id/like"
             android:gravity="center_vertical"
-            android:text='@{content.totalLikes + " "+@string/like }'
+            android:text='@{(content.totalLikes!=null?content.totalLikes:"0") + " "+@string/like }'
             android:textSize="@dimen/text_small"
-            tools:text="23 loves"/>
+            tools:text="23 loves" />
 
         <ImageView
             android:id="@+id/share"
@@ -86,19 +75,36 @@
             android:layout_marginRight="@dimen/spacing_small"
             android:layout_toRightOf="@id/like_count"
             android:padding="@dimen/spacing_xxxsmall"
-            app:srcCompat="@drawable/ic_share"/>
+            app:srcCompat="@drawable/ic_share" />
 
         <TextView
+            android:id="@+id/share_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/share"
             android:layout_alignTop="@id/share"
             android:layout_below="@id/category"
+            android:layout_marginRight="@dimen/spacing_standard"
             android:layout_toRightOf="@id/share"
             android:gravity="center_vertical"
-            android:text='@{content.totalShare+ " "+@string/share }'
+            android:text='@{(content.totalShare!=null?content.totalShare:"0")+ " "+@string/share }'
             android:textSize="@dimen/text_small"
-            tools:text="30 shares"/>
+            tools:text="30 shares" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/share"
+            android:layout_alignTop="@id/share"
+            android:layout_below="@id/category"
+            android:layout_toRightOf="@id/share_count"
+            android:gravity="center_vertical"
+            android:textColor="@color/text_main"
+            android:textSize="@dimen/text_small"
+            app:elapsedTime='@{content.getCreatedAt()}'
+            app:isHeader="@{true}"
+            tools:text="3 days ago" />
 
         <View
             android:id="@+id/divider"
@@ -106,6 +112,6 @@
             android:layout_height="1dp"
             android:layout_below="@id/like"
             android:layout_marginTop="@dimen/spacing_xlarge"
-            android:background="@color/divider"/>
+            android:background="@color/divider" />
     </RelativeLayout>
 </layout>

@@ -77,7 +77,6 @@
                     android:text='@{" - " + article.totalViews + " Views"}'
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
-                    android:visibility="invisible"
                     tools:text=" - 120K"/>
 
                 <TextView
@@ -89,6 +88,7 @@
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     app:elapsedTime="@{article.getCreatedAt()}"
+                    app:isHeader="@{false}"
                     tools:text="3 days ago"/>
 
             </RelativeLayout>

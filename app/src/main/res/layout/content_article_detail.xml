@@ -52,11 +52,18 @@
                         layout="@layout/view_content_head"
                         app:content="@{article}" />
 
-                    <WebView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/spacing_standard"
-                        app:htmlContent="@{article.description}" />
+                        android:background="@android:color/white"
+                        android:padding="@dimen/spacing_standard">
+
+                        <WebView
+                            android:id="@+id/web_view_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:htmlContent='@{(article.description!=null?article.description:"")}' />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/similar_video_section"
@@ -74,14 +81,26 @@
                             android:textAllCaps="true"
                             android:textSize="@dimen/text_default" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/similar_story_list"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clipToPadding="false"
-                            app:callback="@{listener}"
-                            app:posts="@{similarStories}"
-                            tools:listitem="@layout/view_audio_video_list" />
+                            android:layout_height="match_parent">
+
+                            <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+                                android:id="@+id/similar_story_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipToPadding="false"
+                                android:padding="@dimen/spacing_xsmall"
+                                app:callback="@{listener}"
+                                app:posts="@{similarStories}"
+                                tools:listitem="@layout/view_audio_video_list" />
+
+                            <include
+                                android:id="@+id/empty_view"
+                                layout="@layout/empty_list_view"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
                     </LinearLayout>
                 </LinearLayout>
 

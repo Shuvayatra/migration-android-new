@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import static com.taf.util.MyConstants.Extras.KEY_POST;
 import static com.taf.util.MyConstants.Extras.KEY_VIDEO;
 
 public abstract class PostDetailActivity extends PlayerFragmentActivity implements PostDetailView {
-
+    private static final String TAG = "PostDetailActivity";
     public Long mId;
     @Inject
     protected PostDetailPresenter mDetailPresenter;
@@ -78,7 +79,7 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         initialize();
         if (savedInstanceState != null) {
             enableAnalytics = false;
-            mPost = (Post) savedInstanceState.get(KEY_VIDEO);
+            mPost = (Post) savedInstanceState.get(KEY_POST);
             renderPost(mPost);
         } else {
             enableAnalytics = true;
@@ -118,6 +119,7 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     @Override
     public void renderPost(Post post) {
+        Log.e(TAG, "renderPost: " + post);
         if (post != null) {
             mPost = post;
             mPost.setIsFavourite(mPreferences.isFavourite(mPost.getId()));
@@ -180,12 +182,12 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     private void finishWithResult() {
         Intent data = new Intent();
-        if(mPost!= null) {
+        if (mPost != null) {
             data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
             data.putExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, mPost.getLikes());
             setResult(RESULT_OK, data);
-        }else{
-            setResult(RESULT_CANCELED,data);
+        } else {
+            setResult(RESULT_CANCELED, data);
         }
         finish();
     }
@@ -235,5 +237,11 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(KEY_POST, mPost);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mPost = (Post) savedInstanceState.getSerializable(KEY_POST);
     }
 }

@@ -3,6 +3,7 @@ package com.taf.shuvayatra.ui.custom;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -57,6 +58,8 @@ public class EmptyStateRecyclerView extends RecyclerView {
 
     void checkIfEmpty() {
         if (emptyView != null) {
+            Log.e("", "checkIfEmpty: " + getAdapter().getItemCount());
+
             emptyView.setVisibility(getAdapter().getItemCount() > 0 ? GONE : VISIBLE);
         }
     }

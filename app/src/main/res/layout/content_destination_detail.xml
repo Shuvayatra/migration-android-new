@@ -16,13 +16,22 @@
         tools:showIn="@layout/activity_destination_detail">
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:padding="@dimen/spacing_small" />
+            android:layout_height="match_parent">
+
+            <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:clipToPadding="false"
+                android:padding="@dimen/spacing_xsmall" />
+
+            <include
+                android:id="@+id/empty_view"
+                layout="@layout/empty_list_view"
+                android:visibility="gone" />
+        </RelativeLayout>
 
 
     </android.support.v4.widget.SwipeRefreshLayout>

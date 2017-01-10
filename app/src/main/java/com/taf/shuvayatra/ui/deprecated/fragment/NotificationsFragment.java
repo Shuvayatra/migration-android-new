@@ -34,7 +34,7 @@ public class NotificationsFragment extends BaseFragment implements
     @Inject
     NotificationListPresenter mPresenter;
 
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;

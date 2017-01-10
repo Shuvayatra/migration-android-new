@@ -207,6 +207,7 @@ public class MyConstants {
         public static final String KEY_TYPE = "key_post_type";
         public static final String KEY_COUNTRY = "key_country";
         public static final String KEY_CHANNEL_ID = "key_channel_id";
+        public static final String KEY_POST_DATA = "key_post_data";
     }
 
     public static final class Intent {
