@@ -148,4 +148,8 @@
     <string name="all_country">सबै गन्तब्यहरु </string>
     <string name="channels">च्यानलहरू</string>
 
+
+    <string name="error_message_underage">तपाईं कम्तिमा १५ वर्ष हुनुपर्छ अगाडि बढ्न</string>
+    <string name="country_not_decided_yet">अहिलेसम्म निर्णय गरिएको छैन</string>
+
 </resources>

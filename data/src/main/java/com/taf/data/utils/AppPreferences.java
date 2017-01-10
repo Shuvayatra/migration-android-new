@@ -17,6 +17,7 @@ import static com.taf.util.MyConstants.Preferences.NOTICE_DISMISS_ID;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
 
 public class AppPreferences {
+
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     Context mContext;

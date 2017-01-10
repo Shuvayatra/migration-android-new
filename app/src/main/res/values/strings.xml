@@ -32,5 +32,7 @@
 	<string name="title_activity_feed">All Posts</string>
 	<string name="title_activity_destination_detail">DestinationDetailActivity</string>
 	<string name="title_activity_search">SearchActivity</string>
+    <string name="error_message_underage">You should be at least 15 years old to proceed</string>
+    <string name="country_not_decided_yet">Not decided yet</string>
 
 </resources>

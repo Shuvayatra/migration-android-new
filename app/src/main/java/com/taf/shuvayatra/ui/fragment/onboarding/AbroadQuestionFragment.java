@@ -1,11 +1,13 @@
 package com.taf.shuvayatra.ui.fragment.onboarding;
 
+import android.databinding.Bindable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 
 import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
@@ -25,6 +27,8 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     Button mButtonBack;
     @BindView(R.id.radiogroup_previous_work_status)
     RadioGroup mRadioGroupPreviousWorkStatus;
+    @BindView(R.id.scroll_view)
+    ScrollView mScrollContainer;
 
     public static AbroadQuestionFragment newInstance(ButtonPressListener buttonPressListener) {
         AbroadQuestionFragment fragment = new AbroadQuestionFragment();
@@ -48,6 +52,11 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         if (((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus() != Integer.MIN_VALUE) {
             mRadioGroupPreviousWorkStatus.check(((BaseActivity) getActivity()).getPreferences()
                     .getPreviousWorkStatus());
+            if (getView() != null) {
+                View selection = getView().findViewById(mRadioGroupPreviousWorkStatus.getCheckedRadioButtonId());
+                if (selection != null && selection.getBottom() != 0)
+                    mScrollContainer.scrollTo(0, selection.getBottom());
+            }
         }
 
         if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())

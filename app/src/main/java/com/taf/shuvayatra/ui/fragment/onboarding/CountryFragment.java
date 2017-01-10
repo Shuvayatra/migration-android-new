@@ -113,6 +113,8 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
             countries.add(country.toString());
         }
         dataList.addAll(countries);
+        // add a not decided
+        dataList.add(getString(R.string.country_not_decided_yet));
 
         Logger.e(TAG, ">>> data list: " + dataList);
 

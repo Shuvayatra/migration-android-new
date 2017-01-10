@@ -114,6 +114,10 @@ public class MyConstants {
         public static final int NEPALI = 1;
     }
 
+    public static final class Validation {
+        public static final int VALID_AGE = 14;
+    }
+
     public static final class API {
         public static final String LATEST_CONTENT = "api/latest";
         public static final String SYNC_DATA = "api/sync";
