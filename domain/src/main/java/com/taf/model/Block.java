@@ -75,7 +75,7 @@ public class Block extends BaseModel {
     }
 
     public boolean isShowViewMore() {
-        return showViewMore;
+        return showViewMore && !deeplink.isEmpty();
     }
 
     public void setShowViewMore(boolean showViewMore) {

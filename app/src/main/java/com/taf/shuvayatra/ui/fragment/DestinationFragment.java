@@ -100,29 +100,29 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         });
         mRecyclerView.setLayoutManager(gridLayoutManager);
         final int margin = getResources().getDimensionPixelOffset(R.dimen.spacing_xxsmall);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                super.onDraw(c, parent, state);
-            }
-
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                // TODO: 10/27/16 set margin properly
-                int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
-                int type = mAdapter.getItemViewType(i);
-                if (type == MyConstants.Adapter.TYPE_COUNTRY) {
-
-//                    if (i % 2 == 0) {
-//                        outRect.left = margin;
-//                    } else {
-//                        outRect.right = margin;
-//                    }
-                }
-
-            }
-        });
+//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//                super.onDraw(c, parent, state);
+//            }
+//
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                // TODO: 10/27/16 set margin properly
+//                int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
+//                int type = mAdapter.getItemViewType(i);
+//                if (type == MyConstants.Adapter.TYPE_COUNTRY) {
+//
+////                    if (i % 2 == 0) {
+////                        outRect.left = margin;
+////                    } else {
+////                        outRect.right = margin;
+////                    }
+//                }
+//
+//            }
+//        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -196,4 +196,5 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     public void onRefresh() {
         mPresenter.initialize(null);
     }
+
 }

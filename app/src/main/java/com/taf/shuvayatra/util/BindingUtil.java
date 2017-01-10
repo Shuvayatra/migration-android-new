@@ -24,6 +24,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
@@ -45,6 +46,17 @@ public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
+            Logger.e(TAG,"url: "+ url);
+            Logger.e(TAG,"pView.getWidth(): "+ pView.getWidth() +" / "+ pView.getHeight());
+//            int height = 150;
+//            int width = 150;
+//
+//            if(pView.getHeight() != 0){
+//                height = pView.getHeight();
+//            }
+//            if(pView.getWidth() != 0){
+//                width = pView.getWidth();
+//            }
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
                     .setResizeOptions(new ResizeOptions(pView.getWidth(), pView.getHeight()))
                     .build();
@@ -343,14 +355,17 @@ public class BindingUtil {
     @BindingAdapter({"bind:imageUrl"})
     public static void setImage(SimpleDraweeView pView, Post post) {
         String url;
+        
         if (post != null) {
-            ;
+
             if (post.getType().equals("audio") || post.getType().equals("video")) {
                 url = post.getData().getThumbnail();
             } else {
                 url = post.getFeaturedImage();
             }
-            pView.setImageURI(Uri.parse(url));
+            if(url != null && !url.isEmpty()) {
+                pView.setImageURI(Uri.parse(url));
+            }
         }
     }
 

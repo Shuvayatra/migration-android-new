@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Channel;
 import com.taf.model.HeaderItem;
@@ -49,6 +50,8 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
     ChannelAdapter mAdapter;
 
     public static ChannelFragment getInstance() {
+        Logger.e(TAG,"instance created");
+
         return new ChannelFragment();
     }
 

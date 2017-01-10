@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
@@ -28,6 +29,7 @@ import butterknife.BindView;
 public class HomeActivity extends MediaServiceActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String TAG = "HomeActivity";
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @BindView(R.id.nav_view)
@@ -113,7 +115,7 @@ public class HomeActivity extends MediaServiceActivity implements
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment;
+        Fragment fragment = null;
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_home:
@@ -154,6 +156,7 @@ public class HomeActivity extends MediaServiceActivity implements
                 break;
         }
         mDrawer.closeDrawer(GravityCompat.START);
+        Logger.e(TAG,"fragment: "+ fragment);
         return true;
     }
 }

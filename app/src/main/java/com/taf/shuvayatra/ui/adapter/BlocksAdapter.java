@@ -175,6 +175,9 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     private String getFormattedDeeplink(String deepLink, List<Long> filterIds) {
         if (filterIds != null && !filterIds.isEmpty()) {
             deepLink += "?category_id=";
+//            if(deepLink.equals(""))
+//                deepLink = "shuvayatra://feed";
+//            deepLink += "?category_id=";
             int index = 0;
             for (Long filterId : filterIds) {
                 index++;
@@ -184,6 +187,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 }
             }
         }
+        Logger.e(TAG,"deeplink: "+ deepLink);
         return deepLink;
     }
 

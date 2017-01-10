@@ -36,6 +36,8 @@ public class MediaService extends Service implements
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnInfoListener {
 
+    public static final String TAG = "MediaService";
+
     public static final int NOTIFICATION_ID = 1234;
 
     private final IBinder mBinder = new MusicBinder();
@@ -65,6 +67,7 @@ public class MediaService extends Service implements
             mHandler.postDelayed(this, 500);
         }
     };
+    private Notification notification;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -224,6 +227,7 @@ public class MediaService extends Service implements
         Intent intent = new Intent(MyConstants.Media.ACTION_PLAY_STATUS_CHANGE);
         if (mPlayer.isPlaying()) {
             mPlayer.pause();
+
             intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, false);
         } else {
             if (!mIsMediaValid) {
@@ -249,6 +253,10 @@ public class MediaService extends Service implements
         sendBroadcast(intent);
 
         mIsMediaValid = false;
+        if (manager != null){
+            Logger.e(TAG,"notification removed");
+            stopForeground(true);
+        }
     }
 
     public void seekTo(int seekbarProgress) {
@@ -327,15 +335,34 @@ public class MediaService extends Service implements
         contentView.setOnClickPendingIntent(R.id.playpause, pausePlay);
         contentView.setOnClickPendingIntent(R.id.cancel, cancel);
 
-        Notification notification = new NotificationCompat.Builder(this)
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setContentIntent(toOpen)
                 .setContent(contentView)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setLights(0x000000FF, 300, 1000).build();
+                .setLights(0x000000FF, 300, 1000);
+        if(isPlaying){
+            builder.setOngoing(true);
+            startForeground(NOTIFICATION_ID, builder.build());
 
-        startForeground(NOTIFICATION_ID, notification);
+            Logger.e(TAG,"onGoing : true");
+        } else {
+            Logger.e(TAG,"onGoing : false");
+
+            builder.setOngoing(false);
+            manager.notify(NOTIFICATION_ID,builder.build());
+        }
+//        Logger.e(TAG,"builder.getOnGoing(): "+ builder.mNotification.flags);
+//        notification = new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.drawable.ic_logo)
+//                .setContentIntent(toOpen)
+//                .setContent(contentView)
+//                .setAutoCancel(true)
+//                .setPriority(NotificationCompat.PRIORITY_MAX)
+//                .setOngoing(true)
+//                .setLights(0x000000FF, 300, 1000).build();
     }
 
     public enum PlayType {

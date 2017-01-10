@@ -42,6 +42,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
 
     public void setCountries(List<BaseModel> countries){
         mCountries = countries;
+        Logger.e(TAG,"mCountires.size(): "+ mCountries.size());
         notifyDataSetChanged();
     }
 
@@ -69,6 +70,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         int type = getItemViewType(position);
         switch (type) {
             case MyConstants.Adapter.TYPE_COUNTRY:
+                Logger.e(TAG,position + "((Country) mCountries.get(position)).getTitleEnglish();: "+ ((Country) mCountries.get(position)).getTitleEnglish());
+
                 ((ItemCountryListDataBinding) holder.mBinding)
                         .setCountry((Country) mCountries.get(position));
                 return;
@@ -79,6 +82,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             case MyConstants.Adapter.TYPE_COUNTRY_SELECTED:
                 ((ItemCountryListSelectedDataBinding) holder.mBinding)
                         .setCountry((Country) mCountries.get(position));
+                Logger.e(TAG,"((Country) mCountries.get(position)).getTitleEnglish();: "+ ((Country) mCountries.get(position)).getTitleEnglish());
+
         }
     }
 
