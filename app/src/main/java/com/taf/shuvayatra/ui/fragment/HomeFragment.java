@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.DateUtils;
@@ -53,9 +54,11 @@ public class HomeFragment extends BaseFragment implements
     CountryWidgetModel mCountryWidget;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
+    @BindView(R.id.empty_view)
+    View emptyView;
 
     BlocksAdapter mAdapter;
 
@@ -99,6 +102,7 @@ public class HomeFragment extends BaseFragment implements
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(emptyView);
         mSwipeContainer.setOnRefreshListener(this);
 
 

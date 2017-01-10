@@ -50,7 +50,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     SwipeRefreshLayout mSwipeContainer;
     MiniPlayerFragment miniPlayerFragment;
     @BindView(R.id.empty_view)
-    RecyclerView mEmptyView;
+    View mEmptyView;
 
     ListAdapter<Podcast> mAdapter;
 
@@ -90,13 +90,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
             AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
             List<Podcast> podcasts = (List<Podcast>) savedInstanceState.get(STATE_PODCASTS);
             mAdapter.setDataCollection(podcasts);
-        }else{
+        } else {
             mPresenter.initialize(null);
         }
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_player, new MiniPlayerFragment(), MiniPlayerFragment.TAG)
-                .commit();
     }
 
     @Override
@@ -127,6 +123,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mAdapter.setDataCollection(podcasts);
         if (!podcasts.isEmpty()) {
             ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_player, new MiniPlayerFragment(), MiniPlayerFragment.TAG)
+                    .commit();
         }
     }
 
@@ -141,7 +140,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     }
 
     @Override
-    public void showErrorView(String errorMessage) {
+    public void showErrorView(String errorMessage) {`
         Snackbar.make(mSwipeContainer, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
