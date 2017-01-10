@@ -34,6 +34,8 @@ ext {
     gravitySnapHelperVersion = '0.3'
     disklrucache = '2.0.2'
     rxBinding = '0.4.0'
+    // should be equals to gradle tools version
+    databindingCompiler = '2.3.0-beta1'
 
     //Testing
     robolectricVersion = '3.0'
@@ -63,6 +65,7 @@ ext {
             dagger              : "com.google.dagger:dagger:${daggerVersion}",
             butterKnife         : "com.jakewharton:butterknife:${butterKnifeVersion}",
             butterKnifeCompiler : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            databindingCompiler : "com.android.databinding:compiler:${databindingCompiler}",
             rxJava              : "io.reactivex:rxjava:${rxJavaVersion}",
             rxAndroid           : "io.reactivex:rxandroid:${rxAndroidVersion}",
             javaxAnnotation     : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
