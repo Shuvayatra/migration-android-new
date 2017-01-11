@@ -30,12 +30,16 @@ public class HomeActivity extends MediaServiceActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "HomeActivity";
+    private static final String STATE_MENU_ID = "nav-selected-menu-id";
+
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
     @BindView(R.id.searchbox_container)
     LinearLayout mSearchBox;
+
+    int selectedNavMenuId;
 
     private BroadcastReceiver mRadioCallbackReceiver = new BroadcastReceiver() {
         @Override
@@ -72,11 +76,13 @@ public class HomeActivity extends MediaServiceActivity implements
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setCheckedItem(R.id.nav_home);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
-                .commit();
+        if(savedInstanceState !=null ){
+            selectedNavMenuId = savedInstanceState.getInt(STATE_MENU_ID);
+        }else{
+            selectedNavMenuId = R.id.nav_home;
+        }
+        mNavigationView.setCheckedItem(selectedNavMenuId);
+        showFragment(selectedNavMenuId);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mSearchBox
@@ -102,22 +108,34 @@ public class HomeActivity extends MediaServiceActivity implements
             mDrawer.closeDrawer(GravityCompat.START);
             return;
         }
-        /*if (!(getSupportFragmentManager().getFragments().get(0) instanceof HomeFragment)) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
+        if(fragment==null){
+            mNavigationView.setCheckedItem(R.id.nav_home);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
                     .commit();
-            mNavigationView.setCheckedItem(R.id.nav_home);
             return;
-        }*/
+        }
         super.onBackPressed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
         int id = item.getItemId();
-        switch (id) {
+        showFragment(id);
+        mDrawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    /*
+    Replace the fragment by their menu Id from navigation drawer
+     */
+
+    private void showFragment(int menuId){
+        Fragment fragment = null;
+
+        switch (menuId) {
             case R.id.nav_home:
                 fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
                 if (fragment == null) {
@@ -155,8 +173,12 @@ public class HomeActivity extends MediaServiceActivity implements
                         .commit();
                 break;
         }
-        mDrawer.closeDrawer(GravityCompat.START);
-        Logger.e(TAG,"fragment: "+ fragment);
-        return true;
+        if(fragment!=null) selectedNavMenuId = menuId;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_MENU_ID, selectedNavMenuId);
+        super.onSaveInstanceState(outState);
     }
 }

@@ -48,17 +48,13 @@ public class BindingUtil {
         if (url != null) {
             Logger.e(TAG, "url: " + url);
             Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
-//            int height = 150;
-//            int width = 150;
-//
-//            if(pView.getHeight() != 0){
-//                height = pView.getHeight();
-//            }
-//            if(pView.getWidth() != 0){
-//                width = pView.getWidth();
-//            }
+            //// TODO: 1/11/17 issue with width and height 0 for nougat
+            // temp fix for giving certain width and height if view height and width are 0
+            int height = pView.getHeight() > 0? pView.getHeight(): 150 ;
+            int width = pView.getWidth() >0? pView.getWidth():150;
+
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
-//                    .setResizeOptions(new ResizeOptions(pView.getWidth(), pView.getHeight()))
+                    .setResizeOptions(new ResizeOptions(width, height))
                     .build();
 
             DraweeController controller = Fresco.newDraweeControllerBuilder()
