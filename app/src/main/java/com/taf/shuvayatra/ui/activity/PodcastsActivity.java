@@ -2,11 +2,13 @@ package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
@@ -24,6 +26,7 @@ import com.taf.shuvayatra.ui.views.PodcastListView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,6 +37,8 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         PodcastListView,
         ListItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
+    public static final String TAG = "PodcastsActivity";
+    public static final String STATE_PODCASTS = "state-podcasts";
 
     @Inject
     PodcastListPresenter mPresenter;
@@ -42,7 +47,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
-
+    MiniPlayerFragment miniPlayerFragment;
     ListAdapter<Podcast> mAdapter;
 
     Long mId;
@@ -67,11 +72,6 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mId = data.getLong(MyConstants.Extras.KEY_ID, -1);
         mTitle = data.getString(MyConstants.Extras.KEY_TITLE, "");
 
-        getSupportActionBar().setTitle(mTitle);
-        if (savedInstanceState != null) {
-            AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
-        }
-
         initialize();
 
         mAdapter = new ListAdapter(getContext(), this);
@@ -79,7 +79,14 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mRecyclerView.setAdapter(mAdapter);
         mSwipeContainer.setOnRefreshListener(this);
 
-        mPresenter.initialize(null);
+        getSupportActionBar().setTitle(mTitle);
+        if (savedInstanceState != null) {
+            AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
+            List<Podcast> podcasts = (List<Podcast>) savedInstanceState.get(STATE_PODCASTS);
+            mAdapter.setDataCollection(podcasts);
+        }else{
+            mPresenter.initialize(null);
+        }
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_player, new MiniPlayerFragment(), MiniPlayerFragment.TAG)
@@ -112,7 +119,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     @Override
     public void renderPodcasts(List<Podcast> podcasts) {
         mAdapter.setDataCollection(podcasts);
-        if(!podcasts.isEmpty()) {
+        if (!podcasts.isEmpty()) {
             ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
         }
     }
@@ -146,5 +153,13 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
                 .inject(this);
 
         mPresenter.attachView(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mAdapter != null) {
+            outState.putSerializable(STATE_PODCASTS, (Serializable) mAdapter.getDataCollection());
+        }
     }
 }

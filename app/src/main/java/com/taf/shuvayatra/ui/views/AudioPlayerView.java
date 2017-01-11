@@ -18,4 +18,6 @@ public interface AudioPlayerView {
     void onMediaProgressReset();
 
     void onMediaProgressChanged(long[] lengths);
+
+    void onDismissPlayer();
 }
