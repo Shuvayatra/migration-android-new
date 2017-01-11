@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.Country;
+import com.taf.shuvayatra.R;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class CountryDropDownAdapter extends DropDownAdapter {
                 return super.getSpinnerText(position);
             else {
                 // getting exception here cause split is not available
+                if (getData().get(position).equalsIgnoreCase(mContext.getString(R.string.country_not_decided_yet)))
+                    return getData().get(position);
                 return getData().get(position).split(",")[Country.INDEX_TITLE];
             }
         } catch (IndexOutOfBoundsException e) {

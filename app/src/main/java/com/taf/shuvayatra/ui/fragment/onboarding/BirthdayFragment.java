@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.fragment.onboarding;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -19,6 +21,7 @@ import com.taf.util.MyConstants;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -96,24 +99,47 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
             public void onClick(View v) {
 
                 Calendar current = Calendar.getInstance();
-                if(birthday!=null) current = birthday;
-                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                if (birthday != null) current = birthday;
+                final DatePickerDialog dialog = new DatePickerDialog(getActivity(),
                         BirthdayFragment.this,
-                        current.get(Calendar.YEAR),
-                        current.get(Calendar.MONTH),
+                        current.get(Calendar.YEAR), current.get(Calendar.MONTH),
                         current.get(Calendar.DAY_OF_MONTH)
                 );
+
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                     dialog.getDatePicker().setSpinnersShown(true);
                     dialog.getDatePicker().setCalendarViewShown(false);
                 }
                 dialog.show();
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int year = dialog.getDatePicker().getYear();
+                        int month = dialog.getDatePicker().getMonth();
+                        int day = dialog.getDatePicker().getDayOfMonth();
+
+                        Calendar userInput = Calendar.getInstance();
+                        userInput.set(year, month, day);
+
+                        int age = DateUtils.getAge(new Date(), userInput.getTime());
+
+                        if (age < MyConstants.Validation.VALID_AGE) {
+                            Snackbar.make(dialog.getDatePicker(), getString(R.string.error_message_underage),
+                                    Snackbar.LENGTH_LONG).show();
+                        } else {
+                            dialog.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                            dialog.dismiss();
+                        }
+                    }
+                });
             }
         });
     }
 
     @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         // update birthday reference
         birthday = Calendar.getInstance();
         birthday.set(year, month, dayOfMonth);

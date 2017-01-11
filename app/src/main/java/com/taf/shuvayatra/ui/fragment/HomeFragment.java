@@ -62,11 +62,13 @@ public class HomeFragment extends BaseFragment implements
     UseCaseData caseForEx = new UseCaseData();
     UseCaseData caseWeather = new UseCaseData();
 
+    private boolean showCountryWidget;
+
     UseCaseData noCache = new UseCaseData(UseCaseData.NO_CACHE, true);
 
 
     public static HomeFragment getInstance() {
-        Logger.e(TAG,"instance created");
+        Logger.e(TAG, "instance created");
 
         return new HomeFragment();
     }
@@ -79,6 +81,18 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        showCountryWidget = !selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet));
+
+        if (showCountryWidget) {
+            String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
+                    selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
+                            selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
+            Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
+            mCountryWidget = new CountryWidgetModel(countryName);
+        }
+
         initialize();
 
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
@@ -86,12 +100,7 @@ public class HomeFragment extends BaseFragment implements
         mRecyclerView.setAdapter(mAdapter);
         mSwipeContainer.setOnRefreshListener(this);
 
-        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
-                selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
-                        selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
-        Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
-        mCountryWidget = new CountryWidgetModel(countryName);
+
         mPresenter.initialize(null);
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
     }
@@ -112,7 +121,7 @@ public class HomeFragment extends BaseFragment implements
         List<BaseModel> baseModels = new ArrayList<>();
         baseModels.addAll(data);
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
+        if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION) && showCountryWidget) {
             if (!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")) {
                 baseModels.add(1, mCountryWidget);
             } else {
@@ -147,14 +156,17 @@ public class HomeFragment extends BaseFragment implements
         mPresenter.attachView(this);
         mCountryWidgetPresenter.attachView(this);
 
-        caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
-        caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
-        caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+        if (showCountryWidget) {
 
-        // initialize each component for the country widget
-        mCountryWidgetPresenter.initialize(caseCalendar);
-        mCountryWidgetPresenter.initialize(caseWeather);
-        mCountryWidgetPresenter.initialize(caseForEx);
+            caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
+            caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
+            caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+
+            // initialize each component for the country widget
+            mCountryWidgetPresenter.initialize(caseCalendar);
+            mCountryWidgetPresenter.initialize(caseWeather);
+            mCountryWidgetPresenter.initialize(caseForEx);
+        }
     }
 
     @Override
@@ -219,7 +231,8 @@ public class HomeFragment extends BaseFragment implements
                     break;
             }
             // make the change in model reflect in widget
-            if(mAdapter!= null && mAdapter.getBlocks() !=null && mAdapter.getBlocks().contains(mCountryWidget)){
+            if (mAdapter != null && mAdapter.getBlocks() != null && mAdapter.getBlocks()
+                    .contains(mCountryWidget)) {
                 mAdapter.notifyItemChanged(mAdapter.getBlocks().indexOf(mCountryWidget));
             }
         } catch (NullPointerException e) {
@@ -247,7 +260,7 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Logger.e(TAG,"onDestroyViewCalled: ");
+        Logger.e(TAG, "onDestroyViewCalled: ");
         mPresenter.destroy();
     }
 }

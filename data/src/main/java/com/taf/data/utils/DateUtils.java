@@ -16,6 +16,12 @@ import java.util.Locale;
 
 public class DateUtils {
 
+    public static int getAge(Date now, Date dateOfBirth) {
+        long timeBetween = now.getTime() - dateOfBirth.getTime();
+        double yearsBetween = timeBetween / 3.156e+10;
+        return (int) Math.floor(yearsBetween);
+    }
+
     public static class NepaliDateConverter {
 
         private SparseArray<int[]> nepaliCalendarMap;

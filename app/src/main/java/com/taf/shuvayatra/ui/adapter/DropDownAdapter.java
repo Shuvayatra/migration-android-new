@@ -17,7 +17,7 @@ public class DropDownAdapter extends BaseAdapter {
 
     private List<String> mData;
     private LayoutInflater mLayoutInflater;
-    private Context mContext;
+    protected Context mContext;
 
     public DropDownAdapter(Context context, List<String> data) {
         mLayoutInflater = LayoutInflater.from(context);

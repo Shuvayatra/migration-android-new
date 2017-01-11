@@ -12,7 +12,7 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
 
-    Unbinder mUnbinder;
+    public Unbinder mUnbinder;
 
     public abstract int getLayout();
 

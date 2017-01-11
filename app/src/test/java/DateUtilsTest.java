@@ -1,22 +1,15 @@
-package com.taf.shuvayatra;
-
-import android.support.test.runner.AndroidJUnit4;
-
 import com.taf.data.utils.DateUtils;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ *
  */
-@RunWith(AndroidJUnit4.class)
-public class ApplicationTest {
-
+public class DateUtilsTest {
 
     // 1990-06-1
     public static final Calendar DATE_1;

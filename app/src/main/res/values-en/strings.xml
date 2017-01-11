@@ -151,4 +151,6 @@
     <string name="search_result">Search Result</string>
     <string name="all_country">All Country</string>
     <string name="channels">Channels</string>
+    <string name="error_message_underage">You should be at least 15 years old to proceed</string>
+    <string name="country_not_decided_yet">Not decided yet</string>
 </resources>

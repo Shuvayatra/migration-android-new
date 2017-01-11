@@ -1,16 +1,16 @@
-<android.support.v4.widget.SwipeRefreshLayout
-	android:id="@+id/swipe_container"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="@color/main_background"
-	tools:context="com.taf.shuvayatra.ui.fragment.HomeFragment">
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background"
+    android:descendantFocusability="blocksDescendants"
+    tools:context="com.taf.shuvayatra.ui.fragment.HomeFragment">
 
-	<android.support.v7.widget.RecyclerView
-		android:id="@+id/recycler_view"
-		android:clipToPadding="false"
-		android:layout_width="match_parent"
-		android:padding="@dimen/spacing_xsmall"
-		android:layout_height="match_parent"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="@dimen/spacing_xsmall" />
 </android.support.v4.widget.SwipeRefreshLayout>
