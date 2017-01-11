@@ -117,7 +117,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
             if (getToolbar().getTitle() != null) getToolbar().setTitle(null);
         }
 
-
         if (mPlayerFragment != null) {
             if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
                     .getMinimumHeight(mCollapsingToolbar)) {
@@ -271,7 +270,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
         mPlayBtn.setOnClickListener(this);
         mSeekbar.setOnSeekBarChangeListener(this);
-
         mAppBar.addOnOffsetChangedListener(this);
     }
 
