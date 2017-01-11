@@ -61,11 +61,18 @@
                             layout="@layout/view_content_head"
                             app:content="@{video}" />
 
-                        <WebView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:htmlContent="@{video.description}"
-                            tools:text="This is the description of the video." />
+                            android:background="@android:color/white"
+                            android:padding="@dimen/spacing_standard">
+
+                            <WebView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:htmlContent="@{video.description}"
+                                tools:text="This is the description of the video." />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/similar_video_section"
@@ -88,6 +95,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:clipToPadding="false"
+                                android:padding="@dimen/spacing_xsmall"
                                 app:callback="@{listener}"
                                 app:posts="@{similarStories}"
                                 tools:listitem="@layout/view_audio_video_list" />

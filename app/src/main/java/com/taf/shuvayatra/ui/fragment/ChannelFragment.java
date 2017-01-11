@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
@@ -18,6 +18,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ChannelListPresenter;
 import com.taf.shuvayatra.ui.adapter.ChannelAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ChannelView;
 import com.taf.util.MyConstants;
 
@@ -38,11 +39,14 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
     public static final String TAG = "ChannelFragment";
 
-    @BindView(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view)
+    EmptyStateRecyclerView mRecyclerView;
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @BindView(R.id.empty_view)
+    RelativeLayout mEmptyView;
 
     @Inject
     ChannelListPresenter mPresenter;
@@ -50,7 +54,7 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
     ChannelAdapter mAdapter;
 
     public static ChannelFragment getInstance() {
-        Logger.e(TAG,"instance created");
+        Logger.e(TAG, "instance created");
 
         return new ChannelFragment();
     }
@@ -96,6 +100,7 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
     }
 
 
@@ -119,7 +124,9 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 //
         HeaderItem headerItem = new HeaderItem(getString(R.string.channels));
         headerItem.setDataType(MyConstants.Adapter.TYPE_CHANNEL_HEADER);
-        allChannelList.add(0, headerItem);
+        if (allChannelList.size() > 0) {
+            allChannelList.add(0, headerItem);
+        }
 
         mAdapter.setmChannels(allChannelList);
     }

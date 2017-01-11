@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
@@ -21,6 +22,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryListPresenter;
 import com.taf.shuvayatra.ui.adapter.CountryAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.util.MyConstants;
 
@@ -40,7 +42,10 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
+    @BindView(R.id.empty_view)
+    RelativeLayout mEmptyView;
+
     @Inject
     CountryListPresenter mPresenter;
 
@@ -124,6 +129,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 //            }
 //        });
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
     }
 
     @Override
@@ -160,7 +166,9 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
             headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
 
-            allList.add(0, headerItem);
+            if (allList.size() > 0) {
+                allList.add(0, headerItem);
+            }
         } else {
             long id = Long.parseLong(selectedCountry.substring(0, selectedCountry.indexOf(",")));
             Logger.e(TAG, " selected id: " + id);
@@ -169,7 +177,9 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                 if (country.getId() == id) {
                     country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
                     allList.remove(countryList.indexOf(country));
-                    allList.add(0, country);
+                    if (allList.size() > 0) {
+                        allList.add(0, country);
+                    }
                     HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
                     headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
                     allList.add(1, headerItem);

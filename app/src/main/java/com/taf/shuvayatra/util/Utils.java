@@ -3,10 +3,14 @@ package com.taf.shuvayatra.util;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 
 import com.taf.util.MyConstants;
 
 import java.util.Locale;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by julian on 12/17/15.
@@ -42,5 +46,9 @@ public class Utils {
                 context.getApplicationContext().getResources().updateConfiguration(configNp, null);
                 break;
         }
+    }
+
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

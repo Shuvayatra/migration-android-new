@@ -7,6 +7,7 @@
 
     <data class="AudioVideoDataBinding">
 
+        <import type="android.view.View"/>
         <variable
             name="content"
             type="com.taf.model.Post"/>
@@ -93,6 +94,7 @@
                     android:layout_marginBottom="@dimen/spacing_xxsmall"
                     android:text="@{defaultCategory ?? content.getCategory()}"
                     android:textColor="@color/text_main"
+                    android:visibility="@{content.getCategory!=null?View.VISIBLE:View.GONE}"
                     android:textSize="@dimen/text_small"
                     tools:text="Work Permit"/>
 
@@ -104,6 +106,7 @@
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     app:elapsedTime="@{content.getCreatedAt()}"
+                    app:isHeader="@{false}"
                     tools:text="3 days ago"/>
 
                 <TextView

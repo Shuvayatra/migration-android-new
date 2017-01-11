@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
@@ -17,6 +17,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.JourneyPresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.JourneyView;
 
 import java.util.ArrayList;
@@ -35,8 +36,10 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view)
+    EmptyStateRecyclerView mRecyclerView;
+    @BindView(R.id.empty_view)
+    RelativeLayout mEmptyView;
 
     BlocksAdapter mBlocksAdapter;
 
@@ -59,8 +62,9 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
         initialize();
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mBlocksAdapter = new BlocksAdapter(getContext());
-        mRecyclerView.setAdapter(mBlocksAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(mBlocksAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
     }
 
     private void initialize() {

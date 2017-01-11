@@ -5,12 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.RelativeLayout;
 
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.PostDetailActivity;
 import com.taf.shuvayatra.databinding.ArticleDetailDataBinding;
+import com.taf.shuvayatra.ui.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
@@ -28,6 +35,10 @@ public class ArticleDetailActivity extends PostDetailActivity implements
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.similar_story_list)
+    EmptyStateRecyclerView mEmptyStateRecyclerView;
+    @BindView(R.id.empty_view)
+    RelativeLayout mEmptyView;
 
     @Override
     public int getLayout() {
@@ -41,6 +52,7 @@ public class ArticleDetailActivity extends PostDetailActivity implements
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
 //            getSupportActionBar().setTitle(post.getTitle());
 //        }
+        Log.e(TAG, "updateView: " + post);
         ((ArticleDetailDataBinding) mBinding).setArticle(post);
         ((ArticleDetailDataBinding) mBinding).setListener(this);
         ((ArticleDetailDataBinding) mBinding).setSimilarStories(post.getSimilarPosts());
@@ -69,9 +81,11 @@ public class ArticleDetailActivity extends PostDetailActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mContainer.setOnRefreshListener(this);
         appBarLayout.addOnOffsetChangedListener(this);
+        mEmptyStateRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mEmptyStateRecyclerView.setAdapter(new ListAdapter(this, this));
+        mEmptyStateRecyclerView.setEmptyView(mEmptyView);
     }
 
     private static final String TAG = "ArticleDetailActivity";

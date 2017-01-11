@@ -43,7 +43,7 @@ public class FeedActivity extends PlayerFragmentActivity implements
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;

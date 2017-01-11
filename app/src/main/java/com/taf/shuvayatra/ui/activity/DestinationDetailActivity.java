@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
@@ -18,6 +19,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.DestinationBlocksPresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.DestinationDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
@@ -40,9 +42,11 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
     DestinationBlocksPresenter mPresenter;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.empty_view)
+    RelativeLayout mEmptyView;
 
     BlocksAdapter mAdapter;
     Country mCountry;
@@ -103,6 +107,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         mAdapter.setBlocks(initList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mPresenter.initialize(null);

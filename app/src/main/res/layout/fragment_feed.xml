@@ -72,7 +72,7 @@
                 android:layout_height="match_parent">
 
                 <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-                    android:id="@+id/recyclerView"
+                    android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
                     tools:listitem="@layout/view_audio_video_list"/>
