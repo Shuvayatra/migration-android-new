@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -77,6 +78,8 @@ public class MiniPlayerFragment extends BaseFragment implements
         receiverFilter.addAction(MyConstants.Media.ACTION_PLAY_STATUS_CHANGE);
         receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_PLAYBACK_CHANGE);
         receiverFilter.addAction(MyConstants.Media.ACTION_PROGRESS_CHANGE);
+        receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_COMPLETE);
+        receiverFilter.addAction(MyConstants.Media.ACTION_HIDE_MINI_PLAYER);
         getContext().registerReceiver(mediaReceiver, receiverFilter);
 
         updateView();
@@ -141,11 +144,13 @@ public class MiniPlayerFragment extends BaseFragment implements
 
     @Override
     public void onMediaComplete() {
+        Logger.e(TAG, "onCOmplete called");
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
     }
 
     @Override
     public void playStatusChanged(boolean isPlaying) {
+        Logger.e(TAG, "Media isPlaying: " + isPlaying);
         mPlayBtn.setImageDrawable(getResources().getDrawable(isPlaying ? R.drawable.ic_pause : R
                 .drawable.ic_play));
     }
@@ -166,6 +171,14 @@ public class MiniPlayerFragment extends BaseFragment implements
 
             int progress = MediaHelper.getProgressPercentage(lengths[0], lengths[1]);
             mSeekbar.setProgress(progress);
+        }
+    }
+
+    @Override
+    public void onDismissPlayer() {
+        // // TODO: 1/11/17 called after notification is closed
+        if (getView() != null) {
+            getView().setVisibility(View.GONE);
         }
     }
 

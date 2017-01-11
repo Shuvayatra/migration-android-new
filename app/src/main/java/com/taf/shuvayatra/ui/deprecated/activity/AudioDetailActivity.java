@@ -477,6 +477,11 @@ public class AudioDetailActivity extends FacebookActivity implements
     }
 
     @Override
+    public void onDismissPlayer() {
+
+    }
+
+    @Override
     public void onAudioDownloadStarted(String pMessage) {
         Snackbar.make(mScrollView, pMessage, Snackbar.LENGTH_LONG).show();
     }
