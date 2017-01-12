@@ -165,6 +165,7 @@ public class MyConstants {
         public static final int TYPE_CHANNEL = 21;
         public static final int TYPE_CHANNEL_HEADER = 22;
         public static final int TYPE_CHANNEL_SELECTED = 23;
+        public static final int TYPE_USER_INFO = 24;
     }
 
 

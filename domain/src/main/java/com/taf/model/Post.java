@@ -258,4 +258,17 @@ public class Post extends BaseModel {
         return String.format(Locale.getDefault(), "id: %d, title: %s, type: %s", getId(), getTitle(), getType());
     }
 
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null) return false;
+        if(!(o instanceof Post)) return false;
+        if(this.id.equals(((Post) o).getId())) return true;
+        else return false;
+    }
 }

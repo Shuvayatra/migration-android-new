@@ -21,7 +21,7 @@ ext {
     androidAnnotationsVersion = '20.0.0'
     retrofitVersion = '2.1.0'
     pagerIndicatorVersion = '2.4.1'
-    stethoVersion = '1.4.0'
+    stethoVersion = '1.4.2'
     frescoVersion = '0.11.0'
     picassoVersion = '2.5.2'
     facebookSdkVersion = '4.7.0'

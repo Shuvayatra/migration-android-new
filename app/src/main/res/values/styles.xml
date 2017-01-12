@@ -124,4 +124,15 @@
 	<style name="AppTheme.ChannelFab" parent="AppTheme">
 		<item name="colorAccent">@color/teal</item>
 	</style>
+
+	<style name="UserInfoTextTitle">
+		<item name="android:textSize">@dimen/text_big</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:padding">@dimen/spacing_xxsmall</item>
+	</style>
+	<style name="UserInfoTextDescription">
+		<item name="android:textSize">@dimen/text_default</item>
+		<item name="android:textStyle">normal</item>
+		<item name="android:padding">@dimen/spacing_xxsmall</item>
+	</style>
 </resources>

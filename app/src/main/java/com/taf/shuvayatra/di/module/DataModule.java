@@ -14,6 +14,7 @@ import com.taf.data.repository.JourneyRepository;
 import com.taf.data.repository.NewsRepository;
 import com.taf.data.repository.PodcastRepository;
 import com.taf.data.repository.PostRepository;
+import com.taf.data.repository.UserAccountRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.data.repository.deprecated.DeletedContentRepository;
 import com.taf.data.repository.deprecated.LatestContentRepository;
@@ -26,6 +27,7 @@ import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetChannelUseCase;
 import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetDestinationBlocksUseCase;
+import com.taf.interactor.GetFavouritePostUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
 import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.GetPodcastListUseCase;
@@ -52,6 +54,7 @@ import com.taf.interactor.deprecated.UpdateDownloadStatusUseCase;
 import com.taf.interactor.deprecated.UpdateFavouriteStateUseCase;
 import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
+import com.taf.model.Post;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IChannelRepository;
 import com.taf.repository.ICountryRepository;
@@ -60,6 +63,7 @@ import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INewsRepository;
 import com.taf.repository.IPodcastRepository;
 import com.taf.repository.IPostRepository;
+import com.taf.repository.IUserAccountRepository;
 import com.taf.repository.IWidgetComponentRepository;
 import com.taf.repository.deprecated.INotificationRepository;
 import com.taf.repository.deprecated.ISectionRepository;
@@ -89,6 +93,7 @@ public class DataModule {
     String mTitle = null;
 
     String mFilterParams;
+    Post mPost;
 
 
     public DataModule() {
@@ -147,6 +152,10 @@ public class DataModule {
         mParentId = pParentId;
         mParentType = pParentType;
         mPostType = pPostType;
+    }
+
+    public DataModule(Post post){
+        mPost = post;
     }
 
     @Provides
@@ -443,7 +452,7 @@ public class DataModule {
     UseCase providePostFavouriteUseCase(IPostRepository pDataRepository,
                                         ThreadExecutor pThreadExecutor, PostExecutionThread
                                                 pPostExecutionThread) {
-        return new PostFavouriteUseCase(mId, pThreadExecutor, pPostExecutionThread,
+        return new PostFavouriteUseCase(pThreadExecutor, pPostExecutionThread,
                 pDataRepository);
     }
 
@@ -513,4 +522,20 @@ public class DataModule {
             dataMapper) {
         return new NewsRepository(dataStoreFactory, dataMapper);
     }
+
+    @Provides
+    @PerActivity
+    IUserAccountRepository provideUserAccountRepository(DataStoreFactory dataStoreFactory, AppPreferences appPreferences){
+        return new UserAccountRepository(appPreferences,dataStoreFactory);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("favourite-posts")
+    UseCase provideFaouritePostsUseCase(IUserAccountRepository repository,
+                                      ThreadExecutor threadExecutor,
+                                      PostExecutionThread postExecutionThread){
+        return new GetFavouritePostUseCase(repository,threadExecutor, postExecutionThread);
+    }
+
 }

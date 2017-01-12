@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.taf.util.MyConstants;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ import static com.taf.util.MyConstants.Preferences.NOTICE_DISMISS_ID;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
 
 public class AppPreferences {
+
+    public static final String TAG = "AppPreferences";
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -144,6 +147,8 @@ public class AppPreferences {
     }
 
     private void saveFavourites(Set<String> favourites) {
+        editor.remove(FAV_POSTS);
+        editor.apply();
         editor.putStringSet(FAV_POSTS, favourites);
         editor.apply();
     }

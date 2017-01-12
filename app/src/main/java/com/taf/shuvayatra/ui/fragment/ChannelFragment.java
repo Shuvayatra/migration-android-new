@@ -142,4 +142,10 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
     public void onRefresh() {
         mPresenter.initialize(null);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
 }

@@ -1,5 +1,6 @@
 package com.taf.shuvayatra.presenter;
 
+import com.taf.data.utils.Logger;
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -13,6 +14,7 @@ import javax.inject.Named;
 
 public class PostFavouritePresenter implements Presenter {
 
+    public static final String TAG = "PostFavouritePresenter";
     UseCase mUseCase;
     PostDetailView mView;
 
@@ -56,6 +58,7 @@ public class PostFavouritePresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            e.printStackTrace();
             mView.onPostFavouriteStateUpdated(favState);
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
@@ -63,6 +66,7 @@ public class PostFavouritePresenter implements Presenter {
 
         @Override
         public void onNext(Boolean pStatus) {
+            Logger.e(TAG,": pStatus "+pStatus );
             mView.onPostFavouriteStateUpdated(pStatus);
         }
     }

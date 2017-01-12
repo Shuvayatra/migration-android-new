@@ -3,6 +3,8 @@ package com.taf.repository;
 import com.taf.model.Post;
 import com.taf.model.PostResponse;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -14,7 +16,7 @@ public interface IPostRepository {
 
     Observable<Post> getDetail(Long id);
 
-    Observable<Boolean> updateFavouriteCount(Long id, boolean status);
+    Observable<Boolean> updateFavouriteCount(Post post, boolean status);
 
     Observable<Boolean> updateShareCount(Long id);
 

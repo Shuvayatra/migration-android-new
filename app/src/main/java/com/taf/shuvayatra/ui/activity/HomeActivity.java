@@ -23,6 +23,7 @@ import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NewsFragment;
+import com.taf.shuvayatra.ui.fragment.UserAccountFragment;
 import com.taf.util.MyConstants;
 
 import butterknife.BindView;
@@ -180,6 +181,15 @@ public class HomeActivity extends MediaServiceActivity implements
                 }
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_home, fragment, NewsFragment.TAG)
+                        .commit();
+                break;
+            case R.id.nav_account:
+                fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
+                if(fragment == null){
+                    fragment = UserAccountFragment.newInstance();
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, fragment, UserAccountFragment.TAG)
                         .commit();
                 break;
         }
