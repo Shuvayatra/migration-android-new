@@ -1,10 +1,9 @@
-package com.taf.interactor.deprecated;
+package com.taf.interactor;
 
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
-import com.taf.interactor.UseCase;
-import com.taf.interactor.UseCaseData;
-import com.taf.model.Block;
+import com.taf.model.Post;
+import com.taf.model.PostResponse;
 import com.taf.repository.INewsRepository;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-
-public class GetNewsBlocksUseCase extends UseCase<List<Block>> {
+@Deprecated
+public class GetNewsBlocksUseCase extends UseCase<PostResponse> {
 
     private final INewsRepository mNewsRepository;
 
@@ -25,10 +24,10 @@ public class GetNewsBlocksUseCase extends UseCase<List<Block>> {
     }
 
     @Override
-    protected Observable<List<Block>> buildUseCaseObservable(UseCaseData pData) {
+    protected Observable<PostResponse> buildUseCaseObservable(UseCaseData pData) {
         boolean noCache = false;
         if(pData != null) noCache = pData.getBoolean(UseCaseData.NO_CACHE, false);
 
-        return mNewsRepository.getBlocks(noCache);
+        return mNewsRepository.getNewsList(noCache, pData.getInteger(UseCaseData.OFFSET));
     }
 }

@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
@@ -177,7 +176,7 @@ public class HomeActivity extends MediaServiceActivity implements
             case R.id.nav_news:
                 fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
                 if (fragment == null) {
-                    fragment = NewsFragment.getInstance();
+                    fragment = NewsFragment.newInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_home, fragment, NewsFragment.TAG)

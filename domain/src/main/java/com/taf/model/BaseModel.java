@@ -24,24 +24,24 @@ public class BaseModel implements Serializable {
         mDataType = pDataType;
     }
 
-//    public static List<BaseModel> getDummy() {
-//        List<BaseModel> baseModels = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            List<Post> posts = new ArrayList<>();
-//            Post post = new Post();
-//            post.setTitle("title" + i);
-//            post.setDescription("Description");
-//            posts.add(post);
-//            post.setType("audio");
-//
-//            PostData postData = new PostData();
-//            post.setData(postData);
-//
-//            Block block = new Block();
-//            block.setData(posts);
-//            block.setLayout("list");
-//            baseModels.add(block);
-//        }
-//        return baseModels;
-//    }
+    public static List<BaseModel> getDummy() {
+        List<BaseModel> baseModels = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Post> posts = new ArrayList<>();
+            Post post = new Post();
+            post.setTitle("title" + i);
+            post.setDescription("Description");
+            posts.add(post);
+            post.setType("audio");
+
+            PostData postData = new PostData();
+            post.setData(postData);
+
+            Block block = new Block();
+            block.setData(posts);
+            block.setLayout("list");
+            baseModels.add(block);
+        }
+        return baseModels;
+    }
 }

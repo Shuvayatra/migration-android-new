@@ -26,13 +26,15 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<PostResponse> getList(int limit, int offset, String filterParams) {
+    public Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams) {
+
+
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
-                .getPosts(limit, offset, filterParams)
+                .getPosts(feedType, limit, offset, filterParams)
                 .map(responseEntity -> mDataMapper.transformPostResponse(responseEntity));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
-                .getPosts(filterParams)
+                .getPosts(feedType, filterParams)
                 .map(entities -> {
                     PostResponse response = new PostResponse(1, 1);
                     response.setData(mDataMapper.transformPost(entities));
@@ -59,10 +61,9 @@ public class PostRepository implements IPostRepository {
 
     @Override
     public Observable<Boolean> updateFavouriteCount(Post post, boolean status) {
-        if (status){
+        if (status) {
             mDataStoreFactory.createCacheDataStore().saveFavouritePost(post);
-        }
-        else {
+        } else {
             mDataStoreFactory.createCacheDataStore().removefavouritePost(post);
         }
 
@@ -97,7 +98,7 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<PostResponse> getSearchPosts(int limit, int offset, String query, String type){
+    public Observable<PostResponse> getSearchPosts(int limit, int offset, String query, String type) {
         return mDataStoreFactory.createRestDataStore()
                 .getSearchPosts(limit, offset, query, type)
                 .map(postResponseEntity -> mDataMapper.transformPostResponse(postResponseEntity));

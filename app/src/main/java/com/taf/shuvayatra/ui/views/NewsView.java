@@ -1,6 +1,8 @@
 package com.taf.shuvayatra.ui.views;
 
 import com.taf.model.Block;
+import com.taf.model.Post;
+import com.taf.model.PostResponse;
 
 import java.util.List;
 
@@ -9,5 +11,5 @@ import java.util.List;
  */
 
 public interface NewsView extends LoadDataView{
-    void renderBlocks(List<Block> data);
+    void renderBlocks(PostResponse data);
 }

@@ -1,5 +1,7 @@
 package com.taf.data.entity.mapper;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -74,6 +76,7 @@ public class DataMapper {
         List<Post> postList = new ArrayList<>();
         if (pEntities != null) {
             for (PostEntity entity : pEntities) {
+                Log.e(TAG, "transformPost: " + entity);
                 Post post = transformPost(entity);
                 if (post != null)
                     postList.add(post);

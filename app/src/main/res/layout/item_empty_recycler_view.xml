@@ -5,23 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/empty_view"
-        layout="@layout/empty_list_view"
-        android:visibility="gone" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/main_background"
         android:clipToPadding="false"
+        android:descendantFocusability="blocksDescendants"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.taf.shuvayatra.ui.activity.FeedActivity"
-        tools:showIn="@layout/activity_feed"
-        android:descendantFocusability="blocksDescendants">
+        tools:showIn="@layout/activity_feed">
 
-    <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+        <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,4 +25,9 @@
             tools:listitem="@layout/view_audio_video_list" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/empty_list_view"
+        android:visibility="gone" />
 </FrameLayout>

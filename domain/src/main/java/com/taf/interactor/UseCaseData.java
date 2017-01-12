@@ -7,6 +7,7 @@ import java.util.Map;
 public class UseCaseData implements Serializable {
     public static final String LIMIT = "limit";
     public static final String OFFSET = "offset";
+    public static final String CONTENT_TYPE = "content_type";
     public static final String FAVOURITE_STATE = "is_favourite";
     public static final String SYNC_LIST = "sync_list";
     public static final String SEARCH_UN_SYNCED_DATA = "searchUnSyncedData";

@@ -34,8 +34,6 @@ public class MyApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
-//        setLocale();
-
         Fresco.initialize(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         if (BuildConfig.DEBUG) {
@@ -49,12 +47,7 @@ public class MyApplication extends Application {
         }
 
         AnalyticsUtil.logAppOpenEvent(mApplicationComponent.getAnalytics());
-
         scheduleSyncTask();
-    }
-
-    private void setLocale() {
-        Utils.setLanguage(MyConstants.Language.NEPALI, this);
     }
 
     private void scheduleSyncTask() {

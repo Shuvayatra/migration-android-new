@@ -1,5 +1,7 @@
 package com.taf.data.api;
 
+import android.util.Log;
+
 import com.google.gson.JsonElement;
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
@@ -15,15 +17,14 @@ import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
 import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.data.exception.NetworkConnectionException;
-import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 public class ApiRequest {
     public static final String TAG = "ApiRequest";
@@ -105,16 +106,16 @@ public class ApiRequest {
         return mApiService.syncUserActions(pSyncDataList);
     }
 
-    public Observable<List<ChannelEntity>> getChannelList(){
+    public Observable<List<ChannelEntity>> getChannelList() {
         return mApiService.getChannelList();
     }
 
-    public Observable<PostResponseEntity> getSearchPosts(int limit, int offset, String query, String type){
+    public Observable<PostResponseEntity> getSearchPosts(int limit, int offset, String query, String type) {
         return mApiService.getSearchPosts(limit, offset, query, type);
     }
 
-    public Observable<List<BlockEntity>> getNewsBlocks() {
-        return mApiService.getNewsBlocks();
+    public Observable<PostResponseEntity> getNewsList(int page, int offset) {
+        return mApiService.getNewsList(page, offset);
     }
 
 }

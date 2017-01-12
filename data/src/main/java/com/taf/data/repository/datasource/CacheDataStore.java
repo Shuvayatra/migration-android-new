@@ -8,6 +8,8 @@ import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.model.Post;
+import com.taf.data.entity.PostResponseEntity;
+import com.taf.model.PostResponse;
 
 import java.util.List;
 
@@ -41,8 +43,8 @@ public class CacheDataStore implements IDataStore {
         return mCache.getPodcastsByChannelId(channelId);
     }
 
-    public Observable<List<PostEntity>> getPosts(String params) {
-        return mCache.getPostsByParams(params);
+    public Observable<List<PostEntity>> getPosts(int feedType, String params) {
+        return mCache.getPostsByParams(feedType, params);
     }
 
     public Observable<PostEntity> getPost(Long id) {
@@ -67,6 +69,10 @@ public class CacheDataStore implements IDataStore {
 
     public void removefavouritePost(Post post) {
         mCache.removeFavourite(post);
+    }
+
+    public Observable<PostResponseEntity> getNewsList() {
+        return mCache.getNewsPosts();
     }
 
 }

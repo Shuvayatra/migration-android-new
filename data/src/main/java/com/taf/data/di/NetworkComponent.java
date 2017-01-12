@@ -11,6 +11,7 @@ import retrofit2.Retrofit;
 @Singleton
 @Component(modules = NetworkModule.class)
 public interface NetworkComponent {
+
     Retrofit getRetrofit();
 
     ApiRequest getApiRequest();
