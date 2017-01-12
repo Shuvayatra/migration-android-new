@@ -11,6 +11,7 @@ import com.taf.data.repository.ComponentRepository;
 import com.taf.data.repository.CountryRepository;
 import com.taf.data.repository.HomeRepository;
 import com.taf.data.repository.JourneyRepository;
+import com.taf.data.repository.NewsRepository;
 import com.taf.data.repository.PodcastRepository;
 import com.taf.data.repository.PostRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
@@ -39,6 +40,7 @@ import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
 import com.taf.interactor.deprecated.GetLatestContentUseCase;
+import com.taf.interactor.deprecated.GetNewsBlocksUseCase;
 import com.taf.interactor.deprecated.GetNotificationListUseCase;
 import com.taf.interactor.deprecated.GetSectionCategoryUseCase;
 import com.taf.interactor.deprecated.GetSimilarPostsUseCase;
@@ -55,6 +57,7 @@ import com.taf.repository.IChannelRepository;
 import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
 import com.taf.repository.IJourneyRepository;
+import com.taf.repository.INewsRepository;
 import com.taf.repository.IPodcastRepository;
 import com.taf.repository.IPostRepository;
 import com.taf.repository.IWidgetComponentRepository;
@@ -476,14 +479,14 @@ public class DataModule {
     @PerActivity
     @Named(MyConstants.UseCase.CASE_CHANNEL_LIST)
     UseCase provideChannelUseCase(IChannelRepository pRepository, ThreadExecutor pThreadExecutor,
-                                  PostExecutionThread pPostExecutionThread){
+                                  PostExecutionThread pPostExecutionThread) {
         return new GetChannelUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
     }
 
 
     @Provides
     @PerActivity
-    IChannelRepository provideChannelRepository(DataStoreFactory factory, DataMapper mapper){
+    IChannelRepository provideChannelRepository(DataStoreFactory factory, DataMapper mapper) {
         return new ChannelRepository(factory, mapper);
     }
 
@@ -492,7 +495,22 @@ public class DataModule {
     @Named("search-posts")
     UseCase provideSearchPostsUseCase(IPostRepository repository,
                                       ThreadExecutor threadExecutor,
-                                      PostExecutionThread postExecutionThread){
-        return new GetSearchPostsUseCase(repository,threadExecutor, postExecutionThread);
+                                      PostExecutionThread postExecutionThread) {
+        return new GetSearchPostsUseCase(repository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("news")
+    UseCase ProvidesNewsUseCase(INewsRepository pRepository, ThreadExecutor pThreadExecutor,
+                                PostExecutionThread pPostExecutionThread) {
+        return new GetNewsBlocksUseCase(pRepository, pThreadExecutor, pPostExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    INewsRepository provideNewsRepository(DataStoreFactory dataStoreFactory, DataMapper
+            dataMapper) {
+        return new NewsRepository(dataStoreFactory, dataMapper);
     }
 }

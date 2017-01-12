@@ -82,4 +82,7 @@ public interface ApiService {
                                                   @Query("page") int offset,
                                                   @Query("query") String query,
                                                   @Query("post_type") String type);
+
+    @GET(MyConstants.API.NEWS)
+    Observable<List<BlockEntity>> getNewsBlocks();
 }

@@ -82,7 +82,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
-        mRecyclerView.setEmptyMessage(getResources().getString(R.string.facebook_app_id));
+        mRecyclerView.setEmptyMessage(getResources().getString(R.string.default_empty_message));
         mSwipeContainer.setOnRefreshListener(this);
 
         getSupportActionBar().setTitle(mTitle);
@@ -140,7 +140,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     }
 
     @Override
-    public void showErrorView(String errorMessage) {`
+    public void showErrorView(String errorMessage) {
         Snackbar.make(mSwipeContainer, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 

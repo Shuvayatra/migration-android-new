@@ -7,34 +7,7 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:context="com.taf.shuvayatra.ui.activity.DestinationDetailActivity"
-        tools:showIn="@layout/activity_destination_detail">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:clipToPadding="false"
-                android:padding="@dimen/spacing_xsmall" />
-
-            <include
-                android:id="@+id/empty_view"
-                layout="@layout/empty_list_view"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <include layout="@layout/item_empty_recycler_view" />
 
     <FrameLayout
         android:id="@+id/content_player"

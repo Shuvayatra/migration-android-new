@@ -1,26 +1,6 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_container"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:descendantFocusability="blocksDescendants"
-    tools:context="com.taf.shuvayatra.ui.fragment.HomeFragment">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            tools:listitem="@layout/view_audio_video_list"/>
-
-        <include
-            android:id="@+id/empty_view"
-            layout="@layout/empty_list_view"
-            android:visibility="gone"/>
-    </RelativeLayout>
-
-</android.support.v4.widget.SwipeRefreshLayout>
+    <include layout="@layout/item_empty_recycler_view" />
+</FrameLayout>
