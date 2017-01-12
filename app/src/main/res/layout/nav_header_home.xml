@@ -13,27 +13,27 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="@dimen/spacing_xxsmall"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:placeholderImage="@color/profile_image_placeholder"
-        app:roundAsCircle="true" />
+    <!--<com.facebook.drawee.view.SimpleDraweeView-->
+        <!--android:layout_width="64dp"-->
+        <!--android:layout_height="64dp"-->
+        <!--android:layout_marginBottom="@dimen/spacing_xxsmall"-->
+        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
+        <!--app:placeholderImage="@color/profile_image_placeholder"-->
+        <!--app:roundAsCircle="true" />-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text=""
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#fff" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
+        <!--android:text=""-->
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+        <!--android:textColor="#fff" />-->
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test@shuvayatra.com"
-        android:textColor="#fff" />
+    <!--<TextView-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="test@shuvayatra.com"-->
+        <!--android:textColor="#fff" />-->
 
 </LinearLayout>

@@ -93,11 +93,17 @@ public class HomeFragment extends BaseFragment implements
         showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) || selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
 
         if (showCountryWidget) {
-            String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
-                    selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
-                            selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
-            Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
-            mCountryWidget = new CountryWidgetModel(countryName);
+            try {
+                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
+                        selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
+                                selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
+                Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
+                mCountryWidget = new CountryWidgetModel(countryName);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Logger.e(TAG, ">>> country name: " + selectedCountry);
+                String countryName = selectedCountry.split(",")[1];
+                mCountryWidget = new CountryWidgetModel(countryName);
+            }
         }
 
         initialize();
