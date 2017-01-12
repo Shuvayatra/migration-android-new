@@ -144,5 +144,8 @@
             app:similarAudios="@{similarAudios}"
             app:listener="@{listener}"
             bind:audio="@{audio}"/>
+
+        <include layout="@layout/content_mini_player" />
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>

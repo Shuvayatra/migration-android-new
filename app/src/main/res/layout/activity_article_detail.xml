@@ -71,5 +71,7 @@
             app:listener="@{listener}"
             app:similarStories="@{similarStories}" />
 
+        <include layout="@layout/content_mini_player" />
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>
