@@ -18,6 +18,8 @@ import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetModel;
+import com.taf.model.Post;
+import com.taf.model.PostData;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -124,6 +126,7 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void renderBlocks(List<Block> data) {
         List<BaseModel> baseModels = new ArrayList<>();
+//        baseModels.addAll(BaseModel.getDummy());// TODO: 1/12/17 remove
         baseModels.addAll(data);
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
         if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION) && showCountryWidget) {

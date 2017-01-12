@@ -15,6 +15,8 @@ import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
+import com.taf.shuvayatra.util.Utils;
+import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
@@ -49,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        initLanguage();
+        initLanguage();
         super.onCreate(savedInstanceState);
         getApplicationComponent().inject(this);
         if (!isDataBindingEnabled()) {
@@ -61,6 +63,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         if (mToolbar != null)
             initializeToolbar();
+    }
+
+    protected void initLanguage() {
+        Utils.setLanguage(MyConstants.Language.NEPALI, getApplicationContext());
+
     }
 
     @Override

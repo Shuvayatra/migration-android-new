@@ -2,6 +2,7 @@ package com.taf.shuvayatra;
 
 import android.app.Application;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
@@ -19,6 +20,8 @@ import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 public class MyApplication extends Application {
+    private static final String TAG = "MyApplication";
+
     public MediaService mService;
     ApplicationComponent mApplicationComponent;
     private GcmNetworkManager mGcmNetworkManager;
@@ -31,7 +34,7 @@ public class MyApplication extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
 
-        setLocale();
+//        setLocale();
 
         Fresco.initialize(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);

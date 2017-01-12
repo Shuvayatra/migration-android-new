@@ -23,22 +23,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
-                    android:clipToPadding="false"
-                    android:padding="@dimen/spacing_xsmall" />
-
-                <include
-                    android:id="@+id/empty_view"
-                    layout="@layout/empty_list_view"
-                    android:visibility="gone" />
-            </RelativeLayout>
+            <include layout="@layout/item_empty_recycler_view" />
 
             <FrameLayout
                 android:id="@+id/content_player"

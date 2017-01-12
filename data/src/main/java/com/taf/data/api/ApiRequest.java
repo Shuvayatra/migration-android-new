@@ -112,4 +112,9 @@ public class ApiRequest {
     public Observable<PostResponseEntity> getSearchPosts(int limit, int offset, String query, String type){
         return mApiService.getSearchPosts(limit, offset, query, type);
     }
+
+    public Observable<List<BlockEntity>> getNewsBlocks() {
+        return mApiService.getNewsBlocks();
+    }
+
 }

@@ -268,4 +268,15 @@ public class RestDataStore implements IDataStore {
 
         return isConnected;
     }
+
+    public Observable<List<BlockEntity>> getNewsBlocks() {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getNewsBlocks()
+                    .doOnNext(blockEntities -> {
+                        mCache.saveNewsBlocks(blockEntities);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
 }

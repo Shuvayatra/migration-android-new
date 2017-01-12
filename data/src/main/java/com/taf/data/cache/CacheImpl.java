@@ -28,6 +28,7 @@ public class CacheImpl {
     public static final String POST_LIST_PREFIX = "post-param-";
     public static final String PODCAST_PREFIX = "podcast-";
     private static final String HOME_BLOCKS = "home-cache";
+    private static final String NEWS_BLOCKS = "news-cache";
     private static final String JOURNEY_BLOCKS = "journey-blocks";
     private static final String POSTS = "posts";
     private static final String COUNTRY_LIST = "country-list";
@@ -244,5 +245,9 @@ public class CacheImpl {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void saveNewsBlocks(List<BlockEntity> blockEntities) {
+        saveBlocks(NEWS_BLOCKS, blockEntities);
     }
 }

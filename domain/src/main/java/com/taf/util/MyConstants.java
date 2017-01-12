@@ -134,6 +134,7 @@ public class MyConstants {
         public static final String POST_FAVOURITE = "api/post/{id}/favorite";
         public static final String POST_SHARE = "api/post/{id}/share";
         public static final String DESTINATION_DETAIL = "api/screen/destination/{id}";
+        public static final String NEWS = "api/posts/news";
 
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";
@@ -208,6 +209,7 @@ public class MyConstants {
         public static final String KEY_COUNTRY = "key_country";
         public static final String KEY_CHANNEL_ID = "key_channel_id";
         public static final String KEY_POST_DATA = "key_post_data";
+        public static final String KEY_LOCALE = "key_locale";
     }
 
     public static final class Intent {

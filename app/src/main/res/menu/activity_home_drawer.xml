@@ -17,7 +17,6 @@
 		<item
 			android:id="@+id/nav_news"
 			android:icon="@drawable/ic_nav_news"
-			android:enabled="false"
 			android:title="@string/news"/>
 		<item
 			android:id="@+id/nav_radio"

@@ -8,7 +8,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -45,6 +47,8 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;
+//    @BindView(R.id.swipe_container)
+//    ViewGroup rootView;
 
     @Inject
     CountryListPresenter mPresenter;
@@ -129,6 +133,8 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 //            }
 //        });
         mRecyclerView.setAdapter(mAdapter);
+
+//        mEmptyView = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.empty_list_view, mSwipeRefreshLayout);
         mRecyclerView.setEmptyView(mEmptyView);
     }
 
