@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.fragment;
 
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -104,6 +105,20 @@ public class HomeFragment extends BaseFragment implements
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+
+                outRect.right = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
+                outRect.left = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
+                outRect.bottom = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall)/2;
+                outRect.top = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall)/2;
+                if(parent.getChildAdapterPosition(view) == 0) {
+                    outRect.top = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
+                }
+            }
+        });
         mRecyclerView.setEmptyView(emptyView);
         mSwipeContainer.setOnRefreshListener(this);
 

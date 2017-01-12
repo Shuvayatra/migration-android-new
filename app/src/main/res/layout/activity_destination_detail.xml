@@ -23,5 +23,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_destination_detail"/>
+    <include layout="@layout/content_mini_player" />
 
 </android.support.design.widget.CoordinatorLayout>

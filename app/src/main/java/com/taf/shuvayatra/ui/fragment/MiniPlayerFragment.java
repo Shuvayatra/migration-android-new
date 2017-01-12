@@ -4,11 +4,14 @@ package com.taf.shuvayatra.ui.fragment;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
@@ -17,6 +20,7 @@ import com.taf.shuvayatra.media.MediaHelper;
 import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.ui.interfaces.PlayerFragmentCallback;
 import com.taf.shuvayatra.ui.views.AudioPlayerView;
+import com.taf.shuvayatra.util.BindingUtil;
 import com.taf.util.MyConstants;
 
 import butterknife.BindView;
@@ -38,14 +42,32 @@ public class MiniPlayerFragment extends BaseFragment implements
     SeekBar mSeekbar;
     @BindView(R.id.buffering)
     TextView mBufferingText;
+    @BindView(R.id.media_image)
+    SimpleDraweeView mediaImage;
+
     private int mCurrentProgress;
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
     private boolean seekbarChangeByUser = false;
 
     private PlayerFragmentCallback mCallback;
+    private ContainerClick mViewCallback;
 
-    public MiniPlayerFragment() {
+    public interface ContainerClick {
+        void onContainerClick();
+    }
+
+    @OnClick(R.id.mini_media_container)
+    void onContainerClick() {
+        if (mViewCallback != null) {
+            mViewCallback.onContainerClick();
+        }
+    }
+
+    public static MiniPlayerFragment newInstance(ContainerClick containerClick) {
+        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
+        miniPlayerFragment.mViewCallback = containerClick;
+        return miniPlayerFragment;
     }
 
     @Override
@@ -138,13 +160,12 @@ public class MiniPlayerFragment extends BaseFragment implements
     public void onMediaPrepared() {
         //((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
-
         updateView();
     }
 
     @Override
     public void onMediaComplete() {
-        Logger.e(TAG, "onCOmplete called");
+        Logger.e(TAG, "onComplete called");
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
     }
 
@@ -176,7 +197,6 @@ public class MiniPlayerFragment extends BaseFragment implements
 
     @Override
     public void onDismissPlayer() {
-        // // TODO: 1/11/17 called after notification is closed
         if (getView() != null) {
             getView().setVisibility(View.GONE);
         }
@@ -189,5 +209,7 @@ public class MiniPlayerFragment extends BaseFragment implements
         );
         mTitle.setText(((MyApplication) getContext().getApplicationContext()).mService
                 .getCurrentTitle());
+        BindingUtil.setImage(mediaImage, ((MyApplication) getContext().getApplicationContext())
+                .mService.getCurrentImageResource());
     }
 }

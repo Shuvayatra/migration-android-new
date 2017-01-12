@@ -48,7 +48,6 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
-    MiniPlayerFragment miniPlayerFragment;
     @BindView(R.id.empty_view)
     View mEmptyView;
 
@@ -124,7 +123,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         if (!podcasts.isEmpty()) {
             ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_player, new MiniPlayerFragment(), MiniPlayerFragment.TAG)
+                    .replace(R.id.content_player, MiniPlayerFragment.newInstance(this), MiniPlayerFragment.TAG)
                     .commit();
         }
     }

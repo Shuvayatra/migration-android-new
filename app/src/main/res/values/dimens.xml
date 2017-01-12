@@ -91,4 +91,5 @@
 	<dimen name="spacing_45">45dp</dimen>
 
 	<dimen name="cardview_elevation_4dp">4dp</dimen>
+    <dimen name="mini_media_player_peek_height">120dp</dimen>
 </resources>
