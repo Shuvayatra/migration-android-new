@@ -151,12 +151,13 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         Collections.sort(countryList, new Comparator<Country>() {
             @Override
             public int compare(Country o1, Country o2) {
-                // TODO: 10/26/16 check if the english title is null or not. if not remove
-//                if(o2.getTitleEnglish() == null){
-//                    return -1;
-//                } else if (o1.getTitleEnglish() == null){
-//                    return 1;
-//                }
+                if (o2.getTitleEnglish() == null && o1.getTitleEnglish() != null) {
+                    return -1;
+                } else if (o1.getTitleEnglish() == null && o2.getTitleEnglish() != null) {
+                    return 1;
+                } else if (o1.getTitleEnglish() == null && o2.getTitleEnglish() == null) {
+                    return 0;
+                }
                 return o1.getTitleEnglish().trim().toUpperCase().compareTo(o2.getTitleEnglish().trim().toUpperCase());
             }
         });
@@ -166,33 +167,35 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         allList.addAll(countryList);
         Logger.e(TAG, "all.size(): " + allList.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        Logger.e(TAG, "selectedCountry.substring(0,1): " + selectedCountry.substring(0, 1));
 
-        if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
-            HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
-            headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
+        if (!selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
 
-            if (allList.size() > 0) {
-                allList.add(0, headerItem);
-            }
-        } else {
-            long id = Long.parseLong(selectedCountry.substring(0, selectedCountry.indexOf(",")));
-            Logger.e(TAG, " selected id: " + id);
-            for (Country country : countryList) {
-                Logger.e(TAG, "country: " + country);
-                if (country.getId() == id) {
-                    country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
-                    allList.remove(countryList.indexOf(country));
-                    if (allList.size() > 0) {
-                        allList.add(0, country);
-                    }
-                    HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
-                    headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
-                    allList.add(1, headerItem);
-                    break;
+            if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
+                HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
+                headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
+
+                if (allList.size() > 0) {
+                    allList.add(0, headerItem);
                 }
-            }
+            } else {
+                long id = Long.parseLong(selectedCountry.substring(0, selectedCountry.indexOf(",")));
+                Logger.e(TAG, " selected id: " + id);
+                for (Country country : countryList) {
+                    Logger.e(TAG, "country: " + country);
+                    if (country.getId() == id) {
+                        country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
+                        allList.remove(countryList.indexOf(country));
+                        if (allList.size() > 0) {
+                            allList.add(0, country);
+                        }
+                        HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
+                        headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
+                        allList.add(1, headerItem);
+                        break;
+                    }
+                }
 
+            }
         }
 
         mAdapter.setCountries(allList);
