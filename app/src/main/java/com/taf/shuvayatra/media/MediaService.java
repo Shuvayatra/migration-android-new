@@ -60,6 +60,7 @@ public class MediaService extends Service implements
     private long mCurrentDuration = 0;
     private boolean mStoppedByUser = false;
     private String mCurrentTitle = "";
+    private String mCurrentImage = "";
     private MediaSessionManager mMediaSessionManager;
     private MediaSessionCompat mMediaSession;
     MediaControllerCompat mMediaController;
@@ -91,7 +92,7 @@ public class MediaService extends Service implements
             filter.addAction(NotificationEventReceiver.ACTION_DISMISS);
             filter.addAction(NotificationEventReceiver.ACTION_PAUSE_PLAY);
             notificationEventReceiver = new NotificationEventReceiver();
-                registerReceiver(notificationEventReceiver, filter);
+            registerReceiver(notificationEventReceiver, filter);
         }
         mHandler.postDelayed(updateSeekTime, 1000);
 //        initMediaSession();
@@ -101,10 +102,10 @@ public class MediaService extends Service implements
         return START_NOT_STICKY;
     }
 
-    private void initMediaSession(){
+    private void initMediaSession() {
         mMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
-        ComponentName componentName = new ComponentName(getApplicationContext(),NotificationEventReceiver.class);
-        mMediaSession = new MediaSessionCompat(getApplicationContext(),TAG);
+        ComponentName componentName = new ComponentName(getApplicationContext(), NotificationEventReceiver.class);
+        mMediaSession = new MediaSessionCompat(getApplicationContext(), TAG);
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mMediaSession.setCallback(new MediaSessionCallback());
 //        mMediaController = MediaController.fromToken( mSession.getSessionToken() );
@@ -112,7 +113,7 @@ public class MediaService extends Service implements
 
     @Override
     public void onDestroy() {
-        if(mPlayer!=null && !mPlayer.isPlaying()) {
+        if (mPlayer != null && !mPlayer.isPlaying()) {
             Logger.d("MediaService_onDestroy", "test");
             unregisterReceiver(notificationEventReceiver);
             if (mPlayer != null) {
@@ -149,7 +150,7 @@ public class MediaService extends Service implements
     }
 
     public void setTrack(Post pTrack) {
-            stopPlayback();
+        stopPlayback();
         mTrack = pTrack;
         mCurrentPlayType = PlayType.POST;
         startStreaming();
@@ -225,12 +226,14 @@ public class MediaService extends Service implements
 
     private void setDataSource(Podcast podcast) throws IOException {
         mCurrentTitle = podcast.getTitle();
+        mCurrentImage = podcast.getImage();
         String mediaUrl = podcast.getSource().replace(" ", "%20");
         mPlayer.setDataSource(this, Uri.parse(mediaUrl));
     }
 
     private void setDataSource(Post pTrack) throws IOException {
         mCurrentTitle = pTrack.getTitle();
+        mCurrentImage = pTrack.getFeaturedImage();
         String mediaUrl = pTrack.getData().getMediaUrl().replace(" ", "%20");
         String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
@@ -265,13 +268,14 @@ public class MediaService extends Service implements
                 intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, true);
             }
         }
-        Logger.e(TAG,"mPlayer.isPlaying(): "+ mPlayer.isPlaying());
+        Logger.e(TAG, "mPlayer.isPlaying(): " + mPlayer.isPlaying());
         createNotification(mCurrentTitle, mPlayer.isPlaying());
         sendBroadcast(intent);
     }
 
     public void stopPlayback() {
         mCurrentTitle = " ---- ";
+        mCurrentImage = "";
         mStoppedByUser = true;
         if (mIsMediaValid)
             mPlayer.stop();
@@ -281,8 +285,8 @@ public class MediaService extends Service implements
         sendBroadcast(intent);
 
         mIsMediaValid = false;
-        if (manager != null){
-            Logger.e(TAG,"notification removed");
+        if (manager != null) {
+            Logger.e(TAG, "notification removed");
             stopForeground(true);
         }
     }
@@ -330,6 +334,10 @@ public class MediaService extends Service implements
         return mCurrentTitle;
     }
 
+    public String getCurrentImageResource() {
+        return mCurrentImage;
+    }
+
     public void changeCurrentPodcast(int index) {
         if (mCurrentPlayType.equals(PlayType.PODCAST)) {
             stopPlayback();
@@ -339,8 +347,8 @@ public class MediaService extends Service implements
     }
 
     private void createNotification(String title, boolean isPlaying) {
-        Logger.e(TAG,"============ start ==================");
-        if(manager == null)
+        Logger.e(TAG, "============ start ==================");
+        if (manager == null)
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent notificationIntent = new Intent(MediaService.this, HomeActivity.class);
@@ -376,9 +384,9 @@ public class MediaService extends Service implements
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setLights(0x000000FF, 300, 1000);
 
-        Logger.e(TAG,"builder.mActions.size(): "+ builder.mActions.size());
-        if(isPlaying){
-            startForeground(NOTIFICATION_ID,builder.build());
+        Logger.e(TAG, "builder.mActions.size(): " + builder.mActions.size());
+        if (isPlaying) {
+            startForeground(NOTIFICATION_ID, builder.build());
         } else {
             manager.notify(NOTIFICATION_ID, builder.build());
             stopForeground(false);
@@ -418,7 +426,7 @@ public class MediaService extends Service implements
         }
     }
 
-    public class MediaSessionCallback extends MediaSessionCompat.Callback{
+    public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     }
 }

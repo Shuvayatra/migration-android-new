@@ -43,7 +43,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
         mLayoutInflater = LayoutInflater.from(context);
     }
 
-    public void setmChannels(List<BaseModel> mChannels) {
+    public void setChannels(List<BaseModel> mChannels) {
         this.mChannels = mChannels;
         notifyDataSetChanged();
     }
@@ -61,10 +61,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
                 dataBinding = DataBindingUtil.inflate(mLayoutInflater, R.layout
                         .item_channel_header, parent, false);
                 return new ViewHolder((dataBinding));
-//            case MyConstants.Adapter.TYPE_CHANNEL_SELECTED:
-//                dataBinding = DataBindingUtil.inflate(mLayoutInflater, R.layout
-//                        .item_channel_list_selected, parent, false);
-//                return new ViewHolder(dataBinding);
         }
         return null;
     }
@@ -82,10 +78,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
                 ((ItemChannelHeaderDataBinding)holder.mBinding)
                         .setTitle(((HeaderItem)mChannels.get(position)).getTitle());
                 break;
-//            case MyConstants.Adapter.TYPE_CHANNEL_SELECTED:
-//                ((ItemChannelListSelectedDataBinding)holder.mBinding)
-//                        .setChannel((Channel)mChannels.get(position));
-//                break;
         }
     }
 

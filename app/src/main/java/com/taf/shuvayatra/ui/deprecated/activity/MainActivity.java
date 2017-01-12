@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
+@Deprecated
 public class MainActivity extends BaseActivity {
 
     private static final String CURRENT_FRAGMENT_POS = "currentFragmentPosition";

@@ -55,7 +55,6 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
     public static ChannelFragment getInstance() {
         Logger.e(TAG, "instance created");
-
         return new ChannelFragment();
     }
 
@@ -109,26 +108,19 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
         Collections.sort(channelList, new Comparator<Channel>() {
             @Override
             public int compare(Channel o1, Channel o2) {
-//                if(o1.getId() == selctedChannelId){
-//                    return -1;
-//                }
-//                if(o2.getId() == selctedChannelId){
-//                    return 1;
-//                }
                 return o1.getTitle().trim().toUpperCase().compareTo(o2.getTitle().trim().toUpperCase());
             }
         });
 
         List<BaseModel> allChannelList = new ArrayList<>();
         allChannelList.addAll(channelList);
-//
         HeaderItem headerItem = new HeaderItem(getString(R.string.channels));
         headerItem.setDataType(MyConstants.Adapter.TYPE_CHANNEL_HEADER);
         if (allChannelList.size() > 0) {
             allChannelList.add(0, headerItem);
         }
 
-        mAdapter.setmChannels(allChannelList);
+        mAdapter.setChannels(allChannelList);
     }
 
     @Override
