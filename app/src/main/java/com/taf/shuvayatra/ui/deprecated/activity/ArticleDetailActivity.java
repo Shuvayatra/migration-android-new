@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 public class ArticleDetailActivity extends FacebookActivity implements PostDetailView {
 
+    public static final String TAG = "ArticleDetailActivity";
     public static final String KEY_POST = "key_post";
 
     @Inject

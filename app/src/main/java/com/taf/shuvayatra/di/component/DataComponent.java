@@ -30,6 +30,7 @@ import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NewsFragment;
+import com.taf.shuvayatra.ui.fragment.UserAccountFragment;
 import com.taf.shuvayatra.ui.fragment.onboarding.CountryFragment;
 
 import dagger.Component;
@@ -101,4 +102,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(SearchActivity activity);
 
     void inject(NewsFragment fragment);
+
+    void inject(UserAccountFragment userAccountFragment);
 }

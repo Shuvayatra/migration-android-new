@@ -90,7 +90,7 @@ public class HomeFragment extends BaseFragment implements
         super.onActivityCreated(savedInstanceState);
 
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        showCountryWidget = !selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet));
+        showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) || selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
 
         if (showCountryWidget) {
             String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +

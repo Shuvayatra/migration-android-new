@@ -422,4 +422,8 @@ public class DateUtils {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
         return format.format(date);
     }
+    public static String getFormattedDate(Long date){
+        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_PATTERN,Locale.US);
+        return format.format(date);
+    }
 }

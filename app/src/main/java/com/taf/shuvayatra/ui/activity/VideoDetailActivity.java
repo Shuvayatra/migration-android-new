@@ -49,52 +49,53 @@ public class VideoDetailActivity extends PostDetailActivity implements
         pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
         pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
 
-        final String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
-        if (!isRestored) {
+        if(mPost!=null) {
+            final String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
+            if (!isRestored) {
 
-            if (!videoId.isEmpty())
-                Logger.e("VideoDetailActivity", "video loaded");
+                if (!videoId.isEmpty())
+                    Logger.e("VideoDetailActivity", "video loaded");
 
-            pYouTubePlayer.loadVideo(videoId);
-            pYouTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
-                @Override
-                public void onLoading() {
-                    Logger.e("VideoDetailActivity", " video loading");
-                }
-
-                @Override
-                public void onLoaded(String pS) {
-                    Logger.e("VideoDetailActivity", " video loaded " + pS);
-                }
-
-                @Override
-                public void onAdStarted() {
-                }
-
-                @Override
-                public void onVideoStarted() {
-                    Logger.e("VideoDetailActivity", " video started");
-                }
-
-                @Override
-                public void onVideoEnded() {
-                    Logger.e("VideoDetailActivity", " video ended");
-                }
-
-                @Override
-                public void onError(YouTubePlayer.ErrorReason pErrorReason) {
-                    Logger.e("VideoDetailActivity", " video error: " + pErrorReason);
-                    if (!IsFromIntent) {
-                        IsFromIntent = true;
-                        playViaIntent(videoId);
+                pYouTubePlayer.loadVideo(videoId);
+                pYouTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+                    @Override
+                    public void onLoading() {
+                        Logger.e("VideoDetailActivity", " video loading");
                     }
-                }
-            });
-        } else {
-            Logger.e("VideoDetailActivity", "video played");
-            pYouTubePlayer.play();
-        }
 
+                    @Override
+                    public void onLoaded(String pS) {
+                        Logger.e("VideoDetailActivity", " video loaded " + pS);
+                    }
+
+                    @Override
+                    public void onAdStarted() {
+                    }
+
+                    @Override
+                    public void onVideoStarted() {
+                        Logger.e("VideoDetailActivity", " video started");
+                    }
+
+                    @Override
+                    public void onVideoEnded() {
+                        Logger.e("VideoDetailActivity", " video ended");
+                    }
+
+                    @Override
+                    public void onError(YouTubePlayer.ErrorReason pErrorReason) {
+                        Logger.e("VideoDetailActivity", " video error: " + pErrorReason);
+                        if (!IsFromIntent) {
+                            IsFromIntent = true;
+                            playViaIntent(videoId);
+                        }
+                    }
+                });
+            } else {
+                Logger.e("VideoDetailActivity", "video played");
+                pYouTubePlayer.play();
+            }
+        }
         player = pYouTubePlayer;
     }
 

@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
@@ -99,7 +100,7 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
             finishWithResult();
             return true;
         } else if (item.getItemId() == R.id.action_share) {
-            if (!mPost.getType().equals("audio")) share(mPost);
+            if (mPost!= null && !mPost.getType().equals("audio")) share(mPost);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -107,14 +108,30 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     @Override
     public void updateFavouriteState() {
-        UseCaseData data = new UseCaseData();
-        boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
-        data.putBoolean(UseCaseData.FAVOURITE_STATE, status);
+        Logger.e(TAG,"update favourite state in post detail activity");
+        if(mPost != null) {
+            UseCaseData data = new UseCaseData();
+            if(mPost.isFavourite() == null || !mPost.isFavourite()){
+                Logger.e(TAG,"favourite add");
+                mPost.setIsFavourite(true);
+                getPreferences().addToFavourites(mPost.getId());
+            }
+            else {
+                Logger.e(TAG,"favourite remove");
 
-        AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
-                .getType(), status);
+                mPost.setIsFavourite(false);
+                getPreferences().removeFromFavourites(mPost.getId());
+            }
 
-        mFavouritePresenter.initialize(data);
+//            boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
+            data.putBoolean(UseCaseData.FAVOURITE_STATE, mPost.isFavourite());
+            data.putSerializable(UseCaseData.POST, mPost);
+            AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
+                    .getType(), mPost.isFavourite());
+            updateView(mPost);
+            invalidateOptionsMenu();
+            mFavouritePresenter.initialize(data);
+        }
     }
 
     @Override
@@ -134,20 +151,20 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
     public void onPostFavouriteStateUpdated(Boolean status) {
         //boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
         boolean newFavouriteState = !mOldFavouriteState;
-
-        if (newFavouriteState) {
-            mPreferences.addToFavourites(mPost.getId());
-        } else {
-            mPreferences.removeFromFavourites(mPost.getId());
-        }
-        mPost.setIsFavourite(newFavouriteState);
+//
+////        if (newFavouriteState) {
+////            mPreferences.addToFavourites(mPost.getId());
+////        } else {
+////            mPreferences.removeFromFavourites(mPost.getId());
+////        }
+//        mPost.setIsFavourite(newFavouriteState);
         int likes = mPost.getLikes() == null ? 0 : mPost.getLikes();
         mPost.setLikes(newFavouriteState == mOldFavouriteState
                 ? likes
                 : newFavouriteState ? likes + 1 : likes - 1);
         updateView(mPost);
         mOldFavouriteState = mPost.isFavourite();
-        invalidateOptionsMenu();
+//        invalidateOptionsMenu();
     }
 
     @Override

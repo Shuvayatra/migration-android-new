@@ -14,12 +14,14 @@ import com.taf.model.HeaderItem;
 import com.taf.model.Notification;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
+import com.taf.model.UserInfoModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.ArticleDataBinding;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.DestinationDataBinding;
 import com.taf.shuvayatra.databinding.HeaderDataBinding;
 import com.taf.shuvayatra.databinding.InfoListDataBinding;
+import com.taf.shuvayatra.databinding.ItemUserInfoBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.NotificationDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
@@ -139,6 +141,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         (mLayoutInflater, R.layout.view_notification_list, parent, false);
                 viewHolder = new NotificationViewHolder(notificationDataBinding);
                 break;
+            case Adapter.TYPE_USER_INFO:
+               ItemUserInfoBinding userInfoDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.item_user_info,parent, false);
+                viewHolder = new UserInfoViewHolder(userInfoDataBinding);
+                break;
             default:
         }
         return viewHolder;
@@ -187,6 +194,9 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         mDataCollection.get(position));
                 ((NotificationViewHolder) holder).mBinding.setSelected(position ==
                         selectedPosition);
+                break;
+            case Adapter.TYPE_USER_INFO:
+                ((UserInfoViewHolder) holder).mBinding.setUser((UserInfoModel) mDataCollection.get(position));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -357,5 +367,14 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             });
         }
 
+    }
+
+    public class UserInfoViewHolder extends RecyclerView.ViewHolder{
+
+        ItemUserInfoBinding mBinding;
+        public UserInfoViewHolder(ItemUserInfoBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
+        }
     }
 }

@@ -23,7 +23,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-//        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/\"")
 //        buildConfigField("String", "BASE_URL", "\"http://nrna.yipl.com.np/\"")
 //        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/v1\"")
 //        buildConfigField("String", "LOCAL_BASE_URL", "\"http://192.168.1.37/\"")

@@ -11,6 +11,7 @@ import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.utils.Logger;
 import com.taf.model.Channel;
+import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class CacheImpl {
     private static final String COUNTRY_LIST = "country-list";
     public static final String DESTINATION_BLOCKS_SUFFIX = "destination-blocks-";
     public static final String CHANNEL_LIST = "channel-list";
+    public static final String FAVOURITE_POST = "favourite-post";
 
     private SimpleDiskCache mSimpleDiskCache;
 
@@ -250,4 +252,41 @@ public class CacheImpl {
     public void saveNewsBlocks(List<BlockEntity> blockEntities) {
         saveBlocks(NEWS_BLOCKS, blockEntities);
     }
+
+    public void saveFavourite(Post post){
+
+        List<Post> posts = getFavourites();
+        posts.add(post);
+        try {
+            mSimpleDiskCache.put(FAVOURITE_POST,new Gson().toJson(posts));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFavourite(Post post){
+        List<Post> posts = getFavourites();
+        if(posts.remove(post)) {
+            try {
+                mSimpleDiskCache.put(FAVOURITE_POST, new Gson().toJson(posts));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<Post> getFavourites(){
+        List<Post> posts = new ArrayList<>();
+            try {
+                if(mSimpleDiskCache.contains(FAVOURITE_POST)) {
+
+                    String json = mSimpleDiskCache.getCachedString(FAVOURITE_POST).getValue();
+                    posts = new Gson().fromJson(json, new TypeToken<List<Post>>(){}.getType());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        return posts;
+    }
+
 }

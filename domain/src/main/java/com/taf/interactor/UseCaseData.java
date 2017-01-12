@@ -23,6 +23,7 @@ public class UseCaseData implements Serializable {
     public static final String CATEGORY_ID = "category_id";
     public static final String POST_TYPE = "type";
     public static final String IS_FAVOURITE = "is_favourite";
+    public static final String POST ="post";
 
     public static final String COMPONENT_TYPE = "component_type";
 

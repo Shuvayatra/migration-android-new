@@ -58,12 +58,17 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<Boolean> updateFavouriteCount(Long id, boolean status) {
-        if (status) mPreferences.addToFavourites(id);
-        else mPreferences.removeFromFavourites(id);
+    public Observable<Boolean> updateFavouriteCount(Post post, boolean status) {
+        if (status){
+            mDataStoreFactory.createCacheDataStore().saveFavouritePost(post);
+        }
+        else {
+            mDataStoreFactory.createCacheDataStore().removefavouritePost(post);
+        }
+
 
         return mDataStoreFactory.createRestDataStore()
-                .updateFavoriteCount(id, status)
+                .updateFavoriteCount(post.getId(), status)
                 .map(entity -> entity.getStatus().equals("success"));
     }
 

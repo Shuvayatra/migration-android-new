@@ -7,6 +7,7 @@ import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.model.Post;
 
 import java.util.List;
 
@@ -48,12 +49,24 @@ public class CacheDataStore implements IDataStore {
         return mCache.getPost(id);
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id) {
         return mCache.getDestinationBlocks(id);
     }
 
-    public Observable<List<ChannelEntity>> getChannelList(){
+    public Observable<List<ChannelEntity>> getChannelList() {
         return mCache.getChannelList();
+    }
+
+    public Observable<List<Post>> getFavouritePosts() {
+        return Observable.just(mCache.getFavourites());
+    }
+
+    public void saveFavouritePost(Post post) {
+        mCache.saveFavourite(post);
+    }
+
+    public void removefavouritePost(Post post) {
+        mCache.removeFavourite(post);
     }
 
 }
