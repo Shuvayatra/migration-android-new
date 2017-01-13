@@ -25,6 +25,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.taf.data.utils.Logger;
+import com.taf.model.Block;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
@@ -50,8 +51,8 @@ public class BindingUtil {
 //            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
             //// TODO: 1/11/17 issue with width and height 0 for nougat
             // temp fix for giving certain width and height if view height and width are 0
-            int height = pView.getHeight() > 0? pView.getHeight(): 150 ;
-            int width = pView.getWidth() >0? pView.getWidth():150;
+            int height = pView.getHeight() > 0 ? pView.getHeight() : 150;
+            int width = pView.getWidth() > 0 ? pView.getWidth() : 150;
 
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
                     .setResizeOptions(new ResizeOptions(width, height))

@@ -212,6 +212,9 @@ public class MyConstants {
         public static final String KEY_CHANNEL_ID = "key_channel_id";
         public static final String KEY_POST_DATA = "key_post_data";
         public static final String KEY_LOCALE = "key_locale";
+        public static final String KEY_COUNTRY_ID = "key_country_id";
+        public static final String KEY_COUNTRY_TITLE = "key_country_title";
+        public static final String KEY_COUNTRY_TITLE_EN = "key_coutry_title_en";
     }
 
     public static final class Intent {

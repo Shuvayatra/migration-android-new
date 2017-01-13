@@ -58,6 +58,7 @@
 	<dimen name="text_default">14sp</dimen>
 	<dimen name="text_small">12sp</dimen>
 	<dimen name="text_xsmall">10sp</dimen>
+	<dimen name="text_header_title_24sp">24sp</dimen>
 
 	<dimen name="large_line_height">22sp</dimen>
 

@@ -94,15 +94,19 @@ public class HomeFragment extends BaseFragment implements
 
         if (showCountryWidget) {
             try {
-                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
+                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
+                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE].substring(0, 1).toUpperCase() +
                         selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
                                 selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
                 Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
-                mCountryWidget = new CountryWidgetModel(countryName);
+                mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
+                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 Logger.e(TAG, ">>> country name: " + selectedCountry);
                 String countryName = selectedCountry.split(",")[1];
-                mCountryWidget = new CountryWidgetModel(countryName);
+                String countryNameEn = selectedCountry.split(",")[2];
+                mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
+                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             }
         }
 
