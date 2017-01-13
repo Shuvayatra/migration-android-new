@@ -66,8 +66,8 @@ public class PodcastListPresenter implements Presenter {
 
         @Override
         public void onNext(PodcastResponse response) {
-            if (response.getData() != null) {
-                mView.renderPodcasts(response.getData().getData());
+            if (response != null) {
+                mView.renderPodcasts(response);
             }
         }
     }

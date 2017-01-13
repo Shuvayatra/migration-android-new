@@ -6,7 +6,9 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.model.Post;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.model.PostResponse;
@@ -39,8 +41,8 @@ public class CacheDataStore implements IDataStore {
         return mCache.getPost(id);
     }
 
-    public Observable<List<PodcastEntity>> getPodcasts(Long channelId) {
-        return mCache.getPodcastsByChannelId(channelId);
+    public Observable<PodcastResponseEntity> getPodcasts(Long channelId) {
+        return Observable.just(mCache.getPodcastsByChannelId(channelId));
     }
 
     public Observable<List<PostEntity>> getPosts(int feedType, String params) {

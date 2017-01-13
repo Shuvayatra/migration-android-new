@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.views;
 
 import com.taf.model.Podcast;
+import com.taf.model.PodcastResponse;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
  */
 
 public interface PodcastListView extends LoadDataView {
-    void renderPodcasts(List<Podcast> podcasts);
+    void renderPodcasts(PodcastResponse podcasts);
 }

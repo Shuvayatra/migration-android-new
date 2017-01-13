@@ -27,6 +27,7 @@ import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
+import com.taf.shuvayatra.ui.fragment.FavouritePostFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NewsFragment;
@@ -104,4 +105,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(NewsFragment fragment);
 
     void inject(UserAccountFragment userAccountFragment);
+
+    void inject(FavouritePostFragment favouritePostFragment);
 }

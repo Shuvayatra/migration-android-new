@@ -51,8 +51,8 @@ public class ApiRequest {
         return mApiService.getHomeBlocks();
     }
 
-    public Observable<PodcastResponseEntity> getPodcasts(Long channelId) {
-        return mApiService.getPodcasts(channelId);
+    public Observable<PodcastResponseEntity> getPodcasts(int offset, Long channelId) {
+        return mApiService.getPodcasts(offset,channelId);
     }
 
     public Observable<PostResponseEntity> getPosts(int limit, int offset, String params) {

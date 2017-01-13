@@ -9,5 +9,5 @@ import rx.Observable;
  */
 
 public interface IPodcastRepository {
-    Observable<PodcastResponse> getPodcasts();
+    Observable<PodcastResponse> getPodcasts( int offset);
 }

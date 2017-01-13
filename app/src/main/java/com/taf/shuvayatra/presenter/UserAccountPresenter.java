@@ -69,7 +69,9 @@ public class UserAccountPresenter implements Presenter {
 
         @Override
         public void onNext(List<Post> pT) {
-            mView.renderPosts(pT);
+            if (pT != null) {
+                mView.renderPosts(pT);
+            }
         }
     }
 }

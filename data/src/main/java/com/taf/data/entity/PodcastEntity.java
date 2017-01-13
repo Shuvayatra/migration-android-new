@@ -50,4 +50,17 @@ public class PodcastEntity {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public int hashCode() {
+        return title.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof PodcastEntity)) return false;
+        if(this.title.equals(((PodcastEntity) obj).getTitle())) return true;
+        return false;
+    }
 }
