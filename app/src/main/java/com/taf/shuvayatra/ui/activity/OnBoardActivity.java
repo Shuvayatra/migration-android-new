@@ -10,32 +10,37 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
+import com.taf.model.UserInfoModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryListPresenter;
+import com.taf.shuvayatra.presenter.OnBoardingPresenter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
 import com.taf.shuvayatra.ui.fragment.onboarding.AbroadQuestionFragment;
 import com.taf.shuvayatra.ui.views.CountryView;
+import com.taf.shuvayatra.ui.views.OnBoardingView;
 import com.taf.shuvayatra.ui.views.SwipeDisabledPager;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 
 public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdapter.ButtonPressListener,
-        CountryView {
+        CountryView, OnBoardingView {
 
     @BindView(R.id.viewpager_questions)
     SwipeDisabledPager mQuestionPager;
@@ -46,6 +51,9 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
     @Inject
     CountryListPresenter presenter;
+
+    @Inject
+    OnBoardingPresenter onBoardingPresenter;
 
     public static final String TAG = "OnBoardActivity";
     private static final int REQUEST_CODE_WIFI_SETTINGS = 1;
@@ -98,6 +106,7 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
                 .inject(this);
         presenter.attachView(this);
         presenter.initialize(new UseCaseData());
+        onBoardingPresenter.attachView(this);
     }
 
     @Override
@@ -107,14 +116,11 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
 
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-                finish();
+                sendUserInfo();
             } else {
                 mQuestionPager.setCurrentItem(position + 1);
             }
         } else {
-
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 2) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
@@ -124,6 +130,13 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
                 mQuestionPager.setCurrentItem(position + 1);
             }
         }
+    }
+
+    private void sendUserInfo(){
+        Logger.e(TAG,"sending userInfo");
+        UseCaseData useCaseData = new UseCaseData();
+        useCaseData.putSerializable(UseCaseData.USER_INFO, getUserInfo());
+        onBoardingPresenter.initialize(useCaseData);
     }
 
     @Override
@@ -235,5 +248,41 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     @Override
     public Context getContext() {
         return getApplicationContext();
+    }
+
+
+    public UserInfoModel getUserInfo() {
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setName(getPreferences().getUserName());
+        userInfo.setBirthday(getPreferences().getBirthday());
+        String countryInfo = getPreferences().getLocation();
+        if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) && !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+
+            userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
+        } else {
+            userInfo.setDestinedCountry(null);
+        }
+        Locale locale = Locale.getDefault();
+        int worStatusId = getPreferences().getPreviousWorkStatus();
+        userInfo.setWorkStatus(getString(worStatusId));
+        int id = getPreferences().getOriginalLocation();
+
+        String[] zones = getResources().getStringArray(R.array.zones);
+        userInfo.setOrignalLocation(zones[id]);
+        String gender = getPreferences().getGender();
+        if(gender.equalsIgnoreCase(getString(R.string.gender_male))){
+            userInfo.setGender("M");
+        }else if(gender.equalsIgnoreCase(getString(R.string.gender_female))) {
+            userInfo.setGender("F");
+        }
+        Logger.e(TAG,"userInfo: "+ userInfo);
+        return userInfo;
+    }
+
+    @Override
+    public void onSendUserInfo() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

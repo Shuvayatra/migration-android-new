@@ -59,4 +59,16 @@ public class UserInfoModel extends BaseModel {
     public void setOrignalLocation(String orignalLocation) {
         this.orignalLocation = orignalLocation;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfoModel{" +
+                "name='" + name + '\'' +
+                ", destinedCountry='" + destinedCountry + '\'' +
+                ", workStatus='" + workStatus + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthday=" + birthday +
+                ", orignalLocation='" + orignalLocation + '\'' +
+                '}';
+    }
 }

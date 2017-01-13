@@ -27,6 +27,7 @@ import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
+import com.taf.data.entity.UserInfoEntity;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.model.Block;
@@ -45,6 +46,7 @@ import com.taf.model.Post;
 import com.taf.model.PostData;
 import com.taf.model.PostResponse;
 import com.taf.model.SyncData;
+import com.taf.model.UserInfoModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -554,5 +556,16 @@ public class DataMapper {
         }
 
         return channels;
+    }
+
+    public UserInfoEntity transformUserInfo(UserInfoModel model){
+        UserInfoEntity userInfoEntity = new UserInfoEntity();
+        userInfoEntity.setCountry(model.getDestinedCountry());
+        userInfoEntity.setDob(model.getBirthday());
+        userInfoEntity.setGender(model.getGender());
+        userInfoEntity.setWorkStatus(model.getWorkStatus());
+        userInfoEntity.setName(model.getName());
+        userInfoEntity.setLocation(model.getOrignalLocation());
+        return userInfoEntity;
     }
 }
