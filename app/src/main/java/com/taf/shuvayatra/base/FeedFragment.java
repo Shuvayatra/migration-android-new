@@ -1,29 +1,26 @@
-package com.taf.shuvayatra.ui.activity;
+package com.taf.shuvayatra.base;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.taf.data.entity.FeedType;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.model.PostResponse;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.base.PlayerFragmentActivity;
-import com.taf.shuvayatra.di.component.DaggerDataComponent;
-import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.PostListPresenter;
+import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
+import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.FeedActivity;
+import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
@@ -34,24 +31,27 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class FeedActivity extends PlayerFragmentActivity implements
+/**
+ *
+ */
+
+public abstract class FeedFragment extends BaseFragment implements
         ListItemClickListener,
         PostListView,
         SwipeRefreshLayout.OnRefreshListener {
 
     public static final Integer PAGE_LIMIT = 15;
     public static final Integer INITIAL_OFFSET = 1;
-    public static final int REQUEST_CODE_POST_DETAIL = 3209;
 
+    /**
+     * standard ids for feed fragment
+     */
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeContainer;
     @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;
-
-    @Inject
-    PostListPresenter mPresenter;
 
     LinearLayoutManager mLayoutManager;
     ListAdapter<Post> mListAdapter;
@@ -62,51 +62,40 @@ public class FeedActivity extends PlayerFragmentActivity implements
     boolean mIsLoading = false;
     boolean mIsLastPage = false;
 
-    @Override
-    public int getLayout() {
-        return R.layout.activity_feed;
-    }
+    public abstract String getToolbarTitle();
+
+    public static final int FEED_GENERAL = 0;
+    public static final int FEED_NEWS = 1;
+
+    /**
+     * feed type
+     * {@link #FEED_NEWS}, or
+     * {@link #FEED_GENERAL}
+     */
+    @FeedType
+    public abstract int feedType();
+
+    // todo make more generic presenter
+    @Inject
+    public PostListPresenter mPresenter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String title = getIntent().getStringExtra("title");
-        if (title != null) getSupportActionBar().setTitle(title);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        Uri data = getIntent().getData();
-        String params = null;
-        if (data != null) {
-            params = data.getQueryParameter("category_id");
-        }
+        if (((BaseActivity) getActivity()).getSupportActionBar() != null)
+            ((BaseActivity) getActivity()).getSupportActionBar().setTitle(getToolbarTitle());
 
-        initialize(params);
-        setUpAdapter();
-
+        initializeDaggerComponent();
+        setupAdapter();
         loadPostsList(INITIAL_OFFSET);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    public abstract void initializeDaggerComponent();
 
-    private void initialize(String params) {
-        DaggerDataComponent.builder()
-                .dataModule(new DataModule(params))
-                .activityModule(getActivityModule())
-                .applicationComponent(getApplicationComponent())
-                .build()
-                .inject(this);
-        mPresenter.attachView(this);
-    }
-
-    private void setUpAdapter() {
+    public void setupAdapter() {
         mListAdapter = new ListAdapter(getContext(), this);
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mSwipeContainer.setOnRefreshListener(this);
 
@@ -143,13 +132,9 @@ public class FeedActivity extends PlayerFragmentActivity implements
         mUseCaseData.clearAll();
         mUseCaseData.putInteger(UseCaseData.OFFSET, pPage);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
+        mUseCaseData.putInteger(UseCaseData.CONTENT_TYPE, feedType());
 
         mPresenter.initialize(mUseCaseData);
-    }
-
-    @Override
-    public void onRefresh() {
-        loadPostsList(INITIAL_OFFSET);
     }
 
     @Override
@@ -171,14 +156,19 @@ public class FeedActivity extends PlayerFragmentActivity implements
                 break;
         }
         if (intent != null)
-            startActivityForResult(intent, REQUEST_CODE_POST_DETAIL);
+            startActivityForResult(intent, FeedActivity.REQUEST_CODE_POST_DETAIL);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadPostsList(INITIAL_OFFSET);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == BaseActivity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_POST_DETAIL) {
+            if (requestCode == FeedActivity.REQUEST_CODE_POST_DETAIL) {
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
                 mListAdapter.getDataCollection().get(listItemSelection).setShare(shareCount);
                 int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
@@ -186,28 +176,6 @@ public class FeedActivity extends PlayerFragmentActivity implements
                 mListAdapter.notifyDataSetChanged();
             }
         }
-    }
-
-    @Override
-    public void renderPostList(PostResponse response) {
-        if (response.isFromCache()) {
-            if (mListAdapter.getItemCount() == 0) {
-                mListAdapter.setDataCollection(response.getData());
-                mIsLastPage = true;
-            }
-            return;
-        }
-
-        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
-        if (mPage == INITIAL_OFFSET) {
-            mListAdapter.setDataCollection(response.getData());
-        } else {
-            mListAdapter.addDataCollection(response.getData());
-        }
-        mTotalDataCount = response.getTotal();
-        mIsLastPage = (mPage == response.getLastPage());
-        mPage = response.getCurrentPage();
-        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
     }
 
     @Override
@@ -230,7 +198,24 @@ public class FeedActivity extends PlayerFragmentActivity implements
     }
 
     @Override
-    public Context getContext() {
-        return this;
+    public void renderPostList(PostResponse response) {
+        if (response.isFromCache()) {
+            if (mListAdapter.getItemCount() == 0) {
+                mListAdapter.setDataCollection(response.getData());
+                mIsLastPage = true;
+            }
+            return;
+        }
+
+        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
+        if (mPage == INITIAL_OFFSET) {
+            mListAdapter.setDataCollection(response.getData());
+        } else {
+            mListAdapter.addDataCollection(response.getData());
+        }
+        mTotalDataCount = response.getTotal();
+        mIsLastPage = (mPage == response.getLastPage());
+        mPage = response.getCurrentPage();
+        Logger.d("FeedActivity_renderPostList", "pagination: " + mListAdapter.getItemCount());
     }
 }

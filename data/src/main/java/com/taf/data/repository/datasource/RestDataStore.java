@@ -115,11 +115,17 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<PostResponseEntity> getPosts(int limit, int offset, String filterParams) {
+    public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getPosts(limit, offset, filterParams)
+            if(feedType == 0) {
+                return mApiRequest.getPosts(limit, offset, filterParams)
+                        .doOnNext(responseEntity -> {
+                            mCache.savePosts(feedType, filterParams, responseEntity.getData(), (offset != 1));
+                        });
+            }
+            return mApiRequest.getNewsList(limit, offset)
                     .doOnNext(responseEntity -> {
-                        mCache.savePosts(filterParams, responseEntity.getData(), (offset != 1));
+                        mCache.savePosts(feedType, filterParams, responseEntity.getData(), (offset != 1));
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -269,14 +275,14 @@ public class RestDataStore implements IDataStore {
         return isConnected;
     }
 
-    public Observable<List<BlockEntity>> getNewsBlocks() {
-        if (isThereInternetConnection()) {
-            return mApiRequest.getNewsBlocks()
-                    .doOnNext(blockEntities -> {
-                        mCache.saveNewsBlocks(blockEntities);
-                    });
-        } else {
-            return Observable.error(new NetworkConnectionException());
-        }
-    }
+//    public Observable<PostResponseEntity> getNewsList(int page) {
+//        if (isThereInternetConnection()) {
+//            return mApiRequest.getNewsList(page)
+//                    .doOnNext(blockEntities -> {
+//                        mCache.saveNewsBlocks(blockEntities);
+//                    });
+//        } else {
+//            return Observable.error(new NetworkConnectionException());
+//        }
+//    }
 }

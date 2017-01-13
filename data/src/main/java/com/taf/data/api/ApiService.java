@@ -84,5 +84,5 @@ public interface ApiService {
                                                   @Query("post_type") String type);
 
     @GET(MyConstants.API.NEWS)
-    Observable<List<BlockEntity>> getNewsBlocks();
+    Observable<PostResponseEntity> getNewsList(@Query("per_page") int limit, @Query("page") int offset);
 }

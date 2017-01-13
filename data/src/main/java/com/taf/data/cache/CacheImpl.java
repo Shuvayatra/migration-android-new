@@ -1,18 +1,25 @@
 package com.taf.data.cache;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PostEntity;
+import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.utils.Logger;
 import com.taf.model.Channel;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,12 +70,12 @@ public class CacheImpl {
         saveBlocks(JOURNEY_BLOCKS, blockEntities);
     }
 
-    public void saveDestinationBlocks(long id, List<BlockEntity> blockEntities){
-        saveBlocks(DESTINATION_BLOCKS_SUFFIX +id, blockEntities);
+    public void saveDestinationBlocks(long id, List<BlockEntity> blockEntities) {
+        saveBlocks(DESTINATION_BLOCKS_SUFFIX + id, blockEntities);
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlocks(long id){
-       return getBlocks(DESTINATION_BLOCKS_SUFFIX+id);
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id) {
+        return getBlocks(DESTINATION_BLOCKS_SUFFIX + id);
     }
 
     public Observable<List<BlockEntity>> getJourneyBlocks() {
@@ -152,20 +159,47 @@ public class CacheImpl {
         return Observable.just(podcasts);
     }
 
+
     // TODO: 10/26/16 define key as per categories/blocks
-    public void savePosts(String params, List<PostEntity> entities, boolean append) {
-        String suffix = params.replaceAll(",", "-");
+    public void savePosts(int feedType, String params, List<PostEntity> entities, boolean append) {
+        String suffix = "";
+        if (params != null)
+            suffix = params.replaceAll(",", "-");
         if (append) {
             Logger.d("CacheImpl_savePosts", "append");
-            appendPosts(POST_LIST_PREFIX + suffix, entities);
+            appendPosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix, entities);
         } else {
-            savePosts(POST_LIST_PREFIX + suffix, entities);
+            savePosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix, entities);
         }
     }
 
-    public Observable<List<PostEntity>> getPostsByParams(String params) {
-        String suffix = params.replaceAll(",", "-");
-        return Observable.just(getPosts(POST_LIST_PREFIX + suffix));
+    public void saveNews(List<PostEntity> entities, boolean append) {
+        if (append) {
+            appendNews(entities);
+        } else {
+            saveNews(entities);
+        }
+    }
+
+    public void saveNews(List<PostEntity> entities) {
+        try {
+            mSimpleDiskCache.put(NEWS_BLOCKS, new Gson().toJson(entities));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void appendNews(List<PostEntity> entities) {
+        List<PostEntity> list = getPosts(NEWS_BLOCKS);
+        list.addAll(entities);
+        savePosts(NEWS_BLOCKS, list);
+    }
+
+    public Observable<List<PostEntity>> getPostsByParams(int feedType, String params) {
+        String suffix = "";
+        if (params != null)
+            suffix = params.replaceAll(",", "-");
+        return Observable.just(getPosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix));
     }
 
     public void savePosts(String key, List<PostEntity> posts) {
@@ -224,16 +258,16 @@ public class CacheImpl {
     }
 
 
-    public Observable<List<ChannelEntity>> getChannelList(){
+    public Observable<List<ChannelEntity>> getChannelList() {
         List<ChannelEntity> channelEntities = new ArrayList<>();
-        try{
-            if(mSimpleDiskCache.contains(CHANNEL_LIST)){
+        try {
+            if (mSimpleDiskCache.contains(CHANNEL_LIST)) {
                 String json = mSimpleDiskCache.getCachedString(CHANNEL_LIST).getValue();
-                channelEntities = new Gson().fromJson(json, new TypeToken<List<ChannelEntity>>(){
+                channelEntities = new Gson().fromJson(json, new TypeToken<List<ChannelEntity>>() {
 
                 }.getType());
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -241,32 +275,57 @@ public class CacheImpl {
     }
 
 
-    public void saveChannelList(List<ChannelEntity> channelList){
-        try{
-            mSimpleDiskCache.put(CHANNEL_LIST, new Gson().toJson(channelList));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void saveNewsBlocks(List<BlockEntity> blockEntities) {
-        saveBlocks(NEWS_BLOCKS, blockEntities);
-    }
-
-    public void saveFavourite(Post post){
-
-        List<Post> posts = getFavourites();
-        posts.add(post);
+    public void saveChannelList(List<ChannelEntity> channelList) {
         try {
-            mSimpleDiskCache.put(FAVOURITE_POST,new Gson().toJson(posts));
+            mSimpleDiskCache.put(CHANNEL_LIST, new Gson().toJson(channelList));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void removeFavourite(Post post){
+    public void saveNewsBlocks(PostResponseEntity blockEntities) {
+        try {
+            mSimpleDiskCache.put(NEWS_BLOCKS, new Gson().toJson(blockEntities));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Observable<PostResponseEntity> getNewsPosts() {
+        PostResponseEntity postResponseEntity = new PostResponseEntity();
+        String jsonObjectString = "";
+        try {
+            Log.e(TAG, "getNewsPosts: " + mSimpleDiskCache.getCachedString(NEWS_BLOCKS).getValue());
+            try {
+                JSONArray array = new JSONArray(mSimpleDiskCache.getCachedString(NEWS_BLOCKS).getValue());
+                jsonObjectString = array.get(0).toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            postResponseEntity = new Gson().fromJson(jsonObjectString, new TypeToken<PostResponseEntity>() {
+
+            }.getType());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Observable.just(postResponseEntity);
+    }
+
+    public void saveFavourite(Post post) {
+
         List<Post> posts = getFavourites();
-        if(posts.remove(post)) {
+        posts.add(post);
+        try {
+            mSimpleDiskCache.put(FAVOURITE_POST, new Gson().toJson(posts));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFavourite(Post post) {
+        List<Post> posts = getFavourites();
+        if (posts.remove(post)) {
             try {
                 mSimpleDiskCache.put(FAVOURITE_POST, new Gson().toJson(posts));
             } catch (IOException e) {
@@ -275,17 +334,18 @@ public class CacheImpl {
         }
     }
 
-    public List<Post> getFavourites(){
+    public List<Post> getFavourites() {
         List<Post> posts = new ArrayList<>();
-            try {
-                if(mSimpleDiskCache.contains(FAVOURITE_POST)) {
+        try {
+            if (mSimpleDiskCache.contains(FAVOURITE_POST)) {
 
-                    String json = mSimpleDiskCache.getCachedString(FAVOURITE_POST).getValue();
-                    posts = new Gson().fromJson(json, new TypeToken<List<Post>>(){}.getType());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                String json = mSimpleDiskCache.getCachedString(FAVOURITE_POST).getValue();
+                posts = new Gson().fromJson(json, new TypeToken<List<Post>>() {
+                }.getType());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return posts;
     }
 

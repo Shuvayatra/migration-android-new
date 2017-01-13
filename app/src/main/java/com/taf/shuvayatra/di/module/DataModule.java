@@ -42,7 +42,7 @@ import com.taf.interactor.UseCase;
 import com.taf.interactor.deprecated.DeletedContentUseCase;
 import com.taf.interactor.deprecated.DownloadAudioUseCase;
 import com.taf.interactor.deprecated.GetLatestContentUseCase;
-import com.taf.interactor.deprecated.GetNewsBlocksUseCase;
+import com.taf.interactor.GetNewsBlocksUseCase;
 import com.taf.interactor.deprecated.GetNotificationListUseCase;
 import com.taf.interactor.deprecated.GetSectionCategoryUseCase;
 import com.taf.interactor.deprecated.GetSimilarPostsUseCase;

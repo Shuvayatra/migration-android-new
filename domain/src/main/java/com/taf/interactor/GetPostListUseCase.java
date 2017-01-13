@@ -27,11 +27,13 @@ public class GetPostListUseCase extends UseCase<PostResponse> {
     protected Observable<PostResponse> buildUseCaseObservable(UseCaseData pData) {
         int offset = 0;
         int limit = 15;
+        int feedType = 0;
         if (pData != null) {
             offset = pData.getInteger(UseCaseData.OFFSET, 0);
             limit = pData.getInteger(UseCaseData.LIMIT, 15);
+            feedType = pData.getInteger(UseCaseData.CONTENT_TYPE, 0);
         }
 
-        return mRepository.getList(limit, offset, mFilterParams);
+        return mRepository.getList(feedType, limit, offset, mFilterParams);
     }
 }

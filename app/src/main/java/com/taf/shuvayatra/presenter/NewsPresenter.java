@@ -5,9 +5,12 @@ import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Block;
+import com.taf.model.Post;
+import com.taf.model.PostResponse;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.ui.views.MvpView;
 import com.taf.shuvayatra.ui.views.NewsView;
+import com.taf.shuvayatra.ui.views.PostListView;
 
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class NewsPresenter implements Presenter {
         mView = (NewsView) view;
     }
 
-    private final class NewsSubscriber extends DefaultSubscriber<List<Block>>{
+    private final class NewsSubscriber extends DefaultSubscriber<PostResponse>{
         @Override
         public void onCompleted() {
             mView.hideLoadingView();
@@ -70,7 +73,7 @@ public class NewsPresenter implements Presenter {
         }
 
         @Override
-        public void onNext(List<Block> blocks) {
+        public void onNext(PostResponse blocks) {
             mView.renderBlocks(blocks);
         }
     }

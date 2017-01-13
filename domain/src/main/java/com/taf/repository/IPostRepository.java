@@ -12,7 +12,7 @@ import rx.Observable;
  */
 
 public interface IPostRepository {
-    Observable<PostResponse> getList(int limit, int offset, String filterParams);
+    Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams);
 
     Observable<Post> getDetail(Long id);
 

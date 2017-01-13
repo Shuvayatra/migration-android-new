@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 public class NetworkModule {
+
     String mBaseUrl;
 
     public NetworkModule(String pBaseUrl) {
@@ -37,7 +38,7 @@ public class NetworkModule {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
-//                .addInterceptor(interceptor)
+                .addInterceptor(interceptor)
                 .addInterceptor(new HeaderInterceptor())
                 .build();
     }
