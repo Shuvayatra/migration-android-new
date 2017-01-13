@@ -13,6 +13,8 @@ import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
 import com.taf.data.entity.UpdateResponseEntity;
+import com.taf.data.entity.UserInfoEntity;
+import com.taf.data.entity.UserInfoResponse;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -86,4 +88,7 @@ public interface ApiService {
 
     @GET(MyConstants.API.NEWS)
     Observable<PostResponseEntity> getNewsList(@Query("per_page") int limit, @Query("page") int offset);
+
+    @POST(MyConstants.API.ON_BOARDING_PUSH)
+    Observable<UserInfoResponse> saveUserInfo(@Body UserInfoEntity userInfoEntity);
 }

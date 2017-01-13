@@ -19,6 +19,8 @@ import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.UpdateResponseEntity;
+import com.taf.data.entity.UserInfoEntity;
+import com.taf.data.entity.UserInfoResponse;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
@@ -107,8 +109,8 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getPodcasts(offset, channelId)
                     .doOnNext(entity -> {
-                        Logger.e(TAG,"podcasts: "+ entity.getData().getData().size());
-                        if(entity.getData() != null)
+                        Logger.e(TAG, "podcasts: " + entity.getData().getData().size());
+                        if (entity.getData() != null)
                             mCache.savePodcastsByChannelId(entity, channelId);
                     });
         } else {
@@ -118,7 +120,7 @@ public class RestDataStore implements IDataStore {
 
     public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams) {
         if (isThereInternetConnection()) {
-            if(feedType == 0) {
+            if (feedType == 0) {
                 return mApiRequest.getPosts(limit, offset, filterParams)
                         .doOnNext(responseEntity -> {
                             mCache.savePosts(feedType, filterParams, responseEntity.getData(), (offset != 1));
@@ -207,7 +209,7 @@ public class RestDataStore implements IDataStore {
                         mCache.saveChannelList(channelEntityList);
                     }
             );
-        }else {
+        } else {
             return Observable.error(new NetworkConnectionException());
         }
     }
@@ -261,7 +263,15 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getSearchPosts(limit, offset, query, type);
         } else {
-            return  Observable.error(new NetworkConnectionException());
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.saveUserInfo(entity);
+        } else {
+            return Observable.error(new NetworkConnectionException());
         }
     }
 

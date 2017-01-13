@@ -34,6 +34,7 @@ import com.taf.interactor.GetPodcastListUseCase;
 import com.taf.interactor.GetPostDetailUseCase;
 import com.taf.interactor.GetPostListUseCase;
 import com.taf.interactor.GetSearchPostsUseCase;
+import com.taf.interactor.GetSendUserInfoUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
 import com.taf.interactor.PostFavouriteUseCase;
 import com.taf.interactor.PostShareUseCase;
@@ -525,8 +526,8 @@ public class DataModule {
 
     @Provides
     @PerActivity
-    IUserAccountRepository provideUserAccountRepository(DataStoreFactory dataStoreFactory, AppPreferences appPreferences){
-        return new UserAccountRepository(appPreferences,dataStoreFactory);
+    IUserAccountRepository provideUserAccountRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+        return new UserAccountRepository(dataStoreFactory,dataMapper);
     }
 
     @Provides
@@ -536,6 +537,15 @@ public class DataModule {
                                       ThreadExecutor threadExecutor,
                                       PostExecutionThread postExecutionThread){
         return new GetFavouritePostUseCase(repository,threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("send-user-info")
+    UseCase provideSendUserInfoUseCase(IUserAccountRepository repository,
+                                       ThreadExecutor threadExecutor,
+                                       PostExecutionThread postExecutionThread){
+        return new GetSendUserInfoUseCase(repository,threadExecutor, postExecutionThread);
     }
 
 }

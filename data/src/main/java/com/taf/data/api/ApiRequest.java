@@ -16,6 +16,8 @@ import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
 import com.taf.data.entity.UpdateResponseEntity;
+import com.taf.data.entity.UserInfoEntity;
+import com.taf.data.entity.UserInfoResponse;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.model.CountryWidgetData;
 
@@ -116,6 +118,10 @@ public class ApiRequest {
 
     public Observable<PostResponseEntity> getNewsList(int page, int offset) {
         return mApiService.getNewsList(page, offset);
+    }
+
+    public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity){
+        return mApiService.saveUserInfo(entity);
     }
 
 }

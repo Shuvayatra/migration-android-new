@@ -135,6 +135,7 @@ public class MyConstants {
         public static final String POST_SHARE = "api/post/{id}/share";
         public static final String DESTINATION_DETAIL = "api/screen/destination/{id}";
         public static final String NEWS = "api/posts/news";
+        public static final String ON_BOARDING_PUSH = "api/onboarding/save";
 
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";
