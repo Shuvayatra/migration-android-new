@@ -22,6 +22,7 @@ public class GetPodcastListUseCase extends UseCase<PodcastResponse> {
 
     @Override
     protected Observable<PodcastResponse> buildUseCaseObservable(UseCaseData pData) {
-        return mRepository.getPodcasts();
+        int offset = pData.getInteger(UseCaseData.OFFSET);
+        return mRepository.getPodcasts(offset);
     }
 }

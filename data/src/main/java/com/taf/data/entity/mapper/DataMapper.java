@@ -411,6 +411,7 @@ public class DataMapper {
     }
 
     public PodcastResponse transformPodcastResponse(PodcastResponseEntity entity) {
+        Logger.e(TAG,"podcasts: "+ entity.getData().getData().size());
         if (entity != null) {
             PodcastResponse response = new PodcastResponse(entity.getId());
             response.setTitle(entity.getTitle());
@@ -427,6 +428,8 @@ public class DataMapper {
                     .getLastPage());
             data.setLimit(entity.getLimit());
             data.setTotal(entity.getTotal());
+            data.setCurrentPage(entity.getCurrentPage());
+            data.setLastPage(entity.getLastPage());
             data.setData(transformPodcastEntity(entity.getData()));
             return data;
         }

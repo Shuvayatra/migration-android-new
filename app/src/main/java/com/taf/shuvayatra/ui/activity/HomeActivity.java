@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -39,6 +41,8 @@ public class HomeActivity extends MediaServiceActivity implements
     NavigationView mNavigationView;
     @BindView(R.id.searchbox_container)
     LinearLayout mSearchBox;
+    @BindView(R.id.app_bar)
+    AppBarLayout mAppBarLayout;
 
     int selectedNavMenuId;
 
@@ -191,6 +195,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, UserAccountFragment.TAG)
                         .commit();
                 break;
+        }
+        if(menuId == R.id.nav_account){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mAppBarLayout.setElevation(0);
+            }
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
+            }
         }
         if(fragment!=null) selectedNavMenuId = menuId;
     }

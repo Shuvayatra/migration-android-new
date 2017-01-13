@@ -46,8 +46,8 @@ public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null) {
-            Logger.e(TAG, "url: " + url);
-            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
+//            Logger.e(TAG, "url: " + url);
+//            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
             //// TODO: 1/11/17 issue with width and height 0 for nougat
             // temp fix for giving certain width and height if view height and width are 0
             int height = pView.getHeight() > 0? pView.getHeight(): 150 ;

@@ -11,10 +11,12 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.PodcastEntity;
+import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.utils.Logger;
 import com.taf.model.Channel;
+import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
@@ -23,6 +25,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -135,28 +139,50 @@ public class CacheImpl {
         return Observable.just(blocks);
     }
 
-    public void savePodcastsByChannelId(List<PodcastEntity> entities, long channelId) {
+    public void savePodcastsByChannelId(PodcastResponseEntity entities, long channelId) {
+        PodcastResponseEntity podcastResponseEntity = getPodcastsByChannelId(channelId);
+        if (podcastResponseEntity == null) {
+            try {
+                Logger.e(TAG, "podcast cache saved: " + entities.getData().getData().size());
+                mSimpleDiskCache.put(PODCAST_PREFIX + channelId, new Gson().toJson(entities));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        podcastResponseEntity.getData().setCurrentPage(entities.getData().getCurrentPage());
+        podcastResponseEntity.getData().setLastPage(entities.getData().getLastPage());
+        podcastResponseEntity.getData().setTotal(entities.getData().getTotal());
+
+        Logger.e(TAG, "podcast cache prevoius: " + podcastResponseEntity.getData().getData().size());
+        podcastResponseEntity.getData().getData().addAll(entities.getData().getData());
+        podcastResponseEntity.getData().setData(new ArrayList<>(new LinkedHashSet<PodcastEntity>(podcastResponseEntity.getData().getData())));
+        Logger.e(TAG, "podcast cache new: " + podcastResponseEntity.getData().getData().size());
+
         try {
-            mSimpleDiskCache.put(PODCAST_PREFIX + channelId, new Gson().toJson(entities));
+            Logger.e(TAG, "podcast cache saved: " + entities.getData().getData().size());
+            mSimpleDiskCache.put(PODCAST_PREFIX + channelId, new Gson().toJson(podcastResponseEntity));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
-    public Observable<List<PodcastEntity>> getPodcastsByChannelId(Long channelId) {
-        List<PodcastEntity> podcasts = new ArrayList<>();
+    public PodcastResponseEntity getPodcastsByChannelId(Long channelId) {
+        PodcastResponseEntity podcasts = null;
         String key = PODCAST_PREFIX + channelId;
         try {
             if (mSimpleDiskCache.contains(key)) {
                 String json = mSimpleDiskCache.getCachedString(key).getValue();
                 podcasts = new Gson().fromJson(json,
-                        new TypeToken<List<PodcastEntity>>() {
+                        new TypeToken<PodcastResponseEntity>() {
                         }.getType());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Observable.just(podcasts);
+        return podcasts;
     }
 
 

@@ -11,8 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
+import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Podcast;
+import com.taf.model.PodcastResponse;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.PlayerFragmentActivity;
@@ -41,6 +43,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     public static final String TAG = "PodcastsActivity";
     public static final String STATE_PODCASTS = "state-podcasts";
 
+    public static final Integer PAGE_LIMIT = 15;
+    public static final Integer INITIAL_OFFSET = 1;
+
     @Inject
     PodcastListPresenter mPresenter;
 
@@ -51,10 +56,19 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     @BindView(R.id.empty_view)
     View mEmptyView;
 
+    int mPage = INITIAL_OFFSET;
+    int mTotalDataCount = 0;
+    int listItemSelection;
+    boolean mIsLoading = false;
+    boolean mIsLastPage = false;
+    UseCaseData mUseCaseData = new UseCaseData();
+
     ListAdapter<Podcast> mAdapter;
 
     Long mId;
     String mTitle;
+    private boolean playingFromHere;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     public int getLayout() {
@@ -74,24 +88,62 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         Bundle data = getIntent().getExtras();
         mId = data.getLong(MyConstants.Extras.KEY_ID, -1);
         mTitle = data.getString(MyConstants.Extras.KEY_TITLE, "");
-
+        setupAdapter();
         initialize();
-
-        mAdapter = new ListAdapter(getContext(), this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setEmptyView(mEmptyView);
-        mRecyclerView.setEmptyMessage(getResources().getString(R.string.default_empty_message));
-        mSwipeContainer.setOnRefreshListener(this);
+        playingFromHere = false;
 
         getSupportActionBar().setTitle(mTitle);
         if (savedInstanceState != null) {
             AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
             List<Podcast> podcasts = (List<Podcast>) savedInstanceState.get(STATE_PODCASTS);
-            mAdapter.setDataCollection(podcasts);
+//            mAdapter.setDataCollection(podcasts);
         } else {
-            mPresenter.initialize(null);
+            loadPodcasts(INITIAL_OFFSET);
         }
+    }
+
+    private void setupAdapter(){
+        mAdapter = new ListAdapter(getContext(), this);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mSwipeContainer.setOnRefreshListener(this);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
+        mRecyclerView.setEmptyMessage(getResources().getString(R.string.default_empty_message));
+        mSwipeContainer.setOnRefreshListener(this);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int visibleItemCount = mLayoutManager.getChildCount();
+                int totalItemCount = mLayoutManager.getItemCount();
+                int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+                if (!mIsLoading && !mIsLastPage) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0) {
+                        loadPodcasts(mPage + 1);
+                    }
+                }
+            }
+        });
+    }
+
+    public void loadPodcasts(int page){
+//        mPage = page;
+        mSwipeContainer.setRefreshing(true);
+        mUseCaseData.clearAll();
+        mUseCaseData.putInteger(UseCaseData.OFFSET, page);
+        mIsLoading = true;
+        Logger.e(TAG,"loading Post: "+ page);
+        mPresenter.initialize(mUseCaseData);
     }
 
     @Override
@@ -109,23 +161,61 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        ((MyApplication) getApplicationContext()).mService.changeCurrentPodcast(pIndex);
+        if(playingFromHere) {
+            ((MyApplication) getApplicationContext()).mService.changeCurrentPodcast(pIndex);
+        } else {
+            ((MyApplication) getApplicationContext()).mService.setPodcasts(mAdapter.getDataCollection());
+            playingFromHere = true;
+        }
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.initialize(null);
+        mPage = INITIAL_OFFSET;
+        loadPodcasts(INITIAL_OFFSET);
+
     }
 
     @Override
-    public void renderPodcasts(List<Podcast> podcasts) {
-        mAdapter.setDataCollection(podcasts);
-        if (!podcasts.isEmpty()) {
-            ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts);
+    public void renderPodcasts(PodcastResponse podcasts) {
+        if(podcasts.isFromCache()){
+            if(mAdapter.getDataCollection().isEmpty()){
+                mAdapter.setDataCollection(podcasts.getData().getData());
+                mPage = podcasts.getData().getCurrentPage();
+                mIsLastPage = podcasts.getData().getTotal() == podcasts.getData().getData().size();
+                Logger.e(TAG,"cache: page "+ mPage);
+                Logger.e(TAG,"cache: page "+ mAdapter.getDataCollection().size());
+            }
+            return;
+        }
+
+        Logger.e(TAG," ============================ start ==================================");
+        Logger.e(TAG,"current page / total page"+ podcasts.getData().getCurrentPage() +" / " + podcasts.getData().getLastPage());
+        Logger.e(TAG,"total items: "+ podcasts.getData().getTotal());
+        Logger.e(TAG,"prevoius item: "+ mAdapter.getItemCount() );
+        Logger.e(TAG,"add items:  "+ podcasts.getData().getData().size());
+        mPage = podcasts.getData().getCurrentPage();
+
+        if (mPage == INITIAL_OFFSET) {
+            mAdapter.setDataCollection(podcasts.getData().getData());
+        } else {
+            mAdapter.addDataCollection(podcasts.getData().getData());
+        }
+//        mTotalDataCount = podcasts.getData().getTotal();
+        mIsLastPage = (mPage == podcasts.getData().getLastPage());
+        Logger.e(TAG, "new items " + mAdapter.getItemCount());
+        Logger.e(TAG," ============================ end ================================== \n");
+
+        if (!podcasts.getData().getData().isEmpty()) {
+            if(!((MyApplication) getApplicationContext()).mService.getPlayStatus()) {
+                ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts.getData().getData());
+                playingFromHere = true;
+            }
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_player, MiniPlayerFragment.newInstance(this), MiniPlayerFragment.TAG)
                     .commit();
         }
+
     }
 
     @Override
@@ -136,6 +226,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     @Override
     public void hideLoadingView() {
         mSwipeContainer.setRefreshing(false);
+        mIsLoading = false;
     }
 
     @Override

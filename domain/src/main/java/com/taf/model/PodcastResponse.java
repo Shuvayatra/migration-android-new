@@ -8,6 +8,7 @@ public class PodcastResponse {
     Long id;
     String title;
     PaginatedData<Podcast> data;
+    boolean fromCache;
 
     public PodcastResponse(Long id) {
         this.id = id;
@@ -35,5 +36,13 @@ public class PodcastResponse {
 
     public void setData(PaginatedData<Podcast> data) {
         this.data = data;
+    }
+
+    public boolean isFromCache() {
+        return fromCache;
+    }
+
+    public void setFromCache(boolean fromCache) {
+        this.fromCache = fromCache;
     }
 }

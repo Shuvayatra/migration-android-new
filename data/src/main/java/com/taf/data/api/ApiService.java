@@ -42,7 +42,8 @@ public interface ApiService {
     Observable<List<CountryEntity>> getCountryList();
 
     @GET(MyConstants.API.PODCASTS)
-    Observable<PodcastResponseEntity> getPodcasts(@Query("category") Long channelId);
+    Observable<PodcastResponseEntity> getPodcasts(@Query("page") int offset,
+                                                  @Query("category") Long channelId);
 
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);

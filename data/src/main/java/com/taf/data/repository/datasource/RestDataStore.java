@@ -103,12 +103,13 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<PodcastResponseEntity> getPodcasts(Long channelId) {
+    public Observable<PodcastResponseEntity> getPodcasts(int offset, Long channelId) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getPodcasts(channelId)
+            return mApiRequest.getPodcasts(offset, channelId)
                     .doOnNext(entity -> {
+                        Logger.e(TAG,"podcasts: "+ entity.getData().getData().size());
                         if(entity.getData() != null)
-                            mCache.savePodcastsByChannelId(entity.getData().getData(), channelId);
+                            mCache.savePodcastsByChannelId(entity, channelId);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
