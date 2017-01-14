@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
@@ -13,19 +12,22 @@ import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.model.Country;
+import com.taf.model.CountryInfo;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.presenter.CountryListPresenter;
 import com.taf.shuvayatra.presenter.DestinationBlocksPresenter;
+import com.taf.shuvayatra.presenter.deprecated.CategoryPresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
+import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.DestinationDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,12 +36,15 @@ import butterknife.BindView;
 
 public class DestinationDetailActivity extends PlayerFragmentActivity implements
         DestinationDetailView,
+        CountryView,
         SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "DestinationDetailActivity";
 
     @Inject
     DestinationBlocksPresenter mPresenter;
+    @Inject
+    CountryListPresenter mCountryPresenter;
 
     @BindView(R.id.recycler_view)
     EmptyStateRecyclerView mRecyclerView;
@@ -64,6 +69,15 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         if (bundle != null) {
             Logger.e(TAG, ": " + bundle.containsKey(MyConstants.Extras.KEY_COUNTRY));
             mCountry = (Country) bundle.get(MyConstants.Extras.KEY_COUNTRY);
+            if (mCountry == null) {
+                mCountry = new Country();
+                mCountry.setId(bundle.getLong(MyConstants.Extras.KEY_COUNTRY_ID));
+                mCountry.setTitle(bundle.getString(MyConstants.Extras.KEY_COUNTRY_TITLE));
+                mCountry.setTitleEnglish(bundle.getString(MyConstants.Extras.KEY_COUNTRY_TITLE_EN));
+
+                List<CountryInfo> infos = new ArrayList<>();
+                mCountry.setInformation(infos);
+            }
         }
 
         if (savedInstanceState != null) {
@@ -101,6 +115,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
                 .inject(this);
 
         mPresenter.attachView(this);
+        mCountryPresenter.attachView(this);
         mAdapter = new BlocksAdapter(this);
         List<BaseModel> initList = new ArrayList<>();
         initList.add(mCountry);
@@ -110,8 +125,8 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         mRecyclerView.setEmptyView(mEmptyView);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        mCountryPresenter.initialize(null);
         mPresenter.initialize(null);
-
     }
 
     @Override
@@ -130,8 +145,16 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         if (blocks.isEmpty()) {
             models.add(mCountry);
         } else {
-            models.addAll(blocks);
-            if (blocks.get(0).getLayout().equalsIgnoreCase("notice")) {
+            for (Block block : blocks) {
+                if (block.getLayout().equalsIgnoreCase("notice")) {
+                    if (block.getNotice() != null) {
+                        models.add(0, block);
+                    }
+                    continue;
+                }
+                models.add(block);
+            }
+            if (((Block) models.get(0)).getLayout().equalsIgnoreCase("notice")) {
                 models.add(1, mCountry);
             } else {
                 models.add(0, mCountry);
@@ -152,5 +175,16 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
     @Override
     public void onRefresh() {
         mPresenter.initialize(null);
+    }
+
+    @Override
+    public void renderCountries(List<Country> countryList) {
+        for (Country country : countryList) {
+            if (country.getId() == mCountry.getId()) {
+                mCountry = country;
+                break;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
     }
 }

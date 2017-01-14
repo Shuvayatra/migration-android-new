@@ -7,6 +7,7 @@ import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetModel;
+import com.taf.model.Notice;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
@@ -24,6 +26,7 @@ import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
 import com.taf.shuvayatra.databinding.CountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
+import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -187,7 +190,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 }
             }
         }
-        Logger.e(TAG,"deeplink: "+ deepLink);
+        Logger.e(TAG, "deeplink: " + deepLink);
         return deepLink;
     }
 
@@ -215,6 +218,20 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
 
                         mPreferences.setNoticeDismissId(block.getNotice().getId());
                         BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
+                        return;
+                    }
+                });
+            } else if (mBinding instanceof CountryWidgetDataBinding) {
+                ((CountryWidgetDataBinding) mBinding).showCountry.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e(TAG, "onClick: ");
+                        Intent intent = new Intent(mContext, DestinationDetailActivity.class);
+                        CountryWidgetModel countryWidgetModel = ((CountryWidgetDataBinding) mBinding).getWidgetModel();
+
+                        intent.putExtra(MyConstants.Extras.KEY_COUNTRY_TITLE, countryWidgetModel.getCountryName());
+                        intent.putExtra(MyConstants.Extras.KEY_COUNTRY_ID, countryWidgetModel.getId());
+                        mContext.startActivity(intent);
                         return;
                     }
                 });
