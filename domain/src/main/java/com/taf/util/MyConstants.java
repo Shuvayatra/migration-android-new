@@ -136,6 +136,10 @@ public class MyConstants {
         public static final String DESTINATION_DETAIL = "api/screen/destination/{id}";
         public static final String NEWS = "api/posts/news";
         public static final String ON_BOARDING_PUSH = "api/onboarding/save";
+        // TODO: 1/13/17 change after api
+        public static final String SCREEN = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/screens.json";
+        public static final String SCREEN_DATA_BLOCK = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/block.json";
+        public static final String SCREEN_DATA_FEED = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/feeds.json";
 
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";
@@ -249,5 +253,10 @@ public class MyConstants {
         public static final String TYPE_THUNDERSTORM = "thunderstorm";
         public static final String TYPE_SNOW = "snow";
         public static final String TYPE_MIST = "mist";
+    }
+
+    public static final class SCREEN {
+        public static final String TYPE_BLOCK = "block";
+        public static final String TYPE_FEED = "feed";
     }
 }

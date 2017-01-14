@@ -10,6 +10,7 @@ import com.taf.shuvayatra.service.MyTaskService;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
 import com.taf.shuvayatra.ui.activity.FeedActivity;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
 import com.taf.shuvayatra.ui.activity.PodcastsActivity;
 import com.taf.shuvayatra.base.PostDetailActivity;
@@ -24,10 +25,12 @@ import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
+import com.taf.shuvayatra.ui.fragment.BlockScreenFragment;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.CountryWidgetFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FavouritePostFragment;
+import com.taf.shuvayatra.ui.fragment.FeedScreenFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
 import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NewsFragment;
@@ -107,4 +110,10 @@ public interface DataComponent extends ActivityComponent {
     void inject(UserAccountFragment userAccountFragment);
 
     void inject(FavouritePostFragment favouritePostFragment);
+
+    void inject(BlockScreenFragment blockScreenFragment);
+
+    void inject(FeedScreenFragment feedScreenFragment);
+
+    void inject(HomeActivity homeActivity);
 }

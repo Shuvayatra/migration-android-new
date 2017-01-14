@@ -162,7 +162,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             }
         });
 
-        // copy list of country to list of base model after sorting
+        // copy list of country to list of base mScreenModel after sorting
         List<BaseModel> allList = new ArrayList<>();
         allList.addAll(countryList);
         Logger.e(TAG, "all.size(): " + allList.size());

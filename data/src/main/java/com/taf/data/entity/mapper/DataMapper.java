@@ -26,6 +26,9 @@ import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostDataEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
+import com.taf.data.entity.ScreenBlockEntity;
+import com.taf.data.entity.ScreenEntity;
+import com.taf.data.entity.ScreenFeedEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.UserInfoEntity;
 import com.taf.data.utils.DateUtils;
@@ -45,6 +48,8 @@ import com.taf.model.PodcastResponse;
 import com.taf.model.Post;
 import com.taf.model.PostData;
 import com.taf.model.PostResponse;
+import com.taf.model.ScreenDataModel;
+import com.taf.model.ScreenModel;
 import com.taf.model.SyncData;
 import com.taf.model.UserInfoModel;
 
@@ -567,5 +572,45 @@ public class DataMapper {
         userInfoEntity.setName(model.getName());
         userInfoEntity.setLocation(model.getOrignalLocation());
         return userInfoEntity;
+    }
+
+    public List<ScreenModel> transformScreenEntity(List<ScreenEntity> screenEntities){
+        List<ScreenModel> models = new ArrayList<>();
+        if(screenEntities != null) {
+            for (ScreenEntity screenEntity : screenEntities) {
+                models.add(transformScreenEntity(screenEntity));
+            }
+        }
+        return models;
+    }
+
+    public ScreenModel transformScreenEntity(ScreenEntity entity){
+        ScreenModel model = new ScreenModel();
+
+        if(entity != null) {
+            model.setId(entity.getId());
+            model.setEndPOint(entity.getEndpoint());
+            model.setIcon(entity.getIcon());
+            model.setOrder(entity.getOrder());
+            model.setTitle(entity.getTitle());
+            model.setType(entity.getType());
+        }
+        return model;
+
+    }
+
+    public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity){
+        ScreenDataModel<Block> screenDataModel = new ScreenDataModel<>();
+        screenDataModel.setData(transformBlockEntity(screenBlockEntity.getData()));
+        return screenDataModel;
+    }
+
+    public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity){
+        ScreenDataModel<Post> screenDataModel = new ScreenDataModel();
+        screenDataModel.setData(transformPost(screenFeedEntity.getData()));
+        screenDataModel.setCurrentPage(screenFeedEntity.getCurrentPage());
+        screenDataModel.setLastPage(screenFeedEntity.getLastPage());
+        screenDataModel.setTotalCount(screenFeedEntity.getTotal());
+        return screenDataModel;
     }
 }

@@ -159,4 +159,17 @@ public class PostEntity {
     public void setSimilarPosts(List<PostEntity> similarPosts) {
         this.similarPosts = similarPosts;
     }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(!(obj instanceof PostEntity)) return false;
+        return this.id.equals(((PostEntity) obj).getId());
+
+    }
 }

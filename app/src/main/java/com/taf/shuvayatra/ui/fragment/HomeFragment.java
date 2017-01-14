@@ -263,7 +263,7 @@ public class HomeFragment extends BaseFragment implements
                     }
                     break;
             }
-            // make the change in model reflect in widget
+            // make the change in mScreenModel reflect in widget
             if (mAdapter != null && mAdapter.getBlocks() != null && mAdapter.getBlocks()
                     .contains(mCountryWidget)) {
                 mAdapter.notifyItemChanged(mAdapter.getBlocks().indexOf(mCountryWidget));
