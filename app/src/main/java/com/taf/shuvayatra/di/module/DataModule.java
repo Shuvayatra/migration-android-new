@@ -14,6 +14,7 @@ import com.taf.data.repository.JourneyRepository;
 import com.taf.data.repository.NewsRepository;
 import com.taf.data.repository.PodcastRepository;
 import com.taf.data.repository.PostRepository;
+import com.taf.data.repository.ScreenRepository;
 import com.taf.data.repository.UserAccountRepository;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.data.repository.deprecated.DeletedContentRepository;
@@ -33,6 +34,8 @@ import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.GetPodcastListUseCase;
 import com.taf.interactor.GetPostDetailUseCase;
 import com.taf.interactor.GetPostListUseCase;
+import com.taf.interactor.GetScreenDataUseCase;
+import com.taf.interactor.GetScreensUseCase;
 import com.taf.interactor.GetSearchPostsUseCase;
 import com.taf.interactor.GetSendUserInfoUseCase;
 import com.taf.interactor.GetWidgetComponentUseCase;
@@ -56,6 +59,7 @@ import com.taf.interactor.deprecated.UpdateFavouriteStateUseCase;
 import com.taf.interactor.deprecated.UpdatePostShareCountUseCase;
 import com.taf.interactor.deprecated.UpdatePostViewCountUseCase;
 import com.taf.model.Post;
+import com.taf.model.ScreenModel;
 import com.taf.repository.IBaseRepository;
 import com.taf.repository.IChannelRepository;
 import com.taf.repository.ICountryRepository;
@@ -64,6 +68,7 @@ import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INewsRepository;
 import com.taf.repository.IPodcastRepository;
 import com.taf.repository.IPostRepository;
+import com.taf.repository.IScreenRepository;
 import com.taf.repository.IUserAccountRepository;
 import com.taf.repository.IWidgetComponentRepository;
 import com.taf.repository.deprecated.INotificationRepository;
@@ -95,7 +100,6 @@ public class DataModule {
 
     String mFilterParams;
     Post mPost;
-
 
     public DataModule() {
     }
@@ -546,6 +550,30 @@ public class DataModule {
                                        ThreadExecutor threadExecutor,
                                        PostExecutionThread postExecutionThread){
         return new GetSendUserInfoUseCase(repository,threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    IScreenRepository provideScreenRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+        return new ScreenRepository(dataStoreFactory, dataMapper);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("screen-data")
+    UseCase provideScreenDataUseCase(IScreenRepository repository,
+                                     ThreadExecutor threadExecutor,
+                                     PostExecutionThread postExecutionThread){
+        return new GetScreenDataUseCase(mId, repository,threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    @Named("screens")
+    UseCase provideScreenUseCase(IScreenRepository repository,
+                                 ThreadExecutor threadExecutor,
+                                 PostExecutionThread postExecutionThread){
+        return new GetScreensUseCase(repository, threadExecutor, postExecutionThread);
     }
 
 }

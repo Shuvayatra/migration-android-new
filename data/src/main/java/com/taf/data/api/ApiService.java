@@ -9,6 +9,9 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
+import com.taf.data.entity.ScreenBlockEntity;
+import com.taf.data.entity.ScreenEntity;
+import com.taf.data.entity.ScreenFeedEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
@@ -91,4 +94,13 @@ public interface ApiService {
 
     @POST(MyConstants.API.ON_BOARDING_PUSH)
     Observable<UserInfoResponse> saveUserInfo(@Body UserInfoEntity userInfoEntity);
+
+    @GET(MyConstants.API.SCREEN)
+    Observable<List<ScreenEntity>> getScreenEntity();
+
+    @GET(MyConstants.API.SCREEN_DATA_BLOCK)
+    Observable<ScreenBlockEntity> getScreenBlockData();
+
+    @GET(MyConstants.API.SCREEN_DATA_FEED)
+    Observable<ScreenFeedEntity> getScreenFeedData();
 }

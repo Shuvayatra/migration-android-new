@@ -17,6 +17,9 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
+import com.taf.data.entity.ScreenBlockEntity;
+import com.taf.data.entity.ScreenEntity;
+import com.taf.data.entity.ScreenFeedEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.UpdateResponseEntity;
 import com.taf.data.entity.UserInfoEntity;
@@ -270,6 +273,37 @@ public class RestDataStore implements IDataStore {
     public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity) {
         if (isThereInternetConnection()) {
             return mApiRequest.saveUserInfo(entity);
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<List<ScreenEntity>> getScreenEntity() {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getScreens()
+                    .doOnNext(screenEntities -> mCache.saveScreens(screenEntities));
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<ScreenBlockEntity> getScreenBlockData(long id, String endPoint) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getScreenBlockData( endPoint)
+                    .doOnNext(screenDataEntities -> {
+                        mCache.saveScreenBlockData(id, screenDataEntities);
+                    });
+        } else {
+            return Observable.error(new NetworkConnectionException());
+        }
+    }
+
+    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page, String endPoint) {
+        if (isThereInternetConnection()) {
+            return mApiRequest.getScreenFeedData(page, endPoint)
+                    .doOnNext(screenDataEntities -> {
+                        mCache.saveScreenFeedData(id,screenDataEntities);
+                    });
         } else {
             return Observable.error(new NetworkConnectionException());
         }

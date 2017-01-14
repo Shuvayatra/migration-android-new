@@ -1,7 +1,5 @@
 package com.taf.data.api;
 
-import android.util.Log;
-
 import com.google.gson.JsonElement;
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.BlockEntity;
@@ -12,6 +10,9 @@ import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
+import com.taf.data.entity.ScreenBlockEntity;
+import com.taf.data.entity.ScreenEntity;
+import com.taf.data.entity.ScreenFeedEntity;
 import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.SyncResponseEntity;
 import com.taf.data.entity.UpdateRequestEntity;
@@ -26,7 +27,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Action1;
 
 public class ApiRequest {
     public static final String TAG = "ApiRequest";
@@ -123,5 +123,18 @@ public class ApiRequest {
     public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity){
         return mApiService.saveUserInfo(entity);
     }
+
+    public Observable<List<ScreenEntity>> getScreens(){
+        return mApiService.getScreenEntity();
+    }
+
+    public Observable<ScreenBlockEntity> getScreenBlockData(String endpoint){
+        return mApiService.getScreenBlockData();
+    }
+
+    public Observable<ScreenFeedEntity> getScreenFeedData(int page, String endpoint){
+        return mApiService.getScreenFeedData();
+    }
+
 
 }

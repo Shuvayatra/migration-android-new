@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
@@ -14,9 +12,10 @@ import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
+import com.taf.data.entity.ScreenBlockEntity;
+import com.taf.data.entity.ScreenEntity;
+import com.taf.data.entity.ScreenFeedEntity;
 import com.taf.data.utils.Logger;
-import com.taf.model.Channel;
-import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
@@ -25,7 +24,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -47,6 +45,8 @@ public class CacheImpl {
     public static final String DESTINATION_BLOCKS_SUFFIX = "destination-blocks-";
     public static final String CHANNEL_LIST = "channel-list";
     public static final String FAVOURITE_POST = "favourite-post";
+    public static final String SCREENS = "screens";
+    public static final String SCREEN_DATA = "screen-data";
 
     private SimpleDiskCache mSimpleDiskCache;
 
@@ -373,6 +373,107 @@ public class CacheImpl {
             e.printStackTrace();
         }
         return posts;
+    }
+
+    public void saveScreens(List<ScreenEntity> entity) {
+        if (entity != null) {
+            try {
+                mSimpleDiskCache.put(SCREENS, new Gson().toJson(entity, new TypeToken<List<ScreenEntity>>() {
+                }.getType()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<ScreenEntity> getScreens() {
+        List<ScreenEntity> entities = new ArrayList<>();
+        if (mSimpleDiskCache.contains(SCREENS)) {
+            try {
+                String json = mSimpleDiskCache.getCachedString(SCREENS).getValue();
+                entities = new Gson().fromJson(json, new TypeToken<List<ScreenEntity>>() {
+                }.getType());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return entities;
+    }
+
+    public void saveScreenBlockData(long id,ScreenBlockEntity entity) {
+        if (entity != null) {
+            String key = SCREEN_DATA + id;
+            try {
+                mSimpleDiskCache.put(key, new Gson().toJson(entity));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ScreenBlockEntity getScreenBlockData(long id) {
+
+        ScreenBlockEntity screenBlockEntity = null;
+        if (mSimpleDiskCache.contains(SCREEN_DATA + id)) {
+            try {
+                if (mSimpleDiskCache.contains(SCREEN_DATA + id)) {
+                    String json = mSimpleDiskCache.getCachedString(SCREEN_DATA + id).getValue();
+                    screenBlockEntity = new Gson().fromJson(json, new TypeToken<ScreenBlockEntity>() {
+                    }.getType());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return screenBlockEntity;
+    }
+
+    public ScreenFeedEntity getScreenFeedData(long id) {
+
+        ScreenFeedEntity screenFeedEntity = null;
+        if (mSimpleDiskCache.contains(SCREEN_DATA + id)) {
+
+            try {
+                if (mSimpleDiskCache.contains(SCREEN_DATA + id)) {
+                    String json = mSimpleDiskCache.getCachedString(SCREEN_DATA + id).getValue();
+                    screenFeedEntity = new Gson().fromJson(json, new TypeToken<ScreenFeedEntity>() {
+                    }.getType());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return screenFeedEntity;
+    }
+
+    public void saveScreenFeedData(long id, ScreenFeedEntity entity) {
+        ScreenFeedEntity screenFeedEntity = getScreenFeedData(id);
+        String key = SCREEN_DATA + id;
+        // if nothing in cache just put data in cache
+        if (screenFeedEntity == null) {
+            try {
+                mSimpleDiskCache.put(key, new Gson().toJson(entity));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        // update the cache
+        screenFeedEntity.setTotal(entity.getTotal());
+        screenFeedEntity.setCurrentPage(entity.getCurrentPage());
+        screenFeedEntity.setLastPage(entity.getLastPage());
+        screenFeedEntity.setLimit(entity.getLimit());
+
+        screenFeedEntity.getData().addAll(entity.getData());
+        screenFeedEntity.setData(new ArrayList<>(new LinkedHashSet<PostEntity>(screenFeedEntity.getData())));
+
+        try {
+            mSimpleDiskCache.put(key, new Gson().toJson(screenFeedEntity));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
