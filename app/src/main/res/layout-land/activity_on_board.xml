@@ -9,7 +9,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.taf.shuvayatra.ui.activity.OnBoardActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,9 +29,20 @@
 
                 <ImageView
                     android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/img_onboaring"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/onboard_header_height"
-                    android:background="@drawable/onboarding_header"
-                    android:src="@drawable/ic_destination_faded" />
+                    android:background="@drawable/onboarding_header" />
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@android:color/transparent" />
 
                 <TextView
                     android:layout_width="wrap_content"

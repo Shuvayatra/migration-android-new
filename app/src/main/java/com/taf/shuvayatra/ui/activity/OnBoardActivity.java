@@ -11,6 +11,8 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,8 +41,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdapter.ButtonPressListener,
-        CountryView, OnBoardingView {
+public class OnBoardActivity extends BaseActivity implements
+        OnBoardQuestionAdapter.ButtonPressListener,
+        CountryView {
 
     @BindView(R.id.viewpager_questions)
     SwipeDisabledPager mQuestionPager;
@@ -52,14 +55,10 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
     @Inject
     CountryListPresenter presenter;
 
-    @Inject
-    OnBoardingPresenter onBoardingPresenter;
-
     public static final String TAG = "OnBoardActivity";
     private static final int REQUEST_CODE_WIFI_SETTINGS = 1;
 
     private int currentItem;
-
 
     @Override
     public int getLayout() {
@@ -94,8 +93,19 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
             mQuestionPager.setCurrentItem(currentItem);
         }
 
-        if (getSupportActionBar() != null)
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public void initialize() {
@@ -106,22 +116,13 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
                 .inject(this);
         presenter.attachView(this);
         presenter.initialize(new UseCaseData());
-        onBoardingPresenter.attachView(this);
     }
 
     @Override
     public void onNextButtonPressed(final int position) {
         // TODO: 10/26/16 refactor logic
         if (getPreferences().isOnBoardingCountryListLoaded()) {
-
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
-                getPreferences().setFirstLaunch(false);
-                sendUserInfo();
-            } else {
-                mQuestionPager.setCurrentItem(position + 1);
-            }
-        } else {
-            if (position == OnBoardQuestionAdapter.LIST_SIZE - 2) {
                 getPreferences().setFirstLaunch(false);
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
@@ -132,12 +133,6 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
         }
     }
 
-    private void sendUserInfo(){
-        Logger.e(TAG,"sending userInfo");
-        UseCaseData useCaseData = new UseCaseData();
-        useCaseData.putSerializable(UseCaseData.USER_INFO, getUserInfo());
-        onBoardingPresenter.initialize(useCaseData);
-    }
 
     @Override
     public void onBackButtonPressed(int position) {
@@ -250,39 +245,4 @@ public class OnBoardActivity extends BaseActivity implements OnBoardQuestionAdap
         return getApplicationContext();
     }
 
-
-    public UserInfoModel getUserInfo() {
-        UserInfoModel userInfo = new UserInfoModel();
-        userInfo.setName(getPreferences().getUserName());
-        userInfo.setBirthday(getPreferences().getBirthday());
-        String countryInfo = getPreferences().getLocation();
-        if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) && !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
-
-            userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
-        } else {
-            userInfo.setDestinedCountry(null);
-        }
-        Locale locale = Locale.getDefault();
-        int worStatusId = getPreferences().getPreviousWorkStatus();
-        userInfo.setWorkStatus(getString(worStatusId));
-        int id = getPreferences().getOriginalLocation();
-
-        String[] zones = getResources().getStringArray(R.array.zones);
-        userInfo.setOrignalLocation(zones[id]);
-        String gender = getPreferences().getGender();
-        if(gender.equalsIgnoreCase(getString(R.string.gender_male))){
-            userInfo.setGender("M");
-        }else if(gender.equalsIgnoreCase(getString(R.string.gender_female))) {
-            userInfo.setGender("F");
-        }
-        Logger.e(TAG,"userInfo: "+ userInfo);
-        return userInfo;
-    }
-
-    @Override
-    public void onSendUserInfo() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }

@@ -48,4 +48,39 @@ public class Podcast extends BaseModel {
     public int getDataType() {
         return MyConstants.Adapter.TYPE_PODCAST;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (!(o instanceof Podcast)) {
+            return false;
+        }
+
+        Podcast podcast = (Podcast) o;
+        return podcast.title != null && getTitle().equalsIgnoreCase(podcast.title);
+    }
+
+    @Override
+    public String toString() {
+        return "Podcast{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", source='" + source + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
+    }
+
+    public static Podcast convertPost(Post post) {
+        Podcast podcast = new Podcast();
+        podcast.title = post.getTitle();
+        podcast.image = post.getData().getThumbnail();
+        podcast.source = post.getData().getMediaUrl();
+        podcast.description = post.getDescription();
+        return podcast;
+    }
 }

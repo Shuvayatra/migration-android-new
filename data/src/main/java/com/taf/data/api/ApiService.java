@@ -41,7 +41,12 @@ public interface ApiService {
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);
 
     @GET(MyConstants.API.HOME)
-    Observable<List<BlockEntity>> getHomeBlocks();
+    Observable<List<BlockEntity>> getHomeBlocks(@Query("country_id") String countryId,
+                                                @Query("gender") String gender);
+
+    @GET(MyConstants.API.JOURNEY)
+    Observable<List<BlockEntity>> getJourneyContents(@Query("country_id") String countryId,
+                                                     @Query("gender") String gender);
 
     @GET(MyConstants.API.DESTINATION)
     Observable<List<CountryEntity>> getCountryList();
@@ -52,9 +57,6 @@ public interface ApiService {
 
     @GET(MyConstants.API.OPEN_WEATHER)
     Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);
-
-    @GET(MyConstants.API.JOURNEY)
-    Observable<List<BlockEntity>> getJourneyContents();
 
     @GET(MyConstants.API.FOREX)
     Observable<JsonElement> getForex();
@@ -90,7 +92,8 @@ public interface ApiService {
                                                   @Query("post_type") String type);
 
     @GET(MyConstants.API.NEWS)
-    Observable<PostResponseEntity> getNewsList(@Query("per_page") int limit, @Query("page") int offset);
+    Observable<PostResponseEntity> getNewsList(@Query("per_page") int limit,
+                                               @Query("page") int offset);
 
     @POST(MyConstants.API.ON_BOARDING_PUSH)
     Observable<UserInfoResponse> saveUserInfo(@Body UserInfoEntity userInfoEntity);

@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class SplashScreenActivity extends BaseActivity implements
         SplashScreenView,
         LatestContentView,

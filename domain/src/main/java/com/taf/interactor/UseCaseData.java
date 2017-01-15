@@ -22,6 +22,8 @@ public class UseCaseData implements Serializable {
     public static final String SEARCH_QUERY = "search_query";
     public static final String SEARCH_TYPE = "search_type";
     public static final String CATEGORY_ID = "category_id";
+    public static final String COUNTRY_ID = "country_id";
+    public static final String USER_GENDER = "user_gender";
     public static final String POST_TYPE = "type";
     public static final String IS_FAVOURITE = "is_favourite";
     public static final String POST ="post";

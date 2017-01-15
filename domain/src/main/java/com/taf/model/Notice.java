@@ -1,5 +1,6 @@
 package com.taf.model;
 
+
 /**
  * Created by julian on 10/20/16.
  */

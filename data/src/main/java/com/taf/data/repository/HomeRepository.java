@@ -5,6 +5,7 @@ import android.util.Log;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.model.Block;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IHomeRepository;
 
 import java.util.List;
@@ -23,27 +24,17 @@ public class HomeRepository implements IHomeRepository {
     }
 
     @Override
-    public Observable<List<Block>> getBlocks(boolean noCache) {
+    public Observable<List<Block>> getBlocks(boolean noCache, ApiQueryParams params) {
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getHomeBlocks()
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
-                .doOnNext(new Action1<List<Block>>() {
-                    @Override
-                    public void call(List<Block> blocks) {
-                        Log.e("HomeRepository", "call: " + blocks.size());
-                    }
-                });
+                .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.size()));
 
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
-                .getHomeBlocks()
+                .getHomeBlocks(params)
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
-                .doOnNext(new Action1<List<Block>>() {
-                    @Override
-                    public void call(List<Block> blocks) {
-                        Log.e("HomeRepository", "call: " + blocks.get(0).getData());
-                    }
-                });
+                .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.get(0).getData()));
 
         if (noCache) {
             return apiObservable;

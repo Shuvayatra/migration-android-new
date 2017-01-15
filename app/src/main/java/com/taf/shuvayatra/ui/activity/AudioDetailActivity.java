@@ -4,8 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,6 +16,8 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
+import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
@@ -38,6 +41,8 @@ import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -57,6 +62,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
     private static final String TAG = "AudioDetailActivity";
     @BindView(R.id.scroll_view)
     NestedScrollView mScrollView;
+    @BindView(R.id.description)
+    WebView webView;
     @BindView(R.id.audio_time)
     TextView mAudioTime;
     @BindView(R.id.play)
@@ -71,7 +78,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     TextView bufferingText;
     @BindView(R.id.overlay)
     RelativeLayout mOverlay;
-    MiniPlayerFragment mPlayerFragment;
     private MediaReceiver mediaReceiver;
     private IntentFilter receiverFilter;
     private int mCurrentProgress;
@@ -107,26 +113,26 @@ public class AudioDetailActivity extends PostDetailActivity implements
         }
     }
 
+    public boolean fragmentVisibility = true;
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+
+        Logger.e(TAG, ">>> onOffsetChanged(): " + verticalOffset);
+        Logger.e(TAG, ">>> total scroll range: " + appBarLayout.getTotalScrollRange());
 
         if (appBarLayout.getTotalScrollRange() == Math.abs(verticalOffset)) {
             if (mainPost != null && getToolbar().getTitle() == null)
                 getToolbar().setTitle(mainPost.getTitle());
+            if (!fragmentVisibility) {
+                fragmentVisibility = true;
+                findViewById(R.id.content_player).animate().alpha(1).setDuration(300);
+            }
         } else {
             if (getToolbar().getTitle() != null) getToolbar().setTitle(null);
-        }
-
-        if (mPlayerFragment != null) {
-            if (mCollapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat
-                    .getMinimumHeight(mCollapsingToolbar)) {
-                getSupportFragmentManager().beginTransaction()
-                        .show(mPlayerFragment)
-                        .commit();
-            } else {
-                getSupportFragmentManager().beginTransaction()
-                        .hide(mPlayerFragment)
-                        .commit();
+            if (fragmentVisibility) {
+                fragmentVisibility = false;
+                findViewById(R.id.content_player).animate().alpha(0).setDuration(300);
             }
         }
     }
@@ -243,9 +249,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     public void updateView(Post post) {
         mainPost = post;
         ((MyApplication) getApplicationContext()).mService.setTrack(post);
-
-        Logger.e(TAG, ">>> COLLAPSING TOOLBAR TITLE: " + mCollapsingToolbar.getTitle() + " <<<");
-
         mScrollView.scrollTo(0, 0);
         mAppBar.setExpanded(true);
         ((ActivityAudioDetailBinding) mBinding).setAudio(post);
@@ -256,6 +259,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             mCurrentProgress = savedInstanceState.getInt(KEY_PROGRESS, 0);
         } else {
@@ -291,8 +295,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
         switch (item.getItemId()) {
             case R.id.action_download:
                 try {
-                    if (!getPreferences().getDownloadReferences().contains(mPost
-                            .getDownloadReference())) {
+                    if (!getPreferences().getDownloadReferences().contains(mPost.getDownloadReference())) {
                         requestForPermissions();
                     }
                 } catch (IOException e) {

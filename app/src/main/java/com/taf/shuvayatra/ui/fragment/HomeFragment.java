@@ -72,12 +72,7 @@ public class HomeFragment extends BaseFragment implements
 
     private boolean showCountryWidget;
 
-    UseCaseData noCache = new UseCaseData(UseCaseData.NO_CACHE, true);
-
-
     public static HomeFragment getInstance() {
-        Logger.e(TAG, "instance created");
-
         return new HomeFragment();
     }
 
@@ -90,16 +85,14 @@ public class HomeFragment extends BaseFragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();// TODO: 1/15/17 need to add timezone in location preferences
-        showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) || selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
+        showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) ||
+                selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
 
         if (showCountryWidget) {
             try {
                 String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
-                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
-                        selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
-                                selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
                 Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
-                mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
+                mCountryWidget = new CountryWidgetModel(countryName);
                 mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
                 /**
                  * concat timeZoneId while setting location {@link AppPreferences#setLocation(String)}
@@ -108,12 +101,12 @@ public class HomeFragment extends BaseFragment implements
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 Logger.e(TAG, ">>> country name: " + selectedCountry);
-                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
-                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE_EN];
-                mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
-                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[Country.INDEX_ID]));
-                mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
-//                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
+                String countryName = selectedCountry.split(",")[1];
+                // will cause array out of bounds exception
+//                String countryNameEn = selectedCountry.split(",")[2];
+                mCountryWidget = new CountryWidgetModel(countryName);
+                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
+				mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
             }
         }
 
@@ -122,25 +115,11 @@ public class HomeFragment extends BaseFragment implements
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//                super.getItemOffsets(outRect, view, parent, state);
-//
-//                outRect.right = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
-//                outRect.left = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
-//                outRect.bottom = getResources().getDimensionPixelOffset(R.dimen.spacing_xxxsmall)/2;
-//                outRect.top = getResources().getDimensionPixelOffset(R.dimen.spacing_xxxsmall)/2;
-//                if(parent.getChildAdapterPosition(view) == 0) {
-//                    outRect.top = getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall);
-//                }
-//            }
-//        });
         mRecyclerView.setEmptyView(emptyView);
         mSwipeContainer.setOnRefreshListener(this);
 
-
-        mPresenter.initialize(null);
+        // todo do we need cache??
+        mPresenter.initialize(getUserCredentials());
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
     }
 
@@ -152,7 +131,18 @@ public class HomeFragment extends BaseFragment implements
 
     @Override
     public void onRefresh() {
-        mPresenter.initialize(null);
+        mPresenter.initialize(getUserCredentials());
+        if (showCountryWidget) {
+
+            caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
+            caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
+            caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+
+            // initialize each component for the country widget
+            mCountryWidgetPresenter.initialize(caseCalendar);
+            mCountryWidgetPresenter.initialize(caseWeather);
+            mCountryWidgetPresenter.initialize(caseForEx);
+        }
     }
 
     @Override

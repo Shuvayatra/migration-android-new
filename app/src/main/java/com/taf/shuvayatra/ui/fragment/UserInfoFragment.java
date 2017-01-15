@@ -57,8 +57,7 @@ public class UserInfoFragment extends BaseFragment {
         } else {
             userInfo.setDestinedCountry(null);
         }
-        int worStatusId = getTypedActivity().getPreferences().getPreviousWorkStatus();
-        userInfo.setWorkStatus(getString(worStatusId));
+        userInfo.setWorkStatus(getTypedActivity().getPreferences().getPreviousWorkStatus());
         int id = getTypedActivity().getPreferences().getOriginalLocation();
         String[] zones = getResources().getStringArray(R.array.zones);
         userInfo.setOrignalLocation(zones[id]);

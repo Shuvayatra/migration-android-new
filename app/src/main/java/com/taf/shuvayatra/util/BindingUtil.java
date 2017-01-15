@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -85,10 +86,6 @@ public class BindingUtil {
         StringBuilder sb = new StringBuilder();
         sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body " +
                 "style='margin:0;padding:0;'>");
-//        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
-//                "<style></style>" +
-//                "</HEAD><body style=\"padding-left:" + Utils.dpToPx(pView.getResources()
-//                .getDimensionPixelOffset(R.dimen.spacing_standard)) + "\">");
         sb.append("");
         sb.append(content);
         sb.append("</body></HTML>");

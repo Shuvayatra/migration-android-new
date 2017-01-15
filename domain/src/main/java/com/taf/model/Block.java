@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * Created by julian on 10/18/16.
  */
-
 public class Block extends BaseModel {
 
     public static final String TYPE_LIST = "list";
