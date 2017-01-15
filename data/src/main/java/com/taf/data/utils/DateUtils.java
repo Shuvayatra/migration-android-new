@@ -4,11 +4,13 @@ import android.util.SparseArray;
 
 import com.taf.data.utils.Logger;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by rakeeb on 10/19/16.
@@ -417,6 +419,12 @@ public class DateUtils {
      * see other formats <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">here</a>
      */
     public static final String DEFAULT_DATE_PATTERN = "dd MMMM yyyy";
+
+    public static String getFormattedDate(String pattern, Date date, TimeZone timeZone) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
+        format.setTimeZone(timeZone);
+        return format.format(date);
+    }
 
     public static String getFormattedDate(String pattern, Date date) {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);

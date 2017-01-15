@@ -45,7 +45,7 @@
                 android:layout_width="@dimen/country_list_selected_flag_width"
                 android:layout_height="@dimen/country_list_selected_flag_height"
                 app:imageUrl="@{country.icon}"
-                app:actualImageScaleType="centerInside"
+                app:actualImageScaleType="fitXY"
                 android:layout_marginRight="@dimen/spacing_large"
                 app:progressBarAutoRotateInterval="1000"
                 app:progressBarImage="@drawable/ic_refresh"
