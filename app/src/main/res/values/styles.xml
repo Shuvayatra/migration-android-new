@@ -119,6 +119,7 @@
 
 	<style name="AppTheme.RadioWidget">
 		<item name="colorAccent">#009688</item>
+		<item name="android:shadowColor">#000000</item>
 	</style>
 
 	<style name="AppTheme.ChannelFab" parent="AppTheme">

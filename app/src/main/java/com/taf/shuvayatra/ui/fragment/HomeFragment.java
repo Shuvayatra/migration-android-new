@@ -1,16 +1,15 @@
 package com.taf.shuvayatra.ui.fragment;
 
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 
+import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -19,8 +18,6 @@ import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetModel;
-import com.taf.model.Post;
-import com.taf.model.PostData;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
@@ -34,10 +31,14 @@ import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
 import com.taf.util.MyConstants;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -88,25 +89,31 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();// TODO: 1/15/17 need to add timezone in location preferences
         showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) || selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
 
         if (showCountryWidget) {
             try {
                 String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
-                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE].substring(0, 1).toUpperCase() +
+                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(0, 1).toUpperCase() +
                         selectedCountry.split(",")[Country.INDEX_TITLE_EN].substring(1,
                                 selectedCountry.split(",")[Country.INDEX_TITLE_EN].length());
                 Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
                 mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
+                mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
+                /**
+                 * concat timeZoneId while setting location {@link AppPreferences#setLocation(String)}
+                 */
+//                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 Logger.e(TAG, ">>> country name: " + selectedCountry);
-                String countryName = selectedCountry.split(",")[1];
-                String countryNameEn = selectedCountry.split(",")[2];
+                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
+                String countryNameEn = selectedCountry.split(",")[Country.INDEX_TITLE_EN];
                 mCountryWidget = new CountryWidgetModel(countryName, countryNameEn);
-                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
+                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[Country.INDEX_ID]));
+                mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
+//                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
             }
         }
 
@@ -210,7 +217,8 @@ public class HomeFragment extends BaseFragment implements
 
                     mCountryWidget.setNepaliDate(((CountryWidgetData.CalendarComponent) component).getNepaliDate());
                     Calendar instance = ((CountryWidgetData.CalendarComponent) component).getToday();
-                    String date = DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN, instance.getTime());
+                    String date = DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN, instance.getTime(), mCountryWidget.getTimeZone());
+                    Log.e(TAG, "onComponentLoaded: " + DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN + " hh mm ", instance.getTime(), mCountryWidget.getTimeZone()));
                     String day = DateUtils.getEnglishDay(instance.get(Calendar.DAY_OF_WEEK));
                     String englishDate = day + ",\n" + date;
                     mCountryWidget.setEnglishDate(englishDate);

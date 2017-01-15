@@ -2,10 +2,13 @@ package com.taf.model;
 
 import com.taf.util.MyConstants;
 
+import java.util.TimeZone;
+
 public class CountryWidgetModel extends BaseModel {
 
     private String mCountryName;
     private String mCountryNameEn;
+    private String mTimeZoneId;
     private String weather;
     private String temperature;
     private String mEnglishDate;
@@ -13,6 +16,7 @@ public class CountryWidgetModel extends BaseModel {
     private String mForex;
     private int mImageresource = Integer.MIN_VALUE;
     String icon;
+    private TimeZone mTimeZone;
 
     @Override
     public int getDataType() {
@@ -90,5 +94,18 @@ public class CountryWidgetModel extends BaseModel {
 
     public void setImageResource(int imageresource) {
         mImageresource = imageresource;
+    }
+
+    public String getTimeZoneId() {
+        return mTimeZoneId;
+    }
+
+    public void setTimeZoneId(String timeZoneId) {
+        this.mTimeZoneId = timeZoneId;
+        this.mTimeZone = TimeZone.getTimeZone(timeZoneId);
+    }
+
+    public TimeZone getTimeZone() {
+        return mTimeZone;
     }
 }

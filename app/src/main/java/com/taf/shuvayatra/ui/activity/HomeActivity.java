@@ -92,14 +92,7 @@ public class HomeActivity extends MediaServiceActivity implements
     private BroadcastReceiver mRadioCallbackReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChannelFragment.TAG);
-            if (fragment == null) {
-                fragment = ChannelFragment.getInstance();
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_home, fragment, ChannelFragment.TAG)
-                    .commit();
-            mNavigationView.setCheckedItem(R.id.nav_radio);
+            showFragment(R.id.nav_radio);
         }
     };
 
@@ -127,33 +120,32 @@ public class HomeActivity extends MediaServiceActivity implements
         mScreens = new ArrayList<>();
         initialize();
 
-        if(savedInstanceState !=null ){
+        if (savedInstanceState != null) {
             selectedNavMenuId = savedInstanceState.getInt(STATE_MENU_ID);
             mScreens = (List<ScreenModel>) savedInstanceState.get(STATE_SCREENS);
             addMenu();
-        }else{
+        } else {
             selectedNavMenuId = R.id.nav_home;
             mPresenter.initialize(null);
         }
 
 
-        mNavigationView.setCheckedItem(selectedNavMenuId);
         showFragment(selectedNavMenuId);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mSearchBox
                 .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), SearchActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                    }
+                });
 
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(getActivityModule())
@@ -177,7 +169,7 @@ public class HomeActivity extends MediaServiceActivity implements
             return;
         }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-        if(fragment==null){
+        if (fragment == null) {
             mNavigationView.setCheckedItem(R.id.nav_home);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
@@ -200,8 +192,9 @@ public class HomeActivity extends MediaServiceActivity implements
     Replace the fragment by their menu Id from navigation drawer
      */
 
-    private void showFragment(int menuId){
+    private void showFragment(int menuId) {
         Fragment fragment = null;
+        mNavigationView.setCheckedItem(menuId);
 
         switch (menuId) {
             case R.id.nav_home:
@@ -251,7 +244,7 @@ public class HomeActivity extends MediaServiceActivity implements
 //                break;
             case R.id.nav_account:
                 fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
-                if(fragment == null){
+                if (fragment == null) {
                     fragment = UserAccountFragment.newInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
@@ -259,16 +252,16 @@ public class HomeActivity extends MediaServiceActivity implements
                         .commit();
                 break;
         }
-        if(menuId == R.id.nav_account){
+        if (menuId == R.id.nav_account) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mAppBarLayout.setElevation(0);
             }
-        }else{
+        } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
             }
         }
-        if(fragment!=null)
+        if (fragment != null)
             selectedNavMenuId = menuId;
 
     }
@@ -311,16 +304,16 @@ public class HomeActivity extends MediaServiceActivity implements
         addMenu();
     }
 
-    private void addMenu(){
-        Logger.e(TAG,"mScreens.size(): "+ mScreens.size());
+    private void addMenu() {
+        Logger.e(TAG, "mScreens.size(): " + mScreens.size());
         mNavigationView.getMenu().removeGroup(R.id.menu_screens);
-        Logger.e(TAG,"screens mNavigationView.getMenu().size();: "+ mNavigationView.getMenu().size());
+        Logger.e(TAG, "screens mNavigationView.getMenu().size();: " + mNavigationView.getMenu().size());
         for (final ScreenModel screen : mScreens) {
             getMenuIcon(screen);
         }
     }
 
-    private void getMenuIcon(final ScreenModel screen){
+    private void getMenuIcon(final ScreenModel screen) {
 
         ImageRequest imageRequest = ImageRequestBuilder
                 .newBuilderWithSource(Uri.parse(screen.getIcon()))
@@ -333,14 +326,14 @@ public class HomeActivity extends MediaServiceActivity implements
 
             @Override
             public void onNewResultImpl(@Nullable Bitmap bitmap) {
-                if (dataSource.isFinished() && bitmap != null){
-                    Logger.e(TAG,"bitmap has come");
+                if (dataSource.isFinished() && bitmap != null) {
+                    Logger.e(TAG, "bitmap has come");
 //                    Bitmap bmp = Bitmap.createBitmap(bitmap);
-                    final Drawable drawable = new BitmapDrawable(getResources(),bitmap);
+                    final Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            addMenu(screen,drawable);
+                            addMenu(screen, drawable);
                         }
                     });
                     dataSource.close();
@@ -349,7 +342,7 @@ public class HomeActivity extends MediaServiceActivity implements
 
             @Override
             public void onFailureImpl(DataSource dataSource) {
-                Logger.e(TAG,"Bitmap error: ");
+                Logger.e(TAG, "Bitmap error: ");
                 dataSource.getFailureCause().printStackTrace();
                 if (dataSource != null) {
                     dataSource.close();
@@ -363,11 +356,11 @@ public class HomeActivity extends MediaServiceActivity implements
         }, CallerThreadExecutor.getInstance());
     }
 
-    private void addMenu(final ScreenModel screen, Drawable icon){
-        Logger.e(TAG,"menu added: "+screen.getId());
-        final MenuItem  menuItem = mNavigationView.getMenu().add(R.id.menu_screens,
+    private void addMenu(final ScreenModel screen, Drawable icon) {
+        Logger.e(TAG, "menu added: " + screen.getId());
+        final MenuItem menuItem = mNavigationView.getMenu().add(R.id.menu_screens,
                 screen.getId().intValue(),
-                (screen.getOrder()+MENU_OFFSET),
+                (screen.getOrder() + MENU_OFFSET),
                 screen.getTitle());
         menuItem.setIcon(icon);
         menuItem.setCheckable(true);
@@ -376,20 +369,20 @@ public class HomeActivity extends MediaServiceActivity implements
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Fragment fragment = null;
-                Logger.e(TAG,"screen.getType(): "+ screen.getType());
-                if(screen.getType().equals("block")){
-                    fragment = getSupportFragmentManager().findFragmentByTag(BlockScreenFragment.TAG+screen.getId());
-                    if(fragment == null){
+                Logger.e(TAG, "screen.getType(): " + screen.getType());
+                if (screen.getType().equals("block")) {
+                    fragment = getSupportFragmentManager().findFragmentByTag(BlockScreenFragment.TAG + screen.getId());
+                    if (fragment == null) {
                         fragment = BlockScreenFragment.newInstance(screen);
                     }
 
-                } else if(screen.getType().equals("feed")){
-                    fragment = getSupportFragmentManager().findFragmentByTag(FeedScreenFragment.TAG+screen.getId());
-                    if(fragment == null){
+                } else if (screen.getType().equals("feed")) {
+                    fragment = getSupportFragmentManager().findFragmentByTag(FeedScreenFragment.TAG + screen.getId());
+                    if (fragment == null) {
                         fragment = FeedScreenFragment.newInstance(screen);
                     }
                 }
-                if(fragment != null) {
+                if (fragment != null) {
                     selectedNavMenuId = menuItem.getItemId();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_home, fragment, FeedScreenFragment.TAG + screen.getId())

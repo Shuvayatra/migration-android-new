@@ -183,6 +183,7 @@ public class DataMapper {
             country.setDescription(countryEntity.getDescription());
             country.setFeaturedImage(countryEntity.getFeaturedImage());
             country.setIcon(countryEntity.getIcon());
+            country.setTimeZoneId(countryEntity.getTimeZone());
             country.setSmallIcon(countryEntity.getSmallIcon());
             List<CountryInfo> countryInfos = new ArrayList<>();
             for (CountryInfoEntity countryInfoEntity : countryEntity.getInformation()) {
@@ -418,7 +419,7 @@ public class DataMapper {
     }
 
     public PodcastResponse transformPodcastResponse(PodcastResponseEntity entity) {
-        Logger.e(TAG,"podcasts: "+ entity.getData().getData().size());
+        Logger.e(TAG, "podcasts: " + entity.getData().getData().size());
         if (entity != null) {
             PodcastResponse response = new PodcastResponse(entity.getId());
             response.setTitle(entity.getTitle());
@@ -563,7 +564,7 @@ public class DataMapper {
         return channels;
     }
 
-    public UserInfoEntity transformUserInfo(UserInfoModel model){
+    public UserInfoEntity transformUserInfo(UserInfoModel model) {
         UserInfoEntity userInfoEntity = new UserInfoEntity();
         userInfoEntity.setCountry(model.getDestinedCountry());
         userInfoEntity.setDob(model.getBirthday());
@@ -574,9 +575,9 @@ public class DataMapper {
         return userInfoEntity;
     }
 
-    public List<ScreenModel> transformScreenEntity(List<ScreenEntity> screenEntities){
+    public List<ScreenModel> transformScreenEntity(List<ScreenEntity> screenEntities) {
         List<ScreenModel> models = new ArrayList<>();
-        if(screenEntities != null) {
+        if (screenEntities != null) {
             for (ScreenEntity screenEntity : screenEntities) {
                 models.add(transformScreenEntity(screenEntity));
             }
@@ -584,10 +585,10 @@ public class DataMapper {
         return models;
     }
 
-    public ScreenModel transformScreenEntity(ScreenEntity entity){
+    public ScreenModel transformScreenEntity(ScreenEntity entity) {
         ScreenModel model = new ScreenModel();
 
-        if(entity != null) {
+        if (entity != null) {
             model.setId(entity.getId());
             model.setEndPOint(entity.getEndpoint());
             model.setIcon(entity.getIcon());
@@ -599,13 +600,13 @@ public class DataMapper {
 
     }
 
-    public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity){
+    public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity) {
         ScreenDataModel<Block> screenDataModel = new ScreenDataModel<>();
         screenDataModel.setData(transformBlockEntity(screenBlockEntity.getData()));
         return screenDataModel;
     }
 
-    public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity){
+    public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity) {
         ScreenDataModel<Post> screenDataModel = new ScreenDataModel();
         screenDataModel.setData(transformPost(screenFeedEntity.getData()));
         screenDataModel.setCurrentPage(screenFeedEntity.getCurrentPage());

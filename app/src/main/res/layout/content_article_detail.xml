@@ -62,7 +62,8 @@
                             android:id="@+id/web_view_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:htmlContent='@{(article.description!=null?article.description:"")}' />
+                            android:visibility="@{article.description!=null?View.VISIBLE:View.GONE}"
+                            app:htmlContent='@{article.description}' />
                     </LinearLayout>
 
                     <LinearLayout
@@ -107,9 +108,9 @@
             </android.support.v4.widget.NestedScrollView>
 
             <!--<FrameLayout-->
-                <!--android:id="@+id/content_player"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:id="@+id/content_player"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
