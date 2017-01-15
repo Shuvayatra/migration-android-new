@@ -3,6 +3,7 @@ package com.taf.interactor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.model.Country;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.ICountryRepository;
 
 import java.util.List;

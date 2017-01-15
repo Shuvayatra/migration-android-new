@@ -99,6 +99,8 @@ public class MyConstants {
         public static final String FIRST_LAUNCH = "first-launch";
         public static final String LOCATION = "location";
         public static final String DEFAULT_LOCATION = "Nepal";
+        public static final String USER_INFO_SYNC_STATUS = "user-info-sync-status";
+        public static final String USER_ONBOARDING_COMPLETE = "user-onboarding-complete";
 
         public static final String COUNTRY_LIST_CALL = "country-list-call";
         public static final String COUNTRY_LIST = "country-list";

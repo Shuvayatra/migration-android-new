@@ -20,14 +20,13 @@ import javax.inject.Named;
 
 /**
  * Presenter for country list as found in
- * <a href="api.shuvayatra.org/api/">Country API call</a>
+ * <a href="api.shuvayatra.org/api/destinations">Country API call</a>
  * <p>
  * Simply lists out available countries, nothing more.
  *
  * @see OnBoardActivity
  * @see DestinationFragment
  */
-
 public class CountryListPresenter implements Presenter {
 
     CountryView mView;

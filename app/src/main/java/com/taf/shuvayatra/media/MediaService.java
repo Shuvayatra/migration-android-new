@@ -34,7 +34,11 @@ import com.taf.util.MyConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MediaService extends Service implements
         MediaPlayer.OnPreparedListener,
@@ -150,18 +154,43 @@ public class MediaService extends Service implements
     }
 
     public void setTrack(Post pTrack) {
-        stopPlayback();
-        mTrack = pTrack;
-        mCurrentPlayType = PlayType.POST;
-        startStreaming();
+//        if (mTrack == null) {
+            stopPlayback();
+            mTrack = pTrack;
+            mCurrentPlayType = PlayType.POST;
+            startStreaming();
+//        } else {
+//            if (mCurrentPlayType != PlayType.POST && !mTrack.equals(pTrack)) {
+//                stopPlayback();
+//                mTrack = pTrack;
+//                mCurrentPlayType = PlayType.POST;
+//                startStreaming();
+//            }
+//        }
     }
 
     public void setPodcasts(List<Podcast> podcasts) {
+        Logger.e(TAG + "_MethodCall", ">>> setPodcasts()");
         stopPlayback();
         mPodcasts = podcasts;
         mCurrentPlayType = PlayType.PODCAST;
         mCurrentPodcastIndex = 0;
         startStreaming();
+    }
+
+    public void addPodcasts(List<Podcast> podcasts) {
+        Logger.e(TAG + "_MethodCall", ">>> addPodcasts()");
+        Logger.e(TAG, ">>> podcasts: pre " + getPodcasts());
+        List<Podcast> serviceList = new ArrayList<>(getPodcasts());
+        serviceList.removeAll(podcasts);
+        Logger.e(TAG, ">>> podcasts: post " + getPodcasts());
+        Logger.e(TAG, ">>> service list: " + serviceList);
+        getPodcasts().addAll(serviceList);
+        Logger.e(TAG, ">>> podcasts: final " + getPodcasts());
+    }
+
+    public List<Podcast> getPodcasts() {
+        return mPodcasts;
     }
 
     @Override
@@ -215,9 +244,7 @@ public class MediaService extends Service implements
             Logger.d("MediaService_playMedia", "test: " + mCurrentPodcastIndex);
             if (mCurrentPlayType.equals(PlayType.POST)) setDataSource(mTrack);
             else setDataSource(mPodcasts.get(mCurrentPodcastIndex));
-
             createNotification(mCurrentTitle, true);
-
             mPlayer.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();

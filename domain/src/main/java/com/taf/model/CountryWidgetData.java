@@ -1,5 +1,6 @@
 package com.taf.model;
 
+
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -52,7 +53,7 @@ public class CountryWidgetData extends BaseModel {
          * key: "country currency"
          * value: buying value
          */
-        HashMap<String, String> currencyMap;
+        HashMap<String, String> currencyMap = new HashMap<>();
 
         /**
          * forex value for calendar

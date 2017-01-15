@@ -7,7 +7,6 @@ import java.util.TimeZone;
 public class CountryWidgetModel extends BaseModel {
 
     private String mCountryName;
-    private String mCountryNameEn;
     private String mTimeZoneId;
     private String weather;
     private String temperature;
@@ -23,9 +22,8 @@ public class CountryWidgetModel extends BaseModel {
         return mDataType == 0 ? MyConstants.Adapter.TYPE_COUNTRY_WIDGET : mDataType;
     }
 
-    public CountryWidgetModel(String countryName, String countryNameEn) {
+    public CountryWidgetModel(String countryName) {
         mCountryName = countryName;
-        mCountryNameEn = countryNameEn;
     }
 
     public void setIcon(String icon) {
@@ -34,10 +32,6 @@ public class CountryWidgetModel extends BaseModel {
 
     public String getIcon() {
         return icon;
-    }
-
-    public String getCountryNameEn() {
-        return mCountryNameEn;
     }
 
     public String getCountryName() {

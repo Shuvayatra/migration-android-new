@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,12 @@ import com.taf.model.BaseModel;
 import com.taf.model.Country;
 import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.databinding.HeaderDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryHeaderDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryListDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryListSelectedDataBinding;
 import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
-import com.taf.shuvayatra.util.BindingUtil;
 import com.taf.util.MyConstants;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

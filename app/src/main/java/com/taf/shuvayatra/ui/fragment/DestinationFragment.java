@@ -1,16 +1,10 @@
 package com.taf.shuvayatra.ui.fragment;
 
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -47,8 +41,6 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     EmptyStateRecyclerView mRecyclerView;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;
-//    @BindView(R.id.swipe_container)
-//    ViewGroup rootView;
 
     @Inject
     CountryListPresenter mPresenter;
@@ -108,33 +100,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             }
         });
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        final int margin = getResources().getDimensionPixelOffset(R.dimen.spacing_xxsmall);
-//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-//                super.onDraw(c, parent, state);
-//            }
-//
-//            @Override
-//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//                super.getItemOffsets(outRect, view, parent, state);
-//                // TODO: 10/27/16 set margin properly
-//                int i = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewAdapterPosition();
-//                int type = mAdapter.getItemViewType(i);
-//                if (type == MyConstants.Adapter.TYPE_COUNTRY) {
-//
-////                    if (i % 2 == 0) {
-////                        outRect.left = margin;
-////                    } else {
-////                        outRect.right = margin;
-////                    }
-//                }
-//
-//            }
-//        });
         mRecyclerView.setAdapter(mAdapter);
-
-//        mEmptyView = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.empty_list_view, mSwipeRefreshLayout);
         mRecyclerView.setEmptyView(mEmptyView);
     }
 

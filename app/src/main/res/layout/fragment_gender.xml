@@ -1,61 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_container"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        android:fadeScrollbars="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/question1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_xxxlarge"
+                android:gravity="center"
+                android:text="@string/question_gender"
+                android:textColor="@color/grey_87"
+                android:textSize="@dimen/text_big" />
+
+            <RadioGroup
+                android:id="@+id/radiogroup_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/question1"
                 android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/question1"
+                <RadioButton
+                    android:id="@+id/choice_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender_male" />
+
+                <RadioButton
+                    android:id="@+id/choice_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender_female" />
+
+                <RadioButton
+                    android:id="@+id/choice_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender_other" />
+            </RadioGroup>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_xxxlarge"
-        android:gravity="center"
-        android:text="@string/question_gender"
-        android:textColor="@color/grey_87"
-        android:textSize="@dimen/text_big"/>
+        android:layout_alignParentBottom="true">
 
-    <RadioGroup
-        android:id="@+id/radiogroup_gender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/question1"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/choice_male"
+        <Button
+            android:id="@+id/button_back"
+            style="@style/StyleNextBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/spacing_xxxxlarge"
-            android:text="@string/gender_male"/>
+            android:layout_gravity="left"
+            android:text="@string/back"
+            tools:text="BACK" />
 
-        <RadioButton
-            android:id="@+id/choice_female"
+
+        <Button
+            android:id="@+id/button_next"
+            style="@style/StyleNextBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gender_female"/>
-    </RadioGroup>
-
-
-    <Button
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true"
-        style="@style/StyleNextBack"
-        android:text="@string/back"/>
-
-    <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentRight="true"
-        style="@style/StyleNextBack"
-        android:text="@string/next"/>
-
+            android:layout_gravity="right"
+            android:text="@string/next"
+            tools:text="NEXT" />
+    </FrameLayout>
 
 </RelativeLayout>

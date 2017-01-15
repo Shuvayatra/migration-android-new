@@ -8,10 +8,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
+import com.taf.model.Podcast;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.ui.fragment.MiniPlayerFragment;
 import com.taf.shuvayatra.ui.interfaces.PlayerFragmentCallback;
+
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -21,14 +25,18 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     @BindView(R.id.content_player)
     View mPlayer;
 
-    @BindView(R.id.bottom_sheet)
-    NestedScrollView bottomSheet;
+//    @BindView(R.id.bottom_sheet)
+//    View bottomSheet;
 
     private BottomSheetBehavior bottomSheetBehavior;
+
+    private boolean mediaPlayerVisible = false;
 
     public boolean alwaysShowPlayer() {
         return false;
     }
+
+    private MiniPlayerFragment playerFragment;
 
     @Override
     protected void onResume() {
@@ -36,25 +44,46 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
         togglePlayerFragment();
     }
 
-
     public void togglePlayerFragment() {
-        Fragment playerFragment = getSupportFragmentManager().findFragmentByTag
+        Logger.e(TAG+ "_MethodCall", ">>> toggleFragment()");
+        playerFragment = (MiniPlayerFragment) getSupportFragmentManager().findFragmentByTag
                 (MiniPlayerFragment.TAG);
         if (showMiniPlayer()) {
+            Logger.e(TAG+ "_MethodCall", ">>> media player is visible");
             if (playerFragment == null) playerFragment = MiniPlayerFragment.newInstance(this);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_player, playerFragment, MiniPlayerFragment.TAG)
                     .commit();
+            mediaPlayerVisible = true;
             initBottomSheet();
         } else {
+            Logger.e(TAG+ "_MethodCall", ">>> media player is gone");
             if (playerFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(playerFragment).commit();
+                mediaPlayerVisible = false;
             }
         }
     }
 
+    public MiniPlayerFragment getPlayerFragment() {
+        return playerFragment;
+    }
+
+    public MediaService getMediaService() {
+        return ((MyApplication) getApplicationContext()).mService;
+    }
+
+    public List<Podcast> getServicePlaylist() {
+        return ((MyApplication) getApplicationContext()).mService == null ? null :
+                ((MyApplication) getApplicationContext()).mService.getPodcasts();
+    }
+
+    public boolean isMediaPlayerVisible() {
+        return mediaPlayerVisible;
+    }
+
     public void initBottomSheet() {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(mPlayer);
         bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelOffset(R.dimen.mini_media_player_peek_height));
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior
@@ -91,12 +120,21 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     @Override
     public void removePlayer() {
         ((MyApplication) getApplicationContext()).mService.stopPlayback();
-        Fragment playerFragment = getSupportFragmentManager().findFragmentByTag
-                (MiniPlayerFragment.TAG);
         if (playerFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .remove(playerFragment)
                     .commit();
+            mediaPlayerVisible = false;
+        }
+    }
+
+    public void hidePlayer() {
+        if (playerFragment != null) {
+            Logger.e(TAG+ "_MethodCall", "hiding player()");
+            getSupportFragmentManager().beginTransaction()
+                    .remove(playerFragment)
+                    .commit();
+            mediaPlayerVisible = false;
         }
     }
 }

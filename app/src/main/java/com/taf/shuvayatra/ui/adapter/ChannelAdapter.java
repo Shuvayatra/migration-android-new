@@ -31,8 +31,6 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
 
     private static final String TAG = "ChannelAdapter";
 
-
-
     List<BaseModel> mChannels;
     LayoutInflater mLayoutInflater;
     Context context;

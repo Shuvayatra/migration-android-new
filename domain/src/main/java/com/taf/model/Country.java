@@ -13,10 +13,6 @@ import java.util.TimeZone;
 public class Country extends BaseModel {
 
     /**
-     * use {@link #getId()} and {@link #setId(Long)} for id
-     */
-
-    /**
      * index for values stored in preference
      */
     public static final int INDEX_ID = 0;

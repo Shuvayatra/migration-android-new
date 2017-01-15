@@ -1,6 +1,6 @@
 package com.taf.model;
 
-public class CountryInfo extends BaseModel{
+public class CountryInfo extends BaseModel {
 
     private String attribute;
     private String value;

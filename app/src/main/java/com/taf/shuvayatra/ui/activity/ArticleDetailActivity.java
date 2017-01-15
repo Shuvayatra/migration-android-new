@@ -22,7 +22,8 @@ import com.taf.util.MyConstants;
 import butterknife.BindView;
 
 public class ArticleDetailActivity extends PostDetailActivity implements
-        SwipeRefreshLayout.OnRefreshListener, ListItemClickListener, AppBarLayout.OnOffsetChangedListener {
+        SwipeRefreshLayout.OnRefreshListener, ListItemClickListener,
+        AppBarLayout.OnOffsetChangedListener {
 
 
     @BindView(R.id.swipe_container)

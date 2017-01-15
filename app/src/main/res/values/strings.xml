@@ -34,5 +34,7 @@
 	<string name="title_activity_search">SearchActivity</string>
     <string name="error_message_underage">You should be at least 15 years old to proceed</string>
     <string name="country_not_decided_yet">Not decided yet</string>
+    <string name="label_app">Shuvayatra</string>
+
 
 </resources>

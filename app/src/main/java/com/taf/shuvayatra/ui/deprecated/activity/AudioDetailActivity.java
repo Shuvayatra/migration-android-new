@@ -50,7 +50,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class AudioDetailActivity extends FacebookActivity implements
         AudioDetailView,
         AudioPlayerView,

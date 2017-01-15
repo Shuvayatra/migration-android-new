@@ -78,6 +78,7 @@
     <string name="yesterday"> हिजो </string>
     <string name="days_ago">  दिन अगाडि </string>
     <string name="months_ago">  महिना अगाडि </string>
+    <string name="label_app">शुभयात्रा</string>
 
     <string name="read_more">Read more...</string>
 
@@ -113,6 +114,7 @@
     <string name="msg_onboard">निम्न प्रश्न का जवाफ दिएर तपाईं हामीलाई सन्दर्भिक जान्कारी दिना मद्दत गर्दै हुनुहुन्छ </string>
     <string name="gender_male">पुरुष</string>
     <string name="gender_female">महिला</string>
+    <string name="gender_other">अरु</string>
 
     <string name="work_status_working_abroad">छ, म अझै काम गर्छु</string>
     <string name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ</string>
