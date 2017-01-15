@@ -247,15 +247,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, HomeFragment.TAG)
                         .commit();
                 break;
-//            case R.id.nav_journey:
-//                fragment = getSupportFragmentManager().findFragmentByTag(JourneyFragment.TAG);
-//                if (fragment == null) {
-//                    fragment = JourneyFragment.getInstance();
-//                }
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.content_home, fragment, JourneyFragment.TAG)
-//                        .commit();
-//                break;
+            case R.id.nav_journey:
+                fragment = getSupportFragmentManager().findFragmentByTag(JourneyFragment.TAG);
+                if (fragment == null) {
+                    fragment = JourneyFragment.getInstance();
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, fragment, JourneyFragment.TAG)
+                        .commit();
+                break;
             case R.id.nav_radio:
                 fragment = getSupportFragmentManager().findFragmentByTag(ChannelFragment.TAG);
                 if (fragment == null) {
@@ -274,15 +274,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, DestinationFragment.TAG)
                         .commit();
                 break;
-//            case R.id.nav_news:
-//                fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
-//                if (fragment == null) {
-//                    fragment = NewsFragment.newInstance();
-//                }
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.content_home, fragment, NewsFragment.TAG)
-//                        .commit();
-//                break;
+            case R.id.nav_news:
+                fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
+                if (fragment == null) {
+                    fragment = NewsFragment.newInstance();
+                }
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_home, fragment, NewsFragment.TAG)
+                        .commit();
+                break;
             case R.id.nav_account:
                 fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
                 if (fragment == null) {
@@ -347,7 +347,7 @@ public class HomeActivity extends MediaServiceActivity implements
 
     private void addMenu() {
         Logger.e(TAG, "mScreens.size(): " + mScreens.size());
-        // TODO: 1/16/17 refactor code
+        // TODO: 1/16/17 refactor code 
 //        mNavigationView.getMenu().removeGroup(R.id.nav_main_menu);
         Logger.e(TAG, "screens mNavigationView.getMenu().size();: " + mNavigationView.getMenu().size());
         for (final ScreenModel screen : mScreens) {
