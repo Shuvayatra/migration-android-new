@@ -31,6 +31,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:padding="@dimen/spacing_xsmall"
             android:text="@{post.title}" />
     </LinearLayout>

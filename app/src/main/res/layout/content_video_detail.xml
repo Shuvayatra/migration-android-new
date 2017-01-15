@@ -71,6 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:htmlContent="@{video.description}"
+                                android:visibility="@{video.description!=null?View.VISIBLE:View.GONE}"
                                 tools:text="This is the description of the video." />
                         </LinearLayout>
 

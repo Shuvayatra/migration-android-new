@@ -59,7 +59,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     }
     @Override
     public int getLayout() {
-        return R.layout.fragment_block_screen;
+        return R.layout.item_empty_recycler_view;
     }
 
     @Override

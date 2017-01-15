@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.taf.interactor.UseCaseData;
+import com.taf.shuvayatra.R;
+import com.taf.util.MyConstants;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -20,6 +24,17 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    public UseCaseData getUserCredentials() {
+        UseCaseData useCaseData = new UseCaseData();
+        useCaseData.putString(UseCaseData.USER_GENDER, ((BaseActivity) getActivity()).getPreferences()
+                .getGender());
+        String location = ((BaseActivity) getActivity()).getPreferences().getLocation();
+        useCaseData.putString(UseCaseData.CATEGORY_ID, location.equalsIgnoreCase(MyConstants
+                .Preferences.DEFAULT_LOCATION) || location.equalsIgnoreCase(
+                getString(R.string.country_not_decided_yet)) ? null : location);
+        return useCaseData;
     }
 
     @Nullable

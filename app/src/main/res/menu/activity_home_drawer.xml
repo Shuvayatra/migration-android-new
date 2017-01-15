@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<group android:checkableBehavior="single"
-		android:id="@+id/nav_main_menu">
-		<item
-			android:id="@+id/nav_home"
-			android:icon="@drawable/ic_nav_home"
-			android:orderInCategory="1"
-			android:title="@string/home"/>
-		<item
-			android:id="@+id/nav_destination"
-			android:icon="@drawable/ic_nav_destination"
-			android:orderInCategory="2"
+    <group
+        android:id="@+id/nav_main_menu"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_nav_home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_destination"
+            android:icon="@drawable/ic_nav_destination"
+            android:title="@string/destination" />
+        <item
+            android:id="@+id/nav_radio"
+            android:icon="@drawable/ic_nav_radio"
+            android:title="@string/radio" />
+        <!--<item-->
+            <!--android:id="@+id/nav_journey"-->
+            <!--android:icon="@drawable/ic_nav_journey"-->
+            <!--android:orderInCategory="4"-->
+            <!--android:title="@string/journey" />-->
 
-			android:title="@string/destination"/>
-		<item
-			android:id="@+id/nav_radio"
-			android:orderInCategory="3"
+        <!--<item-->
+            <!--android:id="@+id/nav_news"-->
+            <!--android:icon="@drawable/ic_nav_news"-->
+            <!--android:orderInCategory="5"-->
+            <!--android:title="@string/news" />-->
 
-			android:icon="@drawable/ic_nav_radio"
-			android:title="@string/radio"/>
-		<!--<item-->
-			<!--android:id="@+id/nav_journey"-->
-			<!--android:icon="@drawable/ic_nav_journey"-->
-			<!--android:title="@string/journey"/>-->
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/ic_account"
+            android:orderInCategory="99"
+            android:title="@string/account" />
 
-		<!--<item-->
-			<!--android:id="@+id/nav_news"-->
-			<!--android:icon="@drawable/ic_nav_news"-->
-			<!--android:title="@string/news"/>-->
+    </group>
+    <!--<group-->
+    <!--android:id="@+id/menu_screens"-->
+    <!--android:checkableBehavior="single" />-->
 
-	</group>
-	<group android:checkableBehavior="single"
-		android:id="@+id/menu_screens"/>
-
-	<item
-		android:id="@+id/nav_account"
-		android:icon="@drawable/ic_nav_account"
-		android:orderInCategory="99"
-		android:title="@string/account"/>
-	<item
-		android:checkable="true"
-		android:checked="true"
-		android:orderInCategory="100"
-		android:title="@string/help_feedback">
-		<menu>
-			<item
-				android:id="@+id/nav_contact"
-				android:enabled="false"
-				android:title="@string/contact"/>
-			<item
-				android:id="@+id/nav_about"
-				android:enabled="false"
-				android:title="@string/about"/>
-		</menu>
-	</item>
+    <item
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="100"
+        android:title="@string/help_feedback">
+        <menu>
+            <item
+                android:id="@+id/nav_contact"
+                android:enabled="false"
+                android:title="@string/contact" />
+            <item
+                android:id="@+id/nav_about"
+                android:enabled="false"
+                android:title="@string/about" />
+        </menu>
+    </item>
 
 </menu>

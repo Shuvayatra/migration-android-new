@@ -1,6 +1,7 @@
 package com.taf.repository;
 
 import com.taf.model.Block;
+import com.taf.model.base.ApiQueryParams;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ import rx.Observable;
  */
 
 public interface IHomeRepository {
-    Observable<List<Block>> getBlocks(boolean noCache);
+    Observable<List<Block>> getBlocks(boolean noCache, ApiQueryParams params);
 }

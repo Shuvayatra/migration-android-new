@@ -56,6 +56,7 @@
     <string name="article">Article</string>
     <string name="favourite">Favourite</string>
 
+    <string name="label_app">Shuvayatra</string>
     <string name="like">Likes</string>
     <string name="share">Shared</string>
     <string name="label_description">Description</string>
@@ -93,7 +94,7 @@
     <string name="error_option">Please select an option</string>
     <string name="error_name">Please enter your Name </string>
     <string name="error_date">Please select your birthday</string>
-    <string name="message_welcome">welcome</string>
+    <string name="message_welcome">Welcome</string>
 
     <string name="next">Next</string>
     <string name="back">Back</string>
@@ -111,6 +112,7 @@
         information</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
 
     <string name="work_status_working_abroad">Yes, I still work now</string>
     <string name="work_status_back_from_abroad">Yes, but now I’m back to Nepal</string>

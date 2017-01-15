@@ -6,9 +6,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import com.taf.model.BaseModel;
@@ -24,10 +22,9 @@ import com.taf.util.MyConstants;
 import butterknife.BindView;
 
 public class ArticleDetailActivity extends PostDetailActivity implements
-        SwipeRefreshLayout.OnRefreshListener, ListItemClickListener, AppBarLayout.OnOffsetChangedListener {
+        SwipeRefreshLayout.OnRefreshListener, ListItemClickListener,
+        AppBarLayout.OnOffsetChangedListener {
 
-
-    private Post mainPost;
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mContainer;
@@ -47,7 +44,7 @@ public class ArticleDetailActivity extends PostDetailActivity implements
 
     @Override
     protected void updateView(Post post) {
-        mainPost = post;
+        mPost = post;
 //        if (getSupportActionBar() != null) {
 //            getSupportActionBar().setDisplayShowTitleEnabled(true);
 //            getSupportActionBar().setTitle(post.getTitle());
@@ -94,8 +91,8 @@ public class ArticleDetailActivity extends PostDetailActivity implements
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
         if (appBarLayout.getTotalScrollRange() == Math.abs(verticalOffset)) {
-            if (mainPost != null) {
-                collapsingToolbarLayout.setTitle(mainPost.getTitle());
+            if (mPost != null) {
+                collapsingToolbarLayout.setTitle(mPost.getTitle());
             }
         } else {
             if (collapsingToolbarLayout.getTitle() != null) {

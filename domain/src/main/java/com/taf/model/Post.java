@@ -255,7 +255,30 @@ public class Post extends BaseModel {
 
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "id: %d, title: %s, type: %s", getId(), getTitle(), getType());
+        return "Post{" +
+                "mTitle='" + mTitle + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mType='" + mType + '\'' +
+                ", mData=" + mData +
+                ", mSource='" + mSource + '\'' +
+                ", shareUrl='" + shareUrl + '\'' +
+                ", mTags=" + mTags +
+                ", mCreatedAt=" + mCreatedAt +
+                ", mUpdatedAt=" + mUpdatedAt +
+                ", likes=" + likes +
+                ", share=" + share +
+                ", featuredImage='" + featuredImage + '\'' +
+                ", isFavourite=" + isFavourite +
+                ", isSynced=" + isSynced +
+                ", downloadStatus=" + downloadStatus +
+                ", downloadReference=" + downloadReference +
+                ", mViewCount=" + mViewCount +
+                ", mUnSyncedViewCount=" + mUnSyncedViewCount +
+                ", mUnSyncedShareCount=" + mUnSyncedShareCount +
+                ", mCategory='" + mCategory + '\'' +
+                ", mTotalCount=" + mTotalCount +
+                ", mSimilarPosts=" + mSimilarPosts +
+                '}';
     }
 
     @Override

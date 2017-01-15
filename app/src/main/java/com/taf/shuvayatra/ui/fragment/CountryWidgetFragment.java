@@ -32,6 +32,7 @@ import butterknife.BindView;
 /**
  * Created by rakeeb on 10/19/16.
  */
+@Deprecated
 public class CountryWidgetFragment extends BaseFragment implements CountryWidgetView, CountryView {
 
     public static final String TAG = "CountryWidgetFragment";

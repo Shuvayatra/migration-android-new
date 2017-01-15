@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
@@ -49,14 +50,12 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         mRadioGroupPreviousWorkStatus.setOnCheckedChangeListener(this);
         mButtonNext.setOnClickListener(onNextClicked());
 
-        if (((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus() != Integer.MIN_VALUE) {
-            mRadioGroupPreviousWorkStatus.check(((BaseActivity) getActivity()).getPreferences()
-                    .getPreviousWorkStatus());
-            if (getView() != null) {
-                View selection = getView().findViewById(mRadioGroupPreviousWorkStatus.getCheckedRadioButtonId());
-                if (selection != null && selection.getBottom() != 0)
-                    mScrollContainer.scrollTo(0, selection.getBottom());
-            }
+        if (((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus() != null) {
+            String workStatus = ((BaseActivity) getActivity()).getPreferences().getPreviousWorkStatus();
+            mRadioGroupPreviousWorkStatus.check(workStatus.equalsIgnoreCase(getString(R.string.work_status_back_from_abroad)) ? R.id.rb_back_from_abroad :
+                    workStatus.equalsIgnoreCase(getString(R.string.work_status_planning)) ? R.id.rb_planning :
+                            workStatus.equalsIgnoreCase(getString(R.string.work_status_not_going)) ? R.id.rb_not_going :
+                                    workStatus.equalsIgnoreCase(getString(R.string.work_status_working_abroad)) ? R.id.rb_working : -1);
         }
 
         if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())
@@ -74,7 +73,9 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        ((BaseActivity) getActivity()).getPreferences().setPreviousWorkStatus(checkedId);
+        RadioButton selectedButton = (RadioButton) getActivity().findViewById(checkedId);
+        ((BaseActivity) getActivity()).getPreferences()
+                .setPreviousWorkStatus(selectedButton.getText().toString());
     }
 
     private void setButtonPressListener(ButtonPressListener buttonPressListener) {

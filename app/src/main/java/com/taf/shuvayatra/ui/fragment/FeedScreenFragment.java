@@ -74,7 +74,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_block_screen;
+        return R.layout.item_empty_recycler_view;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         loadPosts(INITIAL_OFFSET);
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder().applicationComponent(getTypedActivity().getApplicationComponent())
                 .activityModule(getTypedActivity().getActivityModule())
                 .dataModule(new DataModule(mScreen.getId()))
@@ -99,10 +99,10 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         mPresenter.attachView(this);
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ListAdapter<Post>(getContext(),this);
+        mAdapter = new ListAdapter<Post>(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -139,7 +139,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
     @Override
     public void showErrorView(String pErrorMessage) {
-        Snackbar.make(mRecyclerView,pErrorMessage,Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mRecyclerView, pErrorMessage, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -157,22 +157,22 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     @Override
     public void renderScreenData(ScreenDataModel model) {
 
-        if(model.isFromCache()){
-            if(mAdapter.getDataCollection().isEmpty()){
+        if (model.isFromCache()) {
+            if (mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(model.getData());
                 mPage = model.getCurrentPage();
                 mIsLastPage = model.getTotalCount() == model.getData().size();
-                Logger.e(TAG,"cache: page "+ mPage);
-                Logger.e(TAG,"cache: page "+ mAdapter.getDataCollection().size());
+                Logger.e(TAG, "cache: page " + mPage);
+                Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
             }
             return;
         }
 
-        Logger.e(TAG," ============================ start ==================================");
-        Logger.e(TAG,"current page / total page"+ model.getCurrentPage() +" / " + model.getLastPage());
-        Logger.e(TAG,"total items: "+ model.getTotalCount());
-        Logger.e(TAG,"prevoius item: "+ mAdapter.getItemCount() );
-        Logger.e(TAG,"add items:  "+ model.getData().size());
+        Logger.e(TAG, " ============================ start ==================================");
+        Logger.e(TAG, "current page / total page" + model.getCurrentPage() + " / " + model.getLastPage());
+        Logger.e(TAG, "total items: " + model.getTotalCount());
+        Logger.e(TAG, "prevoius item: " + mAdapter.getItemCount());
+        Logger.e(TAG, "add items:  " + model.getData().size());
         mPage = model.getCurrentPage();
 
         if (mPage == INITIAL_OFFSET) {
@@ -185,7 +185,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
         mIsLastPage = (mPage == model.getLastPage());
         Logger.e(TAG, "new items " + mAdapter.getItemCount());
-        Logger.e(TAG," ============================ end ================================== \n");
+        Logger.e(TAG, " ============================ end ================================== \n");
 
     }
 
@@ -220,7 +220,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
                 mListAdapter.getDataCollection().get(listItemSelection).setShare(shareCount);
                 int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
-                   mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
+                mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
                 mListAdapter.notifyDataSetChanged();
             }
         }

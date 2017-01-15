@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/question"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/question_name"
-        android:textColor="@color/grey_87"
-        android:textSize="@dimen/text_big"
-        android:gravity="center"
-        android:layout_marginBottom="@dimen/spacing_xxxlarge"/>
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/edittext_username"
-        android:layout_below="@id/question"
-        android:inputType="textPersonName|textCapWords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_xxxlarge"
+            android:gravity="center"
+            android:text="@string/question_name"
+            android:textColor="@color/grey_87"
+            android:textSize="@dimen/text_big" />
+
+        <EditText
+            android:id="@+id/edittext_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/button_next"
+        style="@style/StyleNextBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentRight="true"
-        style="@style/StyleNextBack"
-        android:text="@string/next"/>
+        android:layout_gravity="bottom|right"
+        android:text="@string/next" />
 
-</RelativeLayout>
+</FrameLayout>

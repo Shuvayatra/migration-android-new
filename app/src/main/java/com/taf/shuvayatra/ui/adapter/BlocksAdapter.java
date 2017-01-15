@@ -175,12 +175,10 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         return mBlocks == null ? 0 : mBlocks.size();
     }
 
-    private String getFormattedDeeplink(String deepLink, List<Long> filterIds) {
+    private String getFormattedDeepLink(String deepLink, List<Long> filterIds) {
+
         if (filterIds != null && !filterIds.isEmpty()) {
             deepLink += "?category_id=";
-//            if(deepLink.equals(""))
-//                deepLink = "shuvayatra://feed";
-//            deepLink += "?category_id=";
             int index = 0;
             for (Long filterId : filterIds) {
                 index++;
@@ -190,6 +188,15 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 }
             }
         }
+
+        if (!mPreferences.getLocation().equalsIgnoreCase(MyConstants.Preferences
+                .DEFAULT_LOCATION) && !mPreferences.getLocation()
+                .equalsIgnoreCase(mContext.getString(R.string.country_not_decided_yet))) {
+            String countryId = mPreferences.getLocation().split(",")[0];
+            Logger.e(TAG, ">>> country id: " + countryId);
+            deepLink += "&country_id=" + countryId;
+        }
+
         Logger.e(TAG, "deeplink: " + deepLink);
         return deepLink;
     }
@@ -209,8 +216,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
                 view = ((BlockRadioWidgetDataBinding) mBinding).play;
             } else if (mBinding instanceof BlockNoticeDataBinding) {
-                view = ((BlockNoticeDataBinding) mBinding).getRoot();
-                ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
+               ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
@@ -259,7 +265,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                             deepLink = block.getDeeplink();
                         }
 
-                        deepLink = getFormattedDeeplink(deepLink, block.getFilterIds());
+                        deepLink = getFormattedDeepLink(deepLink, block.getFilterIds());
                         if (deepLink != null && !deepLink.isEmpty()) {
                             Intent intent = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(deepLink));

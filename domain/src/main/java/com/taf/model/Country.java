@@ -4,6 +4,7 @@ import com.taf.util.MyConstants;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by rakeeb on 10/25/16.
@@ -12,16 +13,13 @@ import java.util.Locale;
 public class Country extends BaseModel {
 
     /**
-     * use {@link #getId()} and {@link #setId(Long)} for id
-     */
-
-    /**
      * index for values stored in preference
      */
     public static final int INDEX_ID = 0;
     public static final int INDEX_TITLE = 1;
     public static final int INDEX_TITLE_EN = 2;
     public static final int INDEX_INFO = 3;
+    public static final int INDEX_TIME_ZONE = 4;
 
     String title;
     String description;
@@ -29,6 +27,7 @@ public class Country extends BaseModel {
     String icon;
     String smallIcon;
     String titleEnglish;
+    String timeZoneId;
     List<CountryInfo> informations;
 
     @Override
@@ -85,9 +84,17 @@ public class Country extends BaseModel {
         this.titleEnglish = titleEnglish;
     }
 
+    public String getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    public void setTimeZoneId(String timeZoneId) {
+        this.timeZoneId = timeZoneId;
+    }
+
     @Override
     public String toString() {
-        return String.format(Locale.getDefault(), "%d,%s,%s", getId(), getTitle(), getTitleEnglish());
+        return String.format(Locale.getDefault(), "%d,%s,%s,%s", getId(), getTitle(), getTitleEnglish(), getTimeZoneId());
     }
 
     public List<CountryInfo> getInformation() {

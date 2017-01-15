@@ -99,6 +99,8 @@ public class MyConstants {
         public static final String FIRST_LAUNCH = "first-launch";
         public static final String LOCATION = "location";
         public static final String DEFAULT_LOCATION = "Nepal";
+        public static final String USER_INFO_SYNC_STATUS = "user-info-sync-status";
+        public static final String USER_ONBOARDING_COMPLETE = "user-onboarding-complete";
 
         public static final String COUNTRY_LIST_CALL = "country-list-call";
         public static final String COUNTRY_LIST = "country-list";
@@ -218,7 +220,8 @@ public class MyConstants {
         public static final String KEY_LOCALE = "key_locale";
         public static final String KEY_COUNTRY_ID = "key_country_id";
         public static final String KEY_COUNTRY_TITLE = "key_country_title";
-        public static final String KEY_COUNTRY_TITLE_EN = "key_coutry_title_en";
+        public static final String KEY_COUNTRY_TITLE_EN = "key_country_title_en";
+        public static final String KEY_CHANNEL_LIST = "key_channel_list";
     }
 
     public static final class Intent {

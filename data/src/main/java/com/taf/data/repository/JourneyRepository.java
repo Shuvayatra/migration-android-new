@@ -2,6 +2,7 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.model.Block;
 import com.taf.repository.IJourneyRepository;
 
@@ -20,14 +21,14 @@ public class JourneyRepository implements IJourneyRepository {
     }
 
     @Override
-    public Observable<List<Block>> getBlocks() {
+    public Observable<List<Block>> getBlocks(ApiQueryParams params) {
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getJourneyBlocks()
                 .map(contents -> mDataMapper.transformBlockEntity(contents));
 
         Observable apiObservable =  mDataStoreFactory.createRestDataStore()
-                .getJourneyContents()
+                .getJourneyContents(params)
                 .map(contents -> mDataMapper.transformBlockEntity(contents));
 
         return Observable.concatDelayError(cacheObservable, apiObservable);

@@ -20,30 +20,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.facebook.common.executors.CallerThreadExecutor;
-import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.BaseDataSubscriber;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
-import com.facebook.imagepipeline.image.CloseableBitmap;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.taf.data.utils.Logger;
+import com.taf.interactor.UseCaseData;
 import com.taf.model.ScreenModel;
+import com.taf.model.UserInfoModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.HomeActivityPresenter;
+import com.taf.shuvayatra.presenter.OnBoardingPresenter;
 import com.taf.shuvayatra.ui.fragment.BlockScreenFragment;
 import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
@@ -53,19 +53,21 @@ import com.taf.shuvayatra.ui.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.fragment.NewsFragment;
 import com.taf.shuvayatra.ui.fragment.UserAccountFragment;
 import com.taf.shuvayatra.ui.views.HomeActivityView;
-import com.taf.shuvayatra.ui.views.MvpView;
+import com.taf.shuvayatra.ui.views.OnBoardingView;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 
 public class HomeActivity extends MediaServiceActivity implements
-        NavigationView.OnNavigationItemSelectedListener, HomeActivityView {
+        NavigationView.OnNavigationItemSelectedListener, HomeActivityView,
+        OnBoardingView {
 
     public static final String TAG = "HomeActivity";
     private static final String STATE_MENU_ID = "nav-selected-menu-id";
@@ -84,7 +86,9 @@ public class HomeActivity extends MediaServiceActivity implements
     AppBarLayout mAppBarLayout;
 
     @Inject
-    HomeActivityPresenter mPresenter;
+    OnBoardingPresenter onBoardingPresenter;
+    @Inject
+    HomeActivityPresenter homeActivityPresenter;
 
     List<ScreenModel> mScreens;
     int selectedNavMenuId;
@@ -92,14 +96,7 @@ public class HomeActivity extends MediaServiceActivity implements
     private BroadcastReceiver mRadioCallbackReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ChannelFragment.TAG);
-            if (fragment == null) {
-                fragment = ChannelFragment.getInstance();
-            }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_home, fragment, ChannelFragment.TAG)
-                    .commit();
-            mNavigationView.setCheckedItem(R.id.nav_radio);
+            showFragment(R.id.nav_radio);
         }
     };
 
@@ -127,33 +124,32 @@ public class HomeActivity extends MediaServiceActivity implements
         mScreens = new ArrayList<>();
         initialize();
 
-        if(savedInstanceState !=null ){
+        if (savedInstanceState != null) {
             selectedNavMenuId = savedInstanceState.getInt(STATE_MENU_ID);
             mScreens = (List<ScreenModel>) savedInstanceState.get(STATE_SCREENS);
             addMenu();
-        }else{
+        } else {
             selectedNavMenuId = R.id.nav_home;
-            mPresenter.initialize(null);
+            homeActivityPresenter.initialize(null);
         }
 
 
-        mNavigationView.setCheckedItem(selectedNavMenuId);
         showFragment(selectedNavMenuId);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mSearchBox
                 .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), SearchActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                    }
+                });
 
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .activityModule(getActivityModule())
@@ -161,7 +157,44 @@ public class HomeActivity extends MediaServiceActivity implements
                 .build()
                 .inject(this);
 
-        mPresenter.attachView(this);
+        homeActivityPresenter.attachView(this);
+        onBoardingPresenter.attachView(this);
+    }
+
+    private void sendUserInfo() {
+        Logger.e(TAG, "sending userInfo");
+        UseCaseData useCaseData = new UseCaseData();
+        useCaseData.putSerializable(UseCaseData.USER_INFO, getUserInfo());
+        onBoardingPresenter.initialize(useCaseData);
+    }
+
+    public UserInfoModel getUserInfo() {
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setName(getPreferences().getUserName());
+        userInfo.setBirthday(getPreferences().getBirthday());
+        String countryInfo = getPreferences().getLocation();
+        if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) && !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+
+            userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
+        } else {
+            userInfo.setDestinedCountry(null);
+        }
+        Locale locale = Locale.getDefault();
+        userInfo.setWorkStatus(getPreferences().getPreviousWorkStatus());
+        int id = getPreferences().getOriginalLocation();
+
+        String[] zones = getResources().getStringArray(R.array.zones);
+        userInfo.setOrignalLocation(zones[id]);
+        String gender = getPreferences().getGender();
+        if (gender.equalsIgnoreCase(getString(R.string.gender_male))) {
+            userInfo.setGender("M");
+        } else if (gender.equalsIgnoreCase(getString(R.string.gender_female))) {
+            userInfo.setGender("F");
+        } else if (gender.equalsIgnoreCase(getString(R.string.gender_other))) {
+            userInfo.setGender("O");
+        }
+        Logger.e(TAG, "userInfo: " + userInfo);
+        return userInfo;
     }
 
     protected void onResume() {
@@ -177,7 +210,7 @@ public class HomeActivity extends MediaServiceActivity implements
             return;
         }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.TAG);
-        if(fragment==null){
+        if (fragment == null) {
             mNavigationView.setCheckedItem(R.id.nav_home);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_home, HomeFragment.getInstance(), HomeFragment.TAG)
@@ -200,8 +233,9 @@ public class HomeActivity extends MediaServiceActivity implements
     Replace the fragment by their menu Id from navigation drawer
      */
 
-    private void showFragment(int menuId){
+    private void showFragment(int menuId) {
         Fragment fragment = null;
+        mNavigationView.setCheckedItem(menuId);
 
         switch (menuId) {
             case R.id.nav_home:
@@ -251,7 +285,7 @@ public class HomeActivity extends MediaServiceActivity implements
 //                break;
             case R.id.nav_account:
                 fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
-                if(fragment == null){
+                if (fragment == null) {
                     fragment = UserAccountFragment.newInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
@@ -259,16 +293,16 @@ public class HomeActivity extends MediaServiceActivity implements
                         .commit();
                 break;
         }
-        if(menuId == R.id.nav_account){
+        if (menuId == R.id.nav_account) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mAppBarLayout.setElevation(0);
             }
-        }else{
+        } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
             }
         }
-        if(fragment!=null)
+        if (fragment != null)
             selectedNavMenuId = menuId;
 
     }
@@ -311,16 +345,17 @@ public class HomeActivity extends MediaServiceActivity implements
         addMenu();
     }
 
-    private void addMenu(){
-        Logger.e(TAG,"mScreens.size(): "+ mScreens.size());
-        mNavigationView.getMenu().removeGroup(R.id.menu_screens);
-        Logger.e(TAG,"screens mNavigationView.getMenu().size();: "+ mNavigationView.getMenu().size());
+    private void addMenu() {
+        Logger.e(TAG, "mScreens.size(): " + mScreens.size());
+        // TODO: 1/16/17 refactor code
+//        mNavigationView.getMenu().removeGroup(R.id.nav_main_menu);
+        Logger.e(TAG, "screens mNavigationView.getMenu().size();: " + mNavigationView.getMenu().size());
         for (final ScreenModel screen : mScreens) {
             getMenuIcon(screen);
         }
     }
 
-    private void getMenuIcon(final ScreenModel screen){
+    private void getMenuIcon(final ScreenModel screen) {
 
         ImageRequest imageRequest = ImageRequestBuilder
                 .newBuilderWithSource(Uri.parse(screen.getIcon()))
@@ -333,14 +368,14 @@ public class HomeActivity extends MediaServiceActivity implements
 
             @Override
             public void onNewResultImpl(@Nullable Bitmap bitmap) {
-                if (dataSource.isFinished() && bitmap != null){
-                    Logger.e(TAG,"bitmap has come");
+                if (dataSource.isFinished() && bitmap != null) {
+                    Logger.e(TAG, "bitmap has come");
 //                    Bitmap bmp = Bitmap.createBitmap(bitmap);
-                    final Drawable drawable = new BitmapDrawable(getResources(),bitmap);
+                    final Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            addMenu(screen,drawable);
+                            addMenu(screen, drawable);
                         }
                     });
                     dataSource.close();
@@ -349,7 +384,7 @@ public class HomeActivity extends MediaServiceActivity implements
 
             @Override
             public void onFailureImpl(DataSource dataSource) {
-                Logger.e(TAG,"Bitmap error: ");
+                Logger.e(TAG, "Bitmap error: ");
                 dataSource.getFailureCause().printStackTrace();
                 if (dataSource != null) {
                     dataSource.close();
@@ -363,11 +398,11 @@ public class HomeActivity extends MediaServiceActivity implements
         }, CallerThreadExecutor.getInstance());
     }
 
-    private void addMenu(final ScreenModel screen, Drawable icon){
-        Logger.e(TAG,"menu added: "+screen.getId());
-        final MenuItem  menuItem = mNavigationView.getMenu().add(R.id.menu_screens,
+    private void addMenu(final ScreenModel screen, Drawable icon) {
+        Logger.e(TAG, "menu added: " + screen.getId());
+        final MenuItem menuItem = mNavigationView.getMenu().add(R.id.nav_main_menu,
                 screen.getId().intValue(),
-                (screen.getOrder()+MENU_OFFSET),
+                (screen.getOrder()),
                 screen.getTitle());
         menuItem.setIcon(icon);
         menuItem.setCheckable(true);
@@ -376,20 +411,20 @@ public class HomeActivity extends MediaServiceActivity implements
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Fragment fragment = null;
-                Logger.e(TAG,"screen.getType(): "+ screen.getType());
-                if(screen.getType().equals("block")){
-                    fragment = getSupportFragmentManager().findFragmentByTag(BlockScreenFragment.TAG+screen.getId());
-                    if(fragment == null){
+                Logger.e(TAG, "screen.getType(): " + screen.getType());
+                if (screen.getType().equals("block")) {
+                    fragment = getSupportFragmentManager().findFragmentByTag(BlockScreenFragment.TAG + screen.getId());
+                    if (fragment == null) {
                         fragment = BlockScreenFragment.newInstance(screen);
                     }
 
-                } else if(screen.getType().equals("feed")){
-                    fragment = getSupportFragmentManager().findFragmentByTag(FeedScreenFragment.TAG+screen.getId());
-                    if(fragment == null){
+                } else if (screen.getType().equals("feed")) {
+                    fragment = getSupportFragmentManager().findFragmentByTag(FeedScreenFragment.TAG + screen.getId());
+                    if (fragment == null) {
                         fragment = FeedScreenFragment.newInstance(screen);
                     }
                 }
-                if(fragment != null) {
+                if (fragment != null) {
                     selectedNavMenuId = menuItem.getItemId();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_home, fragment, FeedScreenFragment.TAG + screen.getId())
@@ -401,5 +436,10 @@ public class HomeActivity extends MediaServiceActivity implements
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onSendUserInfo() {
+        // TODO: 1/15/17 alter preference
     }
 }

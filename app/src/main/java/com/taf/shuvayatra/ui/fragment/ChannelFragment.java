@@ -60,7 +60,7 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
     @Override
     public int getLayout() {
-        return R.layout.fragment_channel;
+        return R.layout.item_empty_recycler_view;
     }
 
     @Override

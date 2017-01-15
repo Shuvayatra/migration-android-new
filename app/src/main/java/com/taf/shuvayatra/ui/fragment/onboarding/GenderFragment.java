@@ -45,7 +45,8 @@ public class GenderFragment extends BaseFragment implements RadioGroup.OnChecked
         String gender = ((BaseActivity) getActivity()).getPreferences().getGender();
         if (gender != null) {
             mRadioGroupGender.check(gender.equalsIgnoreCase(getString(R.string.gender_male)) ? R.id.choice_male :
-                    gender.equalsIgnoreCase(getString(R.string.gender_female)) ? R.id.choice_female : -1);
+                    gender.equalsIgnoreCase(getString(R.string.gender_female)) ? R.id.choice_female :
+                            gender.equalsIgnoreCase(getString(R.string.gender_other)) ? R.id.choice_other : -1);
 //            mRadioGroupGender.refreshDrawableState();
         }
 

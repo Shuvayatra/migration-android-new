@@ -16,19 +16,19 @@ import static com.taf.util.MyConstants.Preferences.LAST_DELETE_STAMP;
 import static com.taf.util.MyConstants.Preferences.LAST_UPDATE_STAMP;
 import static com.taf.util.MyConstants.Preferences.NOTICE_DISMISS_ID;
 import static com.taf.util.MyConstants.Preferences.PREF_NAME;
+import static com.taf.util.MyConstants.Preferences.USER_INFO_SYNC_STATUS;
+import static com.taf.util.MyConstants.Preferences.USER_ONBOARDING_COMPLETE;
 
 public class AppPreferences {
 
     public static final String TAG = "AppPreferences";
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context mContext;
+    private SharedPreferences pref;
+    private Context mContext;
 
     public AppPreferences(Context pContext) {
         pref = pContext.getSharedPreferences(PREF_NAME, Context
                 .MODE_PRIVATE);
-        editor = pref.edit();
         mContext = pContext;
     }
 
@@ -37,8 +37,23 @@ public class AppPreferences {
     }
 
     public void setLastUpdateStamp(long pStamp) {
-        editor.putLong(LAST_UPDATE_STAMP, pStamp);
-        editor.apply();
+        pref.edit().putLong(LAST_UPDATE_STAMP, pStamp).commit();
+    }
+
+    public boolean isUserInfoSynced() {
+        return pref.getBoolean(USER_INFO_SYNC_STATUS, false);
+    }
+
+    public void setUserInfoSyncStatus(boolean status) {
+        pref.edit().putBoolean(USER_INFO_SYNC_STATUS, status).commit();
+    }
+
+    public boolean isUserOnBoardingComplete() {
+        return pref.getBoolean(USER_ONBOARDING_COMPLETE, false);
+    }
+
+    public void setUserOnBoardingComplete(boolean status) {
+        pref.edit().putBoolean(USER_ONBOARDING_COMPLETE, status).commit();
     }
 
     public Long getLastDeleteStamp() {
@@ -46,8 +61,7 @@ public class AppPreferences {
     }
 
     public void setLastDeleteStamp(long pStamp) {
-        editor.putLong(LAST_DELETE_STAMP, pStamp);
-        editor.apply();
+        pref.edit().putLong(LAST_DELETE_STAMP, pStamp).commit();
     }
 
     public Set<String> getDownloadReferences() {
@@ -57,15 +71,13 @@ public class AppPreferences {
     public void addDownloadReference(Long pReference) {
         Set<String> references = getDownloadReferences();
         references.add(String.valueOf(pReference));
-        editor.putStringSet(DOWNLOAD_REFERENCES, references);
-        editor.commit();
+        pref.edit().putStringSet(DOWNLOAD_REFERENCES, references).commit();
     }
 
     public void removeDownloadReference(Long pReference) {
         Set<String> references = getDownloadReferences();
         references.remove(String.valueOf(pReference));
-        editor.putStringSet(DOWNLOAD_REFERENCES, references);
-        editor.commit();
+        pref.edit().putStringSet(DOWNLOAD_REFERENCES, references).commit();
     }
 
     public boolean hasDownloadReference(Long pReference) {
@@ -73,13 +85,12 @@ public class AppPreferences {
         return references.contains(String.valueOf(pReference));
     }
 
-    public int getPreviousWorkStatus() {
-        return pref.getInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, Integer.MIN_VALUE);
+    public String getPreviousWorkStatus() {
+        return pref.getString(MyConstants.Preferences.PREVIOUS_WORK_STATUS, null);
     }
 
-    public void setPreviousWorkStatus(int workStatus) {
-        editor.putInt(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus);
-        editor.apply();
+    public void setPreviousWorkStatus(String workStatus) {
+        pref.edit().putString(MyConstants.Preferences.PREVIOUS_WORK_STATUS, workStatus).commit();
     }
 
     public String getGender() {
@@ -87,8 +98,7 @@ public class AppPreferences {
     }
 
     public void setGender(String gender) {
-        editor.putString(MyConstants.Preferences.GENDER, gender);
-        editor.apply();
+        pref.edit().putString(MyConstants.Preferences.GENDER, gender).commit();
     }
 
     public boolean getFirstLaunch() {
@@ -96,17 +106,16 @@ public class AppPreferences {
     }
 
     public void setFirstLaunch(boolean isFirstLaunch) {
-        editor.putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch);
-        editor.apply();
+        pref.edit().putBoolean(MyConstants.Preferences.FIRST_LAUNCH, isFirstLaunch).commit();
     }
 
     public String getLocation() {
-        return pref.getString(MyConstants.Preferences.LOCATION, MyConstants.Preferences.DEFAULT_LOCATION);
+        return pref.getString(MyConstants.Preferences.LOCATION,
+                MyConstants.Preferences.DEFAULT_LOCATION);
     }
 
     public void setLocation(String location) {
-        editor.putString(MyConstants.Preferences.LOCATION, location);
-        editor.apply();
+        pref.edit().putString(MyConstants.Preferences.LOCATION, location).commit();
     }
 
     public String getUserName() {
@@ -114,8 +123,7 @@ public class AppPreferences {
     }
 
     public void setUserName(String userName) {
-        editor.putString(MyConstants.Preferences.USERNAME, userName);
-        editor.apply();
+        pref.edit().putString(MyConstants.Preferences.USERNAME, userName).commit();
     }
 
     public Long getBirthday() {
@@ -123,8 +131,7 @@ public class AppPreferences {
     }
 
     public void setBirthday(Long birthday) {
-        editor.putLong(MyConstants.Preferences.BIRTHDAY, birthday);
-        editor.apply();
+        pref.edit().putLong(MyConstants.Preferences.BIRTHDAY, birthday).commit();
     }
 
     public int getOriginalLocation() {
@@ -133,8 +140,7 @@ public class AppPreferences {
 
     // saves position of the zones in string array zones
     public void setOriginalLocation(int location) {
-        editor.putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location);
-        editor.apply();
+        pref.edit().putInt(MyConstants.Preferences.ORIGINAL_LOCATION, location).commit();
     }
 
     public boolean isOnBoardingCountryListLoaded() {
@@ -142,15 +148,12 @@ public class AppPreferences {
     }
 
     public void updateCountryListCallStatus(boolean status) {
-        editor.putBoolean(MyConstants.Preferences.COUNTRY_LIST_CALL, status);
-        editor.apply();
+        pref.edit().putBoolean(MyConstants.Preferences.COUNTRY_LIST_CALL, status).commit();
     }
 
     private void saveFavourites(Set<String> favourites) {
-        editor.remove(FAV_POSTS);
-        editor.apply();
-        editor.putStringSet(FAV_POSTS, favourites);
-        editor.apply();
+        pref.edit().remove(FAV_POSTS).commit();
+        pref.edit().putStringSet(FAV_POSTS, favourites).commit();
     }
 
     public void addToFavourites(Long postId) {
@@ -182,7 +185,6 @@ public class AppPreferences {
     }
 
     public void setNoticeDismissId(Long id) {
-        editor.putLong(NOTICE_DISMISS_ID, id);
-        editor.apply();
+        pref.edit().putLong(NOTICE_DISMISS_ID, id).commit();
     }
 }

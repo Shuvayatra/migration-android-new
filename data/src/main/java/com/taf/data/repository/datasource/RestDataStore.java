@@ -27,6 +27,7 @@ import com.taf.data.entity.UserInfoResponse;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.data.utils.Logger;
 import com.taf.model.CountryWidgetData;
+import com.taf.model.base.ApiQueryParams;
 
 import java.util.List;
 
@@ -97,12 +98,10 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<BlockEntity>> getHomeBlocks() {
+    public Observable<List<BlockEntity>> getHomeBlocks(ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getHomeBlocks()
-                    .doOnNext(blockEntities -> {
-                        mCache.saveHomeBlocks(blockEntities);
-                    });
+            return mApiRequest.getHomeBlocks(params)
+                    .doOnNext(blockEntities -> mCache.saveHomeBlocks(blockEntities));
         } else {
             return Observable.error(new NetworkConnectionException());
         }
@@ -122,17 +121,18 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams) {
+
         if (isThereInternetConnection()) {
+
             if (feedType == 0) {
                 return mApiRequest.getPosts(limit, offset, filterParams)
-                        .doOnNext(responseEntity -> {
-                            mCache.savePosts(feedType, filterParams, responseEntity.getData(), (offset != 1));
-                        });
+                        .doOnNext(responseEntity -> mCache.savePosts(feedType, filterParams,
+                                responseEntity.getData(), (offset != 1)));
             }
+
             return mApiRequest.getNewsList(limit, offset)
-                    .doOnNext(responseEntity -> {
-                        mCache.savePosts(feedType, filterParams, responseEntity.getData(), (offset != 1));
-                    });
+                    .doOnNext(responseEntity -> mCache.savePosts(feedType, filterParams,
+                            responseEntity.getData(), (offset != 1)));
         } else {
             return Observable.error(new NetworkConnectionException());
         }
@@ -217,9 +217,9 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<BlockEntity>> getJourneyContents() {
+    public Observable<List<BlockEntity>> getJourneyContents(ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getJourneyContent()
+            return mApiRequest.getJourneyContent(params)
                     .doOnNext(blockEntities -> {
                         mCache.saveJourneyBlocks(blockEntities);
                     });

@@ -21,6 +21,7 @@ import com.taf.data.entity.UserInfoEntity;
 import com.taf.data.entity.UserInfoResponse;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.model.CountryWidgetData;
+import com.taf.model.base.ApiQueryParams;
 
 import java.util.List;
 
@@ -49,12 +50,16 @@ public class ApiRequest {
         return mApiService.syncLikes(pSyncDataList);
     }
 
-    public Observable<List<BlockEntity>> getHomeBlocks() {
-        return mApiService.getHomeBlocks();
+    public Observable<List<BlockEntity>> getHomeBlocks(ApiQueryParams params) {
+        return mApiService.getHomeBlocks(params.countryId, params.gender);
+    }
+
+    public Observable<List<BlockEntity>> getJourneyContent(ApiQueryParams params) {
+        return mApiService.getJourneyContents(params.countryId, params.gender);
     }
 
     public Observable<PodcastResponseEntity> getPodcasts(int offset, Long channelId) {
-        return mApiService.getPodcasts(offset,channelId);
+        return mApiService.getPodcasts(offset, channelId);
     }
 
     public Observable<PostResponseEntity> getPosts(int limit, int offset, String params) {
@@ -92,10 +97,6 @@ public class ApiRequest {
         return mApiService.getCountryList();
     }
 
-    public Observable<List<BlockEntity>> getJourneyContent() {
-        return mApiService.getJourneyContents();
-    }
-
     public Observable<JsonElement> getForex() {
         return mApiService.getForex();
     }
@@ -120,7 +121,7 @@ public class ApiRequest {
         return mApiService.getNewsList(page, offset);
     }
 
-    public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity){
+    public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity) {
         return mApiService.saveUserInfo(entity);
     }
 

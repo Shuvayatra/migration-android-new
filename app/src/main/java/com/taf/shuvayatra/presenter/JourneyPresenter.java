@@ -1,5 +1,7 @@
 package com.taf.shuvayatra.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -20,7 +22,7 @@ public class JourneyPresenter implements Presenter {
     JourneyView mView;
 
     @Inject
-    public JourneyPresenter(@Named("journey") UseCase useCase){
+    public JourneyPresenter(@Named("journey") UseCase useCase) {
         mUseCase = useCase;
     }
 
@@ -40,8 +42,8 @@ public class JourneyPresenter implements Presenter {
     }
 
     @Override
-    public void initialize(UseCaseData pData) {
-        mUseCase.execute(new JourneySubscriber(),pData);
+    public void initialize(@NonNull UseCaseData pData) {
+        mUseCase.execute(new JourneySubscriber(), pData);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class JourneyPresenter implements Presenter {
         mView = (JourneyView) view;
     }
 
-    public class JourneySubscriber extends DefaultSubscriber<List<Block>>{
+    public class JourneySubscriber extends DefaultSubscriber<List<Block>> {
 
         @Override
         public void onCompleted() {

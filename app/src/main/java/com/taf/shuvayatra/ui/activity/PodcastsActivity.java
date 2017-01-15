@@ -3,12 +3,14 @@ package com.taf.shuvayatra.ui.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -20,6 +22,7 @@ import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
+import com.taf.shuvayatra.media.MediaService;
 import com.taf.shuvayatra.presenter.PodcastListPresenter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
@@ -55,6 +58,8 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     SwipeRefreshLayout mSwipeContainer;
     @BindView(R.id.empty_view)
     View mEmptyView;
+    @BindView(R.id.parent_view)
+    View parentView;
 
     int mPage = INITIAL_OFFSET;
     int mTotalDataCount = 0;
@@ -90,19 +95,24 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mTitle = data.getString(MyConstants.Extras.KEY_TITLE, "");
         setupAdapter();
         initialize();
-        playingFromHere = false;
 
         getSupportActionBar().setTitle(mTitle);
         if (savedInstanceState != null) {
             AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
             List<Podcast> podcasts = (List<Podcast>) savedInstanceState.get(STATE_PODCASTS);
-//            mAdapter.setDataCollection(podcasts);
+            mAdapter.setDataCollection(podcasts);
         } else {
             loadPodcasts(INITIAL_OFFSET);
         }
     }
 
-    private void setupAdapter(){
+    private boolean isPlayingFromHere(List<Podcast> podcasts) {
+        return getMediaService() != null && getMediaService().isMediaValid()
+                && getServicePlaylist() != null && !getServicePlaylist().isEmpty()
+                && getServicePlaylist().containsAll(podcasts);
+    }
+
+    private void setupAdapter() {
         mAdapter = new ListAdapter(getContext(), this);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -136,13 +146,13 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         });
     }
 
-    public void loadPodcasts(int page){
+    public void loadPodcasts(int page) {
 //        mPage = page;
         mSwipeContainer.setRefreshing(true);
         mUseCaseData.clearAll();
         mUseCaseData.putInteger(UseCaseData.OFFSET, page);
         mIsLoading = true;
-        Logger.e(TAG,"loading Post: "+ page);
+        Logger.e(TAG, "loading Post: " + page);
         mPresenter.initialize(mUseCaseData);
     }
 
@@ -160,12 +170,12 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     }
 
     @Override
-    public void onListItemSelected(BaseModel pModel, int pIndex) {
-        if(playingFromHere) {
-            ((MyApplication) getApplicationContext()).mService.changeCurrentPodcast(pIndex);
+    public void onListItemSelected(BaseModel pModel, int index) {
+        if (isPlayingFromHere(mAdapter.getDataCollection())) {
+            getMediaService().changeCurrentPodcast(index);
         } else {
-            ((MyApplication) getApplicationContext()).mService.setPodcasts(mAdapter.getDataCollection());
-            playingFromHere = true;
+            // todo add check for podcast list here
+            getMediaService().setPodcasts(mAdapter.getDataCollection());
         }
     }
 
@@ -173,47 +183,52 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     public void onRefresh() {
         mPage = INITIAL_OFFSET;
         loadPodcasts(INITIAL_OFFSET);
-
     }
 
     @Override
     public void renderPodcasts(PodcastResponse podcasts) {
-        if(podcasts.isFromCache()){
-            if(mAdapter.getDataCollection().isEmpty()){
+        if (podcasts.isFromCache()) {
+            if (mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(podcasts.getData().getData());
                 mPage = podcasts.getData().getCurrentPage();
                 mIsLastPage = podcasts.getData().getTotal() == podcasts.getData().getData().size();
-                Logger.e(TAG,"cache: page "+ mPage);
-                Logger.e(TAG,"cache: page "+ mAdapter.getDataCollection().size());
+//                Logger.e(TAG, "cache: page " + mPage);
+//                Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
             }
             return;
         }
 
-        Logger.e(TAG," ============================ start ==================================");
-        Logger.e(TAG,"current page / total page"+ podcasts.getData().getCurrentPage() +" / " + podcasts.getData().getLastPage());
-        Logger.e(TAG,"total items: "+ podcasts.getData().getTotal());
-        Logger.e(TAG,"prevoius item: "+ mAdapter.getItemCount() );
-        Logger.e(TAG,"add items:  "+ podcasts.getData().getData().size());
+//        Logger.e(TAG, " ============================ start ==================================");
+//        Logger.e(TAG, "current page / total page" + podcasts.getData().getCurrentPage() + " / " + podcasts.getData().getLastPage());
+//        Logger.e(TAG, "total items: " + podcasts.getData().getTotal());
+//        Logger.e(TAG, "prevoius item: " + mAdapter.getItemCount());
+//        Logger.e(TAG, "add items:  " + podcasts.getData().getData().size());
         mPage = podcasts.getData().getCurrentPage();
 
         if (mPage == INITIAL_OFFSET) {
             mAdapter.setDataCollection(podcasts.getData().getData());
-        } else {
+        } else if (!podcasts.getData().getData().isEmpty()) {
             mAdapter.addDataCollection(podcasts.getData().getData());
         }
 //        mTotalDataCount = podcasts.getData().getTotal();
         mIsLastPage = (mPage == podcasts.getData().getLastPage());
-        Logger.e(TAG, "new items " + mAdapter.getItemCount());
-        Logger.e(TAG," ============================ end ================================== \n");
+//        Logger.e(TAG, "new items " + mAdapter.getItemCount());
+//        Logger.e(TAG, " ============================ end ================================== \n");
 
+        // check if is streaming from this page
         if (!podcasts.getData().getData().isEmpty()) {
-            if(!((MyApplication) getApplicationContext()).mService.getPlayStatus()) {
-                ((MyApplication) getApplicationContext()).mService.setPodcasts(podcasts.getData().getData());
-                playingFromHere = true;
+
+            if (isPlayingFromHere(mAdapter.getDataCollection())) {
+                if (!getMediaService().getPodcasts().containsAll(mAdapter.getDataCollection())) {
+                    getMediaService().addPodcasts(mAdapter.getDataCollection());
+                }
+            } else {
+                getMediaService().setPodcasts(podcasts.getData().getData());
             }
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_player, MiniPlayerFragment.newInstance(this), MiniPlayerFragment.TAG)
-                    .commit();
+
+            if (!isMediaPlayerVisible()) {
+                togglePlayerFragment();
+            }
         }
 
     }
@@ -231,7 +246,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     @Override
     public void showErrorView(String errorMessage) {
-        Snackbar.make(mSwipeContainer, errorMessage, Snackbar.LENGTH_LONG).show();
+        // TODO: 1/15/17 quick fix, see later
+        Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
+//        Snackbar.make(parentView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

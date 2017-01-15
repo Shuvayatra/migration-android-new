@@ -18,6 +18,8 @@ public class CountryEntity {
     String featuredImage;
     @SerializedName("small_icon")
     String smallIcon;
+    @SerializedName("time_zone")
+    String timeZone;
     String icon;
     List<CountryInfoEntity> information;
 
@@ -35,6 +37,14 @@ public class CountryEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 
     public String getTitleEnglish() {
