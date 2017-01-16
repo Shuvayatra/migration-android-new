@@ -144,6 +144,8 @@ public class BirthdayFragment extends BaseFragment implements DatePickerDialog.O
         birthday = Calendar.getInstance();
         birthday.set(year, month, dayOfMonth);
         // update preference and view
+        Logger.e(TAG, ">>> on date set called(): " + android.text.format.DateUtils.formatDateTime(getContext(), birthday.getTimeInMillis(),
+                android.text.format.DateUtils.FORMAT_SHOW_YEAR));
         ((BaseActivity) getActivity()).getPreferences().setBirthday(birthday.getTimeInMillis());
         mTextViewBirthday.setText(String.format(Locale.getDefault(),
                 "%d/%s/%d", year, birthday.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US),

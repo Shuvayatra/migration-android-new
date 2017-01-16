@@ -127,13 +127,17 @@
 	</style>
 
 	<style name="UserInfoTextTitle">
-		<item name="android:textSize">@dimen/text_big</item>
+		<item name="android:textSize">@dimen/text_small</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:padding">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingLeft">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingRight">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingTop">@dimen/spacing_xxsmall</item>
 	</style>
 	<style name="UserInfoTextDescription">
-		<item name="android:textSize">@dimen/text_default</item>
+		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textStyle">normal</item>
-		<item name="android:padding">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingLeft">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingRight">@dimen/spacing_xxsmall</item>
+		<item name="android:paddingBottom">@dimen/spacing_xxsmall</item>
 	</style>
 </resources>

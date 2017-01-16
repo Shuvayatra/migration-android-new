@@ -27,6 +27,7 @@ import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryListPresenter;
 import com.taf.shuvayatra.presenter.OnBoardingPresenter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
+import com.taf.shuvayatra.ui.fragment.UserInfoFragment;
 import com.taf.shuvayatra.ui.fragment.onboarding.AbroadQuestionFragment;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.OnBoardingView;
@@ -55,6 +56,15 @@ public class OnBoardActivity extends BaseActivity implements
     @Inject
     CountryListPresenter presenter;
 
+    /**
+     * indicator for {@link #finish()}
+     */
+    boolean isExit = false;
+    /**
+     * if {@link #isExit} is true, maintain past userInfoModel and check against new userInfoModel
+     */
+    UserInfoModel userInfoModel;
+
     public static final String TAG = "OnBoardActivity";
     private static final int REQUEST_CODE_WIFI_SETTINGS = 1;
 
@@ -75,6 +85,9 @@ public class OnBoardActivity extends BaseActivity implements
         // add api request for country listing
         // api.shuvayatra.org/api/destinations
         initialize();
+
+        isExit = getIntent().getExtras().getBoolean(MyConstants.Extras.IS_EXIT, false);
+        userInfoModel = (UserInfoModel) getIntent().getExtras().getSerializable(UserInfoModel.EXTRA_INFO_MODEL);
 
         OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
@@ -98,13 +111,34 @@ public class OnBoardActivity extends BaseActivity implements
         }
     }
 
+    private void onOnboardingDone() {
+        if (isExit) {
+            setResult(RESULT_OK);
+            if (userInfoModel != null && !userInfoModel.equals(UserInfoFragment
+                    .makeUserInfo(getPreferences(), getContext()))) {
+                getPreferences().setUserInfoSyncStatus(false);
+            }
+            finish();
+        } else {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_onboarding, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_skip) {
+            getPreferences().setFirstLaunch(false);
+            getPreferences().setUserOnBoardingComplete(false);
+            onOnboardingDone();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,9 +158,8 @@ public class OnBoardActivity extends BaseActivity implements
         if (getPreferences().isOnBoardingCountryListLoaded()) {
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-                finish();
+                getPreferences().setUserOnBoardingComplete(true);
+                onOnboardingDone();
             } else {
                 mQuestionPager.setCurrentItem(position + 1);
             }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,142 +12,121 @@
             type="com.taf.model.UserInfoModel" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_small">
+        android:layout_height="match_parent"
+        android:padding="@dimen/spacing_xsmall">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/spacing_small">
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardElevation="@dimen/cardview_default_elevation"
+            app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_xsmall">
 
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="Name: " />
+                    android:text="@string/user_label_name" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{user.name}"
+                    android:text="@{user.name == null? @string/value_not_set : user.name}"
                     tools:text="Umesh" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="Birthday: " />
+                    android:text="@string/user_label_birthday" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{DateUtils.getFormattedDate(user.birthday)}"
+                    android:text="@{user.birthday == Long.MIN_VALUE? @string/value_not_set : DateUtils.getFormattedDate(user.birthday)}"
                     tools:text="3rd May 1993" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="Gender: " />
+                    android:text="@string/user_label_gender" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{user.gender}"
+                    android:text="@{user.gender == null? @string/value_not_set : user.gender}"
                     tools:text="Male" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="zone: " />
+                    android:text="@string/user_label_zone" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{user.orignalLocation}"
+                    android:text="@{user.originalLocation == null? @string/value_not_set : user.originalLocation}"
                     tools:text="Bagmati" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="Current work status: " />
+                    android:text="@string/user_label_current_work_status" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{user.workStatus}"
-                    tools:text="Not working" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:text="@{user.workStatus == null? @string/value_not_set : user.workStatus}"
+                    tools:text="Back from abroad" />
 
                 <TextView
                     style="@style/UserInfoTextTitle"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:text="Destination: " />
+                    android:text="@string/user_label_destination" />
 
                 <TextView
                     style="@style/UserInfoTextDescription"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
-                    android:text="@{user.destinedCountry}"
-                    tools:text="Malaysia" />
+                    android:text="@{user.destinedCountry == null? @string/value_not_set : user.destinedCountry}"
+                    tools:text="3rd May 1993" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/spacing_xsmall"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:background="#504a4a4a" />
+
+                <TextView
+                    android:id="@+id/user_info_edit"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:text="@string/action_edit" />
 
             </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+
 </layout>

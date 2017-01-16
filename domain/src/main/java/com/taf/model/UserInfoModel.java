@@ -6,12 +6,15 @@ package com.taf.model;
  */
 
 public class UserInfoModel extends BaseModel {
+
+    public static final String EXTRA_INFO_MODEL = "user_info_model";
+
     private String name;
     private String destinedCountry;
     private String workStatus;
     private String gender;
-    private long birthday;
-    private String orignalLocation;
+    private long birthday = Long.MIN_VALUE;
+    private String originalLocation;
 
     public String getName() {
         return name;
@@ -53,12 +56,12 @@ public class UserInfoModel extends BaseModel {
         this.birthday = birthday;
     }
 
-    public String getOrignalLocation() {
-        return orignalLocation;
+    public String getOriginalLocation() {
+        return originalLocation;
     }
 
-    public void setOrignalLocation(String orignalLocation) {
-        this.orignalLocation = orignalLocation;
+    public void setOriginalLocation(String originalLocation) {
+        this.originalLocation = originalLocation;
     }
 
     @Override
@@ -69,7 +72,36 @@ public class UserInfoModel extends BaseModel {
                 ", workStatus='" + workStatus + '\'' +
                 ", gender='" + gender + '\'' +
                 ", birthday=" + birthday +
-                ", orignalLocation='" + orignalLocation + '\'' +
+                ", originalLocation='" + originalLocation + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserInfoModel that = (UserInfoModel) o;
+
+        if (birthday != that.birthday) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (destinedCountry != null ? !destinedCountry.equals(that.destinedCountry) : that.destinedCountry != null)
+            return false;
+        if (workStatus != null ? !workStatus.equals(that.workStatus) : that.workStatus != null)
+            return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+        return originalLocation != null ? originalLocation.equals(that.originalLocation) : that.originalLocation == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (destinedCountry != null ? destinedCountry.hashCode() : 0);
+        result = 31 * result + (workStatus != null ? workStatus.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (int) (birthday ^ (birthday >>> 32));
+        result = 31 * result + (originalLocation != null ? originalLocation.hashCode() : 0);
+        return result;
     }
 }

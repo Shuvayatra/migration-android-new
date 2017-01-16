@@ -135,7 +135,6 @@ public class HomeActivity extends MediaServiceActivity implements
             homeActivityPresenter.initialize(null);
         }
 
-
         showFragment(selectedNavMenuId);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -148,6 +147,10 @@ public class HomeActivity extends MediaServiceActivity implements
                         overridePendingTransition(0, 0);
                     }
                 });
+
+        if (getPreferences().isUserOnBoardingComplete() && !getPreferences().isUserInfoSynced()) {
+            sendUserInfo();
+        }
 
     }
 
@@ -175,9 +178,14 @@ public class HomeActivity extends MediaServiceActivity implements
         userInfo.setName(getPreferences().getUserName());
         userInfo.setBirthday(getPreferences().getBirthday());
         String countryInfo = getPreferences().getLocation();
-        if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) && !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+        if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) &&
+                !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
 
-            userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
+            if (countryInfo.split(",").length > 2) {
+                userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
+            } else {
+                userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[1]);
+            }
         } else {
             userInfo.setDestinedCountry(null);
         }
@@ -186,7 +194,7 @@ public class HomeActivity extends MediaServiceActivity implements
         int id = getPreferences().getOriginalLocation();
 
         String[] zones = getResources().getStringArray(R.array.zones);
-        userInfo.setOrignalLocation(zones[id]);
+        userInfo.setOriginalLocation(zones[id]);
         String gender = getPreferences().getGender();
         if (gender.equalsIgnoreCase(getString(R.string.gender_male))) {
             userInfo.setGender("M");
@@ -203,6 +211,16 @@ public class HomeActivity extends MediaServiceActivity implements
         super.onResume();
         IntentFilter filter = new IntentFilter(MyConstants.Intent.ACTION_SHOW_RADIO);
         registerReceiver(mRadioCallbackReceiver, filter);
+
+        if (selectedNavMenuId == R.id.nav_account) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mAppBarLayout.setElevation(0);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
+            }
+        }
     }
 
     @Override
@@ -459,7 +477,7 @@ public class HomeActivity extends MediaServiceActivity implements
     }
 
     @Override
-    public void onSendUserInfo() {
-        // TODO: 1/15/17 alter preference
+    public void onUserInfoSent(boolean status) {
+        getPreferences().setUserInfoSyncStatus(status);
     }
 }
