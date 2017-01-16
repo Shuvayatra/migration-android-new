@@ -573,7 +573,7 @@ public class DataMapper {
         userInfoEntity.setGender(model.getGender());
         userInfoEntity.setWorkStatus(model.getWorkStatus());
         userInfoEntity.setName(model.getName());
-        userInfoEntity.setLocation(model.getOrignalLocation());
+        userInfoEntity.setLocation(model.getOriginalLocation());
         return userInfoEntity;
     }
 

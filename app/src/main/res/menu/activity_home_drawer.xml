@@ -47,11 +47,9 @@
         <menu>
             <item
                 android:id="@+id/nav_contact"
-                android:checkable="true"
                 android:title="@string/contact" />
             <item
                 android:id="@+id/nav_about"
-                android:checkable="true"
                 android:title="@string/about" />
         </menu>
     </item>

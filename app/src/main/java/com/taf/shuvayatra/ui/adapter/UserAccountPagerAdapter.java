@@ -1,7 +1,6 @@
 package com.taf.shuvayatra.ui.adapter;
 
 
-
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,14 +18,16 @@ public class UserAccountPagerAdapter extends FragmentPagerAdapter {
 
     private static final int ITEM_COUNT = 2;
     String[] titles;
+    private Context context;
 
     public UserAccountPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
+        this.context = context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return FavouritePostFragment.newInstance();
             case 1:
@@ -42,11 +43,11 @@ public class UserAccountPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
+        switch (position) {
             case 0:
-                return "Favourites";
+                return context.getString(R.string.tab_label_favorites);
             case 1:
-                return "User Info";
+                return context.getString(R.string.tab_label_user_info);
             default:
                 return "";
         }

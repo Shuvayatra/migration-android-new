@@ -5,5 +5,5 @@ package com.taf.shuvayatra.ui.views;
  */
 
 public interface OnBoardingView extends LoadDataView {
-    void onSendUserInfo();
+    void onUserInfoSent(boolean status);
 }

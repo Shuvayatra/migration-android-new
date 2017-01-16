@@ -228,6 +228,7 @@ public class MyConstants {
         public static final String KEY_ABOUT = "key_about";
         public static final String KEY_CONTACT_US = "key_contact_us";
         public static final java.lang.String KEY_INFO = "key_info";
+        public static final String IS_EXIT = "is_exit";
     }
 
     public static final class Intent {

@@ -155,4 +155,15 @@
     <string name="channels">Channels</string>
     <string name="error_message_underage">You should be at least 15 years old to proceed</string>
     <string name="country_not_decided_yet">Not decided yet</string>
+    <string name="menu_skip">SKIP</string>
+    <string name="user_label_name">Name</string>
+    <string name="user_label_birthday">Birthday</string>
+    <string name="user_label_gender">Gender</string>
+    <string name="user_label_zone">Zone</string>
+    <string name="user_label_current_work_status">Current work status</string>
+    <string name="user_label_destination">Destination</string>
+    <string name="value_not_set">Not set</string>
+
+    <string name="tab_label_user_info">User Info</string>
+    <string name="tab_label_favorites">Favourites</string>
 </resources>

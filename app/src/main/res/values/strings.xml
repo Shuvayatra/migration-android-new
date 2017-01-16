@@ -1,40 +1,51 @@
 <resources>
 
-	<string name="app_name">Shuvayatra</string>
-	<string name="facebook_app_id">902864043138819</string>
+    <string name="app_name">Shuvayatra</string>
+    <string name="facebook_app_id">902864043138819</string>
 
-	<string name="filter_audio">audio</string>
-	<string name="filter_video">video</string>
-	<string name="filter_article">text</string>
-	<string name="filter_news">news</string>
+    <string name="filter_audio">audio</string>
+    <string name="filter_video">video</string>
+    <string name="filter_article">text</string>
+    <string name="filter_news">news</string>
 
-	<string name="action_on">Turn on</string>
+    <string name="action_on">Turn on</string>
 
-	<string name="title_activity_places_detail">PlacesDetailActivity</string>
-	<string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
-	<string name="title_activity_country_detail">CountryDetailActivity</string>
-	<string name="title_activity_info_detail">InfoDetailActivity</string>
-	<string name="title_activity_tag_list">Search By Tags</string>
-	<string name="title_activity_facebook_parse">FacebookParseActivity</string>
-	<string name="title_activity_search_list">SearchListActivity</string>
-	<string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_places_detail">PlacesDetailActivity</string>
+    <string name="title_activity_journey_category_detail">JourneyCategoryDetail</string>
+    <string name="title_activity_country_detail">CountryDetailActivity</string>
+    <string name="title_activity_info_detail">InfoDetailActivity</string>
+    <string name="title_activity_tag_list">Search By Tags</string>
+    <string name="title_activity_facebook_parse">FacebookParseActivity</string>
+    <string name="title_activity_search_list">SearchListActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
 
-	<string name="navigation_drawer_open">Open navigation drawer</string>
-	<string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
-	<string name="action_settings">Settings</string>
+    <string name="action_settings">Settings</string>
 
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
-	<string name="title_activity_on_board">OnBoardActivity</string>
-	<string name="title_activity_podcasts">Podcasts</string>
-	<string name="title_activity_deep_link">DeepLinkActivity</string>
-	<string name="title_activity_feed">All Posts</string>
-	<string name="title_activity_destination_detail">DestinationDetailActivity</string>
-	<string name="title_activity_search">SearchActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_on_board">OnBoardActivity</string>
+    <string name="title_activity_podcasts">Podcasts</string>
+    <string name="title_activity_deep_link">DeepLinkActivity</string>
+    <string name="title_activity_feed">All Posts</string>
+    <string name="title_activity_destination_detail">DestinationDetailActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
     <string name="error_message_underage">You should be at least 15 years old to proceed</string>
     <string name="country_not_decided_yet">Not decided yet</string>
     <string name="label_app">Shuvayatra</string>
+    <string name="menu_skip">SKIP</string>
+    <string name="user_label_name">Name</string>
+    <string name="user_label_birthday">Birthday</string>
+    <string name="user_label_gender">Gender</string>
+    <string name="user_label_zone">Zone</string>
+    <string name="user_label_current_work_status">Current work status</string>
+    <string name="user_label_destination">Destination</string>
+    <string name="value_not_set">Not set</string>
+    <string name="action_edit">EDIT</string>
+    <string name="tab_label_user_info">User Info</string>
+    <string name="tab_label_favorites">Favourites</string>
 
 
 </resources>

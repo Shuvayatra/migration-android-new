@@ -150,8 +150,20 @@
     <string name="all_country">सबै गन्तब्यहरु </string>
     <string name="channels">च्यानलहरू</string>
 
+    <string name="menu_skip">पछि भर्नुहोस्</string>
+
 
     <string name="error_message_underage">तपाईं कम्तिमा १५ वर्ष हुनुपर्छ अगाडि बढ्न</string>
     <string name="country_not_decided_yet">अहिलेसम्म निर्णय गरिएको छैन</string>
+    <string name="value_not_set">तपाईं द्वारा उपलब्ध छैन</string>
+
+    <string name="user_label_name">नाम</string>
+    <string name="user_label_birthday">जन्मदिन</string>
+    <string name="user_label_gender">लिंग</string>
+    <string name="user_label_zone">मुल क्षेत्र</string>
+    <string name="user_label_current_work_status">विगतमा विदेशी कामको वस्तुस्थिति</string>
+    <string name="user_label_destination">गन्तव्य</string>
+    <string name="tab_label_user_info">आफ्नो जानकारी</string>
+    <string name="tab_label_favorites">पसंदीदा</string>
 
 </resources>

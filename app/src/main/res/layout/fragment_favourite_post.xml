@@ -2,21 +2,20 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:padding="@dimen/spacing_xsmall" />
 
         <include
             android:id="@+id/empty_view"
             layout="@layout/empty_list_view" />
-    </RelativeLayout>
+    </FrameLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

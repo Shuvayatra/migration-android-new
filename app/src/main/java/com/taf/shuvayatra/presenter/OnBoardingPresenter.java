@@ -21,7 +21,7 @@ public class OnBoardingPresenter implements Presenter {
     UseCase mUsecase;
 
     @Inject
-    public OnBoardingPresenter(@Named("send-user-info") UseCase useCase){
+    public OnBoardingPresenter(@Named("send-user-info") UseCase useCase) {
         mUsecase = useCase;
     }
 
@@ -50,7 +50,7 @@ public class OnBoardingPresenter implements Presenter {
         mView = (OnBoardingView) view;
     }
 
-    public class SendUserInfoSubscriber extends DefaultSubscriber<Boolean>{
+    public class SendUserInfoSubscriber extends DefaultSubscriber<Boolean> {
         @Override
         public void onCompleted() {
             super.onCompleted();
@@ -68,7 +68,7 @@ public class OnBoardingPresenter implements Presenter {
 
         @Override
         public void onNext(Boolean pT) {
-            mView.onSendUserInfo();
+            mView.onUserInfoSent(pT);
         }
     }
 }
