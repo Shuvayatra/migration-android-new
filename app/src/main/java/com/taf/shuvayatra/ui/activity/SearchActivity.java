@@ -38,9 +38,11 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.SearchPostListView;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -51,6 +53,11 @@ import rx.functions.Func1;
 public class SearchActivity extends BaseActivity implements ListItemClickListener, SearchPostListView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "SearchActivity";
+    public static final String STATE_POST= "posts";
+    public static final String STATE_QUERY_TEXT = "query";
+    public static final String STATE_QUERY_TYPE = "type";
+    public static final String STATE_PAGE = "page";
+    public static final String STATE_IS_LAST_PAGE = "is-last-page";
     public static final Integer PAGE_LIMIT = 15;
     public static final Integer INITIAL_OFFSET = 1;
 
@@ -91,8 +98,18 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
         super.onCreate(savedInstanceState);
 
         initialize();
+        List<Post> posts = new ArrayList<>();
+        if(savedInstanceState != null){
+            posts = (List<Post>) savedInstanceState.getSerializable(STATE_POST);
+            mQuery = savedInstanceState.getString(STATE_QUERY_TEXT);
+            mSearchType = savedInstanceState.getString(STATE_QUERY_TYPE);
+            mIsLastPage = savedInstanceState.getBoolean(STATE_IS_LAST_PAGE);
+            mPage = savedInstanceState.getInt(STATE_PAGE);
+        }
         setupAdapter();
         addListeners();
+
+        mPostAdapter.setDataCollection(posts);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -136,6 +153,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
                         Logger.e(TAG, "mQuery " + mQuery.equals(mSearchTextBox.getText().toString()));
                         if (!mQuery.equals(mSearchTextBox.getText().toString())) {
                             mQuery = mSearchTextBox.getText().toString();
+                            Logger.e(TAG,"seargching from text change");
                             searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
                         }
                         return null;
@@ -171,22 +189,25 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String type = (String) mTypeSpinner.getSelectedItem();
+                Logger.e(TAG,"searching from spinner");
                 if (position == 0) {
-                    mSearchType = "";
+                    type = "";
                 } else if (type.equals(getString(R.string.audio))) {
-                    mSearchType = "audio";
+                    type = "audio";
                 } else if (type.equals(getString(R.string.video))) {
-                    mSearchType = "video";
+                    type = "video";
                 } else if (type.equals(getString(R.string.article))) {
-                    mSearchType = "text";
+                    type = "text";
                 }
 
-                if (mQuery != null) {
+                if (mQuery != null && !type.equals(mSearchType)) {
                     mQuery = mSearchTextBox.getText().toString();
+                    mSearchType = type;
                     mSwipeRefreshLayout.setRefreshing(true);
                     searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
                 } else {
                     mQuery = mSearchTextBox.getText().toString();
+                    mSearchType = type;
                 }
 
             }
@@ -216,6 +237,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
                             && firstVisibleItemPosition >= 0) {
                         Logger.e(TAG, "mPage: " + mPage);
                         mSwipeRefreshLayout.setRefreshing(true);
+                        Logger.e(TAG,"searching from scroll");
                         searchPosts(mPage + 1, mQuery, mSearchType);
                     }
                 }
@@ -308,6 +330,17 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
     @Override
     public void onRefresh() {
         searchPosts(INITIAL_OFFSET, mSearchTextBox.getText().toString(), mSearchType);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(STATE_POST, (Serializable) mPostAdapter.getDataCollection());
+        outState.putString(STATE_QUERY_TEXT, mQuery);
+        outState.putString(STATE_QUERY_TYPE, mSearchType);
+        outState.putInt(STATE_PAGE, mPage);
+        outState.putBoolean(STATE_IS_LAST_PAGE, mIsLastPage);
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
