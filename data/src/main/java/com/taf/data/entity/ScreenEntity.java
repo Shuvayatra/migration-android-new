@@ -9,7 +9,6 @@ public class ScreenEntity {
     private long id;
     private String title;
     private String icon;
-    private String endpoint;
     private String type;
     private int order;
 
@@ -35,14 +34,6 @@ public class ScreenEntity {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
     }
 
     public String getType() {

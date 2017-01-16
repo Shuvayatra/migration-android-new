@@ -13,6 +13,6 @@ import rx.Observable;
 
 public interface IScreenRepository {
     Observable<List<ScreenModel>> getScreens();
-    Observable<ScreenDataModel> getScreenBlockData(long id, String endPoint);
-    Observable<ScreenDataModel> getScreenFeedData(long id,int page, String endPoint);
+    Observable<ScreenDataModel> getScreenBlockData(long id);
+    Observable<ScreenDataModel> getScreenFeedData(long id,int page);
 }

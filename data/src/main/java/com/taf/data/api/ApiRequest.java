@@ -129,12 +129,12 @@ public class ApiRequest {
         return mApiService.getScreenEntity();
     }
 
-    public Observable<ScreenBlockEntity> getScreenBlockData(String endpoint){
-        return mApiService.getScreenBlockData();
+    public Observable<ScreenBlockEntity> getScreenBlockData(long id){
+        return mApiService.getScreenBlockData(id);
     }
 
-    public Observable<ScreenFeedEntity> getScreenFeedData(int page, String endpoint){
-        return mApiService.getScreenFeedData();
+    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page){
+        return mApiService.getScreenFeedData(id, page);
     }
 
 

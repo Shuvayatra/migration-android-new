@@ -139,9 +139,8 @@ public class MyConstants {
         public static final String NEWS = "api/posts/news";
         public static final String ON_BOARDING_PUSH = "api/onboarding/save";
         // TODO: 1/13/17 change after api
-        public static final String SCREEN = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/screens.json";
-        public static final String SCREEN_DATA_BLOCK = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/block.json";
-        public static final String SCREEN_DATA_FEED = "A7AA791D-58EE-DD46-FF8A-36EE797F9800/v1/files/feeds.json";
+        public static final String SCREEN = "api/screens";
+        public static final String SCREEN_DATA = "api/screens/{id}";
 
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";

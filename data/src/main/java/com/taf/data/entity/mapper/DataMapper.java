@@ -590,7 +590,6 @@ public class DataMapper {
 
         if (entity != null) {
             model.setId(entity.getId());
-            model.setEndPOint(entity.getEndpoint());
             model.setIcon(entity.getIcon());
             model.setOrder(entity.getOrder());
             model.setTitle(entity.getTitle());
@@ -608,10 +607,10 @@ public class DataMapper {
 
     public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity) {
         ScreenDataModel<Post> screenDataModel = new ScreenDataModel();
-        screenDataModel.setData(transformPost(screenFeedEntity.getData()));
-        screenDataModel.setCurrentPage(screenFeedEntity.getCurrentPage());
-        screenDataModel.setLastPage(screenFeedEntity.getLastPage());
-        screenDataModel.setTotalCount(screenFeedEntity.getTotal());
+        screenDataModel.setData(transformPost(screenFeedEntity.getFeeds().getData()));
+        screenDataModel.setCurrentPage(screenFeedEntity.getFeeds().getCurrentPage());
+        screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());
+        screenDataModel.setTotalCount(screenFeedEntity.getFeeds().getTotal());
         return screenDataModel;
     }
 }

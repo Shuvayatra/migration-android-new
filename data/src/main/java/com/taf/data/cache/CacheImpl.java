@@ -461,13 +461,13 @@ public class CacheImpl {
         }
 
         // update the cache
-        screenFeedEntity.setTotal(entity.getTotal());
-        screenFeedEntity.setCurrentPage(entity.getCurrentPage());
-        screenFeedEntity.setLastPage(entity.getLastPage());
-        screenFeedEntity.setLimit(entity.getLimit());
+        screenFeedEntity.getFeeds().setTotal(entity.getFeeds().getTotal());
+        screenFeedEntity.getFeeds().setCurrentPage(entity.getFeeds().getCurrentPage());
+        screenFeedEntity.getFeeds().setLastPage(entity.getFeeds().getLastPage());
+        screenFeedEntity.getFeeds().setLimit(entity.getFeeds().getLimit());
 
-        screenFeedEntity.getData().addAll(entity.getData());
-        screenFeedEntity.setData(new ArrayList<>(new LinkedHashSet<PostEntity>(screenFeedEntity.getData())));
+        screenFeedEntity.getFeeds().getData().addAll(entity.getFeeds().getData());
+        screenFeedEntity.getFeeds().setData(new ArrayList<>(new LinkedHashSet<PostEntity>(screenFeedEntity.getFeeds().getData())));
 
         try {
             mSimpleDiskCache.put(key, new Gson().toJson(screenFeedEntity));

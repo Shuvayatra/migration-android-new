@@ -101,9 +101,9 @@ public interface ApiService {
     @GET(MyConstants.API.SCREEN)
     Observable<List<ScreenEntity>> getScreenEntity();
 
-    @GET(MyConstants.API.SCREEN_DATA_BLOCK)
-    Observable<ScreenBlockEntity> getScreenBlockData();
+    @GET(MyConstants.API.SCREEN_DATA)
+    Observable<ScreenBlockEntity> getScreenBlockData(@Path("id") long id);
 
-    @GET(MyConstants.API.SCREEN_DATA_FEED)
-    Observable<ScreenFeedEntity> getScreenFeedData();
+    @GET(MyConstants.API.SCREEN_DATA)
+    Observable<ScreenFeedEntity> getScreenFeedData(@Path("id") long id, @Query("page") int page);
 }

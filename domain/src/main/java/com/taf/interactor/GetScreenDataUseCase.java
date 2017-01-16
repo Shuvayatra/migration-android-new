@@ -30,13 +30,12 @@ public class GetScreenDataUseCase extends UseCase<ScreenDataModel> {
 
     @Override
     protected Observable<ScreenDataModel> buildUseCaseObservable(UseCaseData pData) {
-        String endPoint = pData.getString(UseCaseData.END_POINT);
         String type = pData.getString(UseCaseData.SCREEN_DATA_TYPE);
         if (type.equalsIgnoreCase(MyConstants.SCREEN.TYPE_BLOCK)) {
-            return mRepository.getScreenBlockData(mId, endPoint);
+            return mRepository.getScreenBlockData(mId);
         } else if (type.equalsIgnoreCase(MyConstants.SCREEN.TYPE_FEED)) {
             int page = pData.getInteger(UseCaseData.NEXT_PAGE);
-            return mRepository.getScreenFeedData(mId,page, endPoint);
+            return mRepository.getScreenFeedData(mId,page);
         } else
             return Observable.error(new UnsupportedDataTypeException());
     }
