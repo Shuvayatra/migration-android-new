@@ -6,6 +6,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
@@ -22,6 +23,7 @@ import com.taf.data.entity.UserInfoResponse;
 import com.taf.data.exception.NetworkConnectionException;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.base.ApiQueryParams;
+import com.taf.util.MyConstants;
 
 import java.util.List;
 
@@ -125,7 +127,7 @@ public class ApiRequest {
         return mApiService.saveUserInfo(entity);
     }
 
-    public Observable<List<ScreenEntity>> getScreens(){
+    public Observable<List<ScreenEntity>> getScreens() {
         return mApiService.getScreenEntity();
     }
 
@@ -137,5 +139,15 @@ public class ApiRequest {
         return mApiService.getScreenFeedData(id, page);
     }
 
+    public Observable<InfoEntity> getInfo(int type) {
+        switch (type) {
+            case MyConstants.Adapter.TYPE_ABOUT:
+                return mApiService.getAbout();
+            case MyConstants.Adapter.TYPE_CONTACT_US:
+                return mApiService.getContactUs();
+            default:
+                return Observable.empty();
+        }
+    }
 
 }

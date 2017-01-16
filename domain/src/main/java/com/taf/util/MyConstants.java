@@ -145,6 +145,8 @@ public class MyConstants {
         //TODO: need to change after api for channel is build
         public static final String CHANNEL = "api/radio/categories";
         public static final String SEARCH_POSTS = "api/posts";
+        public static final String ABOUT = "api/page/about";
+        public static final String CONTACT_US = "api/page/contact-us";
     }
 
     public static final class Adapter {
@@ -172,6 +174,8 @@ public class MyConstants {
         public static final int TYPE_CHANNEL_HEADER = 22;
         public static final int TYPE_CHANNEL_SELECTED = 23;
         public static final int TYPE_USER_INFO = 24;
+        public static final int TYPE_ABOUT = 25;
+        public static final int TYPE_CONTACT_US = 26;
     }
 
 
@@ -221,6 +225,9 @@ public class MyConstants {
         public static final String KEY_COUNTRY_TITLE = "key_country_title";
         public static final String KEY_COUNTRY_TITLE_EN = "key_country_title_en";
         public static final String KEY_CHANNEL_LIST = "key_channel_list";
+        public static final String KEY_ABOUT = "key_about";
+        public static final String KEY_CONTACT_US = "key_contact_us";
+        public static final java.lang.String KEY_INFO = "key_info";
     }
 
     public static final class Intent {

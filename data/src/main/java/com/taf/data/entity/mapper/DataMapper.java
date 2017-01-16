@@ -18,6 +18,7 @@ import com.taf.data.entity.CategoryEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.CountryInfoEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.NoticeEntity;
 import com.taf.data.entity.PaginatedEntity;
@@ -39,6 +40,7 @@ import com.taf.model.Channel;
 import com.taf.model.Country;
 import com.taf.model.CountryInfo;
 import com.taf.model.CountryWidgetData;
+import com.taf.model.Info;
 import com.taf.model.LatestContent;
 import com.taf.model.Notice;
 import com.taf.model.Notification;
@@ -419,7 +421,7 @@ public class DataMapper {
     }
 
     public PodcastResponse transformPodcastResponse(PodcastResponseEntity entity) {
-        Logger.e(TAG,"podcasts: "+ entity.getData().getData().size());
+        Logger.e(TAG, "podcasts: " + entity.getData().getData().size());
         if (entity != null) {
             PodcastResponse response = new PodcastResponse(entity.getId());
             response.setTitle(entity.getTitle());
@@ -612,5 +614,9 @@ public class DataMapper {
         screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());
         screenDataModel.setTotalCount(screenFeedEntity.getFeeds().getTotal());
         return screenDataModel;
+    }
+
+    public Info transformInfo(InfoEntity infoEntity) {
+        return new Info(infoEntity.title, infoEntity.content);
     }
 }

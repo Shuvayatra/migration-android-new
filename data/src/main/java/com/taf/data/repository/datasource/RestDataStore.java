@@ -13,6 +13,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
@@ -32,7 +33,13 @@ import com.taf.model.base.ApiQueryParams;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import static com.taf.util.MyConstants.Adapter.TYPE_ABOUT;
+import static com.taf.util.MyConstants.Adapter.TYPE_CONTACT_US;
+import static com.taf.util.MyConstants.Extras.KEY_ABOUT;
+import static com.taf.util.MyConstants.Extras.KEY_CONTACT_US;
 
 
 public class RestDataStore implements IDataStore {
@@ -303,7 +310,7 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getScreenFeedData(id,page)
                     .doOnNext(screenDataEntities -> {
-                        mCache.saveScreenFeedData(id,screenDataEntities);
+                        mCache.saveScreenFeedData(id, screenDataEntities);
                     });
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -331,4 +338,19 @@ public class RestDataStore implements IDataStore {
 //            return Observable.error(new NetworkConnectionException());
 //        }
 //    }
+
+    public Observable<InfoEntity> getInfo(String key) {
+        if (isThereInternetConnection()) {
+            switch (key) {
+                case KEY_ABOUT:
+                    return mApiRequest.getInfo(TYPE_ABOUT).doOnNext(infoEntity ->
+                            mCache.saveInfo(key, infoEntity));
+
+                case KEY_CONTACT_US:
+                    return mApiRequest.getInfo(TYPE_CONTACT_US).doOnNext(infoEntity ->
+                            mCache.saveInfo(key, infoEntity));
+            }
+        }
+        return Observable.error(new NetworkConnectionException());
+    }
 }
