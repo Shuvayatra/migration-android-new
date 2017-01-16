@@ -30,7 +30,7 @@ public class ScreenRepository implements IScreenRepository {
     @Override
     public Observable<List<ScreenModel>> getScreens(){
         // TODO: 1/14/17 Url in parameter is only for test. remove the url from parameter.
-        Observable apiObservable = mDataStoreFactory.createRestDataStore("https://api.backendless.com/")
+        Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getScreenEntity()
                 .map(screenEntities -> mDataMapper.transformScreenEntity(screenEntities))
                 .map(screenModels -> sortByOrder(screenModels));
@@ -44,9 +44,9 @@ public class ScreenRepository implements IScreenRepository {
     }
 
     @Override
-    public Observable<ScreenDataModel> getScreenBlockData(long id, String endPoint) {
-        Observable apiObservable =  mDataStoreFactory.createRestDataStore("https://api.backendless.com/")
-                .getScreenBlockData( id,endPoint)
+    public Observable<ScreenDataModel> getScreenBlockData(long id) {
+        Observable apiObservable =  mDataStoreFactory.createRestDataStore()
+                .getScreenBlockData(id)
                 .map(screenDataEntity ->  mDataMapper.transformScreenBlockData(screenDataEntity));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
@@ -61,9 +61,9 @@ public class ScreenRepository implements IScreenRepository {
     }
 
     @Override
-    public Observable<ScreenDataModel> getScreenFeedData(long id, int page, String endPoint) {
-        Observable apiObservable =  mDataStoreFactory.createRestDataStore("https://api.backendless.com/")
-                .getScreenFeedData( id,page,endPoint)
+    public Observable<ScreenDataModel> getScreenFeedData(long id, int page) {
+        Observable apiObservable =  mDataStoreFactory.createRestDataStore()
+                .getScreenFeedData( id,page)
                 .map(screenDataEntity ->  mDataMapper.transformScreenFeedData(screenDataEntity));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()

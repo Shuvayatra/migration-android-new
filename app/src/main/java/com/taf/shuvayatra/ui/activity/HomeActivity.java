@@ -49,8 +49,6 @@ import com.taf.shuvayatra.ui.fragment.ChannelFragment;
 import com.taf.shuvayatra.ui.fragment.DestinationFragment;
 import com.taf.shuvayatra.ui.fragment.FeedScreenFragment;
 import com.taf.shuvayatra.ui.fragment.HomeFragment;
-import com.taf.shuvayatra.ui.fragment.JourneyFragment;
-import com.taf.shuvayatra.ui.fragment.NewsFragment;
 import com.taf.shuvayatra.ui.fragment.UserAccountFragment;
 import com.taf.shuvayatra.ui.views.HomeActivityView;
 import com.taf.shuvayatra.ui.views.OnBoardingView;
@@ -126,8 +124,8 @@ public class HomeActivity extends MediaServiceActivity implements
 
         if (savedInstanceState != null) {
             selectedNavMenuId = savedInstanceState.getInt(STATE_MENU_ID);
-            mScreens = (List<ScreenModel>) savedInstanceState.get(STATE_SCREENS);
-            addMenu();
+            List<ScreenModel> screens = (List<ScreenModel>) savedInstanceState.get(STATE_SCREENS);
+            processMenu(screens);
         } else {
             selectedNavMenuId = R.id.nav_home;
             homeActivityPresenter.initialize(null);
@@ -247,15 +245,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, HomeFragment.TAG)
                         .commit();
                 break;
-            case R.id.nav_journey:
-                fragment = getSupportFragmentManager().findFragmentByTag(JourneyFragment.TAG);
-                if (fragment == null) {
-                    fragment = JourneyFragment.getInstance();
-                }
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_home, fragment, JourneyFragment.TAG)
-                        .commit();
-                break;
+//            case R.id.nav_journey:
+//                fragment = getSupportFragmentManager().findFragmentByTag(JourneyFragment.TAG);
+//                if (fragment == null) {
+//                    fragment = JourneyFragment.getInstance();
+//                }
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.content_home, fragment, JourneyFragment.TAG)
+//                        .commit();
+//                break;
             case R.id.nav_radio:
                 fragment = getSupportFragmentManager().findFragmentByTag(ChannelFragment.TAG);
                 if (fragment == null) {
@@ -274,15 +272,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, DestinationFragment.TAG)
                         .commit();
                 break;
-            case R.id.nav_news:
-                fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
-                if (fragment == null) {
-                    fragment = NewsFragment.newInstance();
-                }
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_home, fragment, NewsFragment.TAG)
-                        .commit();
-                break;
+//            case R.id.nav_news:
+//                fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
+//                if (fragment == null) {
+//                    fragment = NewsFragment.newInstance();
+//                }
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.content_home, fragment, NewsFragment.TAG)
+//                        .commit();
+//                break;
             case R.id.nav_account:
                 fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
                 if (fragment == null) {
@@ -302,6 +300,7 @@ public class HomeActivity extends MediaServiceActivity implements
                 mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
             }
         }
+        Logger.e(TAG,"fragment: "+ fragment);
         if (fragment != null)
             selectedNavMenuId = menuId;
 
@@ -341,15 +340,20 @@ public class HomeActivity extends MediaServiceActivity implements
 
     @Override
     public void renderScreens(List<ScreenModel> screens) {
-        mScreens = screens;
-        addMenu();
+        processMenu(screens);
     }
 
-    private void addMenu() {
+    private void processMenu(List<ScreenModel> screens) {
+
         Logger.e(TAG, "mScreens.size(): " + mScreens.size());
         // TODO: 1/16/17 refactor code 
 //        mNavigationView.getMenu().removeGroup(R.id.nav_main_menu);
-        Logger.e(TAG, "screens mNavigationView.getMenu().size();: " + mNavigationView.getMenu().size());
+        if(mScreens != null){
+            for (ScreenModel screen : mScreens) {
+                mNavigationView.getMenu().removeItem(screen.getId().intValue());
+            }
+        }
+        mScreens = screens;
         for (final ScreenModel screen : mScreens) {
             getMenuIcon(screen);
         }
@@ -400,13 +404,15 @@ public class HomeActivity extends MediaServiceActivity implements
 
     private void addMenu(final ScreenModel screen, Drawable icon) {
         Logger.e(TAG, "menu added: " + screen.getId());
+        // just for safety. some times when data change double icon for fiirst time.
+        mNavigationView.getMenu().removeItem(screen.getId().intValue());
         final MenuItem menuItem = mNavigationView.getMenu().add(R.id.nav_main_menu,
                 screen.getId().intValue(),
                 (screen.getOrder()),
                 screen.getTitle());
         menuItem.setIcon(icon);
         menuItem.setCheckable(true);
-        menuItem.setCheckable(true);
+        if(selectedNavMenuId == menuItem.getItemId()) menuItem.setChecked(true);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

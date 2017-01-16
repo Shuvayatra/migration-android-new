@@ -287,10 +287,11 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<ScreenBlockEntity> getScreenBlockData(long id, String endPoint) {
+    public Observable<ScreenBlockEntity> getScreenBlockData(long id) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getScreenBlockData( endPoint)
+            return mApiRequest.getScreenBlockData(id)
                     .doOnNext(screenDataEntities -> {
+                        Logger.e(TAG,"screenENtities: "+ screenDataEntities);
                         mCache.saveScreenBlockData(id, screenDataEntities);
                     });
         } else {
@@ -298,9 +299,9 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page, String endPoint) {
+    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getScreenFeedData(page, endPoint)
+            return mApiRequest.getScreenFeedData(id,page)
                     .doOnNext(screenDataEntities -> {
                         mCache.saveScreenFeedData(id,screenDataEntities);
                     });

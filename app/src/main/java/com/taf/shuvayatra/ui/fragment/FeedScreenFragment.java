@@ -28,6 +28,9 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -39,7 +42,10 @@ import butterknife.BindView;
 public class FeedScreenFragment extends BaseFragment implements ScreenDataView, ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "FeedScreenFragment";
-
+    private static final String STATE_SCREEN = "screen";
+    private static final String STATE_FEEDS = "feeds";
+    public static final String STATE_PAGE = "page";
+    public static final String STATE_ISLAST_PAGE = "is-last-page" ;
     public static final Integer INITIAL_OFFSET = 1;
     public static final int REQUEST_CODE_POST_DETAIL = 3209;
 
@@ -54,10 +60,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    ScreenDataModel<Post> mScreenModel;
-
     LinearLayoutManager mLayoutManager;
-    ListAdapter<Post> mListAdapter;
     UseCaseData mUseCaseData = new UseCaseData();
     int mPage = INITIAL_OFFSET;
     int mTotalDataCount = 0;
@@ -81,12 +84,21 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initialize();
         setUpAdapter();
+        List<Post> posts = null;
+        if(savedInstanceState != null){
+            mScreen = (ScreenModel) savedInstanceState.get(STATE_SCREEN);
+            mPage = savedInstanceState.getInt(STATE_PAGE);
+            mIsLastPage = savedInstanceState .getBoolean(STATE_ISLAST_PAGE);
+            posts = (List<Post>) savedInstanceState.get(STATE_FEEDS);
+            mAdapter.setDataCollection(posts);
+        }
+        initialize();
 
-        mUseCaseData.putString(UseCaseData.END_POINT, mScreen.getEndPOint());
         mUseCaseData.putString(UseCaseData.SCREEN_DATA_TYPE, mScreen.getType());
-        loadPosts(INITIAL_OFFSET);
+        if(posts == null) {
+            loadPosts(INITIAL_OFFSET);
+        }
     }
 
     private void initialize() {
@@ -132,6 +144,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     }
 
     private void loadPosts(Integer pPage) {
+        Logger.e(TAG,"pPage: "+ pPage);
         mSwipeRefreshLayout.setRefreshing(true);
         mUseCaseData.putInteger(UseCaseData.NEXT_PAGE, pPage);
         mPresenter.initialize(mUseCaseData);
@@ -161,8 +174,8 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
             if (mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(model.getData());
                 mPage = model.getCurrentPage();
-                mIsLastPage = model.getTotalCount() == model.getData().size();
-                Logger.e(TAG, "cache: page " + mPage);
+                mIsLastPage = mPage == model.getLastPage();
+                Logger.e(TAG, "cache: page " + mPage + " last page "+ model.getTotalCount());
                 Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
             }
             return;
@@ -180,7 +193,6 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         } else {
             mAdapter.addDataCollection(model.getData());
         }
-        mScreenModel = model;
         mAdapter.setDataCollection(model.getData());
 
         mIsLastPage = (mPage == model.getLastPage());
@@ -218,10 +230,10 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         if (resultCode == BaseActivity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_POST_DETAIL) {
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
-                mListAdapter.getDataCollection().get(listItemSelection).setShare(shareCount);
+                mAdapter.getDataCollection().get(listItemSelection).setShare(shareCount);
                 int favCount = data.getIntExtra(MyConstants.Extras.KEY_FAVOURITE_COUNT, 0);
-                mListAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
-                mListAdapter.notifyDataSetChanged();
+                mAdapter.getDataCollection().get(listItemSelection).setLikes(favCount);
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -236,5 +248,14 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     public void onDestroyView() {
         super.onDestroyView();
         mPresenter.destroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(STATE_SCREEN, mScreen);
+        outState.putSerializable(STATE_FEEDS, (Serializable) mAdapter.getDataCollection());
+        outState.putSerializable(STATE_ISLAST_PAGE, mIsLastPage);
+        outState.putSerializable(STATE_PAGE, mPage);
+        super.onSaveInstanceState(outState);
     }
 }

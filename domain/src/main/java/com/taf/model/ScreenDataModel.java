@@ -52,4 +52,15 @@ public class ScreenDataModel<T> {
     public void setFromCache(boolean fromCache) {
         isFromCache = fromCache;
     }
+
+    @Override
+    public String toString() {
+        return "ScreenDataModel{" +
+                "lastPage=" + lastPage +
+                ", totalCount=" + totalCount +
+                ", currentPage=" + currentPage +
+                ", isFromCache=" + isFromCache +
+                ", data=" + data +
+                '}';
+    }
 }

@@ -9,52 +9,50 @@ import java.util.List;
  */
 
 public class ScreenFeedEntity {
+    private String title;
+    private String name;
+    @SerializedName("icon_image")
+    private String icon;
+    private String type;
+    private PostResponseEntity feeds;
 
-    @SerializedName("current_page")
-    private int currentPage;
-    @SerializedName("last_page")
-    private int lastPage;
-    private int total;
-    private int limit;
-    private List<PostEntity> data;
-
-    public List<PostEntity> getData() {
-        return data;
+    public PostResponseEntity getFeeds() {
+        return feeds;
     }
 
-    public void setData(List<PostEntity> data) {
-        this.data = data;
+    public void setFeeds(PostResponseEntity feeds) {
+        this.feeds = feeds;
     }
 
-    public int getLastPage() {
-        return lastPage;
+    public String getTitle() {
+        return title;
     }
 
-    public void setLastPage(int lastPage) {
-        this.lastPage = lastPage;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getTotal() {
-        return total;
+    public String getName() {
+        return name;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getLimit() {
-        return limit;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public int getCurrentPage() {
-        return currentPage;
+    public String getType() {
+        return type;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void setType(String type) {
+        this.type = type;
     }
 }

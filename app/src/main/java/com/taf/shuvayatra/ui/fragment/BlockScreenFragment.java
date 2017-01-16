@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
@@ -121,6 +122,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     public void renderScreenData(ScreenDataModel model) {
 
         this.mScreenModel = model;
+        Logger.e(TAG,"model: "+ model);
         mAdapter.setBlocks(model.getData());
     }
 
