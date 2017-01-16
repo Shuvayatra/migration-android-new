@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 
@@ -23,6 +24,8 @@ import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+
 import static com.taf.util.MyConstants.Extras.KEY_CONTACT_US;
 import static com.taf.util.MyConstants.Extras.KEY_INFO;
 
@@ -30,7 +33,7 @@ import static com.taf.util.MyConstants.Extras.KEY_INFO;
  * Created by yipl on 1/16/17.
  */
 
-public class InfoFragment extends BaseFragment implements InfoView {
+public class InfoFragment extends BaseFragment implements InfoView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "InfoFragment";
 
@@ -41,7 +44,16 @@ public class InfoFragment extends BaseFragment implements InfoView {
     @Inject
     InfoPresenter mPresenter;
 
+    @BindView(R.id.progress_bar)
+    View loadingView;
+    @BindView(R.id.empty_view)
+    View emptyView;
+
+    @BindView(R.id.swipe_container)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     InfoDataBinding mBinding;
+    UseCaseData pData = new UseCaseData();
 
     @Override
     public int getLayout() {
@@ -63,18 +75,30 @@ public class InfoFragment extends BaseFragment implements InfoView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null){
-            mKey = (String) savedInstanceState.get("KEY");
-        }
-            switch (mKey) {
-                case MyConstants.Extras.KEY_ABOUT:
-                    ((BaseActivity) getActivity()).getSupportActionBar().setTitle(getContext().getResources().getString(R.string.about));
-                    break;
-                case KEY_CONTACT_US:
-                    ((BaseActivity) getActivity()).getSupportActionBar().setTitle(getContext().getResources().getString(R.string.contact));
-                    break;
-            }
+
         initialize();
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        if (savedInstanceState != null) {
+            mKey = (String) savedInstanceState.get("KEY");
+            mInfo = (Info) savedInstanceState.getSerializable(KEY_INFO);
+            mBinding.setInfo(mInfo);
+            pData = (UseCaseData) savedInstanceState.getSerializable("KEY_PDATA");
+            if (mInfo.getContent() == null) {
+                showEmptyView();
+            } else {
+                hideEmptyView();
+            }
+        } else {
+            fetchData();
+        }
+        switch (mKey) {
+            case MyConstants.Extras.KEY_ABOUT:
+                ((BaseActivity) getActivity()).getSupportActionBar().setTitle(getContext().getResources().getString(R.string.about));
+                break;
+            case KEY_CONTACT_US:
+                ((BaseActivity) getActivity()).getSupportActionBar().setTitle(getContext().getResources().getString(R.string.contact));
+                break;
+        }
     }
 
     private void initialize() {
@@ -88,6 +112,9 @@ public class InfoFragment extends BaseFragment implements InfoView {
         mPresenter.attachView(this);
 
         UseCaseData pData = new UseCaseData();
+    }
+
+    private void fetchData() {
         pData.putString(KEY_INFO, mKey);
 
         mPresenter.initialize(pData);
@@ -95,16 +122,17 @@ public class InfoFragment extends BaseFragment implements InfoView {
 
     @Override
     public void showLoadingView() {
-
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideLoadingView() {
-
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void showErrorView(String pErrorMessage) {
+        hideLoadingView();
         Snackbar.make(getView(), pErrorMessage, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -113,6 +141,11 @@ public class InfoFragment extends BaseFragment implements InfoView {
         Log.e(TAG, "render: " + info);
         mInfo = info;
         mBinding.setInfo(mInfo);
+        if (mInfo.getContent() == null) {
+            showEmptyView();
+        } else {
+            hideEmptyView();
+        }
     }
 
     @Override
@@ -120,6 +153,7 @@ public class InfoFragment extends BaseFragment implements InfoView {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_INFO, mInfo);
         outState.putString("KEY", mKey);
+        outState.putSerializable("KEY_PDATA", pData);
     }
 
     @Override
@@ -130,5 +164,18 @@ public class InfoFragment extends BaseFragment implements InfoView {
             mInfo = (Info) savedInstanceState.getSerializable(KEY_INFO);
             mBinding.setInfo(mInfo);
         }
+    }
+
+    void hideEmptyView() {
+        emptyView.setVisibility(View.GONE);
+    }
+
+    void showEmptyView() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.initialize(pData);
     }
 }

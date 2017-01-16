@@ -5,39 +5,71 @@
 
     <data class="InfoDataBinding">
 
+        <import type="android.view.View" />
+
         <variable
             name="info"
             type="com.taf.model.Info" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_standard">
+        android:layout_height="match_parent">
 
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:padding="@dimen/spacing_standard"-->
-        <!--android:text='@{info.title!=null?info.title:""}'-->
-        <!--android:textSize="@dimen/text_header_title_24sp"-->
-        <!--android:textStyle="bold"-->
-        <!--tools:text="hello" />-->
-
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:background="@color/main_background"
+            android:clipToPadding="false"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <WebView
-                android:id="@+id/content"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/default_gradient"
-                app:htmlContent='@{info.content!=null?info.content:""}'></WebView>
-        </android.support.v4.widget.NestedScrollView>
+                android:layout_height="match_parent"
+                android:background="@android:color/white">
 
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <WebView
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/spacing_standard"
+                        android:background="@drawable/default_gradient"
+                        app:htmlContent='@{info.content!=null?info.content:""}' />
+                </RelativeLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/empty_view"
+                layout="@layout/empty_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{info.content==null?View.VISIBLE:View.GONE}" />
+
+            <FrameLayout
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_alpha_55"
+                android:visibility="gone">
+
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
 </layout>
