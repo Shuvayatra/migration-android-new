@@ -10,6 +10,7 @@ import com.taf.data.repository.ChannelRepository;
 import com.taf.data.repository.ComponentRepository;
 import com.taf.data.repository.CountryRepository;
 import com.taf.data.repository.HomeRepository;
+import com.taf.data.repository.InfoRepository;
 import com.taf.data.repository.JourneyRepository;
 import com.taf.data.repository.NewsRepository;
 import com.taf.data.repository.PodcastRepository;
@@ -30,6 +31,7 @@ import com.taf.interactor.GetCountryUseCase;
 import com.taf.interactor.GetDestinationBlocksUseCase;
 import com.taf.interactor.GetFavouritePostUseCase;
 import com.taf.interactor.GetHomeBlocksUseCase;
+import com.taf.interactor.GetInfoUseCase;
 import com.taf.interactor.GetJourneyUseCase;
 import com.taf.interactor.GetPodcastListUseCase;
 import com.taf.interactor.GetPostDetailUseCase;
@@ -64,6 +66,7 @@ import com.taf.repository.IBaseRepository;
 import com.taf.repository.IChannelRepository;
 import com.taf.repository.ICountryRepository;
 import com.taf.repository.IHomeRepository;
+import com.taf.repository.IInfoRepository;
 import com.taf.repository.IJourneyRepository;
 import com.taf.repository.INewsRepository;
 import com.taf.repository.IPodcastRepository;
@@ -159,7 +162,7 @@ public class DataModule {
         mPostType = pPostType;
     }
 
-    public DataModule(Post post){
+    public DataModule(Post post) {
         mPost = post;
     }
 
@@ -530,17 +533,17 @@ public class DataModule {
 
     @Provides
     @PerActivity
-    IUserAccountRepository provideUserAccountRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
-        return new UserAccountRepository(dataStoreFactory,dataMapper);
+    IUserAccountRepository provideUserAccountRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper) {
+        return new UserAccountRepository(dataStoreFactory, dataMapper);
     }
 
     @Provides
     @PerActivity
     @Named("favourite-posts")
     UseCase provideFaouritePostsUseCase(IUserAccountRepository repository,
-                                      ThreadExecutor threadExecutor,
-                                      PostExecutionThread postExecutionThread){
-        return new GetFavouritePostUseCase(repository,threadExecutor, postExecutionThread);
+                                        ThreadExecutor threadExecutor,
+                                        PostExecutionThread postExecutionThread) {
+        return new GetFavouritePostUseCase(repository, threadExecutor, postExecutionThread);
     }
 
     @Provides
@@ -548,13 +551,13 @@ public class DataModule {
     @Named("send-user-info")
     UseCase provideSendUserInfoUseCase(IUserAccountRepository repository,
                                        ThreadExecutor threadExecutor,
-                                       PostExecutionThread postExecutionThread){
-        return new GetSendUserInfoUseCase(repository,threadExecutor, postExecutionThread);
+                                       PostExecutionThread postExecutionThread) {
+        return new GetSendUserInfoUseCase(repository, threadExecutor, postExecutionThread);
     }
 
     @Provides
     @PerActivity
-    IScreenRepository provideScreenRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+    IScreenRepository provideScreenRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper) {
         return new ScreenRepository(dataStoreFactory, dataMapper);
     }
 
@@ -563,8 +566,8 @@ public class DataModule {
     @Named("screen-data")
     UseCase provideScreenDataUseCase(IScreenRepository repository,
                                      ThreadExecutor threadExecutor,
-                                     PostExecutionThread postExecutionThread){
-        return new GetScreenDataUseCase(mId, repository,threadExecutor, postExecutionThread);
+                                     PostExecutionThread postExecutionThread) {
+        return new GetScreenDataUseCase(mId, repository, threadExecutor, postExecutionThread);
     }
 
     @Provides
@@ -572,8 +575,22 @@ public class DataModule {
     @Named("screens")
     UseCase provideScreenUseCase(IScreenRepository repository,
                                  ThreadExecutor threadExecutor,
-                                 PostExecutionThread postExecutionThread){
+                                 PostExecutionThread postExecutionThread) {
         return new GetScreensUseCase(repository, threadExecutor, postExecutionThread);
     }
 
+    @Provides
+    @PerActivity
+    @Named("info")
+    UseCase provideInfoUseCase(IInfoRepository repository,
+                               ThreadExecutor threadExecutor,
+                               PostExecutionThread postExecutionThread) {
+        return new GetInfoUseCase(repository, threadExecutor, postExecutionThread);
+    }
+
+    @Provides
+    @PerActivity
+    IInfoRepository provideInfoRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+        return new InfoRepository(dataStoreFactory, dataMapper);
+    }
 }

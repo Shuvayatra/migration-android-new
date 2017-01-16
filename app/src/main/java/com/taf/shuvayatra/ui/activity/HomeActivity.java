@@ -63,6 +63,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+import static com.taf.util.MyConstants.Extras.KEY_ABOUT;
+import static com.taf.util.MyConstants.Extras.KEY_CONTACT_US;
+import static com.taf.util.MyConstants.Extras.KEY_INFO;
+
 public class HomeActivity extends MediaServiceActivity implements
         NavigationView.OnNavigationItemSelectedListener, HomeActivityView,
         OnBoardingView {
@@ -234,6 +238,7 @@ public class HomeActivity extends MediaServiceActivity implements
     private void showFragment(int menuId) {
         Fragment fragment = null;
         mNavigationView.setCheckedItem(menuId);
+        Intent intent = new Intent(this, InfoActivity.class);
 
         switch (menuId) {
             case R.id.nav_home:
@@ -290,6 +295,15 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, UserAccountFragment.TAG)
                         .commit();
                 break;
+            case R.id.nav_about:
+                intent.putExtra(KEY_INFO, KEY_ABOUT);
+                startActivity(intent);
+                break;
+            case R.id.nav_contact:
+                intent.putExtra(KEY_INFO, KEY_CONTACT_US);
+                startActivity(intent);
+                break;
+
         }
         if (menuId == R.id.nav_account) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

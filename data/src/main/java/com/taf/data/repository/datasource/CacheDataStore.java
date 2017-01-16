@@ -5,12 +5,14 @@ import com.taf.data.cache.CacheImpl;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
 import com.taf.data.entity.PostResponseEntity;
 import com.taf.data.entity.ScreenBlockEntity;
 import com.taf.data.entity.ScreenEntity;
 import com.taf.data.entity.ScreenFeedEntity;
+import com.taf.model.Info;
 import com.taf.model.Post;
 
 import java.util.List;
@@ -77,12 +79,20 @@ public class CacheDataStore implements IDataStore {
         return mCache.getNewsPosts();
     }
 
-    public Observable<ScreenBlockEntity> getScreenDataEntity(long id) { return Observable.just(mCache.getScreenBlockData(id)); }
+    public Observable<ScreenBlockEntity> getScreenDataEntity(long id) {
+        return Observable.just(mCache.getScreenBlockData(id));
+    }
 
-    public Observable<ScreenFeedEntity> getScreenFeedEntity(long id) { return Observable.just(mCache.getScreenFeedData(id)); }
+    public Observable<ScreenFeedEntity> getScreenFeedEntity(long id) {
+        return Observable.just(mCache.getScreenFeedData(id));
+    }
 
-    public Observable<List<ScreenEntity>> getScreens(){
+    public Observable<List<ScreenEntity>> getScreens() {
         return Observable.just(mCache.getScreens());
     }
 
+    public Observable<InfoEntity> getInfo(String key) {
+
+        return Observable.just(mCache.getInfo(key));
+    }
 }

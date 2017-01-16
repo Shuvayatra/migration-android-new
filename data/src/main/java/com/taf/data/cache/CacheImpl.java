@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.PodcastEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
@@ -401,7 +402,7 @@ public class CacheImpl {
         return entities;
     }
 
-    public void saveScreenBlockData(long id,ScreenBlockEntity entity) {
+    public void saveScreenBlockData(long id, ScreenBlockEntity entity) {
         if (entity != null) {
             String key = SCREEN_DATA + id;
             try {
@@ -474,6 +475,31 @@ public class CacheImpl {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveInfo(String key, InfoEntity entity) {
+        if (entity != null) {
+            try {
+                mSimpleDiskCache.put(key, new Gson().toJson(entity));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public InfoEntity getInfo(String key) {
+        InfoEntity infoEntity = new InfoEntity();
+        try {
+            if (mSimpleDiskCache.contains(key)){
+                String json = mSimpleDiskCache.getCachedString(key).getValue();
+                infoEntity = new Gson().fromJson(json, new TypeToken<InfoEntity>() {
+                }.getType());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return infoEntity;
     }
 
 }

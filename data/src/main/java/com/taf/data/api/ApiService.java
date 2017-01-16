@@ -5,6 +5,7 @@ import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
 import com.taf.data.entity.CountryEntity;
 import com.taf.data.entity.DeletedContentDataEntity;
+import com.taf.data.entity.InfoEntity;
 import com.taf.data.entity.LatestContentEntity;
 import com.taf.data.entity.PodcastResponseEntity;
 import com.taf.data.entity.PostEntity;
@@ -106,4 +107,10 @@ public interface ApiService {
 
     @GET(MyConstants.API.SCREEN_DATA)
     Observable<ScreenFeedEntity> getScreenFeedData(@Path("id") long id, @Query("page") int page);
+
+    @GET(MyConstants.API.ABOUT)
+    Observable<InfoEntity> getAbout();
+
+    @GET(MyConstants.API.CONTACT_US)
+    Observable<InfoEntity> getContactUs();
 }

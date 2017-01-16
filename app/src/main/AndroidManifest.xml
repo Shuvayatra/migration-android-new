@@ -1,252 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.taf.shuvayatra"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-	>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.taf.shuvayatra">
 
-	<uses-permission android:name="android.permission.VIBRATE"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
-	<permission
-		android:name="${applicationId}.permission.C2D_MESSAGE"
-		android:protectionLevel="signature"/>
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
-	<uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 
-	<application
-		android:name=".MyApplication"
-		android:allowBackup="true"
-		android:icon="@mipmap/ic_app_launcher"
-		android:label="@string/app_name"
-		android:supportsRtl="true"
-		android:theme="@style/AppTheme.NoActionBar">
-		<meta-data
-			android:name="com.facebook.sdk.ApplicationId"
-			android:value="@string/facebook_app_id"/>
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_app_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-		<activity
-			android:name=".ui.deprecated.activity.SplashScreenActivity"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.MainActivity"
-			android:label="@string/app_name"
-			android:windowSoftInputMode="stateHidden"/>
-		<activity
-			android:name=".ui.deprecated.activity.ArticleDetailActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.VideoDetailActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.AudioDetailActivity"
-			android:label=""
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
+        <activity
+            android:name=".ui.deprecated.activity.SplashScreenActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.deprecated.activity.MainActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.deprecated.activity.ArticleDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.deprecated.activity.VideoDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.deprecated.activity.AudioDetailActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
-		<service
-			android:name=".media.MediaService"/>
+        <service android:name=".media.MediaService" />
 
-		<receiver android:name=".receivers.DownloadStateReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-				<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
-			</intent-filter>
-		</receiver>
+        <receiver android:name=".receivers.DownloadStateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+            </intent-filter>
+        </receiver>
 
-		<activity
-			android:name=".ui.deprecated.activity.PlacesDetailActivity"
-			android:label=""
-			android:parentActivityName=".ui.deprecated.activity.MainActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".ui.deprecated.activity.MainActivity"/>
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.JourneyCategoryDetailActivity"
-			android:label="@string/title_activity_journey_category_detail"
-			android:theme="@style/AppTheme.NoActionBar"
-			android:windowSoftInputMode="stateHidden">
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.CountryDetailActivity"
-			android:label="@string/title_activity_country_detail"
-			android:theme="@style/AppTheme.NoActionBar"
-			android:windowSoftInputMode="stateHidden">
-		</activity>
+        <activity
+            android:name=".ui.deprecated.activity.PlacesDetailActivity"
+            android:label=""
+            android:parentActivityName=".ui.deprecated.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.deprecated.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.deprecated.activity.JourneyCategoryDetailActivity"
+            android:label="@string/title_activity_journey_category_detail"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".ui.deprecated.activity.CountryDetailActivity"
+            android:label="@string/title_activity_country_detail"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
-		<service android:name=".gcm.MyFcmListenerService">
-			<intent-filter>
-				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
-			</intent-filter>
-		</service>
-		<service android:name=".gcm.GcmInstanceIDListenerService">
-			<intent-filter>
-				<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-			</intent-filter>
-		</service>
+        <service android:name=".gcm.MyFcmListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".gcm.GcmInstanceIDListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
-		<activity
-			android:name=".ui.deprecated.activity.InfoDetailActivity"
-			android:label="@string/title_activity_info_detail"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<!-- <activity -->
-		<!-- android:name="com.facebook.FacebookActivity" -->
-		<!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
-		<!-- android:label="@string/app_name" -->
-		<!-- android:theme="@android:style/Theme.Translucent.NoTitleBar"/> -->
-		<activity
-			android:name=".ui.deprecated.activity.TagListActivity"
-			android:label="@string/title_activity_tag_list"
-			android:parentActivityName=".ui.deprecated.activity.MainActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".ui.deprecated.activity.MainActivity"/>
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.FacebookParseActivity"
-			android:label="@string/title_activity_facebook_parse"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.deprecated.activity.SearchListActivity"
-			android:label="@string/title_activity_search_list"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.activity.HomeActivity"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.activity.DeepLinkActivity"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+        <activity
+            android:name=".ui.deprecated.activity.InfoDetailActivity"
+            android:label="@string/title_activity_info_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <!-- <activity -->
+        <!-- android:name="com.facebook.FacebookActivity" -->
+        <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- android:theme="@android:style/Theme.Translucent.NoTitleBar"/> -->
+        <activity
+            android:name=".ui.deprecated.activity.TagListActivity"
+            android:label="@string/title_activity_tag_list"
+            android:parentActivityName=".ui.deprecated.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.deprecated.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.deprecated.activity.FacebookParseActivity"
+            android:label="@string/title_activity_facebook_parse"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.deprecated.activity.SearchListActivity"
+            android:label="@string/title_activity_search_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.DeepLinkActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-				<data
-					android:host="post"
-					android:scheme="shuvayatra"/>
-				<data
-					android:host="journey"
-					android:scheme="shuvayatra"/>
-				<data
-					android:host="destination"
-					android:scheme="shuvayatra"/>
-				<data
-					android:host="radio"
-					android:scheme="shuvayatra"/>
-				<data
-					android:host="qna"
-					android:scheme="shuvayatra"/>
-				<data
-					android:host="news"
-					android:scheme="shuvayatra"/>
-			</intent-filter>
-		</activity>
+                <data
+                    android:host="post"
+                    android:scheme="shuvayatra" />
+                <data
+                    android:host="journey"
+                    android:scheme="shuvayatra" />
+                <data
+                    android:host="destination"
+                    android:scheme="shuvayatra" />
+                <data
+                    android:host="radio"
+                    android:scheme="shuvayatra" />
+                <data
+                    android:host="qna"
+                    android:scheme="shuvayatra" />
+                <data
+                    android:host="news"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+        </activity>
 
-		<activity
-			android:name=".ui.activity.SplashActivity"
-			android:theme="@style/SplashTheme">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-		</activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-		<activity
-			android:name=".ui.activity.OnBoardActivity"
-			android:label="@string/app_name"
-			android:windowSoftInputMode="adjustPan"
-			android:theme="@style/AppTheme.AppThemeOnBoardActivity">
-		</activity>
-		<activity
-			android:name=".ui.activity.FeedActivity"
-			android:label="@string/title_activity_feed"
-			android:parentActivityName=".ui.activity.HomeActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+        <activity
+            android:name=".ui.activity.OnBoardActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.AppThemeOnBoardActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".ui.activity.FeedActivity"
+            android:label="@string/title_activity_feed"
+            android:parentActivityName=".ui.activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.taf.shuvayatra.ui.activity.HomeActivity" />
 
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-				<data
-					android:host="feed"
-					android:scheme="shuvayatra"/>
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.activity.PodcastsActivity"
-			android:label="@string/title_activity_podcasts"
-			android:parentActivityName=".ui.activity.HomeActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="com.taf.shuvayatra.ui.activity.HomeActivity"/>
+                <data
+                    android:host="feed"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.PodcastsActivity"
+            android:label="@string/title_activity_podcasts"
+            android:parentActivityName=".ui.activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.taf.shuvayatra.ui.activity.HomeActivity" />
 
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-				<category android:name="android.intent.category.DEFAULT"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-				<data
-					android:host="podcasts"
-					android:scheme="shuvayatra"/>
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".ui.activity.DestinationDetailActivity"
-			android:label="@string/title_activity_destination_detail"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.activity.ArticleDetailActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.activity.VideoDetailActivity"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".ui.activity.AudioDetailActivity"
-			android:label=""
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
+                <data
+                    android:host="podcasts"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.DestinationDetailActivity"
+            android:label="@string/title_activity_destination_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.ArticleDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.VideoDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.AudioDetailActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
-		<service
-			android:name=".service.MyTaskService"
-			android:exported="true"
-			android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
-			<intent-filter>
-				<action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
-			</intent-filter>
-		</service>
+        <service
+            android:name=".service.MyTaskService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
+        </service>
 
-		<activity
-			android:name=".ui.activity.SearchActivity"
-			android:label="@string/title_activity_search"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-	</application>
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.InfoActivity"
+            android:parentActivityName=".ui.activity.HomeActivity" />
+    </application>
 
 </manifest>

@@ -116,4 +116,6 @@ public interface DataComponent extends ActivityComponent {
     void inject(FeedScreenFragment feedScreenFragment);
 
     void inject(HomeActivity homeActivity);
+
+    void inject(com.taf.shuvayatra.ui.fragment.InfoFragment fragment);
 }
