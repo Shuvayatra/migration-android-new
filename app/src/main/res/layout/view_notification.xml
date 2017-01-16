@@ -7,6 +7,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:gravity="center_vertical"
+	android:background="@android:color/white"
 	android:orientation="horizontal"
 	android:padding="8dp">
 
@@ -35,8 +36,7 @@
 		android:layout_width="0dp"
 		android:layout_height="fill_parent"
 		android:layout_gravity="center"
-		android:layout_weight="1"
-		app:srcCompat="@drawable/ic_play_notification"/>
+		android:layout_weight="1"/>
 
 	<!--<ImageView-->
 		<!--android:id="@+id/cancel"-->

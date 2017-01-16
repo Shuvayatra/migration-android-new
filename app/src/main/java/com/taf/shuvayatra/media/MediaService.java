@@ -9,6 +9,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
@@ -16,13 +21,17 @@ import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v7.widget.AppCompatDrawableManager;
 import android.widget.RemoteViews;
 
 import com.taf.data.utils.Logger;
@@ -397,13 +406,15 @@ public class MediaService extends Service implements
         if (isPlaying) {
             contentView.setImageViewResource(R.id.playpause, R.drawable.ic_pause_notification);
         } else {
-            contentView.setImageViewResource(R.id.playpause, R.drawable.ic_play_notification);
+            contentView.setImageViewResource(R.id.playpause,R.drawable.ic_play_notification);
         }
         contentView.setOnClickPendingIntent(R.id.playpause, pausePlay);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setContentInfo("Shuvayatra")
                 .setContentIntent(toOpen)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContent(contentView)
                 .setDeleteIntent(cancel)
                 .setAutoCancel(true)
