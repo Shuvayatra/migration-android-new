@@ -112,6 +112,7 @@ public class DataMapper {
             post.setLikes(pEntity.getFavouriteCount());
             post.setViewCount(pEntity.getViewCount());
             post.setSimilarPosts(transformPost(pEntity.getSimilarPosts()));
+            post.setPriority(pEntity.getPriority());
             return post;
         }
         return null;
@@ -604,7 +605,8 @@ public class DataMapper {
     public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity) {
         ScreenDataModel<Block> screenDataModel = new ScreenDataModel<>();
         if(screenBlockEntity != null ) {
-            screenDataModel.setData(transformBlockEntity(screenBlockEntity.getData()));
+            screenDataModel.setData(transformBlockEntity(screenBlockEntity.getBlocks()));
+            screenDataModel.setNotice(transformNotice(screenBlockEntity.getNotice()));
         }
         return screenDataModel;
     }
@@ -616,6 +618,7 @@ public class DataMapper {
             screenDataModel.setCurrentPage(screenFeedEntity.getFeeds().getCurrentPage());
             screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());
             screenDataModel.setTotalCount(screenFeedEntity.getFeeds().getTotal());
+            screenDataModel.setNotice(transformNotice(screenFeedEntity.getNotice()));
         }
         return screenDataModel;
     }

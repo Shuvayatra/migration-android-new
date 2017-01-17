@@ -155,7 +155,6 @@ public class OnBoardActivity extends BaseActivity implements
     @Override
     public void onNextButtonPressed(final int position) {
         // TODO: 10/26/16 refactor logic
-        if (getPreferences().isOnBoardingCountryListLoaded()) {
             if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
                 getPreferences().setFirstLaunch(false);
                 getPreferences().setUserOnBoardingComplete(true);
@@ -163,7 +162,6 @@ public class OnBoardActivity extends BaseActivity implements
             } else {
                 mQuestionPager.setCurrentItem(position + 1);
             }
-        }
     }
 
 

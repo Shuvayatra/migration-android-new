@@ -32,6 +32,7 @@ public class Post extends BaseModel {
     String mCategory;
     // for pagination purpose
     Integer mTotalCount;
+    int priority;
 
     List<Post> mSimilarPosts;
 
@@ -251,6 +252,14 @@ public class Post extends BaseModel {
 
     public void setSimilarPosts(List<Post> similarPosts) {
         mSimilarPosts = similarPosts;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     @Override

@@ -28,6 +28,7 @@ public class PostEntity {
     Integer shareCount;
     @SerializedName("view_count")
     Integer viewCount;
+    Integer priority;
 
     @SerializedName("similar")
     List<PostEntity> similarPosts;
@@ -158,6 +159,14 @@ public class PostEntity {
 
     public void setSimilarPosts(List<PostEntity> similarPosts) {
         this.similarPosts = similarPosts;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     @Override

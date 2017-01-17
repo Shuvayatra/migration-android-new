@@ -24,6 +24,7 @@ import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         fragment.mScreen = screen;
         return fragment;
     }
+
     @Override
     public int getLayout() {
         return R.layout.item_empty_recycler_view;
@@ -73,7 +75,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
         setUpAdapter();
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mScreen = (ScreenModel) savedInstanceState.get(STATE_SCREEN);
             initialize();
             mAdapter.setBlocks((List<BaseModel>) savedInstanceState.get(STATE_BLOCKS));
@@ -83,7 +85,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         }
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setAdapter(mAdapter);
@@ -91,7 +93,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder().applicationComponent(getTypedActivity().getApplicationComponent())
                 .activityModule(getTypedActivity().getActivityModule())
                 .dataModule(new DataModule(mScreen.getId()))
@@ -125,12 +127,20 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
     @Override
     public void renderScreenData(ScreenDataModel model) {
-
         this.mScreenModel = model;
+        List<BaseModel> data = new ArrayList<>();
+        if(model.getNotice() != null && !model.getNotice().getTitle().isEmpty()){
+            Block block = new Block();
+            block.setLayout("notice");
+            block.setNotice(model.getNotice());
+            data.add(0, block);
+        }
         Logger.e(TAG,"model: "+ model);
         if(model.getData() != null) {
-            mAdapter.setBlocks(model.getData());
+            data.addAll(model.getData());
         }
+        mAdapter.setBlocks(data);
+
     }
 
     @Override

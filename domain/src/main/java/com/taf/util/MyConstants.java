@@ -176,6 +176,7 @@ public class MyConstants {
         public static final int TYPE_USER_INFO = 24;
         public static final int TYPE_ABOUT = 25;
         public static final int TYPE_CONTACT_US = 26;
+        public static final int TYPE_NOTICE = 27;
     }
 
 

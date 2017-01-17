@@ -2,6 +2,8 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.model.Block;
+import com.taf.model.Post;
 import com.taf.model.ScreenDataModel;
 import com.taf.model.ScreenModel;
 import com.taf.model.base.ApiQueryParams;
@@ -48,7 +50,11 @@ public class ScreenRepository implements IScreenRepository {
     public Observable<ScreenDataModel> getScreenBlockData(long id, ApiQueryParams params) {
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getScreenBlockData(id, params)
-                .map(screenDataEntity -> mDataMapper.transformScreenBlockData(screenDataEntity));
+                .map(screenDataEntity -> mDataMapper.transformScreenBlockData(screenDataEntity))
+                .map(screenDataModel -> {
+                    screenDataModel.setData(sortByPositionBlock(screenDataModel.getData()));
+                    return screenDataModel;
+                });
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getScreenDataEntity(id)
@@ -56,6 +62,10 @@ public class ScreenRepository implements IScreenRepository {
                     ScreenDataModel dataModel = mDataMapper.transformScreenBlockData(screenDataEntity);
                     dataModel.setFromCache(true);
                     return dataModel;
+                })
+                .map(screenDataModel -> {
+                    screenDataModel.setData(sortByPositionBlock(screenDataModel.getData()));
+                    return screenDataModel;
                 });
 
         return Observable.concatDelayError(cacheObservable, apiObservable);
@@ -65,7 +75,11 @@ public class ScreenRepository implements IScreenRepository {
     public Observable<ScreenDataModel> getScreenFeedData(long id, int page, ApiQueryParams params) {
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getScreenFeedData(id, page, params)
-                .map(screenDataEntity -> mDataMapper.transformScreenFeedData(screenDataEntity));
+                .map(screenDataEntity -> mDataMapper.transformScreenFeedData(screenDataEntity))
+                .map(screenDataModel -> {
+                    screenDataModel.setData(sortByPriorityPost(screenDataModel.getData()));
+                    return screenDataModel;
+                });
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getScreenFeedEntity(id)
@@ -73,6 +87,10 @@ public class ScreenRepository implements IScreenRepository {
                     ScreenDataModel dataModel = mDataMapper.transformScreenFeedData(screenDataEntity);
                     dataModel.setFromCache(true);
                     return dataModel;
+                })
+                .map(screenDataModel -> {
+                    screenDataModel.setData(sortByPriorityPost(screenDataModel.getData()));
+                    return screenDataModel;
                 });
 
         return Observable.concatDelayError(cacheObservable, apiObservable);
@@ -82,12 +100,34 @@ public class ScreenRepository implements IScreenRepository {
         Comparator<ScreenModel> comparator = new Comparator<ScreenModel>() {
             @Override
             public int compare(ScreenModel o1, ScreenModel o2) {
-                return o1.getOrder() <= o2.getOrder() ? -1 : 1;
+                return o1.getOrder()-o2.getOrder();
             }
         };
 
         Collections.sort(screens, comparator);
         return screens;
+    }
+
+    public List<Post> sortByPriorityPost(List<Post> posts){
+        Comparator<Post> comparator = new Comparator<Post>() {
+            @Override
+            public int compare(Post post, Post post2) {
+                return post.getPriority() - post2.getPriority();
+            }
+        };
+        Collections.sort(posts, comparator);
+        return posts;
+    }
+
+    public List<Block> sortByPositionBlock(List<Block> blocks){
+        Comparator<Block> comparator = new Comparator<Block>() {
+            @Override
+            public int compare(Block block, Block block2) {
+                return block.getPosition() - block2.getPosition();
+            }
+        };
+        Collections.sort(blocks, comparator);
+        return blocks;
     }
 
 }

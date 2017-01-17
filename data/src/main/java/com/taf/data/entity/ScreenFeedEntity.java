@@ -1,6 +1,7 @@
 package com.taf.data.entity;
 
 import com.google.gson.annotations.SerializedName;
+import com.taf.model.Notice;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class ScreenFeedEntity {
     private String icon;
     private String type;
     private PostResponseEntity feeds;
+    private NoticeEntity notice;
 
     public PostResponseEntity getFeeds() {
         return feeds;
@@ -54,5 +56,13 @@ public class ScreenFeedEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public NoticeEntity getNotice() {
+        return notice;
+    }
+
+    public void setNotice(NoticeEntity notice) {
+        this.notice = notice;
     }
 }

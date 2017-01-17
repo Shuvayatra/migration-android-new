@@ -12,6 +12,7 @@ public class ScreenDataModel<T> {
     int currentPage;
     private boolean isFromCache;
     List<T> data;
+    private Notice mNotice;
 
     public int getLastPage() {
         return lastPage;
@@ -51,6 +52,14 @@ public class ScreenDataModel<T> {
 
     public void setFromCache(boolean fromCache) {
         isFromCache = fromCache;
+    }
+
+    public Notice getNotice() {
+        return mNotice;
+    }
+
+    public void setNotice(Notice notice) {
+        mNotice = notice;
     }
 
     @Override

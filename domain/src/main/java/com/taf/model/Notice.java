@@ -1,6 +1,8 @@
 package com.taf.model;
 
 
+import com.taf.util.MyConstants;
+
 /**
  * Created by julian on 10/20/16.
  */
@@ -10,6 +12,7 @@ public class Notice extends BaseModel {
     String description;
     String image;
     String deeplink;
+    boolean fromDismiss;
 
     public String getTitle() {
         return title;
@@ -41,5 +44,18 @@ public class Notice extends BaseModel {
 
     public void setDeeplink(String deeplink) {
         this.deeplink = deeplink;
+    }
+
+    public boolean isFromDismiss() {
+        return fromDismiss;
+    }
+
+    public void setFromDismiss(boolean fromDismiss) {
+        this.fromDismiss = fromDismiss;
+    }
+
+    @Override
+    public int getDataType() {
+        return MyConstants.Adapter.TYPE_NOTICE;
     }
 }
