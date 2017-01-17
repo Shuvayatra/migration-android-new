@@ -22,9 +22,10 @@ public class ScreenDataPresenter implements Presenter {
     ScreenDataView mView;
 
     @Inject
-    public ScreenDataPresenter (@Named("screen-data") UseCase useCase){
+    public ScreenDataPresenter(@Named("screen-data") UseCase useCase) {
         mUseCase = useCase;
     }
+
     @Override
     public void resume() {
 
@@ -42,6 +43,7 @@ public class ScreenDataPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
+        mView.showLoadingView();
         mUseCase.execute(new ScreenDataSubscriber(), pData);
     }
 
@@ -50,7 +52,7 @@ public class ScreenDataPresenter implements Presenter {
         mView = (ScreenDataView) view;
     }
 
-    private class ScreenDataSubscriber extends DefaultSubscriber<ScreenDataModel>{
+    private class ScreenDataSubscriber extends DefaultSubscriber<ScreenDataModel> {
         @Override
         public void onCompleted() {
             super.onCompleted();

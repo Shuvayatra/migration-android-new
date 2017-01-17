@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -24,6 +25,7 @@ import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
 import com.taf.util.MyConstants;
@@ -45,7 +47,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     private static final String STATE_SCREEN = "screen";
     private static final String STATE_FEEDS = "feeds";
     public static final String STATE_PAGE = "page";
-    public static final String STATE_ISLAST_PAGE = "is-last-page" ;
+    public static final String STATE_ISLAST_PAGE = "is-last-page";
     public static final Integer INITIAL_OFFSET = 1;
     public static final int REQUEST_CODE_POST_DETAIL = 3209;
 
@@ -56,7 +58,9 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     ScreenDataPresenter mPresenter;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
+    @BindView(R.id.empty_view)
+    View mEmptyView;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -86,17 +90,17 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
         setUpAdapter();
         List<Post> posts = null;
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mScreen = (ScreenModel) savedInstanceState.get(STATE_SCREEN);
             mPage = savedInstanceState.getInt(STATE_PAGE);
-            mIsLastPage = savedInstanceState .getBoolean(STATE_ISLAST_PAGE);
+            mIsLastPage = savedInstanceState.getBoolean(STATE_ISLAST_PAGE);
             posts = (List<Post>) savedInstanceState.get(STATE_FEEDS);
             mAdapter.setDataCollection(posts);
         }
         initialize();
 
         mUseCaseData.putString(UseCaseData.SCREEN_DATA_TYPE, mScreen.getType());
-        if(posts == null) {
+        if (posts == null) {
             loadPosts(INITIAL_OFFSET);
         }
     }
@@ -116,6 +120,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter<Post>(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyView);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
@@ -144,7 +149,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     }
 
     private void loadPosts(Integer pPage) {
-        Logger.e(TAG,"pPage: "+ pPage);
+        Logger.e(TAG, "pPage: " + pPage);
         mSwipeRefreshLayout.setRefreshing(true);
         mUseCaseData.putInteger(UseCaseData.NEXT_PAGE, pPage);
         mPresenter.initialize(mUseCaseData);
@@ -175,7 +180,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
                 mAdapter.setDataCollection(model.getData());
                 mPage = model.getCurrentPage();
                 mIsLastPage = mPage == model.getLastPage();
-                Logger.e(TAG, "cache: page " + mPage + " last page "+ model.getTotalCount());
+                Logger.e(TAG, "cache: page " + mPage + " last page " + model.getTotalCount());
                 Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
             }
             return;
