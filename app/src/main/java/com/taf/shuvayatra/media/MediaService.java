@@ -164,10 +164,10 @@ public class MediaService extends Service implements
 
     public void setTrack(Post pTrack) {
 //        if (mTrack == null) {
-            stopPlayback();
-            mTrack = pTrack;
-            mCurrentPlayType = PlayType.POST;
-            startStreaming();
+        stopPlayback();
+        mTrack = pTrack;
+        mCurrentPlayType = PlayType.POST;
+        startStreaming();
 //        } else {
 //            if (mCurrentPlayType != PlayType.POST && !mTrack.equals(pTrack)) {
 //                stopPlayback();
@@ -204,13 +204,17 @@ public class MediaService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer pMediaPlayer) {
-        mHandler.postDelayed(updateSeekTime, 500);
-        pMediaPlayer.start();
-        pMediaPlayer.seekTo(0);
-        Logger.d("MediaService_onPrepared", "test prepared");
-        sendBroadcast(new Intent(MyConstants.Media.ACTION_STATUS_PREPARED));
-        mCurrentDuration = pMediaPlayer.getDuration();
-        mIsMediaValid = true;
+        if (!mStoppedByUser) {
+            mHandler.postDelayed(updateSeekTime, 500);
+            pMediaPlayer.start();
+            pMediaPlayer.seekTo(0);
+            Logger.d("MediaService_onPrepared", "test prepared");
+            sendBroadcast(new Intent(MyConstants.Media.ACTION_STATUS_PREPARED));
+            createNotification(mCurrentTitle, true);
+            mCurrentDuration = pMediaPlayer.getDuration();
+            mIsMediaValid = true;
+        }
+
     }
 
     @Override
@@ -253,7 +257,7 @@ public class MediaService extends Service implements
             Logger.d("MediaService_playMedia", "test: " + mCurrentPodcastIndex);
             if (mCurrentPlayType.equals(PlayType.POST)) setDataSource(mTrack);
             else setDataSource(mPodcasts.get(mCurrentPodcastIndex));
-            createNotification(mCurrentTitle, true);
+            createNotification(mCurrentTitle, false);
             mPlayer.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();
@@ -406,7 +410,7 @@ public class MediaService extends Service implements
         if (isPlaying) {
             contentView.setImageViewResource(R.id.playpause, R.drawable.ic_pause_notification);
         } else {
-            contentView.setImageViewResource(R.id.playpause,R.drawable.ic_play_notification);
+            contentView.setImageViewResource(R.id.playpause, R.drawable.ic_play_notification);
         }
         contentView.setOnClickPendingIntent(R.id.playpause, pausePlay);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)

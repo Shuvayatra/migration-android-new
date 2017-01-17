@@ -128,7 +128,9 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
         this.mScreenModel = model;
         Logger.e(TAG,"model: "+ model);
-        mAdapter.setBlocks(model.getData());
+        if(model.getData() != null) {
+            mAdapter.setBlocks(model.getData());
+        }
     }
 
     @Override

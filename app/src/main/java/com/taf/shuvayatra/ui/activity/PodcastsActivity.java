@@ -194,6 +194,7 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
                 mIsLastPage = podcasts.getData().getTotal() == podcasts.getData().getData().size();
 //                Logger.e(TAG, "cache: page " + mPage);
 //                Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
+                addToPlaylist(podcasts.getData().getData());
             }
             return;
         }
@@ -216,21 +217,26 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 //        Logger.e(TAG, " ============================ end ================================== \n");
 
         // check if is streaming from this page
-        if (!podcasts.getData().getData().isEmpty()) {
+        addToPlaylist(podcasts.getData().getData());
+
+
+    }
+
+    public void addToPlaylist(List<Podcast> podcasts){
+        if (!podcasts.isEmpty()) {
 
             if (isPlayingFromHere(mAdapter.getDataCollection())) {
                 if (!getMediaService().getPodcasts().containsAll(mAdapter.getDataCollection())) {
                     getMediaService().addPodcasts(mAdapter.getDataCollection());
                 }
             } else {
-                getMediaService().setPodcasts(podcasts.getData().getData());
+                getMediaService().setPodcasts(podcasts);
             }
 
             if (!isMediaPlayerVisible()) {
                 togglePlayerFragment();
             }
         }
-
     }
 
     @Override

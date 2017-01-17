@@ -16,6 +16,7 @@ import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.media.MediaHelper;
 import com.taf.shuvayatra.media.MediaReceiver;
 import com.taf.shuvayatra.ui.interfaces.PlayerFragmentCallback;
@@ -159,6 +160,7 @@ public class MiniPlayerFragment extends BaseFragment implements
     @Override
     public void onMediaPrepared() {
         //((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
+        ((PlayerFragmentActivity) getActivity()).togglePlayerFragment();
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         updateView();
     }
