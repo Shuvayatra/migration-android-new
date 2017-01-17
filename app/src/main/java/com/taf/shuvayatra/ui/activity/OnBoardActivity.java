@@ -76,6 +76,12 @@ public class OnBoardActivity extends BaseActivity implements
         // api.shuvayatra.org/api/destinations
         initialize();
 
+<<<<<<< Updated upstream
+=======
+        isExit = getIntent().getBooleanExtra(MyConstants.Extras.IS_EXIT, false);
+        userInfoModel = (UserInfoModel) getIntent().getSerializableExtra(UserInfoModel.EXTRA_INFO_MODEL);
+
+>>>>>>> Stashed changes
         OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
         // add off screen page limit to avoid context NPE on fragment
