@@ -1,5 +1,7 @@
 package com.taf.shuvayatra.presenter;
 
+import android.util.Log;
+
 import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
@@ -17,6 +19,7 @@ import javax.inject.Named;
  */
 
 public class InfoPresenter implements Presenter {
+    private static final String TAG = "InfoPresenter";
 
     final UseCase mUseCase;
     InfoView mView;
@@ -43,6 +46,7 @@ public class InfoPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
+        mView.showLoadingView();
         mUseCase.execute(new InfoSubscriber(), pData);
     }
 
