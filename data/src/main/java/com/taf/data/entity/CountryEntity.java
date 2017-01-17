@@ -18,7 +18,7 @@ public class CountryEntity {
     String featuredImage;
     @SerializedName("small_icon")
     String smallIcon;
-    @SerializedName("time_zone")
+    @SerializedName("timezone")
     String timeZone;
     String icon;
     List<CountryInfoEntity> information;

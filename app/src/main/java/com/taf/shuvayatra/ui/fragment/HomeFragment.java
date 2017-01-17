@@ -90,20 +90,19 @@ public class HomeFragment extends BaseFragment implements
                 String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
                 Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
                 mCountryWidget = new CountryWidgetModel(countryName);
-                mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
                 /**
                  * concat timeZoneId while setting location {@link AppPreferences#setLocation(String)}
                  */
-//                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
+                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             } catch (ArrayIndexOutOfBoundsException e) {
-                Logger.e(TAG, ">>> country name: " + selectedCountry);
                 String countryName = selectedCountry.split(",")[1];
                 // will cause array out of bounds exception
 //                String countryNameEn = selectedCountry.split(",")[2];
                 mCountryWidget = new CountryWidgetModel(countryName);
+                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
-				mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
+//				mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
             }
         }
 

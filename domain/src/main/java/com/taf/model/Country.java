@@ -18,8 +18,8 @@ public class Country extends BaseModel {
     public static final int INDEX_ID = 0;
     public static final int INDEX_TITLE = 1;
     public static final int INDEX_TITLE_EN = 2;
-    public static final int INDEX_INFO = 3;
-    public static final int INDEX_TIME_ZONE = 4;
+    public static final int INDEX_TIME_ZONE = 3;
+    public static final int INDEX_INFO = 4;
 
     String title;
     String description;
