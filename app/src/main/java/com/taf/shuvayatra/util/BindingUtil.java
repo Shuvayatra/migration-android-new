@@ -6,10 +6,12 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.graphics.Rect;
+import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.taf.data.utils.Logger;
@@ -41,6 +46,8 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class BindingUtil {
     private static final String TAG = "BindingUtil";
@@ -61,6 +68,48 @@ public class BindingUtil {
 
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setImageRequest(request)
+                    .setOldController(pView.getController())
+                    .build();
+
+            pView.setController(controller);
+            //pView.setImageURI(Uri.parse(url));
+        }
+    }
+
+    @BindingAdapter("bind:imageUrlWrap")
+    public static void setImageResourceWithWrap(final SimpleDraweeView pView, String url){
+        if (url != null) {
+            //// TODO: 1/11/17 issue with width and height 0 for nougat
+            // temp fix for giving certain width and height if view height and width are 0
+            DisplayMetrics displayMetrics = pView.getContext().getResources().getDisplayMetrics();
+
+            final int height = pView.getHeight() > 0 ? pView.getHeight() : 150;
+            final int width = pView.getWidth() > 0 ? pView.getWidth() : displayMetrics.widthPixels/2;
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
+                    .setResizeOptions(new ResizeOptions(width, height))
+                    .build();
+            final float ratio;
+            if(displayMetrics.heightPixels > displayMetrics.widthPixels){
+                ratio = displayMetrics.widthPixels / ((float) displayMetrics.heightPixels);
+            }else {
+                ratio = displayMetrics.heightPixels / ((float) displayMetrics.widthPixels);
+            }
+            ControllerListener<ImageInfo> controllerListener = new BaseControllerListener<ImageInfo>(){
+                @Override
+                public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
+
+                    Logger.e(TAG,"ratio: "+ ratio);
+                    Logger.e(TAG,"width: "+ width);
+                    pView.getLayoutParams().height = (int) (width *ratio);
+
+                    Logger.e(TAG,"pView.getLayoutParams().height: "+ pView.getLayoutParams().height);
+                    pView.requestLayout();
+                }
+            };
+
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request)
+                    .setControllerListener(controllerListener)
                     .setOldController(pView.getController())
                     .build();
 

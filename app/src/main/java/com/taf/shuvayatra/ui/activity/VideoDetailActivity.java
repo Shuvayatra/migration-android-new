@@ -1,6 +1,8 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -43,16 +45,28 @@ public class VideoDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Logger.e(TAG, "getRequestedOrientation(): " + newConfig.orientation);
+        if (player != null) {
+            if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                player.setFullscreen(false);
+            } else if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
+                player.setFullscreen(true);
+            }
+        }
+    }
+
+    @Override
     public void onInitializationSuccess(YouTubePlayer.Provider pProvider, YouTubePlayer pYouTubePlayer, boolean isRestored) {
 
-        pYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
-        pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
-        pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
+//        pYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
+//        pYouTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
+        pYouTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
+        if (!isRestored) {
 
-        if(mPost!=null) {
-            final String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
-            if (!isRestored) {
-
+            if (mPost != null) {
+                final String videoId = getYoutubeIdFromUrl(mPost.getData().getMediaUrl());
                 if (!videoId.isEmpty())
                     Logger.e("VideoDetailActivity", "video loaded");
 

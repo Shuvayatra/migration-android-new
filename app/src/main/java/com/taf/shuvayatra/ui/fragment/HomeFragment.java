@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -146,6 +147,7 @@ public class HomeFragment extends BaseFragment implements
         List<BaseModel> baseModels = new ArrayList<>();
 //        baseModels.addAll(BaseModel.getDummy());// TODO: 1/12/17 remove
         baseModels.addAll(data);
+        Logger.e(TAG,"data: +"+ data.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
         if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION) && showCountryWidget) {
             if (!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")) {
@@ -271,17 +273,17 @@ public class HomeFragment extends BaseFragment implements
 
     @Override
     public void onLoadingView(int type) {
-
+        mSwipeContainer.setRefreshing(true);
     }
 
     @Override
     public void onHideLoadingView(int type) {
-
+        mSwipeContainer.setRefreshing(false);
     }
 
     @Override
     public void onErrorView(int type, String error) {
-
+        Snackbar.make(mSwipeContainer, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -290,4 +292,6 @@ public class HomeFragment extends BaseFragment implements
         Logger.e(TAG, "onDestroyViewCalled: ");
         mPresenter.destroy();
     }
+
+
 }

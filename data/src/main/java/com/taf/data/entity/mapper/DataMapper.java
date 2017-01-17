@@ -603,16 +603,20 @@ public class DataMapper {
 
     public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity) {
         ScreenDataModel<Block> screenDataModel = new ScreenDataModel<>();
-        screenDataModel.setData(transformBlockEntity(screenBlockEntity.getData()));
+        if(screenBlockEntity != null ) {
+            screenDataModel.setData(transformBlockEntity(screenBlockEntity.getData()));
+        }
         return screenDataModel;
     }
 
     public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity) {
         ScreenDataModel<Post> screenDataModel = new ScreenDataModel();
-        screenDataModel.setData(transformPost(screenFeedEntity.getFeeds().getData()));
-        screenDataModel.setCurrentPage(screenFeedEntity.getFeeds().getCurrentPage());
-        screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());
-        screenDataModel.setTotalCount(screenFeedEntity.getFeeds().getTotal());
+        if(screenFeedEntity!= null) {
+            screenDataModel.setData(transformPost(screenFeedEntity.getFeeds().getData()));
+            screenDataModel.setCurrentPage(screenFeedEntity.getFeeds().getCurrentPage());
+            screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());
+            screenDataModel.setTotalCount(screenFeedEntity.getFeeds().getTotal());
+        }
         return screenDataModel;
     }
 

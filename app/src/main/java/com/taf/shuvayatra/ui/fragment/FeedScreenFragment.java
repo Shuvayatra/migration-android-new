@@ -176,7 +176,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     public void renderScreenData(ScreenDataModel model) {
 
         if (model.isFromCache()) {
-            if (mAdapter.getDataCollection().isEmpty()) {
+            if (model.getData() != null && mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(model.getData());
                 mPage = model.getCurrentPage();
                 mIsLastPage = mPage == model.getLastPage();
