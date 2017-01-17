@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data class="ItemNoticeDataBinding">
+
+        <import type="android.support.v7.widget.LinearLayoutManager" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="notice"
+            type="com.taf.model.Notice" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:background="@android:color/white"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fffeef"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_standard"
+            android:theme="@style/AppTheme.Block.List">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:visibility="@{notice.image!=null?View.VISIBLE:View.GONE}"
+                app:actualImageScaleType="centerCrop"
+                app:imageUrl="@{notice.image}"
+                app:placeholderImage="@drawable/default_gradient"
+                app:progressBarAutoRotateInterval="1000"
+                app:progressBarImage="@drawable/ic_refresh"
+                app:progressBarImageScaleType="centerInside" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/spacing_small"
+                android:layout_marginRight="@dimen/spacing_small"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{notice.title}" />
+
+                <TextView
+                    style="@style/ListSecondaryText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{notice.description}" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/spacing_xxsmall"
+                android:padding="@dimen/spacing_xxsmall"
+                app:srcCompat="@drawable/ic_clear" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

@@ -16,15 +16,7 @@ public class ScreenBlockEntity {
     private String icon;
     private String type;
     private List<BlockEntity> blocks;
-
-
-    public void setData(List<BlockEntity> data) {
-        this.blocks = data;
-    }
-
-    public List<BlockEntity> getData() {
-        return blocks;
-    }
+    private NoticeEntity notice;
 
     public String getTitle() {
         return title;
@@ -56,6 +48,22 @@ public class ScreenBlockEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<BlockEntity> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<BlockEntity> blocks) {
+        this.blocks = blocks;
+    }
+
+    public NoticeEntity getNotice() {
+        return notice;
+    }
+
+    public void setNotice(NoticeEntity notice) {
+        this.notice = notice;
     }
 
     @Override

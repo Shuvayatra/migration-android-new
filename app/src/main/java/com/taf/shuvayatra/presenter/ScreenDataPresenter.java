@@ -4,6 +4,7 @@ import com.taf.exception.DefaultErrorBundle;
 import com.taf.interactor.DefaultSubscriber;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
+import com.taf.model.Post;
 import com.taf.model.ScreenDataModel;
 import com.taf.shuvayatra.exception.ErrorMessageFactory;
 import com.taf.shuvayatra.ui.views.MvpView;

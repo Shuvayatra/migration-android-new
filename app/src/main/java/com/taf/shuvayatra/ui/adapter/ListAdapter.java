@@ -1,7 +1,9 @@
 package com.taf.shuvayatra.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Category;
 import com.taf.model.HeaderItem;
+import com.taf.model.Notice;
 import com.taf.model.Notification;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
@@ -21,12 +24,14 @@ import com.taf.shuvayatra.databinding.AudioVideoDataBinding;
 import com.taf.shuvayatra.databinding.DestinationDataBinding;
 import com.taf.shuvayatra.databinding.HeaderDataBinding;
 import com.taf.shuvayatra.databinding.InfoListDataBinding;
+import com.taf.shuvayatra.databinding.ItemNoticeDataBinding;
 import com.taf.shuvayatra.databinding.ItemUserInfoBinding;
 import com.taf.shuvayatra.databinding.JourneyCategoryDataBinding;
 import com.taf.shuvayatra.databinding.NotificationDataBinding;
 import com.taf.shuvayatra.databinding.PlaceDataBinding;
 import com.taf.shuvayatra.databinding.PodcastDataBinding;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
+import com.taf.util.MyConstants;
 import com.taf.util.MyConstants.Adapter;
 
 import java.util.ArrayList;
@@ -146,6 +151,11 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                         R.layout.item_user_info,parent, false);
                 viewHolder = new UserInfoViewHolder(userInfoDataBinding);
                 break;
+            case Adapter.TYPE_NOTICE:
+                ItemNoticeDataBinding noticeDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.item_notice, parent, false);
+                viewHolder = new NoticeViewHolder(noticeDataBinding);
+                break;
             default:
         }
         return viewHolder;
@@ -197,6 +207,9 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 break;
             case Adapter.TYPE_USER_INFO:
                 ((UserInfoViewHolder) holder).mBinding.setUser((UserInfoModel) mDataCollection.get(position));
+                break;
+            case Adapter.TYPE_NOTICE:
+                ((NoticeViewHolder) holder).mDataBinding.setNotice((Notice) mDataCollection.get(position));
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -377,4 +390,37 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mBinding = binding;
         }
     }
+
+    public class NoticeViewHolder extends RecyclerView.ViewHolder{
+        ItemNoticeDataBinding mDataBinding;
+
+
+        public NoticeViewHolder(ItemNoticeDataBinding binding) {
+            super(binding.getRoot());
+
+            mDataBinding = binding;
+
+            mDataBinding.dismiss.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Notice notice = mDataBinding.getNotice();
+                    notice.setFromDismiss(true);
+                   mListener.onListItemSelected(mDataBinding.getNotice(),mDataCollection.indexOf(mDataBinding.getNotice()));
+                }
+            });
+
+            mDataBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Notice notice = mDataBinding.getNotice();
+                    notice.setFromDismiss(false);
+
+                    mListener.onListItemSelected(mDataBinding.getNotice(),mDataCollection.indexOf(mDataBinding.getNotice()));
+                }
+            });
+        }
+
+    }
+
+
 }

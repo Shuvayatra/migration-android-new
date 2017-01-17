@@ -180,11 +180,13 @@ public class AppPreferences {
         return false;
     }
 
-    public Long getNoticeDismissId() {
-        return pref.getLong(NOTICE_DISMISS_ID, -1);
+    public ArrayList<String> getNoticeDismissId() {
+        Set<String> dismiss = pref.getStringSet(NOTICE_DISMISS_ID,new HashSet<>());
+        return new ArrayList<>(dismiss);
     }
 
     public void setNoticeDismissId(Long id) {
-        pref.edit().putLong(NOTICE_DISMISS_ID, id).commit();
-    }
+        ArrayList<String> dismissIds = getNoticeDismissId();
+        dismissIds.add(String.valueOf(id));
+        pref.edit().putStringSet(NOTICE_DISMISS_ID, new HashSet<>(dismissIds)).commit();    }
 }
