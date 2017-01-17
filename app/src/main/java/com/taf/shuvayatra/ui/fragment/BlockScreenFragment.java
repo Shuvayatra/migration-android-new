@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -19,6 +20,7 @@ import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ScreenDataPresenter;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
+import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
 
 import java.io.Serializable;
@@ -45,7 +47,9 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     ScreenDataPresenter presenter;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    EmptyStateRecyclerView mRecyclerView;
+    @BindView(R.id.empty_view)
+    View mEmptyVeiw;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -58,6 +62,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         fragment.mScreen = screen;
         return fragment;
     }
+
     @Override
     public int getLayout() {
         return R.layout.item_empty_recycler_view;
@@ -69,7 +74,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
         setUpAdapter();
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mScreen = (ScreenModel) savedInstanceState.get(STATE_SCREEN);
             initialize();
             mAdapter.setBlocks((List<BaseModel>) savedInstanceState.get(STATE_BLOCKS));
@@ -79,14 +84,15 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         }
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setEmptyView(mEmptyVeiw);
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void initialize(){
+    private void initialize() {
         DaggerDataComponent.builder().applicationComponent(getTypedActivity().getApplicationComponent())
                 .activityModule(getTypedActivity().getActivityModule())
                 .dataModule(new DataModule(mScreen.getId()))
@@ -96,7 +102,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         presenter.attachView(this);
     }
 
-    private void loadData(){
+    private void loadData() {
         UseCaseData useCaseData = new UseCaseData();
         useCaseData.putString(UseCaseData.END_POINT, mScreen.getEndPOint());
         useCaseData.putString(UseCaseData.SCREEN_DATA_TYPE, mScreen.getType());
@@ -122,7 +128,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     public void renderScreenData(ScreenDataModel model) {
 
         this.mScreenModel = model;
-        Logger.e(TAG,"model: "+ model);
+        Logger.e(TAG, "model: " + model);
         mAdapter.setBlocks(model.getData());
     }
 
