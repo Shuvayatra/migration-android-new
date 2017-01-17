@@ -76,7 +76,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
                 .inject(this);
 
         mPresenter.attachView(this);
-        mPresenter.initialize(getUserCredentials());
+        mPresenter.initialize(getUserCredentialsUseCase());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
 
     @Override
     public void onRefresh() {
-        mPresenter.initialize(getUserCredentials());
+        mPresenter.initialize(getUserCredentialsUseCase());
     }
 
     @Override

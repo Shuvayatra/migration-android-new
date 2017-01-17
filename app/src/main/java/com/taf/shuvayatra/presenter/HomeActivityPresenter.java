@@ -24,7 +24,7 @@ public class HomeActivityPresenter implements Presenter {
     HomeActivityView mView;
 
     @Inject
-    public HomeActivityPresenter(@Named("screens")UseCase useCase){
+    public HomeActivityPresenter(@Named("screens") UseCase useCase) {
         mUseCase = useCase;
     }
 
@@ -45,7 +45,7 @@ public class HomeActivityPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
-        mUseCase.execute(new ScreenSubscriber(),pData);
+        mUseCase.execute(new ScreenSubscriber(), pData);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class HomeActivityPresenter implements Presenter {
         mView = (HomeActivityView) view;
     }
 
-    private class ScreenSubscriber extends DefaultSubscriber<List<ScreenModel>>{
+    private class ScreenSubscriber extends DefaultSubscriber<List<ScreenModel>> {
 
         @Override
         public void onCompleted() {

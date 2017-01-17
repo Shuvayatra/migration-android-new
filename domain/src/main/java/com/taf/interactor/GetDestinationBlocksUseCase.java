@@ -2,6 +2,7 @@ package com.taf.interactor;
 
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.ICountryRepository;
 
 import rx.Observable;
@@ -27,6 +28,6 @@ public class GetDestinationBlocksUseCase extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable(UseCaseData pData) {
-        return mRepository.getCountryBlocks(mId);
+        return mRepository.getCountryBlocks(mId, new ApiQueryParams(pData));
     }
 }

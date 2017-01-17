@@ -132,7 +132,7 @@ public class HomeActivity extends MediaServiceActivity implements
             processMenu(screens);
         } else {
             selectedNavMenuId = R.id.nav_home;
-            homeActivityPresenter.initialize(null);
+            homeActivityPresenter.initialize(getUserCredentialsUseCase());
         }
 
         showFragment(selectedNavMenuId);
@@ -180,7 +180,6 @@ public class HomeActivity extends MediaServiceActivity implements
         String countryInfo = getPreferences().getLocation();
         if (!countryInfo.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION) &&
                 !countryInfo.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
-
             if (countryInfo.split(",").length > 2) {
                 userInfo.setDestinedCountry(TextUtils.split(countryInfo, ",")[2]);
             } else {
@@ -332,7 +331,7 @@ public class HomeActivity extends MediaServiceActivity implements
                 mAppBarLayout.setElevation(getResources().getDimensionPixelOffset(R.dimen.spacing_xsmall));
             }
         }
-        Logger.e(TAG,"fragment: "+ fragment);
+        Logger.e(TAG, "fragment: " + fragment);
         if (fragment != null)
             selectedNavMenuId = menuId;
 
@@ -380,7 +379,7 @@ public class HomeActivity extends MediaServiceActivity implements
         Logger.e(TAG, "mScreens.size(): " + mScreens.size());
         // TODO: 1/16/17 refactor code 
 //        mNavigationView.getMenu().removeGroup(R.id.nav_main_menu);
-        if(mScreens != null){
+        if (mScreens != null) {
             for (ScreenModel screen : mScreens) {
                 mNavigationView.getMenu().removeItem(screen.getId().intValue());
             }
@@ -444,7 +443,7 @@ public class HomeActivity extends MediaServiceActivity implements
                 screen.getTitle());
         menuItem.setIcon(icon);
         menuItem.setCheckable(true);
-        if(selectedNavMenuId == menuItem.getItemId()) menuItem.setChecked(true);
+        if (selectedNavMenuId == menuItem.getItemId()) menuItem.setChecked(true);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

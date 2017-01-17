@@ -126,7 +126,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mCountryPresenter.initialize(null);
-        mPresenter.initialize(null);
+        mPresenter.initialize(getUserCredentialsUseCase());
     }
 
     @Override
@@ -154,10 +154,12 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
                 }
                 models.add(block);
             }
-            if (((Block) models.get(0)).getLayout().equalsIgnoreCase("notice")) {
-                models.add(1, mCountry);
-            } else {
-                models.add(0, mCountry);
+            if (!models.isEmpty()) {
+                if (((Block) models.get(0)).getLayout().equalsIgnoreCase("notice")) {
+                    models.add(1, mCountry);
+                } else {
+                    models.add(0, mCountry);
+                }
             }
         }
         mAdapter.setBlocks(models);
@@ -174,7 +176,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
 
     @Override
     public void onRefresh() {
-        mPresenter.initialize(null);
+        mPresenter.initialize(getUserCredentialsUseCase());
     }
 
     @Override

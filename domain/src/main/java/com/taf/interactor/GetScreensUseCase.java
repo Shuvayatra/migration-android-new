@@ -3,6 +3,7 @@ package com.taf.interactor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.model.ScreenModel;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IScreenRepository;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class GetScreensUseCase extends UseCase<List<ScreenModel>> {
     IScreenRepository mRepository;
 
     public GetScreensUseCase(IScreenRepository repository,
-                                ThreadExecutor pThreadExecutor,
-                                PostExecutionThread pPostExecutionThread) {
+                             ThreadExecutor pThreadExecutor,
+                             PostExecutionThread pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
 
         mRepository = repository;
@@ -27,6 +28,6 @@ public class GetScreensUseCase extends UseCase<List<ScreenModel>> {
 
     @Override
     protected Observable<List<ScreenModel>> buildUseCaseObservable(UseCaseData pData) {
-        return mRepository.getScreens();
+        return mRepository.getScreens(new ApiQueryParams(pData));
     }
 }
