@@ -178,4 +178,10 @@ public class InfoFragment extends BaseFragment implements InfoView, SwipeRefresh
     public void onRefresh() {
         mPresenter.initialize(pData);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.destroy();
+    }
 }

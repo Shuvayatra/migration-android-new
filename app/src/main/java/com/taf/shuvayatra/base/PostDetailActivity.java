@@ -1,10 +1,15 @@
 package com.taf.shuvayatra.base;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
+import android.provider.Telephony;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,6 +28,7 @@ import com.taf.shuvayatra.presenter.PostFavouritePresenter;
 import com.taf.shuvayatra.presenter.PostSharePresenter;
 import com.taf.shuvayatra.ui.views.PostDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -243,39 +249,10 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         mSharePresenter.initialize(null);
         AnalyticsUtil.logShareEvent(getAnalytics(), mPost.getId(), mPost.getTitle(),
                 mPost.getType());
-        try {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, post.getShareUrl());
-            startActivity(Intent.createChooser(intent, "Share via"));
-//            List<Intent> targetedShareIntents = new ArrayList<Intent>();
-//            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-//            shareIntent.setType("text/plain");
-//            List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(shareIntent, 0);
-//            if (!resInfo.isEmpty())
-//
-//            {
-//                for (ResolveInfo resolveInfo : resInfo) {
-//                    String packageName = resolveInfo.activityInfo.packageName;
-//                    if ((packageName.toLowerCase().equals("com.facebook.katana"))||
-//                            (packageName.toLowerCase().equals("com.facebook.lite"))||
-//                            (packageName.toLowerCase().equals("com.twitter.android"))||
-//                            (packageName.toLowerCase().equals("com.viper.voip"))) {
-//                        Intent targetedShareIntent = new Intent(android.content.Intent.ACTION_SEND);
-//                        targetedShareIntent.setType("text/plain");
-//                        targetedShareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "subject to be shared");
-//                        targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://link-to-be-shared.com");
-//                        targetedShareIntent.setPackage(packageName);
-//                        targetedShareIntents.add(targetedShareIntent);
-//                    }
-//                }
-//                Intent chooserIntent = Intent.createChooser(targetedShareIntents.get(0), "Select app to share");
-//                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[targetedShareIntents.size()]));
-//                startActivity(chooserIntent);
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        startActivity(Utils.create(getPackageManager(), shareIntent, getString(R.string.share), getTargetPackagesForShare(), post));
+
         return true;
     }
 
@@ -289,5 +266,18 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mPost = (Post) savedInstanceState.getSerializable(KEY_POST);
+    }
+
+    //gives list of app's package that is used to share the post
+    List<String> getTargetPackagesForShare() {
+        List<String> targetPackages = new ArrayList<>();
+
+        targetPackages.add(Utils.getDefaultSmsAppPackageName(this));
+        targetPackages.add("com.facebook.katana");
+        targetPackages.add("com.facebook.lite");
+        targetPackages.add("com.twitter.android");
+        targetPackages.add("com.viber.voip");
+
+        return targetPackages;
     }
 }

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import com.taf.data.utils.AppPreferences;
 import com.taf.interactor.UseCase;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.views.AudioDetailView;
 import com.taf.shuvayatra.ui.views.MvpView;
 
@@ -96,7 +98,7 @@ public class AudioOperationsPresenter implements Presenter {
         String mediaUrl = pAudio.getData().getMediaUrl().replace(" ", "%20");
         String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File audioFile = getAudioFile(fileName);
-
+        Log.e("", "shareViaBluetooth: " + audioFile.exists());
         if (audioFile.exists()) {
             String path = audioFile.getAbsolutePath();
             if (!(path.startsWith("file") || path.startsWith("content") || path.startsWith("FILE") || path
@@ -109,8 +111,8 @@ public class AudioOperationsPresenter implements Presenter {
             sharingIntent.setType("audio/mpeg");
             sharingIntent.setPackage("com.android.bluetooth");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, audioUri);
-            mView.getContext().startActivity(Intent.createChooser(sharingIntent, mView.getContext
-                    ().getString(R.string.share_audio)));
+            ((BaseActivity) mView.getContext()).startActivityForResult((Intent.createChooser(sharingIntent, mView.getContext
+                    ().getString(R.string.share_audio))), 100);
         } else {
             mView.onAudioFileNotFoundToShare();
         }
