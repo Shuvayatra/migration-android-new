@@ -28,7 +28,7 @@ public class ScreenModel extends BaseModel {
         this.icon = icon;
     }
 
-    public String getEndPOint() {
+    public String getEndPoint() {
         return endPOint;
     }
 

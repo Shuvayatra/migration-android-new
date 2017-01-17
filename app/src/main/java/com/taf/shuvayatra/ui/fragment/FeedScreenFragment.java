@@ -65,7 +65,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     LinearLayoutManager mLayoutManager;
-    UseCaseData mUseCaseData = new UseCaseData();
+    UseCaseData mUseCaseData = getUserCredentialsUseCase();
     int mPage = INITIAL_OFFSET;
     int mTotalDataCount = 0;
     int listItemSelection;

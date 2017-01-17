@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.taf.data.utils.AppPreferences;
+import com.taf.interactor.UseCaseData;
+import com.taf.model.Country;
 import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
@@ -86,6 +88,24 @@ public abstract class BaseActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.favourite, menu);
         }
         return true;
+    }
+
+    public UseCaseData getUserCredentialsUseCase() {
+        UseCaseData useCaseData = new UseCaseData();
+        String gender = getPreferences().getGender();
+        if (gender != null)
+            if (gender.equalsIgnoreCase(getString(R.string.gender_male))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "M");
+            } else if (gender.equalsIgnoreCase(getString(R.string.gender_female))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "F");
+            } else if (gender.equalsIgnoreCase(getString(R.string.gender_other))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "O");
+            }
+        String location = getPreferences().getLocation();
+        useCaseData.putString(UseCaseData.COUNTRY_ID, location.equalsIgnoreCase(MyConstants
+                .Preferences.DEFAULT_LOCATION) || location.equalsIgnoreCase(
+                getString(R.string.country_not_decided_yet)) ? null : location.split(",")[Country.INDEX_ID]);
+        return useCaseData;
     }
 
     @Override

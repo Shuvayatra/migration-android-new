@@ -41,6 +41,10 @@ public interface ApiService {
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncLikes(@Body List<SyncDataEntity> pSyncDataList);
 
+    @GET(MyConstants.API.SCREEN)
+    Observable<List<ScreenEntity>> getScreenEntity(@Query("country_id") String countryId,
+                                                   @Query("gender") String gender);
+
     @GET(MyConstants.API.HOME)
     Observable<List<BlockEntity>> getHomeBlocks(@Query("country_id") String countryId,
                                                 @Query("gender") String gender);
@@ -48,6 +52,17 @@ public interface ApiService {
     @GET(MyConstants.API.JOURNEY)
     Observable<List<BlockEntity>> getJourneyContents(@Query("country_id") String countryId,
                                                      @Query("gender") String gender);
+
+    @GET(MyConstants.API.SCREEN_DATA)
+    Observable<ScreenBlockEntity> getScreenBlockData(@Path("id") long id,
+                                                     @Query("country_id") String countryId,
+                                                     @Query("gender") String gender);
+
+    @GET(MyConstants.API.SCREEN_DATA)
+    Observable<ScreenFeedEntity> getScreenFeedData(@Path("id") long id,
+                                                   @Query("page") int page,
+                                                   @Query("country_id") String countryId,
+                                                   @Query("gender") String gender);
 
     @GET(MyConstants.API.DESTINATION)
     Observable<List<CountryEntity>> getCountryList();
@@ -57,7 +72,9 @@ public interface ApiService {
                                                   @Query("category") Long channelId);
 
     @GET(MyConstants.API.OPEN_WEATHER)
-    Observable<JsonElement> getWeatherInfo(@Query("q") String place, @Query("units") String unit, @Query("appid") String appId);
+    Observable<JsonElement> getWeatherInfo(@Query("q") String place,
+                                           @Query("units") String unit,
+                                           @Query("appid") String appId);
 
     @GET(MyConstants.API.FOREX)
     Observable<JsonElement> getForex();
@@ -78,7 +95,9 @@ public interface ApiService {
     Observable<UpdateResponseEntity> updateShareCount(@Path("id") Long id);
 
     @GET(MyConstants.API.DESTINATION_DETAIL)
-    Observable<List<BlockEntity>> getDestinationBlocks(@Path("id") long id);
+    Observable<List<BlockEntity>> getDestinationBlocks(@Path("id") long id,
+                                                       @Query("country_id") String countryId,
+                                                       @Query("gender") String gender);
 
     @POST(MyConstants.API.SYNC_DATA)
     Observable<SyncResponseEntity> syncUserActions(@Body List<SyncDataEntity> pSyncDataList);
@@ -98,15 +117,6 @@ public interface ApiService {
 
     @POST(MyConstants.API.ON_BOARDING_PUSH)
     Observable<UserInfoResponse> saveUserInfo(@Body UserInfoEntity userInfoEntity);
-
-    @GET(MyConstants.API.SCREEN)
-    Observable<List<ScreenEntity>> getScreenEntity();
-
-    @GET(MyConstants.API.SCREEN_DATA)
-    Observable<ScreenBlockEntity> getScreenBlockData(@Path("id") long id);
-
-    @GET(MyConstants.API.SCREEN_DATA)
-    Observable<ScreenFeedEntity> getScreenFeedData(@Path("id") long id, @Query("page") int page);
 
     @GET(MyConstants.API.ABOUT)
     Observable<InfoEntity> getAbout();

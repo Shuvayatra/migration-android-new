@@ -197,6 +197,13 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             deepLink += "&country_id=" + countryId;
         }
 
+        if (mPreferences.getGender() != null) {
+            String gender = mPreferences.getGender().equalsIgnoreCase(mContext.getString(R.string.gender_other)) ? "O" :
+                    mPreferences.getGender().equalsIgnoreCase(mContext.getString(R.string.gender_male)) ? "M"
+                            : "F";
+            deepLink += "&gender=" + gender;
+        }
+
         Logger.e(TAG, "deeplink: " + deepLink);
         return deepLink;
     }
@@ -216,7 +223,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
                 view = ((BlockRadioWidgetDataBinding) mBinding).play;
             } else if (mBinding instanceof BlockNoticeDataBinding) {
-               ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
+                ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Block block = ((BlockNoticeDataBinding) mBinding).getBlock();

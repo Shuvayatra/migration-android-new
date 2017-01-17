@@ -242,9 +242,9 @@ public class RestDataStore implements IDataStore {
             return Observable.error(new NetworkConnectionException());
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlocks(long id) {
+    public Observable<List<BlockEntity>> getDestinationBlocks(long id, ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getDestinationBlock(id)
+            return mApiRequest.getDestinationBlock(id, params)
                     .doOnNext(blockEntities -> {
                         mCache.saveDestinationBlocks(id, blockEntities);
                     });
@@ -285,20 +285,20 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<List<ScreenEntity>> getScreenEntity() {
+    public Observable<List<ScreenEntity>> getScreenEntity(ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getScreens()
+            return mApiRequest.getScreens(params)
                     .doOnNext(screenEntities -> mCache.saveScreens(screenEntities));
         } else {
             return Observable.error(new NetworkConnectionException());
         }
     }
 
-    public Observable<ScreenBlockEntity> getScreenBlockData(long id) {
+    public Observable<ScreenBlockEntity> getScreenBlockData(long id, ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getScreenBlockData(id)
+            return mApiRequest.getScreenBlockData(id, params)
                     .doOnNext(screenDataEntities -> {
-                        Logger.e(TAG,"screenENtities: "+ screenDataEntities);
+                        Logger.e(TAG, "screenENtities: " + screenDataEntities);
                         mCache.saveScreenBlockData(id, screenDataEntities);
                     });
         } else {
@@ -306,9 +306,9 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page) {
+    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page, ApiQueryParams params) {
         if (isThereInternetConnection()) {
-            return mApiRequest.getScreenFeedData(id,page)
+            return mApiRequest.getScreenFeedData(id, page, params)
                     .doOnNext(screenDataEntities -> {
                         mCache.saveScreenFeedData(id, screenDataEntities);
                     });

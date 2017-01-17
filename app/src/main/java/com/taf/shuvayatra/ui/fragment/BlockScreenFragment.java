@@ -62,7 +62,6 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         fragment.mScreen = screen;
         return fragment;
     }
-
     @Override
     public int getLayout() {
         return R.layout.item_empty_recycler_view;
@@ -74,7 +73,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
         setUpAdapter();
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null){
             mScreen = (ScreenModel) savedInstanceState.get(STATE_SCREEN);
             initialize();
             mAdapter.setBlocks((List<BaseModel>) savedInstanceState.get(STATE_BLOCKS));
@@ -84,7 +83,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         }
     }
 
-    private void setUpAdapter() {
+    private void setUpAdapter(){
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
         mRecyclerView.setAdapter(mAdapter);
@@ -92,7 +91,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    private void initialize() {
+    private void initialize(){
         DaggerDataComponent.builder().applicationComponent(getTypedActivity().getApplicationComponent())
                 .activityModule(getTypedActivity().getActivityModule())
                 .dataModule(new DataModule(mScreen.getId()))
@@ -103,8 +102,8 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     }
 
     private void loadData() {
-        UseCaseData useCaseData = new UseCaseData();
-        useCaseData.putString(UseCaseData.END_POINT, mScreen.getEndPOint());
+        UseCaseData useCaseData = getUserCredentialsUseCase();
+        useCaseData.putString(UseCaseData.END_POINT, mScreen.getEndPoint());
         useCaseData.putString(UseCaseData.SCREEN_DATA_TYPE, mScreen.getType());
         presenter.initialize(useCaseData);
     }
@@ -128,7 +127,7 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     public void renderScreenData(ScreenDataModel model) {
 
         this.mScreenModel = model;
-        Logger.e(TAG, "model: " + model);
+        Logger.e(TAG,"model: "+ model);
         mAdapter.setBlocks(model.getData());
     }
 

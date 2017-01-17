@@ -3,6 +3,7 @@ package com.taf.interactor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.model.ScreenDataModel;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IScreenRepository;
 import com.taf.util.MyConstants;
 
@@ -32,10 +33,10 @@ public class GetScreenDataUseCase extends UseCase<ScreenDataModel> {
     protected Observable<ScreenDataModel> buildUseCaseObservable(UseCaseData pData) {
         String type = pData.getString(UseCaseData.SCREEN_DATA_TYPE);
         if (type.equalsIgnoreCase(MyConstants.SCREEN.TYPE_BLOCK)) {
-            return mRepository.getScreenBlockData(mId);
+            return mRepository.getScreenBlockData(mId, new ApiQueryParams(pData));
         } else if (type.equalsIgnoreCase(MyConstants.SCREEN.TYPE_FEED)) {
             int page = pData.getInteger(UseCaseData.NEXT_PAGE);
-            return mRepository.getScreenFeedData(mId,page);
+            return mRepository.getScreenFeedData(mId, page, new ApiQueryParams(pData));
         } else
             return Observable.error(new UnsupportedDataTypeException());
     }

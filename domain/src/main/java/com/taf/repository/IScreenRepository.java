@@ -2,6 +2,7 @@ package com.taf.repository;
 
 import com.taf.model.ScreenDataModel;
 import com.taf.model.ScreenModel;
+import com.taf.model.base.ApiQueryParams;
 
 import java.util.List;
 
@@ -12,7 +13,9 @@ import rx.Observable;
  */
 
 public interface IScreenRepository {
-    Observable<List<ScreenModel>> getScreens();
-    Observable<ScreenDataModel> getScreenBlockData(long id);
-    Observable<ScreenDataModel> getScreenFeedData(long id,int page);
+    Observable<List<ScreenModel>> getScreens(ApiQueryParams params);
+
+    Observable<ScreenDataModel> getScreenBlockData(long id, ApiQueryParams params);
+
+    Observable<ScreenDataModel> getScreenFeedData(long id, int page, ApiQueryParams params);
 }

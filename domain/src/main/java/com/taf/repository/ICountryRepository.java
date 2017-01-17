@@ -16,5 +16,5 @@ public interface ICountryRepository {
 
     Observable<List<Country>> getCountryList();
     Observable<List<Country>> getCachedCountryList();
-    Observable<List<Block>> getCountryBlocks(long id);
+    Observable<List<Block>> getCountryBlocks(long id, ApiQueryParams params);
 }

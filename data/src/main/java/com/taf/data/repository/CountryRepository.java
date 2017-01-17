@@ -51,12 +51,12 @@ public class CountryRepository implements ICountryRepository {
     }
 
     @Override
-    public Observable<List<Block>> getCountryBlocks(long id) {
+    public Observable<List<Block>> getCountryBlocks(long id, ApiQueryParams params) {
         Observable<List<Block>> cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getDestinationBlocks(id)
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
         Observable<List<Block>> apiObservable = mDataStoreFactory.createRestDataStore()
-                .getDestinationBlocks(id)
+                .getDestinationBlocks(id, params)
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
 
         return Observable.concatDelayError(cacheObservable, apiObservable);

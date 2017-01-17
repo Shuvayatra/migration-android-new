@@ -60,6 +60,18 @@ public class ApiRequest {
         return mApiService.getJourneyContents(params.countryId, params.gender);
     }
 
+    public Observable<List<ScreenEntity>> getScreens(ApiQueryParams params) {
+        return mApiService.getScreenEntity(params.countryId, params.gender);
+    }
+
+    public Observable<ScreenBlockEntity> getScreenBlockData(long id, ApiQueryParams params) {
+        return mApiService.getScreenBlockData(id, params.countryId, params.gender);
+    }
+
+    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page, ApiQueryParams params) {
+        return mApiService.getScreenFeedData(id, page, params.countryId, params.gender);
+    }
+
     public Observable<PodcastResponseEntity> getPodcasts(int offset, Long channelId) {
         return mApiService.getPodcasts(offset, channelId);
     }
@@ -103,8 +115,8 @@ public class ApiRequest {
         return mApiService.getForex();
     }
 
-    public Observable<List<BlockEntity>> getDestinationBlock(long id) {
-        return mApiService.getDestinationBlocks(id);
+    public Observable<List<BlockEntity>> getDestinationBlock(long id, ApiQueryParams params) {
+        return mApiService.getDestinationBlocks(id, params.countryId, params.gender);
     }
 
     public Observable<SyncResponseEntity> syncUserAtions(List<SyncDataEntity> pSyncDataList) {
@@ -125,18 +137,6 @@ public class ApiRequest {
 
     public Observable<UserInfoResponse> saveUserInfo(UserInfoEntity entity) {
         return mApiService.saveUserInfo(entity);
-    }
-
-    public Observable<List<ScreenEntity>> getScreens() {
-        return mApiService.getScreenEntity();
-    }
-
-    public Observable<ScreenBlockEntity> getScreenBlockData(long id){
-        return mApiService.getScreenBlockData(id);
-    }
-
-    public Observable<ScreenFeedEntity> getScreenFeedData(long id, int page){
-        return mApiService.getScreenFeedData(id, page);
     }
 
     public Observable<InfoEntity> getInfo(int type) {

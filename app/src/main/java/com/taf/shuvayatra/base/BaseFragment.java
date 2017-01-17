@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.interactor.UseCaseData;
+import com.taf.model.Country;
 import com.taf.shuvayatra.R;
 import com.taf.util.MyConstants;
 
@@ -26,14 +27,21 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    public UseCaseData getUserCredentials() {
+    public UseCaseData getUserCredentialsUseCase() {
         UseCaseData useCaseData = new UseCaseData();
-        useCaseData.putString(UseCaseData.USER_GENDER, ((BaseActivity) getActivity()).getPreferences()
-                .getGender());
+        String gender = ((BaseActivity) getActivity()).getPreferences().getGender();
+        if (gender != null)
+            if (gender.equalsIgnoreCase(getString(R.string.gender_male))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "M");
+            } else if (gender.equalsIgnoreCase(getString(R.string.gender_female))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "F");
+            } else if (gender.equalsIgnoreCase(getString(R.string.gender_other))) {
+                useCaseData.putString(UseCaseData.USER_GENDER, "O");
+            }
         String location = ((BaseActivity) getActivity()).getPreferences().getLocation();
-        useCaseData.putString(UseCaseData.CATEGORY_ID, location.equalsIgnoreCase(MyConstants
+        useCaseData.putString(UseCaseData.COUNTRY_ID, location.equalsIgnoreCase(MyConstants
                 .Preferences.DEFAULT_LOCATION) || location.equalsIgnoreCase(
-                getString(R.string.country_not_decided_yet)) ? null : location);
+                getString(R.string.country_not_decided_yet)) ? null : location.split(",")[Country.INDEX_ID]);
         return useCaseData;
     }
 

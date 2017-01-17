@@ -31,14 +31,10 @@ import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
 import com.taf.util.MyConstants;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -119,7 +115,7 @@ public class HomeFragment extends BaseFragment implements
         mSwipeContainer.setOnRefreshListener(this);
 
         // todo do we need cache??
-        mPresenter.initialize(getUserCredentials());
+        mPresenter.initialize(getUserCredentialsUseCase());
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
     }
 
@@ -131,7 +127,7 @@ public class HomeFragment extends BaseFragment implements
 
     @Override
     public void onRefresh() {
-        mPresenter.initialize(getUserCredentials());
+        mPresenter.initialize(getUserCredentialsUseCase());
         if (showCountryWidget) {
 
             caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
