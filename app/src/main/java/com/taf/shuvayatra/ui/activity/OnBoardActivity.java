@@ -86,8 +86,8 @@ public class OnBoardActivity extends BaseActivity implements
         // api.shuvayatra.org/api/destinations
         initialize();
 
-        isExit = getIntent().getExtras().getBoolean(MyConstants.Extras.IS_EXIT, false);
-        userInfoModel = (UserInfoModel) getIntent().getExtras().getSerializable(UserInfoModel.EXTRA_INFO_MODEL);
+        isExit = getIntent().getBooleanExtra(MyConstants.Extras.IS_EXIT, false);
+        userInfoModel = (UserInfoModel) getIntent().getSerializableExtra(UserInfoModel.EXTRA_INFO_MODEL);
 
         OnBoardQuestionAdapter pagerAdapter = new OnBoardQuestionAdapter(getSupportFragmentManager(), this);
         mQuestionPager.setAdapter(pagerAdapter);
