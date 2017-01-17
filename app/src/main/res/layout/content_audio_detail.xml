@@ -99,7 +99,8 @@
             android:id="@+id/overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black_alpha_55">
+            android:background="@color/black_alpha_55"
+            android:visibility="gone">
 
             <ProgressBar
                 android:layout_width="wrap_content"

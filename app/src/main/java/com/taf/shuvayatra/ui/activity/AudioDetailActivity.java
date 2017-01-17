@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -323,6 +324,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.e(TAG, "onSaveInstanceState: ");
         outState.putInt(KEY_PROGRESS, mCurrentProgress);
         super.onSaveInstanceState(outState);
     }
@@ -390,5 +392,11 @@ public class AudioDetailActivity extends PostDetailActivity implements
         } else {
             downloadAudio();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: " + requestCode + ", " + resultCode);
     }
 }

@@ -1,10 +1,12 @@
 package com.taf.shuvayatra.base;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Log;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
@@ -39,17 +41,24 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     private MiniPlayerFragment playerFragment;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate: ");
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         togglePlayerFragment();
     }
 
     public void togglePlayerFragment() {
-        Logger.e(TAG+ "_MethodCall", ">>> toggleFragment()");
+        Logger.e(TAG + "_MethodCall", ">>> toggleFragment()");
         playerFragment = (MiniPlayerFragment) getSupportFragmentManager().findFragmentByTag
                 (MiniPlayerFragment.TAG);
         if (showMiniPlayer()) {
-            Logger.e(TAG+ "_MethodCall", ">>> media player is visible");
+            Logger.e(TAG + "_MethodCall", ">>> media player is visible");
             if (playerFragment == null) playerFragment = MiniPlayerFragment.newInstance(this);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_player, playerFragment, MiniPlayerFragment.TAG)
@@ -57,7 +66,7 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
             mediaPlayerVisible = true;
             initBottomSheet();
         } else {
-            Logger.e(TAG+ "_MethodCall", ">>> media player is gone");
+            Logger.e(TAG + "_MethodCall", ">>> media player is gone");
             if (playerFragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(playerFragment).commit();
                 mediaPlayerVisible = false;
@@ -130,7 +139,7 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
 
     public void hidePlayer() {
         if (playerFragment != null) {
-            Logger.e(TAG+ "_MethodCall", "hiding player()");
+            Logger.e(TAG + "_MethodCall", "hiding player()");
             getSupportFragmentManager().beginTransaction()
                     .remove(playerFragment)
                     .commit();
