@@ -9,6 +9,7 @@ import com.taf.model.ScreenModel;
 import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IScreenRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -100,7 +101,7 @@ public class ScreenRepository implements IScreenRepository {
         Comparator<ScreenModel> comparator = new Comparator<ScreenModel>() {
             @Override
             public int compare(ScreenModel o1, ScreenModel o2) {
-                return o1.getOrder()-o2.getOrder();
+                return o1.getOrder() - o2.getOrder();
             }
         };
 
@@ -108,7 +109,7 @@ public class ScreenRepository implements IScreenRepository {
         return screens;
     }
 
-    public List<Post> sortByPriorityPost(List<Post> posts){
+    public List<Post> sortByPriorityPost(List<Post> posts) {
         Comparator<Post> comparator = new Comparator<Post>() {
             @Override
             public int compare(Post post, Post post2) {
@@ -119,13 +120,9 @@ public class ScreenRepository implements IScreenRepository {
         return posts;
     }
 
-    public List<Block> sortByPositionBlock(List<Block> blocks){
-        Comparator<Block> comparator = new Comparator<Block>() {
-            @Override
-            public int compare(Block block, Block block2) {
-                return block.getPosition() - block2.getPosition();
-            }
-        };
+    public List<Block> sortByPositionBlock(List<Block> blocks) {
+        if (blocks == null) blocks = new ArrayList<>();
+        Comparator<Block> comparator = (block, block2) -> block.getPosition() - block2.getPosition();
         Collections.sort(blocks, comparator);
         return blocks;
     }
