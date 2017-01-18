@@ -2,6 +2,7 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.utils.Utils;
 import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.base.ApiQueryParams;
@@ -54,10 +55,12 @@ public class CountryRepository implements ICountryRepository {
     public Observable<List<Block>> getCountryBlocks(long id, ApiQueryParams params) {
         Observable<List<Block>> cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getDestinationBlocks(id)
-                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
+                .map(blocks -> Utils.sortByPositionBlock(blocks));
         Observable<List<Block>> apiObservable = mDataStoreFactory.createRestDataStore()
                 .getDestinationBlocks(id, params)
-                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
+                .map(blocks -> Utils.sortByPositionBlock(blocks));
 
         return Observable.concatDelayError(cacheObservable, apiObservable);
     }

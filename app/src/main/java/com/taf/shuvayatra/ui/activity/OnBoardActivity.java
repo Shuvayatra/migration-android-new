@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -52,6 +53,9 @@ public class OnBoardActivity extends BaseActivity implements
     // added for Snackbar
     @BindView(R.id.main_container)
     ViewGroup container;
+
+    @BindView(R.id.button_skip)
+    Button skipButton;
 
     @Inject
     CountryListPresenter presenter;
@@ -109,6 +113,15 @@ public class OnBoardActivity extends BaseActivity implements
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPreferences().setFirstLaunch(false);
+                getPreferences().setUserOnBoardingComplete(false);
+                onOnboardingDone();
+            }
+        });
     }
 
     private void onOnboardingDone() {
@@ -134,11 +147,11 @@ public class OnBoardActivity extends BaseActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_skip) {
-            getPreferences().setFirstLaunch(false);
-            getPreferences().setUserOnBoardingComplete(false);
-            onOnboardingDone();
-        }
+//        if (item.getItemId() == R.id.menu_skip) {
+//            getPreferences().setFirstLaunch(false);
+//            getPreferences().setUserOnBoardingComplete(false);
+//            onOnboardingDone();
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,13 +168,13 @@ public class OnBoardActivity extends BaseActivity implements
     @Override
     public void onNextButtonPressed(final int position) {
         // TODO: 10/26/16 refactor logic
-            if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
-                getPreferences().setFirstLaunch(false);
-                getPreferences().setUserOnBoardingComplete(true);
-                onOnboardingDone();
-            } else {
-                mQuestionPager.setCurrentItem(position + 1);
-            }
+        if (position == OnBoardQuestionAdapter.LIST_SIZE - 1) {
+            getPreferences().setFirstLaunch(false);
+            getPreferences().setUserOnBoardingComplete(true);
+            onOnboardingDone();
+        } else {
+            mQuestionPager.setCurrentItem(position + 1);
+        }
     }
 
 
@@ -184,9 +197,9 @@ public class OnBoardActivity extends BaseActivity implements
 
             // update fragment if created
             if (((OnBoardQuestionAdapter) mQuestionPager.getAdapter()).getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
-                ((AbroadQuestionFragment) ((OnBoardQuestionAdapter) mQuestionPager.getAdapter())
-                        .getFragment(MyConstants.OnBoarding.WORK_STATUS))
-                        .mButtonNext.setText(getString(R.string.next));
+//                ((AbroadQuestionFragment) ((OnBoardQuestionAdapter) mQuestionPager.getAdapter())
+//                        .getFragment(MyConstants.OnBoarding.WORK_STATUS))
+//                        .mButtonNext.setText(getString(R.string.next));
             }
         }
     }

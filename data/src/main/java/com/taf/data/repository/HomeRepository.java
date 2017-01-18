@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.utils.Utils;
 import com.taf.model.Block;
 import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IHomeRepository;
@@ -29,11 +30,13 @@ public class HomeRepository implements IHomeRepository {
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getHomeBlocks()
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
+                .map(blocks -> Utils.sortByPositionBlock(blocks))
                 .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.size()));
 
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getHomeBlocks(params)
-                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities));
+                .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
+                .map(blocks -> Utils.sortByPositionBlock(blocks));
 //                .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.get(0).getFeed()));
 
         if (noCache) {

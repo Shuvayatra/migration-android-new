@@ -77,11 +77,21 @@
             <com.taf.shuvayatra.ui.views.SwipeDisabledPager
                 android:id="@+id/viewpager_questions"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:paddingBottom="@dimen/spacing_xxxlarge"
                 android:paddingLeft="@dimen/spacing_xxxlarge"
                 android:paddingRight="@dimen/spacing_xxxlarge"
                 android:paddingTop="@dimen/spacing_xxxxxlarge" />
+            <Button
+                android:id="@+id/button_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="@dimen/spacing_xsmall"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/menu_skip"/>
 
         </LinearLayout>
 

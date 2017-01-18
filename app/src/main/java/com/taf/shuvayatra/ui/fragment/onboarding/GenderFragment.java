@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -22,9 +23,9 @@ public class GenderFragment extends BaseFragment implements RadioGroup.OnChecked
     public static final String TAG = "GenderFragment";
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
-    Button mButtonNext;
+    ImageView mButtonNext;
     @BindView(R.id.button_back)
-    Button mButtonBack;
+    ImageView mButtonBack;
     @BindView(R.id.radiogroup_gender)
     RadioGroup mRadioGroupGender;
 

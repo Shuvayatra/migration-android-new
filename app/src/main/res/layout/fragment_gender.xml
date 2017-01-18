@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/button_back"
+        android:layout_width="@dimen/spacing_xxxxlarge"
+        android:layout_height="@dimen/spacing_xxxxlarge"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/circle_bg"
+        app:srcCompat="@drawable/ic_left"/>
+
+    <ImageView
+        android:id="@+id/button_next"
+        android:layout_width="@dimen/spacing_xxxxlarge"
+        android:layout_height="@dimen/spacing_xxxxlarge"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/circle_bg"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_right"/>
 
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_container"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/spacing_standard"
+        android:layout_toLeftOf="@id/button_next"
+        android:layout_toRightOf="@id/button_back"
+        android:paddingRight="@dimen/spacing_xsmall"
+        android:paddingLeft="@dimen/spacing_xsmall"
         android:fadeScrollbars="false">
 
         <LinearLayout
@@ -28,7 +49,7 @@
                 android:gravity="center"
                 android:text="@string/question_gender"
                 android:textColor="@color/grey_87"
-                android:textSize="@dimen/text_big" />
+                android:textSize="@dimen/text_big"/>
 
             <RadioGroup
                 android:id="@+id/radiogroup_gender"
@@ -41,48 +62,22 @@
                     android:id="@+id/choice_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/gender_male" />
+                    android:text="@string/gender_male"/>
 
                 <RadioButton
                     android:id="@+id/choice_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/gender_female" />
+                    android:text="@string/gender_female"/>
 
                 <RadioButton
                     android:id="@+id/choice_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/gender_other" />
+                    android:text="@string/gender_other"/>
             </RadioGroup>
         </LinearLayout>
 
     </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/button_back"
-            style="@style/StyleNextBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="@string/back"
-            tools:text="BACK" />
-
-
-        <Button
-            android:id="@+id/button_next"
-            style="@style/StyleNextBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="@string/next"
-            tools:text="NEXT" />
-    </FrameLayout>
 
 </RelativeLayout>

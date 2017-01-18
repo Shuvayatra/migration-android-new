@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.taf.data.utils.Logger;
@@ -25,9 +26,9 @@ import butterknife.BindView;
 public class OriginalLocationFragment extends BaseFragment<BaseActivity> implements AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.button_next)
-    Button mButtonNext;
+    ImageView mButtonNext;
     @BindView(R.id.button_back)
-    Button mButtonBack;
+    ImageView mButtonBack;
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.spinner_zone)
     Spinner mSpinner;

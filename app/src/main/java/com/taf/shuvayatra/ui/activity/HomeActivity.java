@@ -405,8 +405,9 @@ public class HomeActivity extends MediaServiceActivity implements
             public void onNewResultImpl(@Nullable Bitmap bitmap) {
 
                 if (dataSource.isFinished() && bitmap != null) {
-                    final Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                    // TODO: 1/18/17 bug here 
+                    Logger.e(TAG, "bitmap has come");
+                    Bitmap bmp = Bitmap.createBitmap(bitmap);
+                    final Drawable drawable = new BitmapDrawable(getResources(), bmp);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {

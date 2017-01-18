@@ -160,6 +160,8 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
                 } else {
                     models.add(0, mCountry);
                 }
+            } else {
+                models.add(mCountry);
             }
         }
         mAdapter.setBlocks(models);
