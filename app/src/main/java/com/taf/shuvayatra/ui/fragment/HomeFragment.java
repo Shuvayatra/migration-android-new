@@ -93,7 +93,7 @@ public class HomeFragment extends BaseFragment implements
                 /**
                  * concat timeZoneId while setting location {@link AppPreferences#setLocation(String)}
                  */
-                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);//// TODO: 1/15/17 remove this line after timeZoneId is set in locaiton preferences
+                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
             } catch (ArrayIndexOutOfBoundsException e) {
                 String countryName = selectedCountry.split(",")[1];
@@ -102,7 +102,6 @@ public class HomeFragment extends BaseFragment implements
                 mCountryWidget = new CountryWidgetModel(countryName);
                 mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);
                 mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
-//				mCountryWidget.setTimeZoneId("Asia/Dubai");// TODO: 1/15/17 remove this after api for timeZoneId is configured
             }
         }
 

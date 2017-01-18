@@ -403,27 +403,25 @@ public class HomeActivity extends MediaServiceActivity implements
 
             @Override
             public void onNewResultImpl(@Nullable Bitmap bitmap) {
+
                 if (dataSource.isFinished() && bitmap != null) {
-                    Logger.e(TAG, "bitmap has come");
-//                    Bitmap bmp = Bitmap.createBitmap(bitmap);
                     final Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                    // TODO: 1/18/17 bug here 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             addMenu(screen, drawable);
                         }
                     });
-                    dataSource.close();
                 }
+                dataSource.close();
             }
 
             @Override
             public void onFailureImpl(DataSource dataSource) {
                 Logger.e(TAG, "Bitmap error: ");
                 dataSource.getFailureCause().printStackTrace();
-                if (dataSource != null) {
-                    dataSource.close();
-                }
+                dataSource.close();
             }
 
             @Override

@@ -72,10 +72,10 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
 
     private List<BaseModel> filterNotice(List<BaseModel> blocks) {
         List<BaseModel> models = new ArrayList<>();
-        Logger.e(TAG,"blocks: "+ blocks);
+        Logger.e(TAG, "blocks: " + blocks);
         for (BaseModel block : blocks) {
             if (block instanceof Block) {
-                if (((Block) block).getNotice() != null && !((Block) block).getTitle().isEmpty()) {
+                if (((Block) block).getNotice() != null && ((Block) block).getTitle() != null && !((Block) block).getTitle().isEmpty()) {
                     if (!mPreferences.getNoticeDismissId().contains(((Block) block).getNotice().getId().toString())) {
                         models.add(0, block);
                         continue;

@@ -27,9 +27,6 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     @BindView(R.id.content_player)
     View mPlayer;
 
-//    @BindView(R.id.bottom_sheet)
-//    View bottomSheet;
-
     private BottomSheetBehavior bottomSheetBehavior;
 
     private boolean mediaPlayerVisible = false;
@@ -64,7 +61,12 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
                     .replace(R.id.content_player, playerFragment, MiniPlayerFragment.TAG)
                     .commit();
             mediaPlayerVisible = true;
-            initBottomSheet();
+            try {
+                if (mPlayer != null)
+                    initBottomSheet();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Logger.e(TAG + "_MethodCall", ">>> media player is gone");
             if (playerFragment != null) {
