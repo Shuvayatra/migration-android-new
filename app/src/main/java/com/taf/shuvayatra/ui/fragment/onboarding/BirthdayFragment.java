@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.taf.data.utils.DateUtils;
@@ -29,9 +30,9 @@ import butterknife.BindView;
 public class BirthdayFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.button_next)
-    Button mButtonNext;
+    ImageView mButtonNext;
     @BindView(R.id.button_back)
-    Button mButtonBack;
+    ImageView mButtonBack;
     @BindView(R.id.textview_birthday)
     TextView mTextViewBirthday;
 

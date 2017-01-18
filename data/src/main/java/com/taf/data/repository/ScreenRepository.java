@@ -2,6 +2,7 @@ package com.taf.data.repository;
 
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
+import com.taf.data.utils.Utils;
 import com.taf.model.Block;
 import com.taf.model.Post;
 import com.taf.model.ScreenDataModel;
@@ -53,7 +54,7 @@ public class ScreenRepository implements IScreenRepository {
                 .getScreenBlockData(id, params)
                 .map(screenDataEntity -> mDataMapper.transformScreenBlockData(screenDataEntity))
                 .map(screenDataModel -> {
-                    screenDataModel.setData(sortByPositionBlock(screenDataModel.getData()));
+                    screenDataModel.setData(Utils.sortByPositionBlock(screenDataModel.getData()));
                     return screenDataModel;
                 });
 
@@ -65,7 +66,7 @@ public class ScreenRepository implements IScreenRepository {
                     return dataModel;
                 })
                 .map(screenDataModel -> {
-                    screenDataModel.setData(sortByPositionBlock(screenDataModel.getData()));
+                    screenDataModel.setData(Utils.sortByPositionBlock(screenDataModel.getData()));
                     return screenDataModel;
                 });
 
@@ -78,7 +79,7 @@ public class ScreenRepository implements IScreenRepository {
                 .getScreenFeedData(id, page, params)
                 .map(screenDataEntity -> mDataMapper.transformScreenFeedData(screenDataEntity))
                 .map(screenDataModel -> {
-                    screenDataModel.setData(sortByPriorityPost(screenDataModel.getData()));
+                    screenDataModel.setData(Utils.sortByPriorityPost(screenDataModel.getData()));
                     return screenDataModel;
                 });
 
@@ -90,7 +91,7 @@ public class ScreenRepository implements IScreenRepository {
                     return dataModel;
                 })
                 .map(screenDataModel -> {
-                    screenDataModel.setData(sortByPriorityPost(screenDataModel.getData()));
+                    screenDataModel.setData(Utils.sortByPriorityPost(screenDataModel.getData()));
                     return screenDataModel;
                 });
 
@@ -107,24 +108,6 @@ public class ScreenRepository implements IScreenRepository {
 
         Collections.sort(screens, comparator);
         return screens;
-    }
-
-    public List<Post> sortByPriorityPost(List<Post> posts) {
-        Comparator<Post> comparator = new Comparator<Post>() {
-            @Override
-            public int compare(Post post, Post post2) {
-                return post.getPriority() - post2.getPriority();
-            }
-        };
-        Collections.sort(posts, comparator);
-        return posts;
-    }
-
-    public List<Block> sortByPositionBlock(List<Block> blocks) {
-        if (blocks == null) blocks = new ArrayList<>();
-        Comparator<Block> comparator = (block, block2) -> block.getPosition() - block2.getPosition();
-        Collections.sort(blocks, comparator);
-        return blocks;
     }
 
 }

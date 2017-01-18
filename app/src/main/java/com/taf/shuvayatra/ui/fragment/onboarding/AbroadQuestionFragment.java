@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -23,9 +24,9 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
     public static final String TAG = "AbroadQuestionFragment";
     ButtonPressListener mButtonPressListener;
     @BindView(R.id.button_next)
-    public Button mButtonNext;
+    public ImageView mButtonNext;
     @BindView(R.id.button_back)
-    Button mButtonBack;
+    ImageView mButtonBack;
     @BindView(R.id.radiogroup_previous_work_status)
     RadioGroup mRadioGroupPreviousWorkStatus;
     @BindView(R.id.scroll_view)
@@ -59,7 +60,7 @@ public class AbroadQuestionFragment extends BaseFragment implements View.OnClick
         }
 
         if (((BaseActivity) getActivity()).getPreferences().isOnBoardingCountryListLoaded())
-            mButtonNext.setText(getString(R.string.next));
+//            mButtonNext.setText(getString(R.string.next));
 
         mButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
@@ -19,7 +20,7 @@ import butterknife.BindView;
 public class UserNameFragment extends BaseFragment<BaseActivity> {
 
     @BindView(R.id.button_next)
-    Button btnNext;
+    ImageView btnNext;
     @BindView(R.id.edittext_username)
     EditText etUserName;
 

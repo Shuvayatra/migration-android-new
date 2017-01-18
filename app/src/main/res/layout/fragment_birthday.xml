@@ -1,49 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/question"
+    <ImageView
+        android:id="@+id/button_back"
+        android:layout_width="@dimen/spacing_xxxxlarge"
+        android:layout_height="@dimen/spacing_xxxxlarge"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/circle_bg"
+        app:srcCompat="@drawable/ic_left"/>
+
+    <ImageView
+        android:id="@+id/button_next"
+        android:layout_width="@dimen/spacing_xxxxlarge"
+        android:layout_height="@dimen/spacing_xxxxlarge"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/circle_bg"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_right"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/question_birthday"
-        android:textColor="@color/grey_87"
-        android:textSize="@dimen/text_big"
-        android:gravity="center"
-        android:layout_marginBottom="@dimen/spacing_xxxlarge"/>
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        android:layout_toLeftOf="@id/button_next"
+        android:layout_toRightOf="@id/button_back"
+        android:fadeScrollbars="false"
+        android:paddingLeft="@dimen/spacing_xsmall"
+        android:paddingRight="@dimen/spacing_xsmall">
 
-        <TextView
-            android:id="@+id/textview_birthday"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/text_xlarge"
-            android:layout_below="@id/question"
-            android:text="_ _ _ _ / _ _ / _ _"
-            tools:text="1993 / 05 / 03"/>
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true"
-        style="@style/StyleNextBack"
-        android:text="@string/back"/>
+            <TextView
+                android:id="@+id/question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_xxxlarge"
+                android:gravity="center"
+                android:text="@string/question_birthday"
+                android:textColor="@color/grey_87"
+                android:textSize="@dimen/text_big"/>
 
-    <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentRight="true"
-        style="@style/StyleNextBack"
-        android:text="@string/next"/>
+            <TextView
+                android:id="@+id/textview_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/question"
+                android:gravity="center"
+                android:text="_ _ _ _ / _ _ / _ _"
+                android:textSize="@dimen/text_xlarge"
+                tools:text="1993 / 05 / 03"/>
 
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
