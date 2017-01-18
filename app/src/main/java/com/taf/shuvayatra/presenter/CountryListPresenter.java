@@ -84,9 +84,8 @@ public class CountryListPresenter implements Presenter {
         @Override
         public void onNext(List<Country> pT) {
             Logger.e(TAG, ">>> call to on next <<<");
-            if(mView.getContext()!=null)
+            if (mView.getContext() != null)
                 mView.renderCountries(pT);
-            onCompleted();
         }
     }
 }

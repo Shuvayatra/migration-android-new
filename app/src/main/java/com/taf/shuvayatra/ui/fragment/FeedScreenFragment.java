@@ -20,16 +20,19 @@ import com.taf.model.ScreenModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ScreenDataPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -90,6 +93,16 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     }
 
     @Override
+    public RecyclerView fragmentRecycler() {
+        return mRecyclerView;
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration initDecorator() {
+        return Utils.getBottomMarginDecoration(getContext(), R.dimen.mini_media_player_peek_height);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -121,11 +134,13 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
     private void setUpAdapter() {
         mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter<>(getContext(), this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
-
+        if (((PlayerFragmentActivity) getActivity()).isMediaPlayerVisible())
+            mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getContext(),
+                    R.dimen.mini_media_player_peek_height));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -180,12 +195,12 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
 
     @Override
     public void renderScreenData(ScreenDataModel model) {
-        Logger.e(TAG,"dismissIds: "+ Arrays.toString(getTypedActivity().getPreferences().getNoticeDismissId().toArray()));
+        Logger.e(TAG, "dismissIds: " + Arrays.toString(getTypedActivity().getPreferences().getNoticeDismissId().toArray()));
         if (model.isFromCache()) {
             if (model.getData() != null && mAdapter.getDataCollection().isEmpty()) {
                 List<BaseModel> models = new ArrayList<>();
-                if(model.getNotice()!=null && !model.getNotice().getTitle().isEmpty()){
-                    if(!getTypedActivity().getPreferences().getNoticeDismissId().contains(model.getNotice().getId().toString())) {
+                if (model.getNotice() != null && !model.getNotice().getTitle().isEmpty()) {
+                    if (!getTypedActivity().getPreferences().getNoticeDismissId().contains(model.getNotice().getId().toString())) {
                         models.add(0, model.getNotice());
                     }
                 }
@@ -207,9 +222,9 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
         mPage = model.getCurrentPage();
 
         List<BaseModel> models = new ArrayList<>();
-        if(model.getNotice()!=null && !model.getNotice().getTitle().isEmpty()){
-            if(!getTypedActivity().getPreferences().getNoticeDismissId().contains(model.getNotice().getId().toString())) {
-                Logger.e(TAG,"notica added: "+ getTypedActivity().getPreferences().getNoticeDismissId() +" ---- "+ model.getNotice().getId());
+        if (model.getNotice() != null && !model.getNotice().getTitle().isEmpty()) {
+            if (!getTypedActivity().getPreferences().getNoticeDismissId().contains(model.getNotice().getId().toString())) {
+                Logger.e(TAG, "notica added: " + getTypedActivity().getPreferences().getNoticeDismissId() + " ---- " + model.getNotice().getId());
                 models.add(0, model.getNotice());
             }
         }
@@ -247,12 +262,12 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
                 break;
             case MyConstants.Adapter.TYPE_NOTICE:
                 Notice notice = ((Notice) pModel);
-                if(notice.isFromDismiss()){
+                if (notice.isFromDismiss()) {
                     mAdapter.getDataCollection().remove(pIndex);
 
                     mAdapter.notifyItemRemoved(pIndex);
                     getTypedActivity().getPreferences().setNoticeDismissId(notice.getId());
-                }else{
+                } else {
                     String deepLink = getFormattedDeepLink(notice.getDeeplink());
                     if (deepLink != null && !deepLink.isEmpty()) {
                         Intent deeplinkIntent = new Intent(Intent.ACTION_VIEW,

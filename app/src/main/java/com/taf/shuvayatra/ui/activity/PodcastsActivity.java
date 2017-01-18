@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -30,6 +31,7 @@ import com.taf.shuvayatra.ui.fragment.MiniPlayerFragment;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PodcastListView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -107,6 +109,8 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     }
 
     private boolean isPlayingFromHere(List<Podcast> podcasts) {
+        Logger.e(TAG, ">>> service playlist is empty " + (getMediaService() != null &&
+                getServicePlaylist() != null && !getServicePlaylist().isEmpty()));
         return getMediaService() != null && getMediaService().isMediaValid()
                 && getServicePlaylist() != null && !getServicePlaylist().isEmpty()
                 && getServicePlaylist().containsAll(podcasts);
@@ -120,6 +124,8 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
         mRecyclerView.setEmptyMessage(getResources().getString(R.string.default_empty_message));
+        mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getContext(),
+                R.dimen.mini_media_player_peek_height));
         mSwipeContainer.setOnRefreshListener(this);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -174,9 +180,11 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         if (isPlayingFromHere(mAdapter.getDataCollection())) {
             getMediaService().changeCurrentPodcast(index);
         } else {
-            // todo add check for podcast list here
-            getMediaService().setPodcasts(mAdapter.getDataCollection());
+            getMediaService().setPodcasts(mAdapter.getDataCollection(), index, true);
         }
+
+        if (!isMediaPlayerVisible())
+            togglePlayerFragment();
     }
 
     @Override
@@ -187,23 +195,17 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     @Override
     public void renderPodcasts(PodcastResponse podcasts) {
+
         if (podcasts.isFromCache()) {
             if (mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(podcasts.getData().getData());
                 mPage = podcasts.getData().getCurrentPage();
                 mIsLastPage = podcasts.getData().getTotal() == podcasts.getData().getData().size();
-//                Logger.e(TAG, "cache: page " + mPage);
-//                Logger.e(TAG, "cache: page " + mAdapter.getDataCollection().size());
                 addToPlaylist(podcasts.getData().getData());
             }
             return;
         }
 
-//        Logger.e(TAG, " ============================ start ==================================");
-//        Logger.e(TAG, "current page / total page" + podcasts.getData().getCurrentPage() + " / " + podcasts.getData().getLastPage());
-//        Logger.e(TAG, "total items: " + podcasts.getData().getTotal());
-//        Logger.e(TAG, "prevoius item: " + mAdapter.getItemCount());
-//        Logger.e(TAG, "add items:  " + podcasts.getData().getData().size());
         mPage = podcasts.getData().getCurrentPage();
 
         if (mPage == INITIAL_OFFSET) {
@@ -211,31 +213,24 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
         } else if (!podcasts.getData().getData().isEmpty()) {
             mAdapter.addDataCollection(podcasts.getData().getData());
         }
-//        mTotalDataCount = podcasts.getData().getTotal();
         mIsLastPage = (mPage == podcasts.getData().getLastPage());
-//        Logger.e(TAG, "new items " + mAdapter.getItemCount());
-//        Logger.e(TAG, " ============================ end ================================== \n");
-
         // check if is streaming from this page
         addToPlaylist(podcasts.getData().getData());
-
-
     }
 
-    public void addToPlaylist(List<Podcast> podcasts){
+    public void addToPlaylist(List<Podcast> podcasts) {
         if (!podcasts.isEmpty()) {
+            boolean shouldRestartStream = !getMediaService().isMediaPlaying()
+                    && (getServicePlaylist() == null
+                    || getServicePlaylist().isEmpty()
+                    || !getServicePlaylist().containsAll(mAdapter.getDataCollection()));
 
-            if (isPlayingFromHere(mAdapter.getDataCollection())) {
-                if (!getMediaService().getPodcasts().containsAll(mAdapter.getDataCollection())) {
-                    getMediaService().addPodcasts(mAdapter.getDataCollection());
-                }
-            } else {
-                getMediaService().setPodcasts(podcasts);
-            }
+            getMediaService().setPodcasts(mAdapter.getDataCollection(), shouldRestartStream ? 0 :
+                    getMediaService().getCurrentPodcastIndex(), shouldRestartStream);
+        }
 
-            if (!isMediaPlayerVisible()) {
-                togglePlayerFragment();
-            }
+        if (!isMediaPlayerVisible()) {
+            togglePlayerFragment();
         }
     }
 

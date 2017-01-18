@@ -192,6 +192,7 @@ public class MyConstants {
         public static final String ACTION_MEDIA_SEEK_TO = "media.action.SEEK_TO";
         public static final String ACTION_PLAY_PAUSE_TOGGLE = "media.action.MEDIA_PLAY_PAUSE";
         public static final String ACTION_HIDE_MINI_PLAYER = "media.action.HIDE_PLAYER";
+        public static final String ACTION_SHOW_PLAYER = "media.action.SHOW_PLAYER";
     }
 
     public static final class Extras {

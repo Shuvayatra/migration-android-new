@@ -25,6 +25,7 @@ import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.DestinationDetailView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -106,6 +107,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         return false;
     }
 
+
     private void initialize() {
         DaggerDataComponent.builder()
                 .applicationComponent(getApplicationComponent())
@@ -121,6 +123,9 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         initList.add(mCountry);
         mAdapter.setBlocks(initList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (isMediaPlayerVisible())
+            mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getApplicationContext(),
+                    R.dimen.mini_media_player_peek_height));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -128,6 +133,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         mCountryPresenter.initialize(null);
         mPresenter.initialize(getUserCredentialsUseCase());
     }
+
 
     @Override
     public void showErrorView(String pErrorMessage) {

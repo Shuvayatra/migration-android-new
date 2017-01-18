@@ -87,10 +87,10 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     public void addDataCollection(List<T> pDataCollection) {
         mDataCollection.addAll(pDataCollection);
-        Logger.d("renderPost-adapter-param", "size:" + pDataCollection.size());
-        Logger.d("renderPost-adapter", "size:" + mDataCollection.size());
-        int newStartPosition = mDataCollection.size() - pDataCollection.size();
-        notifyItemRangeChanged(newStartPosition, pDataCollection.size());
+//        Logger.d("renderPost-adapter-param", "size:" + pDataCollection.size());
+//        Logger.d("renderPost-adapter", "size:" + mDataCollection.size());
+//        int newStartPosition = mDataCollection.size() - pDataCollection.size();
+//        notifyItemRangeChanged(newStartPosition, pDataCollection.size());
         notifyDataSetChanged();
     }
 

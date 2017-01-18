@@ -18,4 +18,20 @@ public class HeaderItem extends BaseModel {
     public void setTitle(String pTitle) {
         title = pTitle;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HeaderItem that = (HeaderItem) o;
+
+        return title != null ? title.equals(that.title) : that.title == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
+    }
 }

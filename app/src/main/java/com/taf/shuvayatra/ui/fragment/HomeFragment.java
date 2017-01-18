@@ -1,16 +1,14 @@
 package com.taf.shuvayatra.ui.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -22,24 +20,31 @@ import com.taf.model.CountryWidgetModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryWidgetPresenter;
 import com.taf.shuvayatra.presenter.HomePresenter;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+
+import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
+import static android.text.format.DateUtils.FORMAT_SHOW_YEAR;
+import static android.text.format.DateUtils.formatDateTime;
 
 public class HomeFragment extends BaseFragment implements
         HomeView,
@@ -74,6 +79,16 @@ public class HomeFragment extends BaseFragment implements
     }
 
     @Override
+    public RecyclerView fragmentRecycler() {
+        return mRecyclerView;
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration initDecorator() {
+        return Utils.getBottomMarginDecoration(getContext(), R.dimen.mini_media_player_peek_height);
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.fragment_home;
     }
@@ -81,28 +96,16 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();// TODO: 1/15/17 need to add timezone in location preferences
+        String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
         showCountryWidget = !(selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) ||
                 selectedCountry.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION));
 
         if (showCountryWidget) {
-            try {
-                String countryName = selectedCountry.split(",")[Country.INDEX_TITLE];
-                Logger.e(TAG, "selectedCountry.split(): " + Arrays.toString(selectedCountry.split(",")));
-                mCountryWidget = new CountryWidgetModel(countryName);
-                /**
-                 * concat timeZoneId while setting location {@link AppPreferences#setLocation(String)}
-                 */
-                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);
-                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
-            } catch (ArrayIndexOutOfBoundsException e) {
-                String countryName = selectedCountry.split(",")[1];
-                // will cause array out of bounds exception
-//                String countryNameEn = selectedCountry.split(",")[2];
-                mCountryWidget = new CountryWidgetModel(countryName);
-                mCountryWidget.setTimeZoneId(selectedCountry.split(",")[Country.INDEX_TIME_ZONE]);
-                mCountryWidget.setId(Long.parseLong(selectedCountry.split(",")[0]));
-            }
+            Country country = Country.makeCountryFromPreference(((BaseActivity) getActivity())
+                    .getPreferences().getLocation());
+            mCountryWidget = new CountryWidgetModel(country.getTitle());
+            mCountryWidget.setId(country.getId());
+            mCountryWidget.setTimeZoneId(country.getTimeZoneId());
         }
 
         initialize();
@@ -113,7 +116,6 @@ public class HomeFragment extends BaseFragment implements
         mRecyclerView.setEmptyView(emptyView);
         mSwipeContainer.setOnRefreshListener(this);
 
-        // todo do we need cache??
         mPresenter.initialize(getUserCredentialsUseCase());
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
     }
@@ -127,25 +129,15 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onRefresh() {
         mPresenter.initialize(getUserCredentialsUseCase());
-        if (showCountryWidget) {
-
-            caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
-            caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
-            caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
-
-            // initialize each component for the country widget
-            mCountryWidgetPresenter.initialize(caseCalendar);
-            mCountryWidgetPresenter.initialize(caseWeather);
-            mCountryWidgetPresenter.initialize(caseForEx);
-        }
+        if (showCountryWidget) initCountryWidgetPresenter();
+        ((HomeActivity) getActivity()).startScreenRequest();
     }
 
     @Override
     public void renderBlocks(List<Block> data) {
         List<BaseModel> baseModels = new ArrayList<>();
-//        baseModels.addAll(BaseModel.getDummy());// TODO: 1/12/17 remove
         baseModels.addAll(data);
-        Logger.e(TAG,"data: +"+ data.size());
+        Logger.e(TAG, "data: +" + data.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
         if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION) && showCountryWidget) {
             if (!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")) {
@@ -182,48 +174,58 @@ public class HomeFragment extends BaseFragment implements
         mPresenter.attachView(this);
         mCountryWidgetPresenter.attachView(this);
 
-        if (showCountryWidget) {
+        if (showCountryWidget) initCountryWidgetPresenter();
+    }
 
-            caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
-            caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
-            caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+    public void initCountryWidgetPresenter() {
+        Country country = Country.makeCountryFromPreference(((BaseActivity) getActivity())
+                .getPreferences().getLocation());
 
-            // initialize each component for the country widget
-            mCountryWidgetPresenter.initialize(caseCalendar);
-            mCountryWidgetPresenter.initialize(caseWeather);
-            mCountryWidgetPresenter.initialize(caseForEx);
-        }
+        caseCalendar.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_CALENDAR);
+        caseCalendar.putSerializable(UseCaseData.CALENDAR_INSTANCE,
+                DateUtils.getTimeZoneCalendarInstance(country.getTimeZoneId()));
+
+        caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
+        caseWeather.putString(UseCaseData.COUNTRY_CODE, country.getTitleEnglish());
+
+        caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
+
+        // initialize each component for the country widget
+        mCountryWidgetPresenter.initialize(caseCalendar);
+        mCountryWidgetPresenter.initialize(caseWeather);
+        mCountryWidgetPresenter.initialize(caseForEx);
     }
 
     @Override
     public void onComponentLoaded(CountryWidgetData.Component component) {
         try {
+
+            Country country = Country.makeCountryFromPreference(((BaseActivity) getActivity())
+                    .getPreferences().getLocation());
+
             switch (component.componentType()) {
                 case CountryWidgetData.COMPONENT_CALENDAR:
 
-                    mCountryWidget.setNepaliDate(((CountryWidgetData.CalendarComponent) component).getNepaliDate());
-                    Calendar instance = ((CountryWidgetData.CalendarComponent) component).getToday();
-                    String date = DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN, instance.getTime(), mCountryWidget.getTimeZone());
-                    Log.e(TAG, "onComponentLoaded: " + DateUtils.getFormattedDate(DateUtils.DEFAULT_DATE_PATTERN + " hh mm ", instance.getTime(), mCountryWidget.getTimeZone()));
-                    String day = DateUtils.getEnglishDay(instance.get(Calendar.DAY_OF_WEEK));
-                    String englishDate = day + ",\n" + date;
-                    mCountryWidget.setEnglishDate(englishDate);
+                    mCountryWidget.setNepaliDate(((CountryWidgetData.CalendarComponent) component)
+                            .getNepaliDate());
+                    mCountryWidget.setEnglishDate(String.format("%s,\n%s", formatDateTime(getContext(),
+                            ((CountryWidgetData.CalendarComponent) component).getToday().getTimeInMillis(),
+                            FORMAT_SHOW_WEEKDAY), formatDateTime(getContext(),
+                            ((CountryWidgetData.CalendarComponent) component).getToday().getTimeInMillis(),
+                            FORMAT_SHOW_YEAR)));
                     break;
                 case CountryWidgetData.COMPONENT_FOREX:
 
                     if (!((BaseActivity) getActivity()).getPreferences().getLocation()
                             .equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
 
-                        String country = ((BaseActivity) getActivity()).getPreferences().getLocation()
-                                .split(",")[Country.INDEX_TITLE];
-                        String foreignCurrency = ((CountryWidgetData.ForexComponent) component).getCurrencyMap().get(MyConstants
-                                .Country.getCurrencyKey(country));
+                        String foreignCurrency = ((CountryWidgetData.ForexComponent) component)
+                                .getCurrencyMap().get(MyConstants.Country.getCurrencyKey(country.getTitle()));
 
-                        Logger.e(TAG, ">>> foreign currency: " + foreignCurrency);
-                        mCountryWidget.setForex(String.format("%s 1 = NPR %s", MyConstants.Country.getCurrency(country), foreignCurrency));
-                    } else {
-                        // TODO: 11/10/16 send null
-                        mCountryWidget.setForex("this is forex");
+                        if (foreignCurrency != null)
+                            mCountryWidget.setForex(String.format("%s 1 = NPR %s",
+                                    MyConstants.Country.getCurrency(country.getTitle()),
+                                    foreignCurrency));
                     }
                     break;
                 case CountryWidgetData.COMPONENT_WEATHER:

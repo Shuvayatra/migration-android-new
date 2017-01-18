@@ -420,18 +420,24 @@ public class DateUtils {
      */
     public static final String DEFAULT_DATE_PATTERN = "dd MMMM yyyy";
 
-    public static String getFormattedDate(String pattern, Date date, TimeZone timeZone) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
-        format.setTimeZone(timeZone);
-        return format.format(date);
+    public static Calendar getTimeZoneCalendarInstance(String timezoneId) {
+
+        Calendar gmtCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        long gmtTime = gmtCalendar.getTime().getTime();
+
+        long timezoneAlteredTime = gmtTime + TimeZone.getTimeZone(timezoneId).getRawOffset();
+        Calendar timeZoneCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezoneId));
+        timeZoneCalendar.setTimeInMillis(timezoneAlteredTime);
+        return timeZoneCalendar;
     }
 
     public static String getFormattedDate(String pattern, Date date) {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.US);
         return format.format(date);
     }
-    public static String getFormattedDate(Long date){
-        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_PATTERN,Locale.US);
+
+    public static String getFormattedDate(Long date) {
+        SimpleDateFormat format = new SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.US);
         return format.format(date);
     }
 }

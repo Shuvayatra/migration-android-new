@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseModel implements Serializable {
+
     Long id;
     int mDataType;
 

@@ -139,6 +139,20 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if (!fragmentVisibility)
+            findViewById(R.id.content_player).animate().alpha(1).setDuration(300);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void finishWithResult() {
+        if (!fragmentVisibility)
+            findViewById(R.id.content_player).animate().alpha(1).setDuration(300);
+        super.finishWithResult();
+    }
+
+    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
     }
@@ -249,12 +263,14 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public void updateView(Post post) {
         mainPost = post;
-        ((MyApplication) getApplicationContext()).mService.setTrack(post);
-        mScrollView.scrollTo(0, 0);
-        mAppBar.setExpanded(true);
-        ((ActivityAudioDetailBinding) mBinding).setAudio(post);
-        ((ActivityAudioDetailBinding) mBinding).setSimilarAudios(post.getSimilarPosts());
-        invalidateOptionsMenu();
+        if (((MyApplication) getApplicationContext()).mService != null) {
+            ((MyApplication) getApplicationContext()).mService.setTrack(post);
+            mScrollView.scrollTo(0, 0);
+            mAppBar.setExpanded(true);
+            ((ActivityAudioDetailBinding) mBinding).setAudio(post);
+            ((ActivityAudioDetailBinding) mBinding).setSimilarAudios(post.getSimilarPosts());
+            invalidateOptionsMenu();
+        }
     }
 
     @Override

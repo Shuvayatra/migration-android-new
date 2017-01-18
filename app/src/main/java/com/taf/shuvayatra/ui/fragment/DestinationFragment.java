@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -14,18 +15,23 @@ import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryListPresenter;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.CountryAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -52,6 +58,17 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 
         DestinationFragment fragment = new DestinationFragment();
         return fragment;
+    }
+
+    @Override
+    public RecyclerView fragmentRecycler() {
+        return mRecyclerView;
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration initDecorator() {
+        return Utils.getBottomMarginDecorationForGrid(getContext(),
+                R.dimen.mini_media_player_peek_height);
     }
 
     @Override
@@ -90,7 +107,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                int type = mAdapter.getItemViewType(position);
+                int type = mRecyclerView.getAdapter().getItemViewType(position);
                 Logger.e(TAG, "span type: " + type);
                 if (type == MyConstants.Adapter.TYPE_COUNTRY) {
                     return 1;
@@ -111,8 +128,8 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 
     @Override
     public void renderCountries(List<Country> countryList) {
-        Logger.e(TAG, "countryList.size(): " + countryList.size());
 
+        Logger.e(TAG, ">>> call to render countries:\n" + countryList);
 
         Collections.sort(countryList, new Comparator<Country>() {
             @Override
@@ -124,14 +141,14 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                 } else if (o1.getTitleEnglish() == null && o2.getTitleEnglish() == null) {
                     return 0;
                 }
-                return o1.getTitleEnglish().trim().toUpperCase().compareTo(o2.getTitleEnglish().trim().toUpperCase());
+                return o1.getTitleEnglish().trim().toUpperCase().compareTo(o2.getTitleEnglish()
+                        .trim().toUpperCase());
             }
         });
 
         // copy list of country to list of base mScreenModel after sorting
         List<BaseModel> allList = new ArrayList<>();
         allList.addAll(countryList);
-        Logger.e(TAG, "all.size(): " + allList.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
 
         if (!selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
@@ -140,31 +157,33 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                 HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
                 headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
 
-                if (allList.size() > 0) {
+                if (!allList.isEmpty()) {
                     allList.add(0, headerItem);
                 }
             } else {
-                long id = Long.parseLong(selectedCountry.substring(0, selectedCountry.indexOf(",")));
-                Logger.e(TAG, " selected id: " + id);
-                for (Country country : countryList) {
-                    Logger.e(TAG, "country: " + country);
-                    if (country.getId() == id) {
-                        country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
-                        allList.remove(countryList.indexOf(country));
-                        if (allList.size() > 0) {
-                            allList.add(0, country);
-                        }
-                        HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
-                        headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
-                        allList.add(1, headerItem);
-                        break;
+                Country preferredCountry = Country.makeCountryFromPreference(selectedCountry);
+                int index = allList.indexOf(preferredCountry);
+                if (index != -1) {
+                    Country country = (Country) allList.get(index);
+                    country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
+                    allList.remove(countryList.indexOf(country));
+                    if (allList.size() > 0) {
+                        allList.add(0, country);
                     }
+                    HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
+                    headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
+                    allList.add(1, headerItem);
                 }
-
             }
         }
 
-        mAdapter.setCountries(allList);
+//        if (mAdapter.getCountries() != null && !mAdapter.getCountries().isEmpty()
+//                && !mAdapter.getCountries().containsAll(allList)) {
+//            Logger.e(TAG, ">>> updating country list");
+            mAdapter.setCountries(allList);
+//        } else {
+//            Logger.e(TAG, ">>> country list not updated");
+//        }
     }
 
     @Override

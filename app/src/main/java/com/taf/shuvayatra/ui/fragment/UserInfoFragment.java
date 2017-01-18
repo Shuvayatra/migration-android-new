@@ -16,10 +16,12 @@ import com.taf.data.utils.Logger;
 import com.taf.model.UserInfoModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.databinding.ItemUserInfoBinding;
 import com.taf.shuvayatra.ui.activity.OnBoardActivity;
 import com.taf.util.MyConstants;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -29,6 +31,9 @@ import butterknife.OnClick;
 public class UserInfoFragment extends BaseFragment {
 
     ItemUserInfoBinding binding;
+
+    @BindView(R.id.mini_player_placeholder_margin)
+    View placeHolderView;
 
     public static UserInfoFragment newInstance() {
         return new UserInfoFragment();
@@ -60,6 +65,13 @@ public class UserInfoFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         binding.setUser(makeUserInfo(getTypedActivity().getPreferences(), getContext()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        placeHolderView.setVisibility(((PlayerFragmentActivity) getActivity()).isMediaPlayerVisible()
+                ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -174,7 +174,7 @@ public class VideoDetailActivity extends PostDetailActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MyApplication) getApplicationContext()).mService.stopPlayback();
+        ((MyApplication) getApplicationContext()).mService.stopPlayback(false);
 
 
         mYouTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();

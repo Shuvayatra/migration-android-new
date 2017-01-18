@@ -107,15 +107,23 @@ public class Country extends BaseModel {
 
     @Override
     public boolean equals(Object o) {
-        System.out.println(">>> on equals()");
-        if (o instanceof String) {
-            System.out.println(">>> equals(): " + o);
-            System.out.println(String.format("comparison id %s, actual id %d",
-                    Long.valueOf(((String) o).split(",")[INDEX_ID]), getId()));
-            if (getId().equals(Long.valueOf(((String) o).split(",")[INDEX_ID])))
-                return true;
-        }
-        return super.equals(o);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Country country = (Country) o;
+
+        if (title != null ? !title.equals(country.title) : country.title != null) return false;
+        if (titleEnglish != null ? !titleEnglish.equals(country.titleEnglish) : country.titleEnglish != null)
+            return false;
+        return timeZoneId != null ? timeZoneId.equals(country.timeZoneId) : country.timeZoneId == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (titleEnglish != null ? titleEnglish.hashCode() : 0);
+        result = 31 * result + (timeZoneId != null ? timeZoneId.hashCode() : 0);
+        return result;
     }
 
     // if information is avilable gets the first key and value to show for the selected country in country list screen
@@ -133,6 +141,16 @@ public class Country extends BaseModel {
             info += countryInfo.getAttribute() + " : " + countryInfo.getValue() + "\n";
         }
         return info;
+    }
+
+    public static Country makeCountryFromPreference(String preference) {
+        Country country = new Country();
+        String[] data = preference.split(",");
+        country.id = data.length > 0 ? Long.valueOf(data[INDEX_ID]) : Long.MIN_VALUE;
+        country.title = data.length >= 2 ? data[INDEX_TITLE] : null;
+        country.titleEnglish = data.length >= 3 ? data[INDEX_TITLE_EN] : null;
+        country.timeZoneId = data.length >= 4 ? data[INDEX_TIME_ZONE] : null;
+        return country;
     }
 
 }

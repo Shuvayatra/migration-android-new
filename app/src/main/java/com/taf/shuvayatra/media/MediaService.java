@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
@@ -32,6 +33,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v7.widget.AppCompatDrawableManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.taf.data.utils.Logger;
@@ -49,6 +51,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The type Media service.
+ */
 public class MediaService extends Service implements
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
@@ -63,20 +68,16 @@ public class MediaService extends Service implements
     Handler mHandler = new Handler();
     NotificationManager manager;
     NotificationEventReceiver notificationEventReceiver;
-    Notification mNotification;
     private MediaPlayer mPlayer;
     private Post mTrack;
     private List<Podcast> mPodcasts;
     private boolean mIsMediaValid = false;
-    private PlayType mCurrentPlayType;
+    private PlayType mCurrentPlayType = PlayType.NONE;
     private int mCurrentPodcastIndex = 0;
     private long mCurrentDuration = 0;
     private boolean mStoppedByUser = false;
     private String mCurrentTitle = "";
     private String mCurrentImage = "";
-    private MediaSessionManager mMediaSessionManager;
-    private MediaSessionCompat mMediaSession;
-    MediaControllerCompat mMediaController;
     private Runnable updateSeekTime = new Runnable() {
         @Override
         public void run() {
@@ -91,14 +92,11 @@ public class MediaService extends Service implements
             mHandler.postDelayed(this, 500);
         }
     };
-    private Notification notification;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logger.d("MediaService_onStartCommand", "test");
-        if (mPlayer != null) {
-//            mPlayer.reset();
-        } else {
+        Log.d(TAG, "onStartCommand() called with: intent = [" + intent + "], flags = [" + flags + "], startId = [" + startId + "]");
+        if (mPlayer == null) {
             mPlayer = new MediaPlayer();
             initMediaPlayer();
             IntentFilter filter = new IntentFilter();
@@ -108,24 +106,25 @@ public class MediaService extends Service implements
             registerReceiver(notificationEventReceiver, filter);
         }
         mHandler.postDelayed(updateSeekTime, 1000);
-//        initMediaSession();
-        // register fot old notificaiton click
-
-
         return START_NOT_STICKY;
     }
 
-    private void initMediaSession() {
-        mMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
-        ComponentName componentName = new ComponentName(getApplicationContext(), NotificationEventReceiver.class);
-        mMediaSession = new MediaSessionCompat(getApplicationContext(), TAG);
-        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-        mMediaSession.setCallback(new MediaSessionCallback());
-//        mMediaController = MediaController.fromToken( mSession.getSessionToken() );
+//    private void initMediaSession() {
+//        mMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
+//        ComponentName componentName = new ComponentName(getApplicationContext(), NotificationEventReceiver.class);
+//        mMediaSession = new MediaSessionCompat(getApplicationContext(), TAG);
+//        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+//        mMediaSession.setCallback(new MediaSessionCallback());
+//    }
+
+
+    public int getCurrentPodcastIndex() {
+        return mCurrentPodcastIndex;
     }
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy() called");
         if (mPlayer != null && !mPlayer.isPlaying()) {
             Logger.d("MediaService_onDestroy", "test");
             unregisterReceiver(notificationEventReceiver);
@@ -149,11 +148,11 @@ public class MediaService extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Logger.d("MediaService_onUnbind", "test");
         return true;
     }
 
     private void initMediaPlayer() {
+        Log.d(TAG, "initMediaPlayer() called");
         mPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mPlayer.setOnPreparedListener(this);
@@ -163,11 +162,12 @@ public class MediaService extends Service implements
     }
 
     public void setTrack(Post pTrack) {
+        Log.d(TAG, "setTrack() called with: pTrack = [" + pTrack + "]");
 //        if (mTrack == null) {
-        stopPlayback();
+        stopPlayback(false);
         mTrack = pTrack;
         mCurrentPlayType = PlayType.POST;
-        startStreaming();
+        startStreaming(true);
 //        } else {
 //            if (mCurrentPlayType != PlayType.POST && !mTrack.equals(pTrack)) {
 //                stopPlayback();
@@ -178,24 +178,31 @@ public class MediaService extends Service implements
 //        }
     }
 
-    public void setPodcasts(List<Podcast> podcasts) {
+    /**
+     * Sets podcasts.
+     *
+     * @param podcasts            list of podcasts
+     * @param index               current index of streamed podcast
+     * @param shouldRestartStream indicator to restart streaming
+     */
+    public void setPodcasts(List<Podcast> podcasts, int index, boolean shouldRestartStream) {
         Logger.e(TAG + "_MethodCall", ">>> setPodcasts()");
-        stopPlayback();
+        if (shouldRestartStream) {
+            stopPlayback(false);
+        }
         mPodcasts = podcasts;
         mCurrentPlayType = PlayType.PODCAST;
-        mCurrentPodcastIndex = 0;
-        startStreaming();
+        mCurrentPodcastIndex = index;
+        if (shouldRestartStream) {
+            startStreaming(false);
+        }
     }
 
     public void addPodcasts(List<Podcast> podcasts) {
-        Logger.e(TAG + "_MethodCall", ">>> addPodcasts()");
-        Logger.e(TAG, ">>> podcasts: pre " + getPodcasts());
+        Log.d(TAG, "addPodcasts() called with: podcasts = [" + podcasts + "]");
         List<Podcast> serviceList = new ArrayList<>(getPodcasts());
         serviceList.removeAll(podcasts);
-        Logger.e(TAG, ">>> podcasts: post " + getPodcasts());
-        Logger.e(TAG, ">>> service list: " + serviceList);
         getPodcasts().addAll(serviceList);
-        Logger.e(TAG, ">>> podcasts: final " + getPodcasts());
     }
 
     public List<Podcast> getPodcasts() {
@@ -204,17 +211,24 @@ public class MediaService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer pMediaPlayer) {
+        Log.d(TAG, "onPrepared() called with: pMediaPlayer = [" + pMediaPlayer + "]");
+        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        Logger.e(TAG, "ON PREPARED, stopped by user: " + mStoppedByUser);
+        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         if (!mStoppedByUser) {
             mHandler.postDelayed(updateSeekTime, 500);
             pMediaPlayer.start();
             pMediaPlayer.seekTo(0);
-            Logger.d("MediaService_onPrepared", "test prepared");
             sendBroadcast(new Intent(MyConstants.Media.ACTION_STATUS_PREPARED));
+            Logger.e(TAG, ">>> MEDIA PREPARED for " + mCurrentTitle);
             createNotification(mCurrentTitle, true);
             mCurrentDuration = pMediaPlayer.getDuration();
             mIsMediaValid = true;
         }
+    }
 
+    public boolean isMediaPlaying() {
+        return mPlayer != null && mPlayer.isPlaying();
     }
 
     @Override
@@ -229,7 +243,13 @@ public class MediaService extends Service implements
             mCurrentPodcastIndex++;
             if (mCurrentPodcastIndex == mPodcasts.size()) mCurrentPodcastIndex = 0;
             playMedia();
+        } else {
+            mCurrentPlayType = PlayType.NONE;
         }
+    }
+
+    public PlayType getCurrentPlayType() {
+        return mCurrentPlayType;
     }
 
     @Override
@@ -242,9 +262,11 @@ public class MediaService extends Service implements
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
         switch (what) {
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                Logger.e(TAG, "MEDIA_INFO_BUFFERING_END");
                 sendBroadcast(new Intent(MyConstants.Media.ACTION_MEDIA_BUFFER_STOP));
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                Logger.e(TAG, "MEDIA_INFO_BUFFERING_START");
                 sendBroadcast(new Intent(MyConstants.Media.ACTION_MEDIA_BUFFER_START));
                 break;
         }
@@ -252,11 +274,16 @@ public class MediaService extends Service implements
     }
 
     private void playMedia() {
+        Log.d(TAG, "playMedia() called");
         try {
             mPlayer.reset();
-            Logger.d("MediaService_playMedia", "test: " + mCurrentPodcastIndex);
-            if (mCurrentPlayType.equals(PlayType.POST)) setDataSource(mTrack);
-            else setDataSource(mPodcasts.get(mCurrentPodcastIndex));
+            if (mCurrentPlayType.equals(PlayType.POST)) {
+                setDataSource(mTrack);
+            } else {
+                Logger.e(TAG, String.format(">>> CHANGING DATA SOURCE (index-%d):\n", mCurrentPodcastIndex)
+                        + mPodcasts.get(mCurrentPodcastIndex));
+                setDataSource(mPodcasts.get(mCurrentPodcastIndex));
+            }
             createNotification(mCurrentTitle, false);
             mPlayer.prepareAsync();
         } catch (Exception e) {
@@ -265,15 +292,20 @@ public class MediaService extends Service implements
     }
 
     private void setDataSource(Podcast podcast) throws IOException {
+        Log.d(TAG, "setDataSource() called with: podcast = [" + podcast + "]");
         mCurrentTitle = podcast.getTitle();
         mCurrentImage = podcast.getImage();
+        mCurrentPlayType = PlayType.PODCAST;
         String mediaUrl = podcast.getSource().replace(" ", "%20");
-        mPlayer.setDataSource(this, Uri.parse(mediaUrl));
+        Logger.e(TAG, ">>> MEDIA URL: " + mediaUrl);
+        mPlayer.setDataSource(mediaUrl);
     }
 
     private void setDataSource(Post pTrack) throws IOException {
+        Log.d(TAG, "setDataSource() called with: pTrack = [" + pTrack + "]");
         mCurrentTitle = pTrack.getTitle();
-        mCurrentImage = pTrack.getFeaturedImage();
+        mCurrentImage = pTrack.getData().getThumbnail();
+        mCurrentPlayType = PlayType.POST;
         String mediaUrl = pTrack.getData().getMediaUrl().replace(" ", "%20");
         String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
@@ -313,12 +345,19 @@ public class MediaService extends Service implements
         sendBroadcast(intent);
     }
 
-    public void stopPlayback() {
+    public void stopPlayback(boolean fromPodcastSelection) {
+        Log.d(TAG, "stopPlayback() called with: fromPodcastSelection = [" + fromPodcastSelection + "]");
         mCurrentTitle = " ---- ";
         mCurrentImage = "";
-        mStoppedByUser = true;
+        if (!fromPodcastSelection)
+            mStoppedByUser = true;
         if (mIsMediaValid)
             mPlayer.stop();
+
+        mCurrentPlayType = PlayType.NONE;
+        // clear service podcast list
+//        if (mPodcasts != null && !mPodcasts.isEmpty())
+//            mPodcasts.clear();
 
         Intent intent = new Intent(MyConstants.Media.ACTION_PLAY_STATUS_CHANGE);
         intent.putExtra(MyConstants.Extras.KEY_PLAY_STATUS, false);
@@ -331,14 +370,20 @@ public class MediaService extends Service implements
         }
     }
 
+    public void showLoadingView() {
+        mCurrentTitle = "";
+    }
+
     public void seekTo(int seekbarProgress) {
         int currentPosition = MediaHelper.progressToTimer(seekbarProgress, mPlayer.getDuration());
         mPlayer.seekTo(currentPosition);
     }
 
-    public void startStreaming() {
+    public void startStreaming(boolean shouldRestartPodcastIndex) {
         mStoppedByUser = false;
-        mCurrentPodcastIndex = 0;
+        if (shouldRestartPodcastIndex)
+            mCurrentPodcastIndex = 0;
+        Logger.e(TAG, "current podcast index: " + mCurrentPodcastIndex);
         playMedia();
     }
 
@@ -379,15 +424,17 @@ public class MediaService extends Service implements
     }
 
     public void changeCurrentPodcast(int index) {
+        Log.d(TAG, "changeCurrentPodcast() called with: index = [" + index + "]");
         if (mCurrentPlayType.equals(PlayType.PODCAST)) {
-            stopPlayback();
+            Logger.e(TAG, ">>> CHANGING PODCAST INDEX to " + index);
+            stopPlayback(true);
             mCurrentPodcastIndex = index;
             playMedia();
         }
     }
 
     private void createNotification(String title, boolean isPlaying) {
-        Logger.e(TAG, "============ start ==================");
+        Logger.e(TAG, "============ NOTIFICATION START ==================");
         if (manager == null)
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -426,7 +473,7 @@ public class MediaService extends Service implements
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setLights(0x000000FF, 300, 1000);
 
-        Logger.e(TAG, "builder.mActions.size(): " + builder.mActions.size());
+        Logger.e(TAG, "NOTIFICATION: builder.mActions.size(): " + builder.mActions.size());
         if (isPlaying) {
             startForeground(NOTIFICATION_ID, builder.build());
         } else {
@@ -438,7 +485,8 @@ public class MediaService extends Service implements
 
     public enum PlayType {
         POST,
-        PODCAST
+        PODCAST,
+        NONE
     }
 
     /*
@@ -451,11 +499,10 @@ public class MediaService extends Service implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_DISMISS)) {
-                stopPlayback();
+                stopPlayback(false);
                 sendBroadcast(new Intent(MyConstants.Media.ACTION_HIDE_MINI_PLAYER));
                 // TODO: 1/11/17 close mini player fragment here
                 stopForeground(true);
-//                stopSelf();
             } else if (intent.getAction().equals(ACTION_PAUSE_PLAY)) {
                 playPause();
             }
@@ -466,9 +513,5 @@ public class MediaService extends Service implements
         public MediaService getService() {
             return MediaService.this;
         }
-    }
-
-    public class MediaSessionCallback extends MediaSessionCompat.Callback {
-
     }
 }

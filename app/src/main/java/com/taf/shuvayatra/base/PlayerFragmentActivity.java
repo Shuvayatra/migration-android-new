@@ -52,6 +52,22 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
 
     public void togglePlayerFragment() {
         Logger.e(TAG + "_MethodCall", ">>> toggleFragment()");
+
+        Logger.e(TAG, ">>> service is null? " + String.valueOf(null == ((MyApplication)
+                getApplicationContext()).mService));
+
+        Logger.e(TAG, ">>> service is media valid: " + String.valueOf(((MyApplication)
+                getApplicationContext()).mService != null &&
+                ((MyApplication) getApplicationContext()).mService.isMediaValid()));
+
+        Logger.e(TAG, ">>> service is media playing: " + String.valueOf(((MyApplication)
+                getApplicationContext()).mService != null &&
+                ((MyApplication) getApplicationContext()).mService.isMediaPlaying()));
+
+        Logger.e(TAG, ">>> service current play type: " + String.valueOf(((MyApplication)
+                getApplicationContext()).mService != null ?
+                ((MyApplication) getApplicationContext()).mService.getCurrentPlayType() : false));
+
         playerFragment = (MiniPlayerFragment) getSupportFragmentManager().findFragmentByTag
                 (MiniPlayerFragment.TAG);
         if (showMiniPlayer()) {
@@ -90,6 +106,7 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     }
 
     public boolean isMediaPlayerVisible() {
+        Logger.e(TAG, ">>> media player visibility: " + mediaPlayerVisible);
         return mediaPlayerVisible;
     }
 
@@ -124,13 +141,13 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
 
     public boolean showMiniPlayer() {
         return alwaysShowPlayer() || ((MyApplication) getApplicationContext()).mService != null &&
-                ((MyApplication) getApplicationContext()).mService.isMediaValid();
+                ((MyApplication) getApplicationContext()).mService.getCurrentPlayType()
+                        != MediaService.PlayType.NONE;
     }
-
 
     @Override
     public void removePlayer() {
-        ((MyApplication) getApplicationContext()).mService.stopPlayback();
+        ((MyApplication) getApplicationContext()).mService.stopPlayback(false);
         if (playerFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .remove(playerFragment)

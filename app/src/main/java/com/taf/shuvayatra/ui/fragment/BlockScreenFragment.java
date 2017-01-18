@@ -16,12 +16,15 @@ import com.taf.model.ScreenDataModel;
 import com.taf.model.ScreenModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ScreenDataPresenter;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
+import com.taf.shuvayatra.util.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,6 +70,16 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     @Override
     public int getLayout() {
         return R.layout.item_empty_recycler_view;
+    }
+
+    @Override
+    public RecyclerView fragmentRecycler() {
+        return mRecyclerView;
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration initDecorator() {
+        return Utils.getBottomMarginDecoration(getContext(), R.dimen.mini_media_player_peek_height);
     }
 
     @Override
@@ -129,14 +142,14 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
     public void renderScreenData(ScreenDataModel model) {
         this.mScreenModel = model;
         List<BaseModel> data = new ArrayList<>();
-        if(model.getNotice() != null && !model.getNotice().getTitle().isEmpty()){
+        if (model.getNotice() != null && !model.getNotice().getTitle().isEmpty()) {
             Block block = new Block();
             block.setLayout("notice");
             block.setNotice(model.getNotice());
             data.add(0, block);
         }
-        Logger.e(TAG,"model: "+ model);
-        if(model.getData() != null) {
+        Logger.e(TAG, "model: " + model);
+        if (model.getData() != null) {
             data.addAll(model.getData());
         }
         mAdapter.setBlocks(data);

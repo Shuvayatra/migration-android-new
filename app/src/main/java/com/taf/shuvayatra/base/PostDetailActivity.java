@@ -207,7 +207,7 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         return true;
     }
 
-    private void finishWithResult() {
+    protected void finishWithResult() {
         Intent data = new Intent();
         if (mPost != null) {
             data.putExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS, mPost.isFavourite());
@@ -217,6 +217,10 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
             setResult(RESULT_CANCELED, data);
         }
         finish();
+    }
+
+    protected String getAMPShareURL() {
+        return mPost.getShareUrl().replace("feed", "amp");
     }
 
     protected void initialize() {
@@ -251,7 +255,8 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
                 mPost.getType());
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        startActivity(Utils.create(getPackageManager(), shareIntent, getString(R.string.share), getTargetPackagesForShare(), post));
+        startActivity(Utils.create(getPackageManager(), shareIntent, getString(R.string.share),
+                getTargetPackagesForShare(), post));
 
         return true;
     }
