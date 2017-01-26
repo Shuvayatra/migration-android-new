@@ -4,9 +4,7 @@ package com.taf.shuvayatra.ui.fragment;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -103,6 +101,7 @@ public class MiniPlayerFragment extends BaseFragment implements
         receiverFilter.addAction(MyConstants.Media.ACTION_PROGRESS_CHANGE);
         receiverFilter.addAction(MyConstants.Media.ACTION_MEDIA_COMPLETE);
         receiverFilter.addAction(MyConstants.Media.ACTION_HIDE_MINI_PLAYER);
+        receiverFilter.addAction(MyConstants.Media.ACTION_SHOW_PLAYER);
         getContext().registerReceiver(mediaReceiver, receiverFilter);
 
         updateView();
@@ -199,9 +198,10 @@ public class MiniPlayerFragment extends BaseFragment implements
 
     @Override
     public void onDismissPlayer() {
-        if (getView() != null) {
-            getView().setVisibility(View.GONE);
-        }
+        ((PlayerFragmentActivity) getActivity()).togglePlayerFragment();
+//        if (getView() != null) {
+//            getView().setVisibility(View.GONE);
+//        }
     }
 
     private void updateView() {

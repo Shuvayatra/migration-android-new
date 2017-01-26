@@ -1,5 +1,6 @@
 package com.taf.repository;
 
+import com.taf.interactor.UseCaseData;
 import com.taf.model.CountryWidgetData;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import rx.Observable;
  */
 
 public interface IWidgetComponentRepository {
-    Observable<CountryWidgetData.Component> getComponent(int type);
+    Observable<CountryWidgetData.Component> getComponent(int type, UseCaseData useCaseData);
 }

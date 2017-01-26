@@ -7,13 +7,22 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Telephony;
+import android.support.annotation.DimenRes;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.View;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
@@ -30,6 +39,51 @@ import static java.security.AccessController.getContext;
  * Created by julian on 12/17/15.
  */
 public class Utils {
+
+    public static RecyclerView.ItemDecoration getBottomMarginDecoration(final Context context,
+                                                                        @DimenRes final int padding) {
+        return new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.bottom = 0;
+                if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1) {
+                    outRect.bottom = context.getResources().getDimensionPixelOffset(padding);
+                }
+            }
+        };
+    }
+
+
+    public static RecyclerView.ItemDecoration getBottomMarginDecorationForGrid(final Context context,
+                                                                               @DimenRes final int padding) {
+        return new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.bottom = 0;
+                int position = parent.getChildAdapterPosition(view);
+                int size = parent.getAdapter().getItemCount();
+
+                // for second last item in adapter
+                if (position == size - 2) {
+                    GridLayoutManager manager = (GridLayoutManager) parent.getLayoutManager();
+                    GridLayoutManager.SpanSizeLookup lookup = manager.getSpanSizeLookup();
+
+                    int spanGroupIndex = lookup.getSpanGroupIndex(position, manager.getSpanCount());
+                    if (lookup.getSpanGroupIndex(size - 1, manager.getSpanCount()) == spanGroupIndex) {
+                        outRect.bottom = context.getResources().getDimensionPixelOffset(padding);
+                    }
+                }
+
+                // for last item in adapter
+                if (position == size - 1) {
+                    outRect.bottom = context.getResources().getDimensionPixelOffset(padding);
+                }
+            }
+        };
+    }
+
     public static ColorStateList getIconColorTint(int color, int checkedColor) {
         return new ColorStateList(
                 new int[][]{
@@ -67,14 +121,14 @@ public class Utils {
     }
 
     public static Intent create(PackageManager pm, Intent target, String title,
-                                List<String> whitelist, Post post) {
+                                List<String> packageList, Post post) {
         Intent dummy = new Intent(target.getAction());
         dummy.setType(target.getType());
         List<ResolveInfo> resInfo = pm.queryIntentActivities(dummy, 0);
 
         List<HashMap<String, String>> metaInfo = new ArrayList<>();
         for (ResolveInfo ri : resInfo) {
-            if (ri.activityInfo == null || !whitelist.contains(ri.activityInfo.packageName))
+            if (ri.activityInfo == null || !packageList.contains(ri.activityInfo.packageName))
                 continue;
 
             HashMap<String, String> info = new HashMap<>();
@@ -108,7 +162,8 @@ public class Utils {
             targetedShareIntent.setClassName(mi.get("packageName"), mi.get("className"));
             targetedShareIntent.setType("text/plain");
             targetedShareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, post.getTitle());
-            targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, post.getShareUrl());
+            targetedShareIntent.putExtra(android.content.Intent.EXTRA_TEXT, post.getShareUrl()
+                    .replace("://app", "://amp"));
             targetedIntents.add(targetedShareIntent);
         }
 
@@ -119,6 +174,8 @@ public class Utils {
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedIntentsParcelable);
         return chooserIntent;
     }
+
+    private static final String TAG = "Utils";
 
     @Nullable
     public static String getDefaultSmsAppPackageName(@NonNull Context context) {

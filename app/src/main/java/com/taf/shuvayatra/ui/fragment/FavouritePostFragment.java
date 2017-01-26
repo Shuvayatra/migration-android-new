@@ -14,6 +14,7 @@ import com.taf.model.UserInfoModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.UserAccountPresenter;
@@ -24,6 +25,7 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.UserAccountView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import butterknife.BindView;
  * Created by umesh on 1/12/17.
  */
 
-public class FavouritePostFragment extends BaseFragment implements UserAccountView, ListItemClickListener, SwipeRefreshLayout.OnRefreshListener  {
+public class FavouritePostFragment extends BaseFragment implements UserAccountView, ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "FavouritePostFragment";
     private static final int REQUEST_CODE_POST_DETAIL = 1001;
@@ -90,6 +92,9 @@ public class FavouritePostFragment extends BaseFragment implements UserAccountVi
     private void setUpAdapter() {
         mAdapter = new ListAdapter<>(getContext(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (((PlayerFragmentActivity) getActivity()).isMediaPlayerVisible())
+            mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getContext(),
+                    R.dimen.mini_media_player_peek_height));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
     }

@@ -112,6 +112,11 @@ public class HomeActivity extends MediaServiceActivity implements
         unregisterReceiver(mRadioCallbackReceiver);
     }
 
+    public void startScreenRequest() {
+        if(homeActivityPresenter != null)
+            homeActivityPresenter.initialize(getUserCredentialsUseCase());
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +137,7 @@ public class HomeActivity extends MediaServiceActivity implements
             processMenu(screens);
         } else {
             selectedNavMenuId = R.id.nav_home;
-            homeActivityPresenter.initialize(getUserCredentialsUseCase());
+            startScreenRequest();
         }
 
         showFragment(selectedNavMenuId);
@@ -267,15 +272,6 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, HomeFragment.TAG)
                         .commit();
                 break;
-//            case R.id.nav_journey:
-//                fragment = getSupportFragmentManager().findFragmentByTag(JourneyFragment.TAG);
-//                if (fragment == null) {
-//                    fragment = JourneyFragment.getInstance();
-//                }
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.content_home, fragment, JourneyFragment.TAG)
-//                        .commit();
-//                break;
             case R.id.nav_radio:
                 fragment = getSupportFragmentManager().findFragmentByTag(ChannelFragment.TAG);
                 if (fragment == null) {
@@ -294,15 +290,6 @@ public class HomeActivity extends MediaServiceActivity implements
                         .replace(R.id.content_home, fragment, DestinationFragment.TAG)
                         .commit();
                 break;
-//            case R.id.nav_news:
-//                fragment = getSupportFragmentManager().findFragmentByTag(NewsFragment.TAG);
-//                if (fragment == null) {
-//                    fragment = NewsFragment.newInstance();
-//                }
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.content_home, fragment, NewsFragment.TAG)
-//                        .commit();
-//                break;
             case R.id.nav_account:
                 fragment = getSupportFragmentManager().findFragmentByTag(UserAccountFragment.TAG);
                 if (fragment == null) {

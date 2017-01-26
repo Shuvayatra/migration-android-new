@@ -16,6 +16,8 @@ public class UseCaseData implements Serializable {
     public static final String DOWNLOAD_STATUS = "download_status";
     public static final String EXCLUDE_LIST = "exclude_list";
     public static final String CACHED_DATA = "cached_data";
+    public static final String CALENDAR_INSTANCE = "calendar_instance";
+    public static final String COUNTRY_CODE = "country_code";
     public static final String SUBMISSION_DATA = "submission_data";
 
     public static final String IS_SEARCH = "is_seearch";

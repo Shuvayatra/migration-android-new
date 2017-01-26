@@ -3,6 +3,7 @@ package com.taf.shuvayatra.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.taf.model.Country;
 import com.taf.shuvayatra.R;
 import com.taf.util.MyConstants;
 
+import java.util.Locale;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -19,12 +22,53 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
 
     public Unbinder mUnbinder;
 
+    private RecyclerView.ItemDecoration itemDecoration;
+
     public abstract int getLayout();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    public RecyclerView fragmentRecycler() {
+        return null;
+    }
+
+    public RecyclerView.ItemDecoration itemDecoration() {
+        if (itemDecoration == null)
+            itemDecoration = initDecorator();
+        return itemDecoration;
+    }
+
+    public RecyclerView.ItemDecoration initDecorator() {
+        return null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // set default locale to english
+        Locale.setDefault(Locale.ENGLISH);
+        if (shouldAddOrRemoveDecoration()) {
+            if (((PlayerFragmentActivity) getActivity()).isMediaPlayerVisible()) {
+                fragmentRecycler().addItemDecoration(itemDecoration());
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (shouldAddOrRemoveDecoration()) {
+            if (itemDecoration != null)
+                fragmentRecycler().removeItemDecoration(itemDecoration);
+        }
+    }
+
+    public boolean shouldAddOrRemoveDecoration() {
+        return fragmentRecycler() != null && getActivity() instanceof PlayerFragmentActivity;
     }
 
     public UseCaseData getUserCredentialsUseCase() {

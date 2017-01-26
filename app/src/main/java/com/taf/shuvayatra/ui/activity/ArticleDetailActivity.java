@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.taf.model.BaseModel;
@@ -35,7 +36,7 @@ public class ArticleDetailActivity extends PostDetailActivity implements
     @BindView(R.id.similar_story_list)
     EmptyStateRecyclerView mEmptyStateRecyclerView;
     @BindView(R.id.empty_view)
-    RelativeLayout mEmptyView;
+    View mEmptyView;
 
     @Override
     public int getLayout() {

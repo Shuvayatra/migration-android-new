@@ -29,6 +29,6 @@ public class GetWidgetComponentUseCase extends UseCase<CountryWidgetData.Compone
 
     @Override
     protected Observable<CountryWidgetData.Component> buildUseCaseObservable(UseCaseData pData) {
-        return mWidgetRepository.getComponent(pData.getInteger(UseCaseData.COMPONENT_TYPE));
+        return mWidgetRepository.getComponent(pData.getInteger(UseCaseData.COMPONENT_TYPE), pData);
     }
 }

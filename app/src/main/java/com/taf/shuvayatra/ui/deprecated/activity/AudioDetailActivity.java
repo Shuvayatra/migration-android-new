@@ -108,7 +108,7 @@ public class AudioDetailActivity extends FacebookActivity implements
             MediaService.MusicBinder binder = (MediaService.MusicBinder) service;
             mService = binder.getService();
             mService.setTrack(mAudio);
-            mService.startStreaming();
+            mService.startStreaming(true);
             mMusicBound = true;
         }
 
@@ -162,7 +162,7 @@ public class AudioDetailActivity extends FacebookActivity implements
 
     @Override
     protected void onDestroy() {
-        mService.stopPlayback();
+        mService.stopPlayback(false);
         stopService(mPlayIntent);
         // Unbind from the service
         if (mMusicBound) {
@@ -419,7 +419,7 @@ public class AudioDetailActivity extends FacebookActivity implements
         mSimilarPresenter.initialize(new UseCaseData());
 
         mService.setTrack(mAudio);
-        mService.startStreaming();
+        mService.startStreaming(true);
     }
 
     @Override

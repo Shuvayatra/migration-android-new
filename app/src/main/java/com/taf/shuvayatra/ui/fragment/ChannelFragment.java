@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -14,12 +15,15 @@ import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ChannelListPresenter;
+import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.ChannelAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ChannelView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -64,6 +68,17 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
     }
 
     @Override
+    public RecyclerView fragmentRecycler() {
+        return mRecyclerView;
+    }
+
+    @Override
+    public RecyclerView.ItemDecoration initDecorator() {
+        return Utils.getBottomMarginDecorationForGrid(getContext(),
+                R.dimen.mini_media_player_peek_height);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -96,7 +111,6 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
                 return 2;
             }
         });
-
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);

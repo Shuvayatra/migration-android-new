@@ -6,6 +6,7 @@ import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.data.utils.AppPreferences;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
+import com.taf.interactor.UseCaseData;
 import com.taf.model.CountryWidgetData;
 import com.taf.repository.IWidgetComponentRepository;
 
@@ -33,12 +34,13 @@ public class ComponentRepository implements IWidgetComponentRepository {
     }
 
     @Override
-    public Observable<CountryWidgetData.Component> getComponent(int type) {
+    public Observable<CountryWidgetData.Component> getComponent(int type, UseCaseData data) {
         switch (type) {
             case CountryWidgetData.COMPONENT_CALENDAR:
                 Logger.e(TAG, ">>> component calendar");
                 CountryWidgetData.CalendarComponent component = new CountryWidgetData.CalendarComponent();
-                Calendar today = Calendar.getInstance();
+                Calendar today = data.getSerializable(UseCaseData.CALENDAR_INSTANCE) == null ? Calendar.getInstance() :
+                        (Calendar) data.getSerializable(UseCaseData.CALENDAR_INSTANCE);
                 String nepaliDate = new DateUtils.NepaliDateConverter().englishToNepali(today);
                 component.setToday(today);
                 component.setNepaliDate(nepaliDate);
@@ -52,9 +54,9 @@ public class ComponentRepository implements IWidgetComponentRepository {
                         .map(jsonElement -> mDataMapper.transformForexInfo(jsonElement));
 
             case CountryWidgetData.COMPONENT_WEATHER:
-                Logger.e(TAG, ">>> component " + type);
+                String location = data.getString(UseCaseData.COUNTRY_CODE);
                 return mDataStoreFactory.createRestDataStore(BuildConfig.OPEN_WEATHER_URL)
-                        .getWeatherInfo(mAppPreferences.getLocation(), unit)
+                        .getWeatherInfo(location, unit)
                         .map(jsonElement -> mDataMapper.transformWeatherInfo(jsonElement));
         }
         return null;
