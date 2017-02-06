@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -119,6 +120,11 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
+        // WIP set animation time to zero for flickering but didnot work
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
+        mRecyclerView.getItemAnimator().setAddDuration(0);
+        mRecyclerView.getItemAnimator().setRemoveDuration(0);
+        mRecyclerView.getItemAnimator().setMoveDuration(0);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.taf.data.utils.Logger;
@@ -53,6 +56,8 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;
+    @BindView(R.id.searchbox_container)
+    LinearLayout mSearchBox;
 
     BlocksAdapter mAdapter;
     Country mCountry;
@@ -89,6 +94,16 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mCountry.getTitle());
         initialize();
+
+        mSearchBox
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                    }
+                });
     }
 
     @Override

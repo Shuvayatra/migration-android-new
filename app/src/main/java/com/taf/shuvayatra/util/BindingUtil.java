@@ -98,11 +98,11 @@ public class BindingUtil {
                 @Override
                 public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
 
-                    Logger.e(TAG,"ratio: "+ ratio);
-                    Logger.e(TAG,"width: "+ width);
+//                    Logger.e(TAG,"ratio: "+ ratio);
+//                    Logger.e(TAG,"width: "+ width);
                     pView.getLayoutParams().height = (int) (width *ratio);
 
-                    Logger.e(TAG,"pView.getLayoutParams().height: "+ pView.getLayoutParams().height);
+//                    Logger.e(TAG,"pView.getLayoutParams().height: "+ pView.getLayoutParams().height);
                     pView.requestLayout();
                 }
             };
