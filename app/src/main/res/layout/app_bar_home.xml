@@ -6,53 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.taf.shuvayatra.ui.activity.HomeActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/spacing_xsmall"
-            android:layout_marginBottom="@dimen/spacing_small"
-            app:cardElevation="4dp">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/white"
-                android:theme="@style/Theme.AppCompat.Light"
-                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
-
-                <LinearLayout
-                    android:id="@+id/searchbox_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textview_search"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:hint="Search" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:paddingLeft="@dimen/spacing_xxsmall"
-                        android:paddingRight="@dimen/spacing_standard"
-                        app:srcCompat="@drawable/ic_search" />
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
-        </android.support.v7.widget.CardView>
-    </android.support.design.widget.AppBarLayout>
+  <include layout="@layout/toolbar"/>
 
     <include layout="@layout/content_home" />
 

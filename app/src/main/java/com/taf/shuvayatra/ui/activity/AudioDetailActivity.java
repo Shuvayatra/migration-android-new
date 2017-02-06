@@ -309,26 +309,30 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.action_download:
-                try {
-                    if (!getPreferences().getDownloadReferences().contains(mPost.getDownloadReference())) {
-                        requestForPermissions();
-                    }
-                } catch (IOException e) {
-                    Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
-                            .getLocalizedMessage());
-                }
-                break;
-            case SUBMENU_BLUETOOTH:
-                shareViaBluetooth();
-                break;
-            case SUBMENU_FACEBOOK:
-                share(mPost);
-                break;
+        if(mPost!=null) {
 
+            switch (item.getItemId()) {
+                case R.id.action_download:
+                    try {
+                        if (!getPreferences().getDownloadReferences().contains(mPost.getDownloadReference())) {
+                            requestForPermissions();
+                        }
+                    } catch (IOException e) {
+                        Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
+                                .getLocalizedMessage());
+                    }
+                    break;
+                case SUBMENU_BLUETOOTH:
+                    shareViaBluetooth();
+                    break;
+                case SUBMENU_FACEBOOK:
+                    share(mPost);
+                    break;
+
+            }
         }
-        return true;
+        return false;
+
     }
 
     @Override

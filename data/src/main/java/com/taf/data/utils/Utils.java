@@ -31,7 +31,7 @@ public class Utils {
             Comparator<Block> comparator = new Comparator<Block>() {
                 @Override
                 public int compare(Block block, Block block2) {
-                    return block2.getPosition() - block.getPosition();
+                    return block.getPosition() - block2.getPosition();
                 }
             };
             Collections.sort(blocks, comparator);

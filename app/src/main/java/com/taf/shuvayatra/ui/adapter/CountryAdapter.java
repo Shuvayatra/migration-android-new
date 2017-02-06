@@ -55,11 +55,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             case MyConstants.Adapter.TYPE_COUNTRY_SELECTED:
                 binding = DataBindingUtil.inflate(mLayoutInflater,
                         R.layout.item_country_list_selected, parent, false);
-                return new ViewHolder(binding);
+                return new ViewHolder<>(binding);
             case MyConstants.Adapter.TYPE_COUNTRY_HEADER:
                 binding = DataBindingUtil.inflate(mLayoutInflater,
                         R.layout.item_country_header, parent, false);
-                return new ViewHolder(binding);
+                return new ViewHolder<>(binding);
         }
         return null;
     }
