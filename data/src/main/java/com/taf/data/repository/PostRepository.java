@@ -26,11 +26,11 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams) {
+    public Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams, long id) {
 
 
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
-                .getPosts(feedType, limit, offset, filterParams)
+                .getPosts(feedType, limit, offset, filterParams, id)
                 .map(responseEntity -> mDataMapper.transformPostResponse(responseEntity));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()

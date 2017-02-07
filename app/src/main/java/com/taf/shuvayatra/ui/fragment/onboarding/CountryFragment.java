@@ -1,8 +1,13 @@
 package com.taf.shuvayatra.ui.fragment.onboarding;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -51,12 +56,22 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
 
     List<String> dataList;
 
+    public BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            List<Country> countries = (List<Country>) intent.getSerializableExtra(MyConstants.OnBoarding.INTENT_COUNTRY);
+            renderCountries(countries);
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(this);
+        }
+    };
+
     public static CountryFragment newInstance(OnBoardQuestionAdapter.ButtonPressListener listener) {
         CountryFragment fragment = new CountryFragment();
         fragment.mButtonListener = listener;
         fragment.setRetainInstance(true);
         return fragment;
     }
+
 
     @Override
     public int getLayout() {
@@ -66,6 +81,10 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        LocalBroadcastManager.getInstance(getContext())
+                .registerReceiver(mBroadcastReceiver,
+                        new IntentFilter(MyConstants.OnBoarding.INTENT_ACTION_REFRESH_COUNTRIES));
+
         initialize();
     }
 
@@ -75,9 +94,9 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .build().inject(this);
         presenter.attachView(this);
-        UseCaseData metaData = new UseCaseData();
-        metaData.putBoolean(UseCaseData.CACHED_DATA, true);
-        presenter.initialize(metaData);
+//        UseCaseData metaData = new UseCaseData();
+//        metaData.putBoolean(UseCaseData.CACHED_DATA, true);
+//        presenter.initialize(metaData);
     }
 
     @OnClick(R.id.button_back)
@@ -99,6 +118,10 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void renderCountries(List<Country> countryList) {
@@ -160,4 +183,9 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
         // do nothing
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mBroadcastReceiver);
+    }
 }

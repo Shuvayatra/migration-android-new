@@ -8,6 +8,7 @@ public class MyConstants {
     public static final String YOUTUBE_API_KEY = "AIzaSyAbqEgRif7zCL7R_OoK0rJK1Cc2LzOTWVE";
     public static final int APP_CACHE_VERSION = 1;
     public static final long MAX_CACHE_SIZE = Long.MAX_VALUE;
+    public static final int UPDATE_HOUR_OFFSET = 2;
 
     public enum DataParent {
         COUNTRY,
@@ -109,6 +110,9 @@ public class MyConstants {
         public static final String NOTICE_DISMISS_ID = "home-notice-dismiss-id";
         public static final String COUNTRY_NOTICE_DISMISS_ID = "country-notice-dismiss-id";
         public static final String LAST_TRACK = "last_track";
+
+        public static final String LAST_FOREX_UPDATE = "last-forex-update";
+        public static final String LAST_WEATHER_UPDATE = "last-weather-update";
     }
 
     public static final class Language {
@@ -247,11 +251,14 @@ public class MyConstants {
     public static class OnBoarding {
 
         public static final int USERNAME = 0;
-        public static final int BIRTHDAY = 1;
+        public static final int BIRTHDAY = 3;
         public static final int GENDER = 2;
-        public static final int ORIGINAL_LOCATION = 3;
-        public static final int WORK_STATUS = 4;
-        public static final int PREFERRED_DESTINATION = 5;
+        public static final int ORIGINAL_LOCATION = 4;
+        public static final int WORK_STATUS = 5;
+        public static final int PREFERRED_DESTINATION = 1;
+
+        public static final String INTENT_ACTION_REFRESH_COUNTRIES = "refresh-countries";
+        public static final String INTENT_COUNTRY = "countries";
     }
 
     public static final class WEATHER {

@@ -1,6 +1,8 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -41,6 +43,7 @@ import com.taf.shuvayatra.ui.views.AudioPlayerView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,9 +121,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-
-        Logger.e(TAG, ">>> onOffsetChanged(): " + verticalOffset);
-        Logger.e(TAG, ">>> total scroll range: " + appBarLayout.getTotalScrollRange());
 
         if (appBarLayout.getTotalScrollRange() == Math.abs(verticalOffset)) {
             if (mainPost != null && getToolbar().getTitle() == null)
@@ -261,6 +261,30 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    public void showDeleteDialog(final File file) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setMessage(getString(R.string.message_delete_warn, mPost.getTitle()))
+                .setPositiveButton(R.string.action_confirmed, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(file.delete()) {
+                            Snackbar.make(mScrollView, getString(R.string.message_deleted, mPost.getTitle()), Snackbar.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+
+                    }
+                })
+                .setNegativeButton(R.string.action_denied, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
+    }
+
+    @Override
     public void updateView(Post post) {
         mainPost = post;
         if (((MyApplication) getApplicationContext()).mService != null) {
@@ -321,6 +345,9 @@ public class AudioDetailActivity extends PostDetailActivity implements
                         Logger.e("AudioDetailActivity_onOptionsItemSelected", "errorMessage: " + e
                                 .getLocalizedMessage());
                     }
+                    break;
+                case R.id.action_delete:
+                    mPresenter.deleteAudio(mPost);
                     break;
                 case SUBMENU_BLUETOOTH:
                     shareViaBluetooth();

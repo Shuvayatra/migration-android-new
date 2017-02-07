@@ -13,14 +13,17 @@ public class GetPostListUseCase extends UseCase<PostResponse> {
 
     private final IPostRepository mRepository;
     private final String mFilterParams;
+    long mId;
 
     @Inject
-    public GetPostListUseCase(String filterParams, IPostRepository pRepository,
+    public GetPostListUseCase(long id,
+                              String filterParams, IPostRepository pRepository,
                               ThreadExecutor pThreadExecutor, PostExecutionThread
                                       pPostExecutionThread) {
         super(pThreadExecutor, pPostExecutionThread);
         mRepository = pRepository;
         mFilterParams = filterParams;
+        mId = id;
     }
 
     @Override
@@ -34,6 +37,6 @@ public class GetPostListUseCase extends UseCase<PostResponse> {
             feedType = pData.getInteger(UseCaseData.CONTENT_TYPE, 0);
         }
 
-        return mRepository.getList(feedType, limit, offset, mFilterParams);
+        return mRepository.getList(feedType, limit, offset, mFilterParams, mId);
     }
 }

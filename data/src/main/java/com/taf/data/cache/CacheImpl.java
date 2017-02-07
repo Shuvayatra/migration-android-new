@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
@@ -48,6 +51,8 @@ public class CacheImpl {
     public static final String FAVOURITE_POST = "favourite-post";
     public static final String SCREENS = "screens";
     public static final String SCREEN_DATA = "screen-data";
+    public static final String FOREX = "forex";
+    public static final String WEATHER = "weather";
 
     private SimpleDiskCache mSimpleDiskCache;
 
@@ -194,9 +199,9 @@ public class CacheImpl {
             suffix = params.replaceAll(",", "-");
         if (append) {
             Logger.d("CacheImpl_savePosts", "append");
-            appendPosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix, entities);
+            appendPosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix, entities);
         } else {
-            savePosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix, entities);
+            savePosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix, entities);
         }
     }
 
@@ -223,10 +228,11 @@ public class CacheImpl {
     }
 
     public Observable<List<PostEntity>> getPostsByParams(int feedType, String params) {
+        Logger.e(TAG,"params: "+ params);
         String suffix = "";
         if (params != null)
             suffix = params.replaceAll(",", "-");
-        return Observable.just(getPosts(feedType == 0 ? POST_LIST_PREFIX : NEWS_BLOCKS + suffix));
+        return Observable.just(getPosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix));
     }
 
     public void savePosts(String key, List<PostEntity> posts) {
@@ -244,6 +250,7 @@ public class CacheImpl {
     }
 
     public List<PostEntity> getPosts(String key) {
+        Logger.e(TAG,"key: "+ key);
         List<PostEntity> posts = new ArrayList<>();
         try {
             if (mSimpleDiskCache.contains(key)) {
@@ -500,6 +507,48 @@ public class CacheImpl {
         }
 
         return infoEntity;
+    }
+
+    public void saveForex(JsonElement jsonElement){
+        try {
+            mSimpleDiskCache.put(FOREX, jsonElement.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JsonElement getForex(){
+        JsonElement jsonElement = null;
+        if(mSimpleDiskCache.contains(FOREX)){
+            try {
+                JsonParser jsonParser = new JsonParser();
+                jsonElement = jsonParser.parse(mSimpleDiskCache.getCachedString(FOREX).getValue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonElement;
+    }
+
+    public void saveWeather(JsonElement weather){
+        try {
+            mSimpleDiskCache.put(WEATHER, weather.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JsonElement getWeather(){
+        JsonElement jsonElement = null;
+        if(mSimpleDiskCache.contains(WEATHER)){
+            try {
+                JsonParser jsonParser = new JsonParser();
+                jsonElement = jsonParser.parse(mSimpleDiskCache.getCachedString(WEATHER).getValue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonElement;
     }
 
 }

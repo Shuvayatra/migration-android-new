@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,14 +29,22 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PostListView;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import retrofit2.http.POST;
 
 public class FeedActivity extends PlayerFragmentActivity implements
         ListItemClickListener,
         PostListView,
         SwipeRefreshLayout.OnRefreshListener {
+
+    public static final String TAG = "FeedActivity";
+    public static final String STATE_POST_LIST = "post-list";
 
     public static final Integer PAGE_LIMIT = 15;
     public static final Integer INITIAL_OFFSET = 1;
@@ -59,6 +68,7 @@ public class FeedActivity extends PlayerFragmentActivity implements
     int listItemSelection;
     boolean mIsLoading = false;
     boolean mIsLastPage = false;
+    long mId;
 
     @Override
     public int getLayout() {
@@ -71,17 +81,24 @@ public class FeedActivity extends PlayerFragmentActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String title = getIntent().getStringExtra("title");
         if (title != null) getSupportActionBar().setTitle(title);
-
+        long id = getIntent().getLongExtra("id",Long.MIN_VALUE);
         Uri data = getIntent().getData();
         String params = null;
         if (data != null) {
             params = data.getQueryParameter("category_id");
         }
 
-        initialize(params);
+        initialize(id,params);
         setUpAdapter();
-
-        loadPostsList(INITIAL_OFFSET);
+        List<Post> posts = new ArrayList<>();
+        if(savedInstanceState != null){
+            posts = (List<Post>) savedInstanceState.getSerializable(STATE_POST_LIST);
+        }
+        if(posts.isEmpty()) {
+            loadPostsList(INITIAL_OFFSET);
+        } else {
+            mListAdapter.setDataCollection(posts);
+        }
     }
 
     @Override
@@ -92,9 +109,9 @@ public class FeedActivity extends PlayerFragmentActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void initialize(String params) {
+    private void initialize(long id, String params) {
         DaggerDataComponent.builder()
-                .dataModule(new DataModule(params))
+                .dataModule(new DataModule(id,params))
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
                 .build()
@@ -230,5 +247,12 @@ public class FeedActivity extends PlayerFragmentActivity implements
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(STATE_POST_LIST, (Serializable) mListAdapter.getDataCollection());
+        Logger.e(TAG,"saveInstanceState mListAdapter.getDataCollection().size(): "+ mListAdapter.getDataCollection().size());
+        super.onSaveInstanceState(outState);
     }
 }

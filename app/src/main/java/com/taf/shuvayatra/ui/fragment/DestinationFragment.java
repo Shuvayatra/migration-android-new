@@ -104,6 +104,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
         mPresenter.initialize(null);
 
         mAdapter = new CountryAdapter(getContext());
+        mAdapter.setHasStableIds(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -162,7 +163,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
                 HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
                 headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
-
+                headerItem.setId(0l);
                 if (!allList.isEmpty()) {
                     allList.add(0, headerItem);
                 }
@@ -178,6 +179,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
                     }
                     HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
                     headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
+                    headerItem.setId(0l);
                     allList.add(1, headerItem);
                 }
             }

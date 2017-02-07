@@ -82,7 +82,8 @@ public interface ApiService {
     @GET(MyConstants.API.POSTS)
     Observable<PostResponseEntity> getPosts(@Query("per_page") int limit,
                                             @Query("page") int offset,
-                                            @Query("category_id") String params);
+                                            @Query("category_id") String params,
+                                            @Query("block_id") long blockId);
 
     @GET(MyConstants.API.POST)
     Observable<PostEntity> getPost(@Path("id") Long id);

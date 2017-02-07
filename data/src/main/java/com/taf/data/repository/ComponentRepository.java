@@ -1,5 +1,6 @@
 package com.taf.data.repository;
 
+
 import com.taf.data.BuildConfig;
 import com.taf.data.entity.mapper.DataMapper;
 import com.taf.data.repository.datasource.DataStoreFactory;
@@ -48,16 +49,39 @@ public class ComponentRepository implements IWidgetComponentRepository {
                 return Observable.just(component);
             case CountryWidgetData.COMPONENT_FOREX:
                 // create base url here
-
-                return mDataStoreFactory.createRestDataStore(BuildConfig.HAMRO_PATRO_URL)
-                        .getForexInfo()
-                        .map(jsonElement -> mDataMapper.transformForexInfo(jsonElement));
+                long lastForexUpdatedTime = mAppPreferences.getLastForexUpdatedTime();
+                Logger.e(TAG,"component lastForexUpdatedTime: "+ lastForexUpdatedTime);
+                if(lastForexUpdatedTime == Long.MIN_VALUE ||
+                        (lastForexUpdatedTime + android.text.format.DateUtils.HOUR_IN_MILLIS * 2)< System.currentTimeMillis()) {
+                    return mDataStoreFactory.createRestDataStore(BuildConfig.HAMRO_PATRO_URL)
+                            .getForexInfo()
+                            .doOnNext(jsonElement -> {
+                                mAppPreferences.saveLastForexUpdate(System.currentTimeMillis());
+                            })
+                            .map(jsonElement -> mDataMapper.transformForexInfo(jsonElement));
+                } else {
+                    return mDataStoreFactory.createCacheDataStore()
+                            .getForex()
+                            .map(jsonElement -> mDataMapper.transformForexInfo(jsonElement));
+                }
 
             case CountryWidgetData.COMPONENT_WEATHER:
-                String location = data.getString(UseCaseData.COUNTRY_CODE);
-                return mDataStoreFactory.createRestDataStore(BuildConfig.OPEN_WEATHER_URL)
-                        .getWeatherInfo(location, unit)
-                        .map(jsonElement -> mDataMapper.transformWeatherInfo(jsonElement));
+
+                long lastWeatherUpdatedTime = mAppPreferences.getLastWeatherUpdatedTime();
+                Logger.e(TAG,"component lastWeatherUpdatedTime: "+ lastWeatherUpdatedTime);
+                if(lastWeatherUpdatedTime == Long.MIN_VALUE ||
+                        (lastWeatherUpdatedTime + android.text.format.DateUtils.HOUR_IN_MILLIS * 2)< System.currentTimeMillis()) {
+
+                    String location = data.getString(UseCaseData.COUNTRY_CODE);
+                    return mDataStoreFactory.createRestDataStore(BuildConfig.OPEN_WEATHER_URL)
+                            .getWeatherInfo(location, unit)
+                            .doOnNext(jsonElement -> mAppPreferences.saveLastWeatherUpdate(System.currentTimeMillis()))
+                            .map(jsonElement -> mDataMapper.transformWeatherInfo(jsonElement));
+                } else {
+                    return mDataStoreFactory.createCacheDataStore()
+                            .getWeather()
+                            .map(jsonElement -> mDataMapper.transformWeatherInfo(jsonElement));
+                }
         }
         return null;
     }

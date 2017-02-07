@@ -1,8 +1,12 @@
 package com.taf.shuvayatra.presenter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -92,6 +96,20 @@ public class AudioOperationsPresenter implements Presenter {
             mView.onAudioDownloadStarted(mView.getContext().getString(R.string
                     .message_already_downloaded, pAudio.getTitle()));
         }
+    }
+
+    public void deleteAudio(Post audio){
+        String mediaUrl = audio.getData().getMediaUrl().replace(" ", "%20");
+        String fileName = mediaUrl.substring(mediaUrl.lastIndexOf("/") + 1).replace("%20", " ");
+        final File audioFile = getAudioFile(fileName);
+
+        if(audioFile.exists()){
+            mView.showDeleteDialog(audioFile);
+
+        } else {
+            mView.onAudioDownloadStarted(mView.getContext().getString(R.string.message_deleted_not_available));
+        }
+
     }
 
     public void shareViaBluetooth(Post pAudio) {

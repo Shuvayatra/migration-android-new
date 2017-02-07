@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -30,11 +33,13 @@ import com.taf.shuvayatra.presenter.OnBoardingPresenter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
 import com.taf.shuvayatra.ui.fragment.UserInfoFragment;
 import com.taf.shuvayatra.ui.fragment.onboarding.AbroadQuestionFragment;
+import com.taf.shuvayatra.ui.fragment.onboarding.CountryFragment;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.shuvayatra.ui.views.OnBoardingView;
 import com.taf.shuvayatra.ui.views.SwipeDisabledPager;
 import com.taf.util.MyConstants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -194,7 +199,9 @@ public class OnBoardActivity extends BaseActivity implements
                 countries.add(String.valueOf(country.getId()) + "," + country.getTitle());
             }
             getPreferences().updateCountryListCallStatus(true);
-
+            Intent intent = new Intent(MyConstants.OnBoarding.INTENT_ACTION_REFRESH_COUNTRIES);
+            intent.putExtra(MyConstants.OnBoarding.INTENT_COUNTRY, (Serializable) countryList);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
             // update fragment if created
             if (((OnBoardQuestionAdapter) mQuestionPager.getAdapter()).getFragment(MyConstants.OnBoarding.WORK_STATUS) != null) {
 //                ((AbroadQuestionFragment) ((OnBoardQuestionAdapter) mQuestionPager.getAdapter())

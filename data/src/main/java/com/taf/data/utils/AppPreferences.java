@@ -189,4 +189,20 @@ public class AppPreferences {
         ArrayList<String> dismissIds = getNoticeDismissId();
         dismissIds.add(String.valueOf(id));
         pref.edit().putStringSet(NOTICE_DISMISS_ID, new HashSet<>(dismissIds)).commit();    }
+
+    public void saveLastForexUpdate(long time){
+        pref.edit().putLong(MyConstants.Preferences.LAST_FOREX_UPDATE, time).commit();
+    }
+
+    public void saveLastWeatherUpdate(long time){
+        pref.edit().putLong(MyConstants.Preferences.LAST_WEATHER_UPDATE, time).commit();
+    }
+
+    public long getLastForexUpdatedTime(){
+        return pref.getLong(MyConstants.Preferences.LAST_FOREX_UPDATE, Long.MIN_VALUE);
+    }
+
+    public long getLastWeatherUpdatedTime(){
+        return pref.getLong(MyConstants.Preferences.LAST_WEATHER_UPDATE, Long.MIN_VALUE);
+    }
 }

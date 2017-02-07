@@ -139,12 +139,18 @@ public class BlockScreenFragment extends BaseFragment implements ScreenDataView,
 
     @Override
     public void renderScreenData(ScreenDataModel model) {
-        this.mScreenModel = model;
-        List<BaseModel> dataList = new ArrayList<>();
-        dataList.addAll(model.getData());
-        if (model.getNotice() != null)
-            dataList.add(Notice.convertToBlock(model.getNotice()));
-        mAdapter.setBlocks(Utils.sortBlock(dataList));
+        if(model != null) {
+            this.mScreenModel = model;
+            if(model.getData()!= null && !model.getData().isEmpty()) {
+                List<BaseModel> dataList = new ArrayList<>();
+
+                dataList.addAll(model.getData());
+                if (model.getNotice() != null)
+                    dataList.add(Notice.convertToBlock(model.getNotice()));
+
+                mAdapter.setBlocks(Utils.sortBlock(dataList));
+            }
+        }
     }
 
     @Override

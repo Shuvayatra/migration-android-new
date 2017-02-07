@@ -3,21 +3,27 @@ package com.taf.shuvayatra.receivers;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.widget.Toast;
 
 import com.taf.data.utils.AppPreferences;
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.ui.views.MvpView;
+
+import java.io.FileNotFoundException;
 
 public class DownloadStateReceiver extends BroadcastReceiver implements MvpView {
     DownloadManager mDownloadManager;
     AppPreferences pref;
     Context mContext;
-
+    public static final String TAG = "DownloadStateReceiver";
 //    @Inject
 //    DownloadCompletePresenter mPresenter;
 
@@ -66,8 +72,8 @@ public class DownloadStateReceiver extends BroadcastReceiver implements MvpView 
         try {
             int status = pCursor.getInt(pCursor.getColumnIndex(DownloadManager.COLUMN_STATUS));
             int reason = pCursor.getInt(pCursor.getColumnIndex(DownloadManager.COLUMN_REASON));
-            String filePath = pCursor.getString(pCursor.getColumnIndex(DownloadManager
-                    .COLUMN_LOCAL_FILENAME));
+            String uri = pCursor.getString(pCursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            String filePath =Uri.parse(uri).getPath();
 
             switch (status) {
                 case DownloadManager.STATUS_SUCCESSFUL:

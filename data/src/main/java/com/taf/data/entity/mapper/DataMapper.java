@@ -85,7 +85,7 @@ public class DataMapper {
         List<Post> postList = new ArrayList<>();
         if (pEntities != null) {
             for (PostEntity entity : pEntities) {
-                Log.e(TAG, "transformPost: " + entity);
+//                Log.e(TAG, "transformPost: " + entity);
                 Post post = transformPost(entity);
                 if (post != null)
                     postList.add(post);
@@ -390,10 +390,11 @@ public class DataMapper {
     }
 
     public Block transformBlockEntity(BlockEntity entity) {
-        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         Logger.e(TAG, entity.toString());
         if (entity != null) {
             Block block = new Block();
+            block.setId(entity.getId());
             block.setPosition(entity.getPosition());
             block.setTitle(entity.getTitle());
             block.setDescription(entity.getDescription());
@@ -409,7 +410,7 @@ public class DataMapper {
             }
             return block;
         }
-        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
@@ -440,7 +441,6 @@ public class DataMapper {
     }
 
     public PodcastResponse transformPodcastResponse(PodcastResponseEntity entity) {
-        Logger.e(TAG, "podcasts: " + entity.getData().getData().size());
         if (entity != null) {
             PodcastResponse response = new PodcastResponse(entity.getId());
             response.setTitle(entity.getTitle());

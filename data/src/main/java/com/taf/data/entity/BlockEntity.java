@@ -9,6 +9,8 @@ import java.util.List;
  */
 
 public class BlockEntity {
+
+    private long id;
     private int position;
     private String layout;
     private String title;
@@ -27,15 +29,15 @@ public class BlockEntity {
     private NoticeEntity notice;
 
     // attributes only unique to notices
-    @SerializedName("id")
-    private long noticeId;
     @SerializedName("deeplink")
     private String noticeDeeplink;
     @SerializedName("image")
     private String noticeImage;
 
+    //todo check later
+    
     public long getNoticeId() {
-        return noticeId;
+        return id;
     }
 
     public String getNoticeDeeplink() {
@@ -124,6 +126,14 @@ public class BlockEntity {
 
     public void setFilterIds(List<Long> filterIds) {
         this.filterIds = filterIds;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override

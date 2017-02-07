@@ -1,6 +1,7 @@
 package com.taf.data.repository.datasource;
 
 
+import com.google.gson.JsonElement;
 import com.taf.data.cache.CacheImpl;
 import com.taf.data.entity.BlockEntity;
 import com.taf.data.entity.ChannelEntity;
@@ -94,5 +95,13 @@ public class CacheDataStore implements IDataStore {
     public Observable<InfoEntity> getInfo(String key) {
 
         return Observable.just(mCache.getInfo(key));
+    }
+
+    public Observable<JsonElement> getForex(){
+        return Observable.just(mCache.getForex());
+    }
+
+    public Observable<JsonElement> getWeather(){
+        return Observable.just(mCache.getWeather());
     }
 }
