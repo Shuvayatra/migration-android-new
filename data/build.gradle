@@ -51,7 +51,7 @@ dependencies {
     def dataDependencies = rootProject.ext.dataDependencies
     //def testDependencies = rootProject.ext.dataTestDependencies
 
-    compile project (':domain')
+    compile project(':domain')
 
     compile dataDependencies.retrofit
     compile dataDependencies.retrofitGsonConverter

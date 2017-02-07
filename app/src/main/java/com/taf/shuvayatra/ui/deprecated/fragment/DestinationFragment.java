@@ -49,8 +49,7 @@ public class DestinationFragment extends BaseFragment implements
     }
 
     public static DestinationFragment newInstance() {
-        DestinationFragment fragment = new DestinationFragment();
-        return fragment;
+        return new DestinationFragment();
     }
 
     @Override
@@ -63,6 +62,7 @@ public class DestinationFragment extends BaseFragment implements
 
     private void setUpAdapter() {
         mAdapter = new ListAdapter<>(getContext(),this);
+        mAdapter.setHasStableIds(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);

@@ -42,6 +42,10 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
         return itemDecoration;
     }
 
+    public boolean shouldDisableChangeAnimation() {
+        return true;
+    }
+
     public RecyclerView.ItemDecoration initDecorator() {
         return null;
     }

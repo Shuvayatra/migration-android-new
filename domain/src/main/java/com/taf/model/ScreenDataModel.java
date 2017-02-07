@@ -70,6 +70,7 @@ public class ScreenDataModel<T> {
                 ", currentPage=" + currentPage +
                 ", isFromCache=" + isFromCache +
                 ", data=" + data +
+                ", mNotice=" + mNotice +
                 '}';
     }
 }

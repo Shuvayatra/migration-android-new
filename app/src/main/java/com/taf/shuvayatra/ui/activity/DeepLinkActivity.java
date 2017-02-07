@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
@@ -17,6 +18,8 @@ import butterknife.BindView;
 
 
 public class DeepLinkActivity extends BaseActivity {
+
+    private static final String TAG = "DeepLinkActivity";
 
     @BindView(R.id.fragment_container)
     FrameLayout mContainer;
@@ -30,6 +33,7 @@ public class DeepLinkActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         Uri data = getIntent().getData();
+        Logger.e(TAG, ">>> deep link: " + data.getPath());
         handleDeepLink(data);
 
         getSupportActionBar().setTitle(getIntent().getStringExtra("title"));

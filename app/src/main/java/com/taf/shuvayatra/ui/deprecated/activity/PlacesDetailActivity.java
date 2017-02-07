@@ -87,7 +87,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
 
         /*AnalyticsUtil.trackEvent(getAnalytics(), AnalyticsUtil.CATEGORY_FAVOURITE,
                 status ? AnalyticsUtil.ACTION_LIKE : AnalyticsUtil.ACTION_UNLIKE,
-                AnalyticsUtil.LABEL_ID, mPlace.getId());*/
+                AnalyticsUtil.LABEL_ID, mPlace.getNoticeId());*/
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mPlace.getId().toString());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mPlace.getTitle());

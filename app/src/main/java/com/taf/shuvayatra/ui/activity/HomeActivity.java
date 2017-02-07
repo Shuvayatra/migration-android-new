@@ -113,7 +113,7 @@ public class HomeActivity extends MediaServiceActivity implements
     }
 
     public void startScreenRequest() {
-        if(homeActivityPresenter != null)
+        if (homeActivityPresenter != null)
             homeActivityPresenter.initialize(getUserCredentialsUseCase());
     }
 

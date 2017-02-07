@@ -87,11 +87,12 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     public void addDataCollection(List<T> pDataCollection) {
         mDataCollection.addAll(pDataCollection);
-//        Logger.d("renderPost-adapter-param", "size:" + pDataCollection.size());
-//        Logger.d("renderPost-adapter", "size:" + mDataCollection.size());
-//        int newStartPosition = mDataCollection.size() - pDataCollection.size();
-//        notifyItemRangeChanged(newStartPosition, pDataCollection.size());
         notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mDataCollection.get(position).getId();
     }
 
     @Override
@@ -147,8 +148,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 viewHolder = new NotificationViewHolder(notificationDataBinding);
                 break;
             case Adapter.TYPE_USER_INFO:
-               ItemUserInfoBinding userInfoDataBinding = DataBindingUtil.inflate(mLayoutInflater,
-                        R.layout.item_user_info,parent, false);
+                ItemUserInfoBinding userInfoDataBinding = DataBindingUtil.inflate(mLayoutInflater,
+                        R.layout.item_user_info, parent, false);
                 viewHolder = new UserInfoViewHolder(userInfoDataBinding);
                 break;
             case Adapter.TYPE_NOTICE:
@@ -382,16 +383,17 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
 
     }
 
-    public class UserInfoViewHolder extends RecyclerView.ViewHolder{
+    public class UserInfoViewHolder extends RecyclerView.ViewHolder {
 
         ItemUserInfoBinding mBinding;
+
         public UserInfoViewHolder(ItemUserInfoBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
     }
 
-    public class NoticeViewHolder extends RecyclerView.ViewHolder{
+    public class NoticeViewHolder extends RecyclerView.ViewHolder {
         ItemNoticeDataBinding mDataBinding;
 
 
@@ -405,7 +407,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 public void onClick(View view) {
                     Notice notice = mDataBinding.getNotice();
                     notice.setFromDismiss(true);
-                   mListener.onListItemSelected(mDataBinding.getNotice(),mDataCollection.indexOf(mDataBinding.getNotice()));
+                    mListener.onListItemSelected(mDataBinding.getNotice(), mDataCollection.indexOf(mDataBinding.getNotice()));
                 }
             });
 
@@ -415,7 +417,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                     Notice notice = mDataBinding.getNotice();
                     notice.setFromDismiss(false);
 
-                    mListener.onListItemSelected(mDataBinding.getNotice(),mDataCollection.indexOf(mDataBinding.getNotice()));
+                    mListener.onListItemSelected(mDataBinding.getNotice(), mDataCollection.indexOf(mDataBinding.getNotice()));
                 }
             });
         }

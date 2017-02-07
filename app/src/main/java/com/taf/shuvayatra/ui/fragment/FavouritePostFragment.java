@@ -59,9 +59,7 @@ public class FavouritePostFragment extends BaseFragment implements UserAccountVi
     UserInfoModel mUserInfo;
 
     public static FavouritePostFragment newInstance() {
-
-        FavouritePostFragment fragment = new FavouritePostFragment();
-        return fragment;
+        return new FavouritePostFragment();
     }
 
     @Override

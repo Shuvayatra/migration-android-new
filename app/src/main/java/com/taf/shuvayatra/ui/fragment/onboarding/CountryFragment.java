@@ -38,7 +38,6 @@ import butterknife.OnClick;
  *
  * @see OnBoardActivity
  */
-
 public class CountryFragment extends BaseFragment implements CountryView, AdapterView.OnItemSelectedListener {
 
     @BindView(R.id.spinner_country)

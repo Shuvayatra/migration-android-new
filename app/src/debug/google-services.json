@@ -36,6 +36,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113768150601:android:608c756d11e7e04e",
+        "android_client_info": {
+          "package_name": "com.taf.shuvayatra.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "113768150601-h1o10ke9maspvor321v1r667ueu4gsj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmSDVfDr4hWTuJDuDvhvG0ZIHbLValKqc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

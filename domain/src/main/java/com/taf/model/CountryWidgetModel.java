@@ -22,6 +22,11 @@ public class CountryWidgetModel extends BaseModel {
         return mDataType == 0 ? MyConstants.Adapter.TYPE_COUNTRY_WIDGET : mDataType;
     }
 
+    @Override
+    public int getPriority() {
+        return 2;
+    }
+
     public CountryWidgetModel(String countryName) {
         mCountryName = countryName;
     }

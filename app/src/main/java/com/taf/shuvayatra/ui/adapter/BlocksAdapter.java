@@ -26,7 +26,9 @@ import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
 import com.taf.shuvayatra.databinding.CountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
+import com.taf.shuvayatra.ui.activity.DeepLinkActivity;
 import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     private List<BaseModel> mBlocks;
     private LayoutInflater mInflater;
     private Context mContext;
-    private FragmentManager mFragmentManager;
 
     private AppPreferences mPreferences;
 
@@ -53,39 +54,29 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         mPreferences = new AppPreferences(context);
     }
 
-    // constructor for home fragment to show country widget fragment
-    public BlocksAdapter(Context context, FragmentManager fragmentManager) {
-        mContext = context;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mFragmentManager = fragmentManager;
-        mPreferences = new AppPreferences(context);
-    }
-
     public List<BaseModel> getBlocks() {
         return mBlocks;
     }
 
     public void setBlocks(List<BaseModel> blocks) {
-        mBlocks = filterNotice(blocks);
+        mBlocks = removeDismissedNotice(blocks);
         notifyDataSetChanged();
     }
 
-    private List<BaseModel> filterNotice(List<BaseModel> blocks) {
-        List<BaseModel> models = new ArrayList<>();
-        Logger.e(TAG, "blocks: " + blocks);
-        for (BaseModel block : blocks) {
-            if (block instanceof Block) {
-                if (((Block) block).getNotice() != null && ((Block) block).getTitle() != null && !((Block) block).getTitle().isEmpty()) {
-                    if (!mPreferences.getNoticeDismissId().contains(((Block) block).getNotice().getId().toString())) {
-                        models.add(0, block);
-                        continue;
-                    }
-                }
+    private List<BaseModel> removeDismissedNotice(List<BaseModel> items) {
+        List<BaseModel> baseModels = new ArrayList<>();
+        for (BaseModel item : items) {
+            baseModels.add(item);
 
+            if (item instanceof Block) {
+                if (((Block) item).getLayout().equalsIgnoreCase(Block.TYPE_NOTICE) &&
+                        mPreferences.getNoticeDismissId().contains(((Block) item).getNotice().getId()
+                                .toString())) {
+                    baseModels.remove(item);
+                }
             }
-            models.add(block);
         }
-        return models;
+        return baseModels;
     }
 
     @Override
@@ -170,6 +161,8 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             return MyConstants.Adapter.TYPE_COUNTRY;
         } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_WIDGET) {
             return MyConstants.Adapter.TYPE_COUNTRY_WIDGET;
+        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_NOTICE) {
+            return MyConstants.Adapter.VIEW_TYPE_NOTICE;
         }
         return MyConstants.Adapter.VIEW_TYPE_LIST;
     }
@@ -215,7 +208,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     public class ViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
         public final T mBinding;
 
-        public ViewHolder(T binding) {
+        public ViewHolder(final T binding) {
             super(binding.getRoot());
             mBinding = binding;
 
@@ -236,6 +229,20 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                         mPreferences.setNoticeDismissId(block.getNotice().getId());
                         BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
                         return;
+                    }
+                });
+
+                mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
+                        if (block.getNotice().getDeeplink() != null
+                                && !block.getNotice().getDeeplink().isEmpty()) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(block.getNotice().getDeeplink()));
+                            intent.putExtra("title", block.getNotice().getTitle());
+                            mContext.startActivity(intent);
+                        }
                     }
                 });
             } else if (mBinding instanceof CountryWidgetDataBinding) {

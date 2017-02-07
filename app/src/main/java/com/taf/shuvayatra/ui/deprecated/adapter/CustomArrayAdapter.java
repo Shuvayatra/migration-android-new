@@ -51,7 +51,7 @@ public class CustomArrayAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-//        return mCategories.get(position).getId();
+//        return mCategories.get(position).getNoticeId();
         return -1;
     }
 

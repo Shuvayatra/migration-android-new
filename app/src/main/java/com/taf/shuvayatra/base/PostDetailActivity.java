@@ -163,9 +163,9 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         boolean newFavouriteState = !mOldFavouriteState;
 //
 ////        if (newFavouriteState) {
-////            mPreferences.addToFavourites(mPost.getId());
+////            mPreferences.addToFavourites(mPost.getNoticeId());
 ////        } else {
-////            mPreferences.removeFromFavourites(mPost.getId());
+////            mPreferences.removeFromFavourites(mPost.getNoticeId());
 ////        }
 //        mPost.setIsFavourite(newFavouriteState);
         int likes = mPost.getLikes() == null ? 0 : mPost.getLikes();

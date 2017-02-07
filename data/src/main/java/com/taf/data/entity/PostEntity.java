@@ -175,9 +175,32 @@ public class PostEntity {
     }
 
     @Override
+    public String toString() {
+        return "PostEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", data=" + data +
+                ", source='" + source + '\'' +
+                ", shareUrl='" + shareUrl + '\'' +
+                ", tags=" + tags +
+                ", categoryIds=" + categoryIds +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", featuredImage='" + featuredImage + '\'' +
+                ", favouriteCount=" + favouriteCount +
+                ", shareCount=" + shareCount +
+                ", viewCount=" + viewCount +
+                ", priority=" + priority +
+                ", similarPosts=" + similarPosts +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if(!(obj instanceof PostEntity)) return false;
+        if (this == obj) return true;
+        if (!(obj instanceof PostEntity)) return false;
         return this.id.equals(((PostEntity) obj).getId());
 
     }

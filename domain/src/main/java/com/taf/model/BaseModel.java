@@ -25,6 +25,13 @@ public class BaseModel implements Serializable {
         mDataType = pDataType;
     }
 
+    /**
+     * used to sort array
+     */
+    public int getPriority() {
+        return -1;
+    }
+
     public static List<BaseModel> getDummy() {
         List<BaseModel> baseModels = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
