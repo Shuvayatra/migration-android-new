@@ -92,10 +92,13 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         if (savedInstanceState != null) {
             enableAnalytics = false;
             mPost = (Post) savedInstanceState.get(KEY_POST);
-            renderPost(mPost);
         } else {
             enableAnalytics = true;
+        }
+        if(mPost == null){
             loadPost();
+        } else {
+            renderPost(mPost);
         }
     }
 

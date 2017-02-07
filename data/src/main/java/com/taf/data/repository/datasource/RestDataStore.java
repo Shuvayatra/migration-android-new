@@ -127,12 +127,12 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams) {
+    public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams, long id) {
 
         if (isThereInternetConnection()) {
 
             if (feedType == 0) {
-                return mApiRequest.getPosts(limit, offset, filterParams)
+                return mApiRequest.getPosts(limit, offset, filterParams, id)
                         .doOnNext(responseEntity -> mCache.savePosts(feedType, filterParams,
                                 responseEntity.getData(), (offset != 1)));
             }
@@ -193,8 +193,10 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<JsonElement> getWeatherInfo(String place, String unit) {
+        Logger.e(TAG,"weather component from api");
         if (isThereInternetConnection()) {
-            return mApiRequest.getWeather(place, unit);
+            return mApiRequest.getWeather(place, unit)
+                    .doOnNext(mCache::saveWeather);
         } else {
             return Observable.error(new NetworkConnectionException());
         }
@@ -236,8 +238,11 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<JsonElement> getForexInfo() {
+        Logger.e(TAG,"forex component from api");
+
         if (isThereInternetConnection())
-            return mApiRequest.getForex();
+            return mApiRequest.getForex()
+                    .doOnNext(mCache::saveForex);
         else
             return Observable.error(new NetworkConnectionException());
     }

@@ -87,6 +87,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     }
 
     @Override
+    public long getItemId(int position) {
+        return mCountries.get(position).getId();
+    }
+
+    @Override
     public int getItemViewType(int position) {
         return mCountries.get(position).getDataType();
     }

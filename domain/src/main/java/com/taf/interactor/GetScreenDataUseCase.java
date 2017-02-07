@@ -30,7 +30,7 @@ public class GetScreenDataUseCase extends UseCase<ScreenDataModel> {
     }
 
     @Override
-    protected Observable<ScreenDataModel> buildUseCaseObservable(UseCaseData pData) {
+    protected Observable<ScreenDataModel> buildUseCaseObservable(UseCaseData pData){
         String type = pData.getString(UseCaseData.SCREEN_DATA_TYPE);
         if (type.equalsIgnoreCase(MyConstants.SCREEN.TYPE_BLOCK)) {
             return mRepository.getScreenBlockData(mId, new ApiQueryParams(pData));

@@ -44,6 +44,7 @@ import com.taf.shuvayatra.ui.views.AudioPlayerView;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -490,6 +491,11 @@ public class AudioDetailActivity extends FacebookActivity implements
     public void onAudioFileNotFoundToShare() {
         Snackbar.make(mScrollView, getString(R.string.error_bluetooth_share), Snackbar
                 .LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showDeleteDialog(File file) {
+
     }
 
     @Override

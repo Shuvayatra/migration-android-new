@@ -288,6 +288,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                             Intent intent = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(deepLink));
                             intent.putExtra("title", block.getTitle());
+                            intent.putExtra("id", block.getId());
                             mContext.startActivity(intent);
                         }
                     }

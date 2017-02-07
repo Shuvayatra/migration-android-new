@@ -76,8 +76,8 @@ public class ApiRequest {
         return mApiService.getPodcasts(offset, channelId);
     }
 
-    public Observable<PostResponseEntity> getPosts(int limit, int offset, String params) {
-        return mApiService.getPosts(limit, offset, params);
+    public Observable<PostResponseEntity> getPosts(int limit, int offset, String params, long id) {
+        return mApiService.getPosts(limit, offset, params, id);
     }
 
     public Observable<PostEntity> getPost(Long id) {

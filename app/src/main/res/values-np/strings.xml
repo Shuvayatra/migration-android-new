@@ -4,6 +4,12 @@
     <string name="message_download_start">डाउनलोडिङ %1$s</string>
     <string name="message_download_success">%1$s डाउनलोडेड  सम्पन्नभयो </string>
     <string name="message_already_downloaded">%1$s डाउनलोड पहिले भइसक्यो</string>
+    <string name="message_deleted">%1$s हटाइयो </string>
+    <string name="message_deleted_not_available">अडियो डाउनलोअद भएको छैन </string>
+    <string name="message_delete_warn">के तपाईं %1$s हटाउन चाहनुहुन्छ ?</string>
+    <string name="action_confirmed">हो </string>
+    <string name="action_denied">होइन </string>
+
 
     <string name="message_search_un_synced_data">सिंक नभएको सामाग्री खोज्दै </string>
     <string name="message_no_un_synced_data">सिंक नभएको सामाग्री छैन</string>
@@ -18,6 +24,7 @@
     <string name="exception_message_no_connection">तपाइँको इन्टरनेट जडान जाँच गर्नुहोस्</string>
 
     <string name="action_download">डाउनलोड</string>
+    <string name="delete">डिलिट</string>
     <string name="action_on">Turn on</string>
     <string name="action_share">शेयर</string>
     <string name="action_share_facebook">शेयर</string>
@@ -164,6 +171,6 @@
     <string name="user_label_current_work_status">विगतमा विदेशी कामको वस्तुस्थिति</string>
     <string name="user_label_destination">गन्तव्य</string>
     <string name="tab_label_user_info">आफ्नो जानकारी</string>
-    <string name="tab_label_favorites">पसंदीदा</string>
+    <string name="tab_label_favorites">मनपराएको</string>
 
 </resources>

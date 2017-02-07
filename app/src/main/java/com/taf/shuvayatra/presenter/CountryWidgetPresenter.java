@@ -80,6 +80,7 @@ public class CountryWidgetPresenter implements Presenter {
 
         @Override
         public void onError(Throwable e) {
+            super.onError(e);
             mView.onErrorView(type, ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
         }

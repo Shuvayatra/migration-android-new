@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@drawable/circle_bg"
-        app:srcCompat="@drawable/ic_done"/>
+        app:srcCompat="@drawable/ic_right"/>
 
     <ScrollView
         android:id="@+id/scroll_view"

@@ -111,8 +111,9 @@ public class DataModule {
         mId = pId;
     }
 
-    public DataModule(String filterParams) {
+    public DataModule(long id,String filterParams) {
         mFilterParams = filterParams;
+        mId = id;
     }
 
     public DataModule(String pTitle, List<String> pTags) {
@@ -434,7 +435,7 @@ public class DataModule {
     @Named("post_list")
     UseCase providePostListUseCase(IPostRepository pRepository, ThreadExecutor
             pThreadExecutor, PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(mFilterParams, pRepository, pThreadExecutor,
+        return new GetPostListUseCase(mId,mFilterParams, pRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
 
