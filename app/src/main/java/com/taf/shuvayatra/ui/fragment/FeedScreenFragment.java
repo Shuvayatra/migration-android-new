@@ -135,6 +135,7 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     private void setUpAdapter() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mAdapter = new ListAdapter<>(getContext(), this);
+        mAdapter.setHasStableIds(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);

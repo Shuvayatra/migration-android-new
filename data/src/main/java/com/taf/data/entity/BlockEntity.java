@@ -26,6 +26,26 @@ public class BlockEntity {
     private List<PostEntity> data;
     private NoticeEntity notice;
 
+    // attributes only unique to notices
+    @SerializedName("id")
+    private long noticeId;
+    @SerializedName("deeplink")
+    private String noticeDeeplink;
+    @SerializedName("image")
+    private String noticeImage;
+
+    public long getNoticeId() {
+        return noticeId;
+    }
+
+    public String getNoticeDeeplink() {
+        return noticeDeeplink;
+    }
+
+    public String getNoticeImage() {
+        return noticeImage;
+    }
+
     public int getPosition() {
         return position;
     }
@@ -104,5 +124,21 @@ public class BlockEntity {
 
     public void setFilterIds(List<Long> filterIds) {
         this.filterIds = filterIds;
+    }
+
+    @Override
+    public String toString() {
+        return "BlockEntity{" +
+                "position=" + position +
+                ", layout='" + layout + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", showViewMore=" + showViewMore +
+                ", viewMoreTitle='" + viewMoreTitle + '\'' +
+                ", deeplink='" + deeplink + '\'' +
+                ", filterIds=" + filterIds +
+                ", data=" + data +
+                ", notice=" + notice +
+                '}';
     }
 }

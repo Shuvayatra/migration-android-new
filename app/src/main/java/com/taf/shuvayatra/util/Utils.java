@@ -23,6 +23,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.taf.data.utils.Logger;
+import com.taf.model.BaseModel;
+import com.taf.model.Block;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
@@ -118,6 +120,17 @@ public class Utils {
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static List<BaseModel> sortBlock(final List<BaseModel> modelList) {
+        Collections.sort(modelList, new Comparator<BaseModel>() {
+            @Override
+            public int compare(BaseModel first, BaseModel second) {
+                return (first.getPriority() < second.getPriority()) ? 1 :
+                        ((first.getPriority() == second.getPriority()) ? 0 : -1);
+            }
+        });
+        return modelList;
     }
 
     public static Intent create(PackageManager pm, Intent target, String title,

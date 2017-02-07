@@ -28,6 +28,7 @@ import com.taf.shuvayatra.presenter.HomePresenter;
 import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
 import com.taf.shuvayatra.util.Utils;
@@ -49,6 +50,7 @@ import static android.text.format.DateUtils.formatDateTime;
 public class HomeFragment extends BaseFragment implements
         HomeView,
         CountryWidgetView,
+        ListItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "HomeFragment";
@@ -110,7 +112,7 @@ public class HomeFragment extends BaseFragment implements
 
         initialize();
 
-        mAdapter = new BlocksAdapter(getContext(), getChildFragmentManager());
+        mAdapter = new BlocksAdapter(getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(emptyView);
@@ -137,16 +139,11 @@ public class HomeFragment extends BaseFragment implements
     public void renderBlocks(List<Block> data) {
         List<BaseModel> baseModels = new ArrayList<>();
         baseModels.addAll(data);
-        Logger.e(TAG, "data: +" + data.size());
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
         if (!selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION) && showCountryWidget) {
-            if (!data.isEmpty() && data.get(0).getLayout().equalsIgnoreCase("notice")) {
-                baseModels.add(1, mCountryWidget);
-            } else {
-                baseModels.add(0, mCountryWidget);
-            }
+            baseModels.add(mCountryWidget);
         }
-        mAdapter.setBlocks(baseModels);
+        mAdapter.setBlocks(Utils.sortBlock(baseModels));
     }
 
     @Override
@@ -270,6 +267,10 @@ public class HomeFragment extends BaseFragment implements
         }
     }
 
+    @Override
+    public void onListItemSelected(BaseModel pModel, int pIndex) {
+
+    }
 
     @Override
     public void onLoadingView(int type) {

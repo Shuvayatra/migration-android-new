@@ -163,29 +163,9 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
     @Override
     public void renderBlocks(List<Block> blocks) {
         List<BaseModel> models = new ArrayList<>();
-        if (blocks.isEmpty()) {
-            models.add(mCountry);
-        } else {
-            for (Block block : blocks) {
-                if (block.getLayout().equalsIgnoreCase("notice")) {
-                    if (block.getNotice() != null) {
-                        models.add(0, block);
-                    }
-                    continue;
-                }
-                models.add(block);
-            }
-            if (!models.isEmpty()) {
-                if (((Block) models.get(0)).getLayout().equalsIgnoreCase("notice")) {
-                    models.add(1, mCountry);
-                } else {
-                    models.add(0, mCountry);
-                }
-            } else {
-                models.add(mCountry);
-            }
-        }
-        mAdapter.setBlocks(models);
+        models.addAll(blocks);
+        models.add(mCountry);
+        mAdapter.setBlocks(Utils.sortBlock(models));
     }
 
     @Override

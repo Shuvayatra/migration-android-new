@@ -98,7 +98,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     private void shareViaBluetooth() {
-//        AnalyticsUtil.logBluetoothShareEvent(getAnalytics(), mPost.getId(), mPost.getTitle(),
+//        AnalyticsUtil.logBluetoothShareEvent(getAnalytics(), mPost.getNoticeId(), mPost.getTitle(),
 //                mPost.getType());
         mPresenter.shareViaBluetooth(mPost);
     }

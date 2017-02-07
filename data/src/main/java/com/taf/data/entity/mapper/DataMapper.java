@@ -390,6 +390,8 @@ public class DataMapper {
     }
 
     public Block transformBlockEntity(BlockEntity entity) {
+        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        Logger.e(TAG, entity.toString());
         if (entity != null) {
             Block block = new Block();
             block.setPosition(entity.getPosition());
@@ -402,9 +404,12 @@ public class DataMapper {
             block.setDeeplink(entity.getDeeplink());
             block.setFilterIds(entity.getFilterIds());
             block.setData(transformPost(entity.getData()));
-            block.setNotice(transformNotice(entity.getNotice()));
+            if (block.getLayout().equalsIgnoreCase(Block.TYPE_NOTICE)) {
+                block.setNotice(transformNotice(entity));
+            }
             return block;
         }
+        Logger.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
@@ -416,6 +421,19 @@ public class DataMapper {
             notice.setDescription(entity.getDescription());
             notice.setDeeplink(entity.getDeeplink());
             notice.setImage(entity.getImage());
+            return notice;
+        }
+        return null;
+    }
+
+    public Notice transformNotice(BlockEntity entity) {
+        if (entity != null) {
+            Notice notice = new Notice();
+            notice.setId(entity.getNoticeId());
+            notice.setTitle(entity.getTitle());
+            notice.setDescription(entity.getDescription());
+            notice.setDeeplink(entity.getNoticeDeeplink());
+            notice.setImage(entity.getNoticeImage());
             return notice;
         }
         return null;
@@ -604,7 +622,7 @@ public class DataMapper {
 
     public ScreenDataModel transformScreenBlockData(ScreenBlockEntity screenBlockEntity) {
         ScreenDataModel<Block> screenDataModel = new ScreenDataModel<>();
-        if(screenBlockEntity != null ) {
+        if (screenBlockEntity != null) {
             screenDataModel.setData(transformBlockEntity(screenBlockEntity.getBlocks()));
             screenDataModel.setNotice(transformNotice(screenBlockEntity.getNotice()));
         }
@@ -613,7 +631,7 @@ public class DataMapper {
 
     public ScreenDataModel transformScreenFeedData(ScreenFeedEntity screenFeedEntity) {
         ScreenDataModel<Post> screenDataModel = new ScreenDataModel();
-        if(screenFeedEntity!= null) {
+        if (screenFeedEntity != null) {
             screenDataModel.setData(transformPost(screenFeedEntity.getFeeds().getData()));
             screenDataModel.setCurrentPage(screenFeedEntity.getFeeds().getCurrentPage());
             screenDataModel.setLastPage(screenFeedEntity.getFeeds().getLastPage());

@@ -36,6 +36,11 @@ public class Country extends BaseModel {
         return super.getDataType() == 0 ? MyConstants.Adapter.TYPE_COUNTRY : super.getDataType();
     }
 
+    @Override
+    public int getPriority() {
+        return 2;
+    }
+
     public String getTitle() {
         return title;
     }

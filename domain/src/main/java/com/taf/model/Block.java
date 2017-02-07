@@ -41,6 +41,20 @@ public class Block extends BaseModel {
         this.mLayout = layout;
     }
 
+    @Override
+    public int getPriority() {
+        switch (getLayout()) {
+            case TYPE_LIST:
+            case TYPE_SLIDER:
+            case TYPE_RADIO:
+                return 0;
+            case TYPE_NOTICE:
+                return 1;
+            default:
+                return -1;
+        }
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -103,6 +117,15 @@ public class Block extends BaseModel {
 
     public void setFilterIds(List<Long> filterIds) {
         this.filterIds = filterIds;
+    }
+
+    @Override
+    public String toString() {
+        return "Block{" +
+                "mLayout='" + mLayout + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mNotice=" + mNotice +
+                '}';
     }
 
     @Override

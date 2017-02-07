@@ -141,7 +141,7 @@ public abstract class FacebookActivity extends BaseActivity {
                 .putString("og:type", "nrnaapp:post")
                 .putString("og:title", title)
                 .putString("og:description", description)
-                .putString("og:url", "https://fb.me/988277937930762?id=" + pModel.getId())
+                .putString("og:url", "https://fb.me/988277937930762?id=" + pModel.getNoticeId())
                 .putString("al:android:url", "shuvayatra://taf.posts")
                 .putString("al:android:app_name", getString(R.string.app_name))
                 .putString("al:android:package", "com.taf.shuvayatra")

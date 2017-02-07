@@ -14,7 +14,7 @@ ext {
     //Libraries
     daggerVersion = '2.7'
     butterKnifeVersion = '8.4.0'
-    supportLibVersion = '25.1.0'
+    supportLibVersion = '25.1.1'
     rxJavaVersion = '1.2.2'
     rxAndroidVersion = '1.2.1'
     javaxAnnotationVersion = '1.0'
@@ -29,8 +29,8 @@ ext {
     iconicsGoogleVersion = '2.1.0.1.original@aar'
     showCaseVersion = '5.4.0'
     pdfViewerVersion = '1.0.4@aar'
-    playServicesVersion = '9.8.0'
-    firebaseVersion = '9.8.0'
+    playServicesVersion = '10.0.1'
+    firebaseVersion = '10.0.1'
     gravitySnapHelperVersion = '0.3'
     disklrucache = '2.0.2'
     rxBinding = '0.4.0'
@@ -60,6 +60,7 @@ ext {
             firebaseMessaging   : "com.google.firebase:firebase-messaging:${firebaseVersion}",
             firebaseAnalytics   : "com.google.firebase:firebase-core:${firebaseVersion}",
             firebaseDynamicLinks: "com.google.firebase:firebase-invites:${firebaseVersion}",
+            firebaseCrash       : "com.google.firebase:firebase-crash:${firebaseVersion}",
 
             daggerCompiler      : "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger              : "com.google.dagger:dagger:${daggerVersion}",
