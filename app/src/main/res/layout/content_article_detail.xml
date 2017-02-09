@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="article"
-            type="com.taf.model.Post" />
+            type="com.taf.model.Post"/>
 
         <variable
             name="listener"
-            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
 
         <variable
             name="similarStories"
-            type="java.util.List&lt;com.taf.model.Post&gt;" />
+            type="java.util.List&lt;com.taf.model.Post&gt;"/>
 
     </data>
 
@@ -44,13 +44,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical"
                     tools:context="com.yipl.nrna.umesh.ArticleDetailActivity"
                     tools:showIn="@layout/activity_article_detail">
 
                     <include
                         layout="@layout/view_content_head"
-                        app:content="@{article}" />
+                        app:content="@{article}"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -63,7 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="@{article.description!=null?View.VISIBLE:View.GONE}"
-                            app:htmlContent='@{article.description}' />
+                            app:htmlContent='@{article.description}'/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -81,7 +82,7 @@
                             android:padding="@dimen/spacing_standard"
                             android:text="@string/similar_stories"
                             android:textAllCaps="true"
-                            android:textSize="@dimen/text_default" />
+                            android:textSize="@dimen/text_default"/>
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -95,12 +96,12 @@
                                 android:padding="@dimen/spacing_xsmall"
                                 app:callback="@{listener}"
                                 app:posts="@{similarStories}"
-                                tools:listitem="@layout/view_audio_video_list" />
+                                tools:listitem="@layout/view_audio_video_list"/>
 
                             <include
                                 android:id="@+id/empty_view"
                                 layout="@layout/empty_list_view"
-                                android:visibility="gone" />
+                                android:visibility="gone"/>
                         </FrameLayout>
 
                     </LinearLayout>

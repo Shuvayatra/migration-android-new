@@ -433,8 +433,8 @@ public class BindingUtil {
         view.setText(text.replaceAll("\uFFFC", ""));
     }
 
-    @BindingAdapter({"bind:imageUrl"})
-    public static void setImage(SimpleDraweeView pView, Post post) {
+    @BindingAdapter(value = {"bind:imageUrl", "bind:required"}, requireAll = false)
+    public static void setImage(SimpleDraweeView pView, Post post, boolean required) {
         String url;
 
         if (post != null) {
@@ -447,7 +447,8 @@ public class BindingUtil {
             if (url != null && !url.isEmpty()) {
                 pView.setImageURI(Uri.parse(url));
             } else {
-                pView.setVisibility(View.GONE);
+                if(required) pView.setVisibility(View.VISIBLE);
+                else pView.setVisibility(View.GONE);
             }
         }
     }

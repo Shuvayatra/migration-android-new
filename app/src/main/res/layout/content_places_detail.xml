@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View"/>
+
         <variable
             name="similarStories"
             type="java.util.List&lt;com.taf.model.Post>"/>
@@ -16,13 +18,13 @@
 
         <variable
             name="listener"
-            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@id/swipe_container"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.activity.PlacesDetailActivity"
@@ -37,117 +39,120 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context="com.yipl.nrna.PlaceDetailActivity"
-            tools:showIn="@layout/activity_article_detail">
-
-            <include
-                layout="@layout/view_content_head"
-                app:content="@{place}" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_standard"
-                android:paddingRight="@dimen/spacing_standard"
-                android:paddingTop="@dimen/spacing_small">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical"
-                    app:phoneNumbersBig="@{place.getData().getPhoneNumbers()}"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/ic_location"
-                        android:layout_width="@dimen/icon_size_big"
-                        android:layout_height="@dimen/icon_size_big"
-                        android:layout_marginRight="@dimen/spacing_small"
-                        android:padding="@dimen/spacing_small"
-                        app:srcCompat="@drawable/ic_location"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/ic_location"
-                        android:layout_alignTop="@id/ic_location"
-                        android:layout_marginLeft="@dimen/spacing_xxlarge"
-                        android:layout_toRightOf="@id/ic_location"
-                        android:gravity="center_vertical"
-                        app:address='@{place.getData().getAddress()}'
-                        android:textSize="@dimen/text_default"
-                        tools:text="Home No.12, New Road. Selangor"/>
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:background="@color/divider"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:padding="@dimen/spacing_standard">
-
-                <WebView
-                    android:id="@+id/web_view_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{place.description!=null?View.VISIBLE:View.GONE}"
-                    app:htmlContent='@{place.description}' />
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/similar_post_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/player_control_section_height"
-                android:orientation="vertical"
-                android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
-
-                <TextView
-                    android:id="@+id/label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/spacing_standard"
-                    android:text="@string/similar_stories"
-                    android:textAllCaps="true"
-                    android:textSize="@dimen/text_default" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
-                        android:id="@+id/similar_story_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:padding="@dimen/spacing_xsmall"
-                        app:callback="@{listener}"
-                        app:posts="@{similarStories}"
-                        tools:listitem="@layout/view_audio_video_list" />
+                    tools:context="com.yipl.nrna.PlaceDetailActivity"
+                    tools:showIn="@layout/activity_article_detail">
 
                     <include
-                        android:id="@+id/empty_view"
-                        layout="@layout/empty_list_view"
-                        android:visibility="gone" />
-                </FrameLayout>
+                        layout="@layout/view_content_head"
+                        app:content="@{place}"/>
 
-            </LinearLayout>
-            </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/spacing_standard"
+                        android:paddingRight="@dimen/spacing_standard"
+                        android:paddingTop="@dimen/spacing_small">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:phoneNumbersBig="@{place.getData().getPhoneNumbers()}"/>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ic_location"
+                                android:layout_width="@dimen/icon_size_big"
+                                android:layout_height="@dimen/icon_size_big"
+                                android:layout_marginRight="@dimen/spacing_small"
+                                android:padding="@dimen/spacing_small"
+                                app:srcCompat="@drawable/ic_location"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@id/ic_location"
+                                android:layout_alignTop="@id/ic_location"
+                                android:layout_marginLeft="@dimen/spacing_xxlarge"
+                                android:layout_toRightOf="@id/ic_location"
+                                android:gravity="center_vertical"
+                                android:textSize="@dimen/text_default"
+                                app:address='@{place.getData().getAddress()}'
+                                tools:text="Home No.12, New Road. Selangor"/>
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="@dimen/spacing_small"
+                            android:background="@color/divider"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
+                        android:padding="@dimen/spacing_standard">
+
+                        <WebView
+                            android:id="@+id/web_view_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="@{place.description!=null?View.VISIBLE:View.GONE}"
+                            app:htmlContent='@{place.description}'/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/similar_post_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/player_control_section_height"
+                        android:orientation="vertical"
+                        android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
+
+                        <TextView
+                            android:id="@+id/label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/spacing_standard"
+                            android:text="@string/similar_stories"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/text_default"/>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+                                android:id="@+id/similar_story_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:clipToPadding="false"
+                                android:padding="@dimen/spacing_xsmall"
+                                app:callback="@{listener}"
+                                app:posts="@{similarStories}"
+                                tools:listitem="@layout/view_audio_video_list"/>
+
+                            <include
+                                android:id="@+id/empty_view"
+                                layout="@layout/empty_list_view"
+                                android:visibility="gone"/>
+                        </FrameLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
