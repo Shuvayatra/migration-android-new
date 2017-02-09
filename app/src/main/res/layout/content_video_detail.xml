@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="similarStories"
-            type="java.util.List&lt;com.taf.model.Post&gt;" />
+            type="java.util.List&lt;com.taf.model.Post&gt;"/>
 
         <variable
             name="video"
-            type="com.taf.model.Post" />
+            type="com.taf.model.Post"/>
 
         <variable
             name="listener"
-            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -46,7 +46,7 @@
                 <FrameLayout
                     android:id="@+id/youtube_container"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/video_height" />
+                    android:layout_height="@dimen/video_height"/>
 
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -55,11 +55,12 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:descendantFocusability="blocksDescendants"
                         android:orientation="vertical">
 
                         <include
                             layout="@layout/view_content_head"
-                            app:content="@{video}" />
+                            app:content="@{video}"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -71,9 +72,9 @@
                                 android:id="@+id/web_view_content"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:htmlContent="@{video.description}"
                                 android:visibility="@{video.description!=null?View.VISIBLE:View.GONE}"
-                                tools:text="This is the description of the video." />
+                                app:htmlContent="@{video.description}"
+                                tools:text="This is the description of the video."/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -90,7 +91,7 @@
                                 android:padding="@dimen/spacing_standard"
                                 android:text="@string/similar_stories"
                                 android:textAllCaps="true"
-                                android:textSize="@dimen/text_default" />
+                                android:textSize="@dimen/text_default"/>
 
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/similar_story_list"
@@ -100,16 +101,16 @@
                                 android:padding="@dimen/spacing_xsmall"
                                 app:callback="@{listener}"
                                 app:posts="@{similarStories}"
-                                tools:listitem="@layout/view_audio_video_list" />
+                                tools:listitem="@layout/view_audio_video_list"/>
                         </LinearLayout>
                     </LinearLayout>
                 </android.support.v4.widget.NestedScrollView>
             </LinearLayout>
 
             <!--<FrameLayout-->
-                <!--android:id="@+id/content_player"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:id="@+id/content_player"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

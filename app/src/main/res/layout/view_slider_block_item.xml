@@ -23,6 +23,7 @@
             android:layout_marginBottom="@dimen/spacing_xxsmall"
             app:actualImageScaleType="centerCrop"
             app:imageUrl="@{post}"
+            app:required="@{true}"
             app:placeholderImage="@drawable/default_gradient"
             app:progressBarAutoRotateInterval="1000"
             app:progressBarImage="@drawable/ic_refresh"

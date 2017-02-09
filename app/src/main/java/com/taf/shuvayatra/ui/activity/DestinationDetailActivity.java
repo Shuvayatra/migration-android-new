@@ -170,6 +170,7 @@ public class DestinationDetailActivity extends PlayerFragmentActivity implements
 
     @Override
     public void showLoadingView() {
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override

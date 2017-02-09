@@ -196,7 +196,7 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
 
     @Override
     public void showLoadingView() {
-
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override

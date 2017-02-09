@@ -44,6 +44,7 @@ public class DestinationBlocksPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
+        mView.showLoadingView();
         mUseCase.execute(new DestinationBlocksSubscriber(), pData);
     }
 
