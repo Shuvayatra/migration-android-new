@@ -8,9 +8,12 @@ import android.databinding.ViewDataBinding;
 import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.common.references.CloseableReference;
+import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -33,6 +37,7 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.taf.data.BuildConfig;
 import com.taf.data.utils.Logger;
 import com.taf.model.Block;
 import com.taf.model.Post;
@@ -58,7 +63,9 @@ public class BindingUtil {
 
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
-        if (url != null) {
+        if (url != null && !url.isEmpty()) {
+            if(url.contains("notice"))
+                Logger.e(TAG,"image of notice: "+ url);
 //            Logger.e(TAG, "url: " + url);
 //            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
             //// TODO: 1/11/17 issue with width and height 0 for nougat
@@ -77,34 +84,40 @@ public class BindingUtil {
 
             pView.setController(controller);
             //pView.setImageURI(Uri.parse(url));
+        } else {
+            Uri uri = new Uri.Builder()
+                    .scheme(UriUtil.LOCAL_RESOURCE_SCHEME) // "res"
+                    .path(String.valueOf(R.drawable.default_gradient))
+                    .build();
+            pView.setImageURI(uri);
         }
     }
 
     @BindingAdapter("bind:imageUrlWrap")
-    public static void setImageResourceWithWrap(final SimpleDraweeView pView, String url){
+    public static void setImageResourceWithWrap(final SimpleDraweeView pView, String url) {
         if (url != null) {
             //// TODO: 1/11/17 issue with width and height 0 for nougat
             // temp fix for giving certain width and height if view height and width are 0
             DisplayMetrics displayMetrics = pView.getContext().getResources().getDisplayMetrics();
 
             final int height = pView.getHeight() > 0 ? pView.getHeight() : 150;
-            final int width = pView.getWidth() > 0 ? pView.getWidth() : displayMetrics.widthPixels/2;
+            final int width = pView.getWidth() > 0 ? pView.getWidth() : displayMetrics.widthPixels / 2;
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url))
                     .setResizeOptions(new ResizeOptions(width, height))
                     .build();
             final float ratio;
-            if(displayMetrics.heightPixels > displayMetrics.widthPixels){
+            if (displayMetrics.heightPixels > displayMetrics.widthPixels) {
                 ratio = displayMetrics.widthPixels / ((float) displayMetrics.heightPixels);
-            }else {
+            } else {
                 ratio = displayMetrics.heightPixels / ((float) displayMetrics.widthPixels);
             }
-            ControllerListener<ImageInfo> controllerListener = new BaseControllerListener<ImageInfo>(){
+            ControllerListener<ImageInfo> controllerListener = new BaseControllerListener<ImageInfo>() {
                 @Override
                 public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
 
 //                    Logger.e(TAG,"ratio: "+ ratio);
 //                    Logger.e(TAG,"width: "+ width);
-                    pView.getLayoutParams().height = (int) (width *ratio);
+                    pView.getLayoutParams().height = (int) (width * ratio);
 
 //                    Logger.e(TAG,"pView.getLayoutParams().height: "+ pView.getLayoutParams().height);
                     pView.requestLayout();
@@ -134,15 +147,20 @@ public class BindingUtil {
         }
     }
 
+    @BindingAdapter("bind:htmlNoImage")
+    public static void setHtmlContentNoImage(WebView pView, String content) {
+
+    }
+
     @BindingAdapter("bind:htmlContent")
     public static void setHtmlContent(WebView pView, String content) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<HTML><HEAD><LINK href=\"styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body " +
+        sb.append("<HTML><HEAD><LINK href=\"file:///android_asset/styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body " +
                 "style='margin:0;padding:0;'>");
         sb.append("");
         sb.append(content);
         sb.append("</body></HTML>");
-        pView.loadDataWithBaseURL("file:///android_asset/", sb.toString(), "text/html",
+        pView.loadDataWithBaseURL("http://nrna.yipl.com.np", sb.toString(), "text/html",
                 "utf-8", null);
     }
 
@@ -406,7 +424,13 @@ public class BindingUtil {
 
     @BindingAdapter("bind:htmlContent")
     public static void setHtmlContent(TextView view, String content) {
-        view.setText(Html.fromHtml(content));
+        String text = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            text = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            text = Html.fromHtml(content).toString();
+        }
+        view.setText(text.replaceAll("\uFFFC", ""));
     }
 
     @BindingAdapter({"bind:imageUrl"})
@@ -422,7 +446,7 @@ public class BindingUtil {
             }
             if (url != null && !url.isEmpty()) {
                 pView.setImageURI(Uri.parse(url));
-            } else{
+            } else {
                 pView.setVisibility(View.GONE);
             }
         }

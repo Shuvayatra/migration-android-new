@@ -24,7 +24,7 @@ import butterknife.BindView;
 public abstract class PlayerFragmentActivity extends BaseActivity implements
         PlayerFragmentCallback, MiniPlayerFragment.ContainerClick {
 
-    @BindView(R.id.content_player)
+    @BindView(R.id.bottom_sheet)
     View mPlayer;
 
     private BottomSheetBehavior bottomSheetBehavior;
@@ -111,6 +111,7 @@ public abstract class PlayerFragmentActivity extends BaseActivity implements
     }
 
     public void initBottomSheet() {
+        Logger.e(TAG,"bottom sheet initialized");
         bottomSheetBehavior = BottomSheetBehavior.from(mPlayer);
         bottomSheetBehavior.setPeekHeight(getResources().getDimensionPixelOffset(R.dimen.mini_media_player_peek_height));
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

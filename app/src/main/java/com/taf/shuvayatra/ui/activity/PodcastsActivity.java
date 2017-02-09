@@ -195,7 +195,9 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
     @Override
     public void renderPodcasts(PodcastResponse podcasts) {
-
+        if (podcasts.getData() == null) {
+            return;
+        }
         if (podcasts.isFromCache()) {
             if (mAdapter.getDataCollection().isEmpty()) {
                 mAdapter.setDataCollection(podcasts.getData().getData());

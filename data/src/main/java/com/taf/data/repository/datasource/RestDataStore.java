@@ -118,7 +118,6 @@ public class RestDataStore implements IDataStore {
         if (isThereInternetConnection()) {
             return mApiRequest.getPodcasts(offset, channelId)
                     .doOnNext(entity -> {
-                        Logger.e(TAG, "podcasts: " + entity.getData().getData().size());
                         if (entity.getData() != null)
                             mCache.savePodcastsByChannelId(entity, channelId);
                     });

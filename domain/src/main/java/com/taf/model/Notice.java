@@ -56,7 +56,7 @@ public class Notice extends BaseModel {
 
     @Override
     public int getPriority() {
-        return 1;
+        return 3;
     }
 
     @Override

@@ -126,8 +126,7 @@ public class Utils {
         Collections.sort(modelList, new Comparator<BaseModel>() {
             @Override
             public int compare(BaseModel first, BaseModel second) {
-                return (first.getPriority() < second.getPriority()) ? 1 :
-                        ((first.getPriority() == second.getPriority()) ? 0 : -1);
+                return second.getPriority() - first.getPriority();
             }
         });
         return modelList;

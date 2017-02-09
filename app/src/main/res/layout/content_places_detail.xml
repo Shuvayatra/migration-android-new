@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="similarPlaces"
+            name="similarStories"
             type="java.util.List&lt;com.taf.model.Post>"/>
 
         <variable
@@ -14,16 +15,17 @@
             type="com.taf.model.Post"/>
 
         <variable
-            name="countryId"
-            type="java.lang.Long"/>
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@id/swipe_container"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".ui.deprecated.activity.PlacesDetailActivity"
+        tools:context=".ui.activity.PlacesDetailActivity"
         tools:showIn="@layout/activity_places_detail">
 
         <LinearLayout
@@ -31,88 +33,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="10dp">
+                android:layout_height="0dp"
+                android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="com.yipl.nrna.PlaceDetailActivity"
+            tools:showIn="@layout/activity_article_detail">
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{place.getTitle()}"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_large"
-                    tools:text="Nepal Embassy"/>
+            <include
+                layout="@layout/view_content_head"
+                app:content="@{place}" />
 
-                <TextView
-                    android:id="@+id/category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/title"
-                    android:layout_marginBottom="@dimen/spacing_standard"
-                    android:layout_marginTop="@dimen/spacing_xsmall"
-                    android:text=""
-                    android:textSize="@dimen/text_small"
-                    tools:text="Favourite Place in Nepal - 3 days ago"/>
-
-                <ImageView
-                    android:id="@+id/like"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:layout_below="@id/category"
-                    android:layout_marginRight="@dimen/spacing_small"
-                    android:padding="@dimen/spacing_xxxsmall"
-                    app:srcCompat="@drawable/ic_like"/>
-
-                <TextView
-                    android:id="@+id/like_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/like"
-                    android:layout_alignTop="@id/like"
-                    android:layout_below="@id/category"
-                    android:layout_marginRight="@dimen/spacing_xxxlarge"
-                    android:layout_toRightOf="@id/like"
-                    android:gravity="center_vertical"
-                    android:text='@{place.totalLikes+ " "+@string/like}'
-                    android:textSize="@dimen/text_small"
-                    tools:text="23 loves"/>
-
-                <ImageView
-                    android:id="@+id/share"
-                    android:layout_width="@dimen/icon_size"
-                    android:layout_height="@dimen/icon_size"
-                    android:layout_below="@id/category"
-                    android:layout_marginRight="@dimen/spacing_small"
-                    android:layout_toRightOf="@id/like_count"
-                    android:padding="@dimen/spacing_xxxsmall"
-                    app:srcCompat="@drawable/ic_share"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/share"
-                    android:layout_alignTop="@id/share"
-                    android:layout_below="@id/category"
-                    android:layout_toRightOf="@id/share"
-                    android:gravity="center_vertical"
-                    android:text='@{place.totalShare + " "+@string/share }'
-                    android:textSize="@dimen/text_small"
-                    tools:text="30 shares"/>
-
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/like"
-                    android:layout_marginTop="@dimen/spacing_xlarge"
-                    android:background="@color/divider"/>
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,51 +100,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:orientation="vertical"
                 android:padding="@dimen/spacing_standard">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_description"
-                    android:textAllCaps="true"
-                    android:textSize="@dimen/text_default"/>
-
                 <WebView
+                    android:id="@+id/web_view_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_large"
-                    android:layout_marginTop="@dimen/spacing_standard"
-                    app:htmlContent="@{place.getDescription()}"
-                    tools:text="One of the ILO’s predominant concerns since its inception has been with the protection of migrant workers. In this interview, Binda Pandey, Member of governing council of the General Federation of Nepalese Trade Unions (GEFONT)) explains the challenges related to the implementation of the ILO Fair Migration Agenda. Ms. Pandey also highlights the experience from Nepal about the protection of migrant workers."/>
+                    android:visibility="@{place.description!=null?View.VISIBLE:View.GONE}"
+                    app:htmlContent='@{place.description}' />
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/other_places_section"
+                android:id="@+id/similar_post_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/player_control_section_height"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/spacing_standard"
-                android:paddingRight="@dimen/spacing_standard">
+                android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
 
                 <TextView
+                    android:id="@+id/label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_large"
-                    android:text="@string/label_other_places"
+                    android:padding="@dimen/spacing_standard"
+                    android:text="@string/similar_stories"
                     android:textAllCaps="true"
-                    android:textSize="@dimen/text_default"/>
+                    android:textSize="@dimen/text_default" />
 
-                <LinearLayout
-                    android:id="@+id/places_container"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:similarPosts="@{similarPlaces}"
-                    app:countryId="@{countryId}"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/spacing_standard"
-                    android:paddingTop="@dimen/spacing_standard"/>
+                    android:layout_height="match_parent">
+
+                    <com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView
+                        android:id="@+id/similar_story_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:padding="@dimen/spacing_xsmall"
+                        app:callback="@{listener}"
+                        app:posts="@{similarStories}"
+                        tools:listitem="@layout/view_audio_video_list" />
+
+                    <include
+                        android:id="@+id/empty_view"
+                        layout="@layout/empty_list_view"
+                        android:visibility="gone" />
+                </FrameLayout>
+
             </LinearLayout>
+            </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </layout>

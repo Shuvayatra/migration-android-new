@@ -172,6 +172,7 @@
 
     <string name="tab_label_user_info">User Info</string>
     <string name="tab_label_favorites">Favourites</string>
+    <string name="views">Views</string>
 
 
 </resources>

@@ -183,7 +183,7 @@ public class HomeFragment extends BaseFragment implements
                 DateUtils.getTimeZoneCalendarInstance(country.getTimeZoneId()));
 
         caseWeather.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_WEATHER);
-        caseWeather.putString(UseCaseData.COUNTRY_CODE, country.getTitleEnglish());
+        caseWeather.putString(UseCaseData.COUNTRY_CODE, country.getTitleEnglish() + "," + country.getTitle());
 
         caseForEx.putInteger(UseCaseData.COMPONENT_TYPE, CountryWidgetData.COMPONENT_FOREX);
 

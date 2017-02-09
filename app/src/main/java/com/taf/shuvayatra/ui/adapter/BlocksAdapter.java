@@ -123,6 +123,7 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                         .setWidgetModel((CountryWidgetModel) mBlocks.get(position));
                 break;
             case MyConstants.Adapter.VIEW_TYPE_NOTICE:
+                Logger.e(TAG,"image notice: "+ ((Block) mBlocks.get(position)).getNotice().getImage());
                 ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding
                         .setBlock((Block) mBlocks.get(position));
                 break;
@@ -235,14 +236,15 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
                 mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
-                        if (block.getNotice().getDeeplink() != null
-                                && !block.getNotice().getDeeplink().isEmpty()) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(block.getNotice().getDeeplink()));
-                            intent.putExtra("title", block.getNotice().getTitle());
-                            mContext.startActivity(intent);
-                        }
+//                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
+//                        if (block.getNotice().getDeeplink() != null
+//                                && !block.getNotice().getDeeplink().isEmpty()) {
+//                            Intent intent = new Intent(Intent.ACTION_VIEW,
+//                                    Uri.parse(block.getNotice().getDeeplink()));
+//                            intent.putExtra("title", block.getNotice().getTitle());
+//                            intent.putExtra("id", block.getNotice().getId());
+//                            mContext.startActivity(intent);
+//                        }
                     }
                 });
             } else if (mBinding instanceof CountryWidgetDataBinding) {

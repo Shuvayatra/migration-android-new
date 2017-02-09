@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.taf.shuvayatra.ui.activity.DestinationDetailActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/holo_red_dark"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.taf.shuvayatra.ui.activity.DestinationDetailActivity">
 
-    <include layout="@layout/content_destination_detail"/>
-    <include layout="@layout/content_mini_player" />
+        <include layout="@layout/toolbar"/>
 
-</android.support.design.widget.CoordinatorLayout>
+        <include layout="@layout/content_destination_detail"/>
+
+        <include layout="@layout/content_mini_player"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

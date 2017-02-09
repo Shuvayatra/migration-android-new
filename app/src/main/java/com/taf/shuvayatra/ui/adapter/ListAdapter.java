@@ -414,10 +414,10 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
             mDataBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Notice notice = mDataBinding.getNotice();
-                    notice.setFromDismiss(false);
-
-                    mListener.onListItemSelected(mDataBinding.getNotice(), mDataCollection.indexOf(mDataBinding.getNotice()));
+//                    Notice notice = mDataBinding.getNotice();
+//                    notice.setFromDismiss(false);
+//
+//                    mListener.onListItemSelected(mDataBinding.getNotice(), mDataCollection.indexOf(mDataBinding.getNotice()));
                 }
             });
         }

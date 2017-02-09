@@ -74,7 +74,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:text='@{" - " + article.totalViews + " Views"}'
+                    android:text='@{" - " + article.totalViews + "  " + @string/views}'
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_small"
                     tools:text=" - 120K"/>

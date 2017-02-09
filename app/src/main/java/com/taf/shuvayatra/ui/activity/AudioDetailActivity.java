@@ -66,8 +66,6 @@ public class AudioDetailActivity extends PostDetailActivity implements
     private static final String TAG = "AudioDetailActivity";
     @BindView(R.id.scroll_view)
     NestedScrollView mScrollView;
-    @BindView(R.id.description)
-    WebView webView;
     @BindView(R.id.audio_time)
     TextView mAudioTime;
     @BindView(R.id.play)

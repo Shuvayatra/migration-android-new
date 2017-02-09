@@ -40,6 +40,7 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Podcast;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.receivers.NotificationBroadcastReceiver;
 import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.util.MyConstants;
 
@@ -78,6 +79,7 @@ public class MediaService extends Service implements
     private boolean mStoppedByUser = false;
     private String mCurrentTitle = "";
     private String mCurrentImage = "";
+    private String mCurrentDescription="";
     private Runnable updateSeekTime = new Runnable() {
         @Override
         public void run() {
@@ -295,6 +297,7 @@ public class MediaService extends Service implements
         Log.d(TAG, "setDataSource() called with: podcast = [" + podcast + "]");
         mCurrentTitle = podcast.getTitle();
         mCurrentImage = podcast.getImage();
+        mCurrentDescription = podcast.getDescription();
         mCurrentPlayType = PlayType.PODCAST;
         String mediaUrl = podcast.getSource().replace(" ", "%20");
         Logger.e(TAG, ">>> MEDIA URL: " + mediaUrl);
@@ -304,6 +307,7 @@ public class MediaService extends Service implements
     private void setDataSource(Post pTrack) throws IOException {
         Log.d(TAG, "setDataSource() called with: pTrack = [" + pTrack + "]");
         mCurrentTitle = pTrack.getTitle();
+        mCurrentDescription = pTrack.getDescription();
         mCurrentImage = pTrack.getData().getThumbnail();
         mCurrentPlayType = PlayType.POST;
         String mediaUrl = pTrack.getData().getMediaUrl().replace(" ", "%20");
@@ -419,6 +423,10 @@ public class MediaService extends Service implements
         return mCurrentTitle;
     }
 
+    public String getCurrentDescription() {
+        return mCurrentDescription;
+    }
+
     public String getCurrentImageResource() {
         return mCurrentImage;
     }
@@ -438,8 +446,8 @@ public class MediaService extends Service implements
         if (manager == null)
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent notificationIntent = new Intent(MediaService.this, HomeActivity.class);
-        PendingIntent toOpen = PendingIntent.getActivity(getApplicationContext(), NOTIFICATION_ID,
+        Intent notificationIntent = new Intent(MediaService.this, NotificationBroadcastReceiver.class);
+        PendingIntent toOpen = PendingIntent.getBroadcast(getApplicationContext(), NOTIFICATION_ID,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent cancelNotification = new Intent(NotificationEventReceiver.ACTION_DISMISS);

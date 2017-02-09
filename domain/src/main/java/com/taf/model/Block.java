@@ -49,7 +49,7 @@ public class Block extends BaseModel {
             case TYPE_RADIO:
                 return 0;
             case TYPE_NOTICE:
-                return 1;
+                return 3;
             default:
                 return -1;
         }
