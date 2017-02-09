@@ -18,6 +18,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(!MyApplication.isActivityShowing){
             Intent appIntent = new Intent(context, SplashActivity.class);
+            appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(appIntent);
         }
     }
