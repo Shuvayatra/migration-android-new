@@ -28,6 +28,7 @@ import com.taf.model.Post;
 import com.taf.model.PostResponse;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.SearchPostListPresenter;
@@ -36,6 +37,7 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.SearchPostListView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -50,7 +52,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import rx.functions.Func1;
 
-public class SearchActivity extends BaseActivity implements ListItemClickListener, SearchPostListView, SwipeRefreshLayout.OnRefreshListener {
+public class SearchActivity extends MediaServiceActivity implements ListItemClickListener, SearchPostListView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "SearchActivity";
     public static final String STATE_POST= "posts";
@@ -132,6 +134,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
         mRecyclerView.setAdapter(mPostAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
         mUseCaseData = new UseCaseData();
+        mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getContext(), R.dimen.mini_media_player_peek_height));
 
         List<String> searchTypes = new ArrayList<>();
         searchTypes.add(getString(R.string.search_type_header));
@@ -177,8 +180,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
                     mQuery = mSearchTextBox.getText().toString();
                     mSwipeRefreshLayout.setRefreshing(true);
                     searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
-                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
-                            .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                   hideKeyboard();
 
                 }
                 return false;
@@ -188,6 +190,7 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
         mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                hideKeyboard();
                 String type = (String) mTypeSpinner.getSelectedItem();
                 Logger.e(TAG,"searching from spinner");
                 if (position == 0) {
@@ -245,7 +248,10 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
         });
 
     }
-
+    private void hideKeyboard(){
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
     private void searchPosts(int page, String query, String type) {
         mPage = page;
         mPresenter.destroy();       //cancel any pending query before initating new one
@@ -282,6 +288,10 @@ public class SearchActivity extends BaseActivity implements ListItemClickListene
                 break;
             case MyConstants.Adapter.TYPE_AUDIO:
                 intent = new Intent(getContext(), AudioDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
+                break;
+            case MyConstants.Adapter.TYPE_PLACE:
+                intent = new Intent(getContext(), PlaceDetailActivity.class);
                 intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
                 break;
         }

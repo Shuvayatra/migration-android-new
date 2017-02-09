@@ -199,9 +199,9 @@ public class CacheImpl {
             suffix = params.replaceAll(",", "-");
         if (append) {
             Logger.d("CacheImpl_savePosts", "append");
-            appendPosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix, entities);
+            appendPosts(feedType == 0 ? POST_LIST_PREFIX+suffix : NEWS_BLOCKS + suffix, entities);
         } else {
-            savePosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix, entities);
+            savePosts(feedType == 0 ? POST_LIST_PREFIX+suffix : NEWS_BLOCKS + suffix, entities);
         }
     }
 
@@ -232,7 +232,7 @@ public class CacheImpl {
         String suffix = "";
         if (params != null)
             suffix = params.replaceAll(",", "-");
-        return Observable.just(getPosts(feedType == 0 ? POST_LIST_PREFIX+params : NEWS_BLOCKS + suffix));
+        return Observable.just(getPosts(feedType == 0 ? POST_LIST_PREFIX+suffix : NEWS_BLOCKS + suffix));
     }
 
     public void savePosts(String key, List<PostEntity> posts) {

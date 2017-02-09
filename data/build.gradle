@@ -26,7 +26,7 @@ android {
         buildConfigField("String", "BASE_URL", "\"http://nrna.yipl.com.np/\"")
 //        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/v1\"")
 //        buildConfigField("String", "LOCAL_BASE_URL", "\"http://192.168.1.37/\"")
-//        buildConfigField("String", "BASE_URL", "\"http://api.shuvayatra.org/v1/\"")
+//        buildConfigField("String", "BASE_URL", "\"https://api.shuvayatra.org/v1/\"")
         buildConfigField("String", "API_KEY", "\"670125552cb74cb09d7b53da59e0fc6907dd3478\"")
         buildConfigField("String", "OPEN_WEATHER_URL", "\"http://api.openweathermap.org/\"")
         buildConfigField("String", "OPEN_WEATHER_APPID", "\"b9f726111c15b02aaa2929d83941170e\"")

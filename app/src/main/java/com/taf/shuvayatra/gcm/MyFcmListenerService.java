@@ -21,6 +21,8 @@ import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.di.module.ApplicationModule;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.NotificationReceivedPresenter;
+import com.taf.shuvayatra.receivers.NotificationBroadcastReceiver;
+import com.taf.shuvayatra.ui.activity.SplashActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.SplashScreenActivity;
 
 import java.util.Map;
@@ -30,13 +32,13 @@ import javax.inject.Inject;
 
 public class MyFcmListenerService extends FirebaseMessagingService {
 
-    @Inject
-    NotificationReceivedPresenter mPresenter;
+//    @Inject
+//    NotificationReceivedPresenter mPresenter;
 
     @Override
     public void onMessageReceived(RemoteMessage pRemoteMessage) {
 
-        initialize();
+//        initialize();
 
         Map<String, String> data = pRemoteMessage.getData();
         Logger.d("MyGcmListenerService_onMessageReceived", "data:" + data.toString());
@@ -56,43 +58,40 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                     .setAutoCancel(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(description));
 
-            Intent resultIntent = new Intent(this, SplashScreenActivity.class);
+            Intent resultIntent = new Intent(this, NotificationBroadcastReceiver.class);
 
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addParentStack(SplashScreenActivity.class);
-            stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.getBroadcast(getBaseContext(),0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context
                     .NOTIFICATION_SERVICE);
             mNotificationManager.notify(2390, builder.build());
 
-            saveNotificationToDB(title, description);
+//            saveNotificationToDB(title, description);
         }
     }
-
-    private void initialize() {
-        DaggerDataComponent.builder()
-                .activityModule(new ActivityModule())
-                .applicationComponent(DaggerApplicationComponent.builder()
-                        .applicationModule(new ApplicationModule((MyApplication) this
-                                .getApplicationContext()))
-                        .build())
-                .dataModule(new DataModule())
-                .build()
-                .inject(this);
-    }
-
-    private void saveNotificationToDB(String title, String description) {
-        UseCaseData useCaseData = new UseCaseData();
-
-        Notification notification = new Notification();
-        notification.setTitle(title);
-        notification.setDescription(description);
-        notification.setCreatedAt(System.currentTimeMillis() / 1000);
-        notification.setUpdatedAt(System.currentTimeMillis() / 1000);
-        useCaseData.putSerializable(UseCaseData.SUBMISSION_DATA, notification);
-        mPresenter.initialize(useCaseData);
-    }
+//
+//    private void initialize() {
+//        DaggerDataComponent.builder()
+//                .activityModule(new ActivityModule())
+//                .applicationComponent(DaggerApplicationComponent.builder()
+//                        .applicationModule(new ApplicationModule((MyApplication) this
+//                                .getApplicationContext()))
+//                        .build())
+//                .dataModule(new DataModule())
+//                .build()
+//                .inject(this);
+//    }
+//
+//    private void saveNotificationToDB(String title, String description) {
+//        UseCaseData useCaseData = new UseCaseData();
+//
+//        Notification notification = new Notification();
+//        notification.setTitle(title);
+//        notification.setDescription(description);
+//        notification.setCreatedAt(System.currentTimeMillis() / 1000);
+//        notification.setUpdatedAt(System.currentTimeMillis() / 1000);
+//        useCaseData.putSerializable(UseCaseData.SUBMISSION_DATA, notification);
+////        mPresenter.initialize(useCaseData);
+//    }
 }

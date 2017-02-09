@@ -19,6 +19,7 @@ import com.taf.model.Post;
 import com.taf.model.PostResponse;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.MediaServiceActivity;
 import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -27,6 +28,7 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.PostListView;
+import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.io.Serializable;
@@ -38,7 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import retrofit2.http.POST;
 
-public class FeedActivity extends PlayerFragmentActivity implements
+public class FeedActivity extends MediaServiceActivity implements
         ListItemClickListener,
         PostListView,
         SwipeRefreshLayout.OnRefreshListener {
@@ -150,6 +152,7 @@ public class FeedActivity extends PlayerFragmentActivity implements
 
         mRecyclerView.setAdapter(mListAdapter);
         mRecyclerView.setEmptyView(mEmptyView);
+        mRecyclerView.addItemDecoration(Utils.getBottomMarginDecoration(getContext(), R.dimen.mini_media_player_peek_height));
     }
 
     private void loadPostsList(Integer pPage) {
@@ -184,6 +187,11 @@ public class FeedActivity extends PlayerFragmentActivity implements
                 intent = new Intent(getContext(), AudioDetailActivity.class);
                 intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
                 break;
+            case MyConstants.Adapter.TYPE_PLACE:
+                intent = new Intent(getContext(), PlaceDetailActivity.class);
+                intent.putExtra(MyConstants.Extras.KEY_ID, pModel.getId());
+                break;
+
         }
         if (intent != null)
             startActivityForResult(intent, REQUEST_CODE_POST_DETAIL);

@@ -2,7 +2,6 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.deprecated.activity.PlacesDetailActivity">
@@ -10,7 +9,7 @@
     <data class="PlaceDetailDataBinding">
 
         <variable
-            name="similarPlaces"
+            name="similarStories"
             type="java.util.List&lt;com.taf.model.Post>"/>
 
         <variable
@@ -18,8 +17,8 @@
             type="com.taf.model.Post"/>
 
         <variable
-            name="countryId"
-            type="java.lang.Long"/>
+            name="listener"
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -28,6 +27,7 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
@@ -66,8 +66,11 @@
 
         <include
             layout="@layout/content_places_detail"
-            bind:countryId="@{countryId}"
-            bind:place="@{place}"
-            bind:similarPlaces="@{similarPlaces}"/>
+            app:listener="@{listener}"
+            app:place="@{place}"
+            app:similarStories="@{similarStories}"/>
+
+        <include layout="@layout/content_mini_player"/>
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>

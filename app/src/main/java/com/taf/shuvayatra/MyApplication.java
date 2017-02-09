@@ -10,6 +10,7 @@ import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.component.DaggerApplicationComponent;
 import com.taf.shuvayatra.di.module.ApplicationModule;
@@ -25,10 +26,11 @@ public class MyApplication extends Application {
     public MediaService mService;
     ApplicationComponent mApplicationComponent;
     private GcmNetworkManager mGcmNetworkManager;
-
+    public static boolean isActivityShowing;
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.e(TAG,"Applicaiton on create called");
 
         this.mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
@@ -69,4 +71,5 @@ public class MyApplication extends Application {
     public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
     }
+
 }

@@ -172,5 +172,6 @@
     <string name="user_label_destination">गन्तव्य</string>
     <string name="tab_label_user_info">आफ्नो जानकारी</string>
     <string name="tab_label_favorites">मनपराएको</string>
+    <string name="views">पटक हेरेको  </string>
 
 </resources>

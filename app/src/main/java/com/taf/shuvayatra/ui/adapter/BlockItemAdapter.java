@@ -17,6 +17,7 @@ import com.taf.shuvayatra.databinding.BlockListItemDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderItemDataBinding;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
+import com.taf.shuvayatra.ui.activity.PlaceDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.util.MyConstants;
 
@@ -114,6 +115,9 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
                             case MyConstants.Adapter.TYPE_TEXT:
                                 Logger.e(TAG, ">>> news|text type");
                                 intent = new Intent(mContext, ArticleDetailActivity.class);
+                                break;
+                            case MyConstants.Adapter.TYPE_PLACE:
+                                intent = new Intent(mContext, PlaceDetailActivity.class);
                                 break;
                         }
 

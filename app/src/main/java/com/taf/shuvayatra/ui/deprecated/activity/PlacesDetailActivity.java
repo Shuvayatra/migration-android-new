@@ -31,6 +31,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+@Deprecated
 public class PlacesDetailActivity extends FacebookActivity implements PlacesListView, PostDetailView {
 
     @Inject
@@ -38,7 +39,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     @Inject
     PostFavouritePresenter mFavouritePresenter;
 
-    @BindView(R.id.places_container)
+//    @BindView(R.id.places_container)
     LinearLayout mPlacesContainer;
 
     Post mPlace;
@@ -120,7 +121,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
         if (mPlace == null || mCountryId == null) throw new IllegalStateException("Place and " +
                 "respective country id must be provided.");
         ((PlaceDetailDataBinding) mBinding).setPlace(mPlace);
-        ((PlaceDetailDataBinding) mBinding).setCountryId(mCountryId);
+//        ((PlaceDetailDataBinding) mBinding).setCountryId(mCountryId);
         mOldFavouriteState = mPlace.isFavourite() != null ? mPlace.isFavourite() : false;
 
         initialize();
@@ -164,7 +165,7 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
 
     @Override
     public void renderPlaces(List<Post> pPlaces) {
-        ((PlaceDetailDataBinding) mBinding).setSimilarPlaces(pPlaces);
+//        ((PlaceDetailDataBinding) mBinding).setSimilarPlaces(pPlaces);
     }
 
     @Override

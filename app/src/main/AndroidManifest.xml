@@ -53,6 +53,7 @@
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receivers.NotificationBroadcastReceiver"/>
 
         <activity
             android:name=".ui.deprecated.activity.PlacesDetailActivity"
@@ -165,7 +166,7 @@
             android:name=".ui.activity.FeedActivity"
             android:label="@string/title_activity_feed"
             android:parentActivityName=".ui.activity.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.StatusBarColor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.taf.shuvayatra.ui.activity.HomeActivity" />
@@ -185,7 +186,7 @@
             android:name=".ui.activity.PodcastsActivity"
             android:label="@string/title_activity_podcasts"
             android:parentActivityName=".ui.activity.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.StatusBarColor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.taf.shuvayatra.ui.activity.HomeActivity" />
@@ -204,7 +205,7 @@
         <activity
             android:name=".ui.activity.DestinationDetailActivity"
             android:label="@string/title_activity_destination_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.StatusBarColor"></activity>
         <activity
             android:name=".ui.activity.ArticleDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
@@ -214,6 +215,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.AudioDetailActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.activity.PlaceDetailActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
@@ -229,7 +234,7 @@
         <activity
             android:name=".ui.activity.SearchActivity"
             android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.StatusBarColor"></activity>
         <activity
             android:name=".ui.activity.InfoActivity"
             android:parentActivityName=".ui.activity.HomeActivity" />

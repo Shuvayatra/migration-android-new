@@ -30,7 +30,7 @@ public class PostEntity {
     Integer viewCount;
     Integer priority;
 
-    @SerializedName("similar")
+    @SerializedName("similar_posts")
     List<PostEntity> similarPosts;
 
     public Long getId() {

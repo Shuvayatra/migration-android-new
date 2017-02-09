@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
@@ -36,6 +37,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+
 import static com.taf.util.MyConstants.Extras.KEY_ID;
 import static com.taf.util.MyConstants.Extras.KEY_POST;
 import static com.taf.util.MyConstants.Extras.KEY_VIDEO;
@@ -54,6 +57,11 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     protected Post mPost;
     private boolean mOldFavouriteState;
+
+
+
+    @BindView(R.id.web_view_content)
+    WebView mWebView;
 
     private boolean enableAnalytics = true;
 
@@ -100,6 +108,10 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         } else {
             renderPost(mPost);
         }
+
+        mWebView.getSettings().setLoadsImagesAutomatically(true);
+        mWebView.getSettings().setBlockNetworkLoads(false);
+        mWebView.getSettings().setBlockNetworkImage(false);
     }
 
     @Override

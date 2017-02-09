@@ -31,7 +31,7 @@ public class BlockEntity {
     // attributes only unique to notices
     @SerializedName("deeplink")
     private String noticeDeeplink;
-    @SerializedName("image")
+    @SerializedName("image_url")
     private String noticeImage;
 
     //todo check later

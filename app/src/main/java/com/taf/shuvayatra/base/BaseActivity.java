@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.test.mock.MockApplication;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -53,8 +54,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initLanguage();
         super.onCreate(savedInstanceState);
+        initLanguage();
+
         getApplicationComponent().inject(this);
         if (!isDataBindingEnabled()) {
             setContentView(getLayout());
@@ -69,8 +71,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void initLanguage() {
         Utils.setLanguage(MyConstants.Language.NEPALI, getApplicationContext());
-
     }
+
 
     @Override
     protected void onDestroy() {
@@ -153,5 +155,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public ActivityModule getActivityModule() {
         return new ActivityModule(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyApplication.isActivityShowing = true;
+        initLanguage();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+       MyApplication.isActivityShowing = false;
     }
 }

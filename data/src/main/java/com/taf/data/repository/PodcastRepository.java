@@ -34,7 +34,7 @@ public class PodcastRepository implements IPodcastRepository {
                 .getPodcasts(mChannelId)
                 .map(entities ->{
                    PodcastResponse podcastResponse =  mDataMapper.transformPodcastResponse(entities);
-                    podcastResponse.setFromCache(true);
+                    if(podcastResponse!=null) podcastResponse.setFromCache(true);
                     return podcastResponse;
                 });
 //                .map(entities -> {

@@ -43,6 +43,8 @@ public class MiniPlayerFragment extends BaseFragment implements
     TextView mBufferingText;
     @BindView(R.id.media_image)
     SimpleDraweeView mediaImage;
+    @BindView(R.id.textview_description)
+    TextView mDescription;
 
     private int mCurrentProgress;
     private MediaReceiver mediaReceiver;
@@ -81,6 +83,7 @@ public class MiniPlayerFragment extends BaseFragment implements
         receiverFilter = new IntentFilter();
 
         mPlayBtn.setOnClickListener(this);
+        mDescription.setOnClickListener(this);
         mSeekbar.setOnSeekBarChangeListener(this);
     }
 
@@ -211,6 +214,8 @@ public class MiniPlayerFragment extends BaseFragment implements
         );
         mTitle.setText(((MyApplication) getContext().getApplicationContext()).mService
                 .getCurrentTitle());
+        mDescription.setText(((MyApplication) getContext().getApplicationContext()).mService
+                .getCurrentDescription());
         BindingUtil.setImage(mediaImage, ((MyApplication) getContext().getApplicationContext())
                 .mService.getCurrentImageResource());
     }
