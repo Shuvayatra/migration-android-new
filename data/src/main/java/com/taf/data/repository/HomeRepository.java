@@ -30,14 +30,12 @@ public class HomeRepository implements IHomeRepository {
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
                 .getHomeBlocks()
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
-                .map(blocks -> Utils.sortByPositionBlock(blocks))
-                .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.size()));
+                .map(blocks -> Utils.sortByPositionBlock(blocks));
 
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
                 .getHomeBlocks(params)
                 .map(blockEntities -> mDataMapper.transformBlockEntity(blockEntities))
                 .map(blocks -> Utils.sortByPositionBlock(blocks));
-//                .doOnNext(blocks -> Log.e("HomeRepository", "call: " + blocks.get(0).getFeed()));
 
         if (noCache) {
             return apiObservable;

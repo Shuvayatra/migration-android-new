@@ -53,7 +53,13 @@
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receivers.NotificationBroadcastReceiver"/>
+
+        <receiver android:name=".receivers.NotificationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="intent.action.PLAY_RADIO" />
+                <action android:name="intent.action.PUSH_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".ui.deprecated.activity.PlacesDetailActivity"
@@ -68,12 +74,12 @@
             android:name=".ui.deprecated.activity.JourneyCategoryDetailActivity"
             android:label="@string/title_activity_journey_category_detail"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.deprecated.activity.CountryDetailActivity"
             android:label="@string/title_activity_country_detail"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".gcm.MyFcmListenerService">
             <intent-filter>
@@ -89,7 +95,7 @@
         <activity
             android:name=".ui.deprecated.activity.InfoDetailActivity"
             android:label="@string/title_activity_info_detail"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <!-- <activity -->
         <!-- android:name="com.facebook.FacebookActivity" -->
         <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
@@ -107,19 +113,16 @@
         <activity
             android:name=".ui.deprecated.activity.FacebookParseActivity"
             android:label="@string/title_activity_facebook_parse"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.deprecated.activity.SearchListActivity"
             android:label="@string/title_activity_search_list"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".ui.activity.DeepLinkActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -127,25 +130,30 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="post"
+                    android:host="screen"
                     android:scheme="shuvayatra" />
+
                 <data
-                    android:host="journey"
-                    android:scheme="shuvayatra" />
-                <data
-                    android:host="destination"
-                    android:scheme="shuvayatra" />
-                <data
-                    android:host="radio"
-                    android:scheme="shuvayatra" />
-                <data
-                    android:host="qna"
-                    android:scheme="shuvayatra" />
-                <data
-                    android:host="news"
+                    android:host="home"
                     android:scheme="shuvayatra" />
             </intent-filter>
+
         </activity>
+        <!--<activity-->
+        <!--android:name=".ui.activity.DeeplinkActivity"-->
+        <!--android:label="@string/app_name"-->
+        <!--android:theme="@style/AppTheme.NoActionBar">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.VIEW" />-->
+
+        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+
+        <!--<data-->
+        <!--android:host="post"-->
+        <!--android:scheme="shuvayatra" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
 
         <activity
             android:name=".ui.activity.SplashActivity"
@@ -161,7 +169,7 @@
             android:name=".ui.activity.OnBoardActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.AppThemeOnBoardActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.FeedActivity"
             android:label="@string/title_activity_feed"
@@ -205,22 +213,86 @@
         <activity
             android:name=".ui.activity.DestinationDetailActivity"
             android:label="@string/title_activity_destination_detail"
-            android:theme="@style/AppTheme.NoActionBar.StatusBarColor"></activity>
+            android:theme="@style/AppTheme.NoActionBar.StatusBarColor">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="destination"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ui.activity.ArticleDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="text"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ui.activity.VideoDetailActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="video"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ui.activity.AudioDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="audio"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ui.activity.PlaceDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="place"
+                    android:scheme="shuvayatra" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.MyTaskService"

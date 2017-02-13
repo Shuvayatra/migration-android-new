@@ -20,4 +20,12 @@ public class CountryInfo extends BaseModel {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "CountryInfo{" +
+                "attribute='" + attribute + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

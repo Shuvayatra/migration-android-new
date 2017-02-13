@@ -3,6 +3,7 @@ package com.taf.interactor;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.model.PostResponse;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IPostRepository;
 
 import javax.inject.Inject;
@@ -35,8 +36,9 @@ public class GetPostListUseCase extends UseCase<PostResponse> {
             offset = pData.getInteger(UseCaseData.OFFSET, 0);
             limit = pData.getInteger(UseCaseData.LIMIT, 15);
             feedType = pData.getInteger(UseCaseData.CONTENT_TYPE, 0);
+            pData.putString(UseCaseData.BLOCK_ID, String.valueOf(mId));
         }
-
-        return mRepository.getList(feedType, limit, offset, mFilterParams, mId);
+        ApiQueryParams params = new ApiQueryParams(pData);
+        return mRepository.getList(feedType, limit, offset, params);
     }
 }

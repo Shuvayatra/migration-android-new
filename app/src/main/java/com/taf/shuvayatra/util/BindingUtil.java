@@ -51,10 +51,12 @@ import com.taf.shuvayatra.ui.adapter.BlockItemAdapter;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.RetainingDataSourceSupplier;
 import com.taf.shuvayatra.ui.deprecated.activity.PlacesDetailActivity;
+import com.taf.shuvayatra.ui.interfaces.BlockItemAnalytics;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -64,11 +66,7 @@ public class BindingUtil {
     @BindingAdapter("bind:imageUrl")
     public static void setImage(SimpleDraweeView pView, String url) {
         if (url != null && !url.isEmpty()) {
-            if(url.contains("notice"))
-                Logger.e(TAG,"image of notice: "+ url);
-//            Logger.e(TAG, "url: " + url);
-//            Logger.e(TAG, "pView.getWidth(): " + pView.getWidth() + " / " + pView.getHeight());
-            //// TODO: 1/11/17 issue with width and height 0 for nougat
+            Logger.e(TAG, ">>> URL: " + url);
             // temp fix for giving certain width and height if view height and width are 0
             int height = pView.getHeight() > 0 ? pView.getHeight() : 150;
             int width = pView.getWidth() > 0 ? pView.getWidth() : 150;
@@ -79,11 +77,25 @@ public class BindingUtil {
 
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setImageRequest(request)
+                    .setControllerListener(new BaseControllerListener<ImageInfo>() {
+                        @Override
+                        public void onFailure(String id, Throwable throwable) {
+                            super.onFailure(id, throwable);
+                            Logger.e(TAG, ">>> image fail for : " + id);
+                            throwable.printStackTrace();
+                        }
+
+                        @Override
+                        public void onIntermediateImageFailed(String id, Throwable throwable) {
+                            super.onIntermediateImageFailed(id, throwable);
+                            throwable.printStackTrace();
+                        }
+                    })
                     .setOldController(pView.getController())
                     .build();
 
             pView.setController(controller);
-            //pView.setImageURI(Uri.parse(url));
+//            pView.setImageURI(Uri.parse(url));
         } else {
             Uri uri = new Uri.Builder()
                     .scheme(UriUtil.LOCAL_RESOURCE_SCHEME) // "res"
@@ -114,12 +126,7 @@ public class BindingUtil {
             ControllerListener<ImageInfo> controllerListener = new BaseControllerListener<ImageInfo>() {
                 @Override
                 public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
-
-//                    Logger.e(TAG,"ratio: "+ ratio);
-//                    Logger.e(TAG,"width: "+ width);
                     pView.getLayoutParams().height = (int) (width * ratio);
-
-//                    Logger.e(TAG,"pView.getLayoutParams().height: "+ pView.getLayoutParams().height);
                     pView.requestLayout();
                 }
             };
@@ -131,7 +138,6 @@ public class BindingUtil {
                     .build();
 
             pView.setController(controller);
-            //pView.setImageURI(Uri.parse(url));
         }
     }
 
@@ -152,16 +158,30 @@ public class BindingUtil {
 
     }
 
-    @BindingAdapter("bind:htmlContent")
-    public static void setHtmlContent(WebView pView, String content) {
+    @BindingAdapter(value = {"htmlContent", "post", "isAudio"}, requireAll = false)
+    public static void setHtmlContent(WebView pView, String content, Post post, boolean isAudio) {
+
+        if (isAudio)
+            if (post != null && post.getPhotoCredit() != null && !post.getPhotoCredit()
+                    .isEmpty()) {
+                content = content.concat("<br>Photo Credit: " + post.getPhotoCredit());
+            }
+
+        if (post != null) {
+            if (post.getSourceUrl() != null && !post.getSourceUrl().isEmpty())
+                content = content.concat(String.format(Locale.getDefault(),
+                        "<br>स्रोत: <a href='%s'>%s</a>", post.getSourceUrl(), post.getSource()));
+            else if (post.getSource() != null && !post.getSource().isEmpty())
+                content = content.concat(String.format(Locale.getDefault(), "स्रोत: %s", post.getSource()));
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append("<HTML><HEAD><LINK href=\"file:///android_asset/styles.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body " +
                 "style='margin:0;padding:0;'>");
-        sb.append("");
+        sb.append(" ");
         sb.append(content);
         sb.append("</body></HTML>");
-        pView.loadDataWithBaseURL("http://nrna.yipl.com.np", sb.toString(), "text/html",
-                "utf-8", null);
+        pView.loadDataWithBaseURL(BuildConfig.BASE_URL, sb.toString(), "text/html", "utf-8", null);
     }
 
     @BindingAdapter("bind:address")
@@ -269,9 +289,10 @@ public class BindingUtil {
     public static void setPhoneNumbers(LinearLayout pContainer, List<String> pNumbers) {
         pContainer.removeAllViews();
         if (pNumbers != null && !pNumbers.isEmpty()) {
-            for (String number : pNumbers) {
-                showPhoneNumber(pContainer.getContext(), pContainer, number, false);
-            }
+            showPhoneNumber(pContainer.getContext(), pContainer, pNumbers.get(0), false);
+//            for (String number : pNumbers) {
+//                showPhoneNumber(pContainer.getContext(), pContainer, number, false);
+//            }
         }
     }
 
@@ -406,25 +427,41 @@ public class BindingUtil {
         }
     }
 
-    @BindingAdapter({"bind:data", "bind:orientation"})
-    public static void showBlockItems(RecyclerView recyclerView, List<Post> posts,
+    // TODO: 2/12/17 refactor later, don't use 'data' rather use 'block'
+    @BindingAdapter(value = {"bind:block", "bind:callback", "bind:orientation"}, requireAll = false)
+    public static void showBlockItems(RecyclerView recyclerView,
+                                      Block block,
+                                      BlockItemAnalytics callback,
                                       int orientation) {
         BlockItemAdapter adapter = (BlockItemAdapter) recyclerView.getAdapter();
         if (adapter == null) {
-            adapter = new BlockItemAdapter(recyclerView.getContext(), posts, orientation);
-
+            adapter = new BlockItemAdapter(recyclerView.getContext(), block, callback, block.getData(),
+                    orientation);
             recyclerView.setHasFixedSize(true);
             recyclerView.setClipToPadding(false);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),
                     orientation, false));
         }
-        adapter.setItems(posts);
+        adapter.setItems(block.getData());
     }
 
-    @BindingAdapter("bind:htmlContent")
-    public static void setHtmlContent(TextView view, String content) {
-        String text = "";
+    @BindingAdapter(value = {"bind:htmlContent", "bind:post"}, requireAll = false)
+    public static void setHtmlContent(TextView view, String content, Post post) {
+        String text;
+
+        if (post != null && post.getPhotoCredit() != null && !post.getPhotoCredit().isEmpty()) {
+            content = content.concat("<br>Photo Credit: " + post.getPhotoCredit());
+        }
+
+        if (post != null) {
+            if (post.getSourceUrl() != null && !post.getSourceUrl().isEmpty())
+                content = content.concat(String.format(Locale.getDefault(),
+                        "<br>स्रोत: <a href='%s'>%s</a>", post.getSourceUrl(), post.getSource()));
+            else if (post.getSource() != null && !post.getSource().isEmpty())
+                content = content.concat(String.format(Locale.getDefault(), "स्रोत: %s", post.getSource()));
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             text = Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY).toString();
         } else {
@@ -435,8 +472,10 @@ public class BindingUtil {
 
     @BindingAdapter(value = {"bind:imageUrl", "bind:required"}, requireAll = false)
     public static void setImage(SimpleDraweeView pView, Post post, boolean required) {
-        String url;
+        // view should be visible by default
+        pView.setVisibility(View.VISIBLE);
 
+        String url;
         if (post != null) {
 
             if (post.getType().equals("audio") || post.getType().equals("video")) {
@@ -447,15 +486,16 @@ public class BindingUtil {
             if (url != null && !url.isEmpty()) {
                 pView.setImageURI(Uri.parse(url));
             } else {
-                if(required) pView.setVisibility(View.VISIBLE);
-                else pView.setVisibility(View.GONE);
+                if (required)
+                    pView.setVisibility(View.VISIBLE);
+                else
+                    pView.setVisibility(View.GONE);
             }
         }
     }
 
     @BindingAdapter({"bind:resourceId"})
     public static void setImageResource(ImageView view, int resourceId) {
-//        if(view.getContext().getResources().getDrawable())
         if (resourceId != Integer.MIN_VALUE) {
             view.setImageResource(resourceId);
         }

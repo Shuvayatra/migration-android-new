@@ -85,6 +85,11 @@ public class MyConstants {
         public static final String CASE_CHANNEL_LIST = "channel_list";
     }
 
+    public static final class Analytics {
+        public static final String KEY_SCREEN = "screen";
+        public static final String KEY_MENU_ITEM = "navigation_menu_item_click";
+    }
+
     public static final class Preferences {
         public static final String PREF_NAME = "nrna_app_preferences";
         public static final String LAST_UPDATE_STAMP = "last_update_stamp_1";
@@ -153,6 +158,27 @@ public class MyConstants {
         public static final String CONTACT_US = "api/page/contact-us";
     }
 
+    public static final class DynamicScreen {
+        public static final String TYPE_FEED = "feed";
+        public static final String TYPE_BLOCK = "block";
+    }
+
+    public static final class Deeplink {
+
+        public static final String TYPE_POST = "post";
+        public static final String TYPE_SCREEN = "screen";
+        public static final String TYPE_HOME = "home";
+        public static final String TYPE_DESTINATION = "home";
+        public static final String TYPE_FEED = "feed";
+
+        public static final String PARAM_SCREEN_ID = "screen_id";
+        public static final String PARAM_POST_ID = "post_id";
+        public static final String PARAM_DESTINATION_ID = "destination_id";
+        public static final String PARAM_CATEGORY_ID = "category_id";
+
+        public static final String KEY_DEEPLINK_LOADED = "deeplink_loaded";
+    }
+
     public static final class Adapter {
         public static final int TYPE_AUDIO = 1;
         public static final int TYPE_VIDEO = 2;
@@ -166,8 +192,8 @@ public class MyConstants {
         public static final int TYPE_INFO = 10;
         public static final int TYPE_CATEGORY_HEADER = 11;
         public static final int TYPE_PODCAST = 12;
-        public static final int TYPE_COUNTRY_SELECTED = 13;
-        public static final int TYPE_COUNTRY_HEADER = 14;
+        public static final int TYPE_COUNTRY_HEADER = 13;
+        public static final int TYPE_COUNTRY_SELECTED = 14;
         public static final int TYPE_BLOCK = 15;
         public static final int TYPE_COUNTRY_WIDGET = 16;
         public static final int VIEW_TYPE_LIST = 17;
@@ -202,6 +228,7 @@ public class MyConstants {
     public static final class Extras {
         public static final String KEY_PAGER_POSITION = "pager-position";
         public static final String KEY_ID = "key_id";
+        public static final String KEY_PAGE_TITLE = "title";
         public static final String KEY_POST = "key_post";
         public static final String KEY_AUDIO = "key_audio";
         public static final String KEY_VIDEO = "key_video";
@@ -233,13 +260,19 @@ public class MyConstants {
         public static final String KEY_CHANNEL_LIST = "key_channel_list";
         public static final String KEY_ABOUT = "key_about";
         public static final String KEY_CONTACT_US = "key_contact_us";
-        public static final java.lang.String KEY_INFO = "key_info";
+        public static final String KEY_INFO = "key_info";
         public static final String IS_EXIT = "is_exit";
+        public static final String KEY_COUNTRY_LIST = "key_country_list";
+        public static final String KEY_COUNTRY_WIDGET = "key_country_widget";
+        public static final String KEY_POST_ID = "id";
     }
 
     public static final class Intent {
         public static final String GCM_REGISTRATION_COMPLETE = "gcm_registration_complete";
         public static final String ACTION_SHOW_RADIO = "intent.action.SHOW_RADIO";
+        public static final String ACTION_SHOW_DESTINATION = "intent.action.SHOW_DESTINATION";
+        public static final String ACTION_CLICK_PLAYER = "intent.action.PLAY_RADIO";
+        public static final String ACTION_CLICK_PUSH_NOTIFICATION = "intent.action.PUSH_NOTIFICATION";
     }
 
     public static class SECTION {

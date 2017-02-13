@@ -28,7 +28,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class SearchListActivity extends BaseActivity implements PostListView, ListItemClickListener {
 
     @Inject
@@ -43,6 +43,11 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
     RelativeLayout mEmptyView;
     private ListAdapter<Post> mListAdapter;
     private int listItemSelection;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {
@@ -153,12 +158,12 @@ public class SearchListActivity extends BaseActivity implements PostListView, Li
                 boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
                         false);
                 int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
-                Logger.e("FeedFragment", "view count = " + viewCount);
+                Logger.e("FeedListFragment", "view count = " + viewCount);
                 if (viewCount != 0) {
                     mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedViewCount(viewCount);
                 }
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
-                Logger.e("FeedFragment", "share count = " + shareCount);
+                Logger.e("FeedListFragment", "share count = " + shareCount);
                 if (shareCount != 0) {
                     mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedShareCount(shareCount);
                 }

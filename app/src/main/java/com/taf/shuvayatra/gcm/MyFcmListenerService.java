@@ -24,6 +24,7 @@ import com.taf.shuvayatra.presenter.deprecated.NotificationReceivedPresenter;
 import com.taf.shuvayatra.receivers.NotificationBroadcastReceiver;
 import com.taf.shuvayatra.ui.activity.SplashActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.SplashScreenActivity;
+import com.taf.util.MyConstants;
 
 import java.util.Map;
 
@@ -32,20 +33,15 @@ import javax.inject.Inject;
 
 public class MyFcmListenerService extends FirebaseMessagingService {
 
-//    @Inject
-//    NotificationReceivedPresenter mPresenter;
-
     @Override
     public void onMessageReceived(RemoteMessage pRemoteMessage) {
 
-//        initialize();
-
         Map<String, String> data = pRemoteMessage.getData();
-        Logger.d("MyGcmListenerService_onMessageReceived", "data:" + data.toString());
 
         String title = data.get("title");
         String description = data.get("description");
-        description = description != null ? description : "";
+        String deeplink = data.get("deeplink");
+        description = (description != null ? description : "no description");
 
         if (title != null) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
@@ -58,40 +54,17 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                     .setAutoCancel(true)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(description));
 
-            Intent resultIntent = new Intent(this, NotificationBroadcastReceiver.class);
+            Intent resultIntent = new Intent(MyConstants.Intent.ACTION_CLICK_PUSH_NOTIFICATION);
+            if (deeplink != null) {
+                resultIntent.putExtra("deeplink", deeplink);
+            }
 
             PendingIntent resultPendingIntent =
-                    PendingIntent.getBroadcast(getBaseContext(),0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.getBroadcast(getBaseContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context
                     .NOTIFICATION_SERVICE);
             mNotificationManager.notify(2390, builder.build());
-
-//            saveNotificationToDB(title, description);
         }
     }
-//
-//    private void initialize() {
-//        DaggerDataComponent.builder()
-//                .activityModule(new ActivityModule())
-//                .applicationComponent(DaggerApplicationComponent.builder()
-//                        .applicationModule(new ApplicationModule((MyApplication) this
-//                                .getApplicationContext()))
-//                        .build())
-//                .dataModule(new DataModule())
-//                .build()
-//                .inject(this);
-//    }
-//
-//    private void saveNotificationToDB(String title, String description) {
-//        UseCaseData useCaseData = new UseCaseData();
-//
-//        Notification notification = new Notification();
-//        notification.setTitle(title);
-//        notification.setDescription(description);
-//        notification.setCreatedAt(System.currentTimeMillis() / 1000);
-//        notification.setUpdatedAt(System.currentTimeMillis() / 1000);
-//        useCaseData.putSerializable(UseCaseData.SUBMISSION_DATA, notification);
-////        mPresenter.initialize(useCaseData);
-//    }
 }

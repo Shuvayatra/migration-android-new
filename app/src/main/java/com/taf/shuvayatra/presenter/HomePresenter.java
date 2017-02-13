@@ -45,6 +45,7 @@ public class HomePresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
+        mView.showLoadingView();
         mUseCase.execute(new HomeSubscriber(), pData);
     }
 

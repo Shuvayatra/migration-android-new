@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
+import com.taf.model.Country;
 import com.taf.model.Post;
 import com.taf.model.PostResponse;
 import com.taf.shuvayatra.R;
@@ -71,6 +72,7 @@ public class FeedActivity extends MediaServiceActivity implements
     boolean mIsLoading = false;
     boolean mIsLastPage = false;
     long mId;
+    String categoryId = null;
 
     @Override
     public int getLayout() {
@@ -78,25 +80,33 @@ public class FeedActivity extends MediaServiceActivity implements
     }
 
     @Override
+    public String screenName() {
+        return "Content Feed Screen";
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Logger.e(TAG, getIntent().getData().toString());
+
         String title = getIntent().getStringExtra("title");
         if (title != null) getSupportActionBar().setTitle(title);
-        long id = getIntent().getLongExtra("id",Long.MIN_VALUE);
+        long id = getIntent().getLongExtra("id", Long.MIN_VALUE);
         Uri data = getIntent().getData();
-        String params = null;
         if (data != null) {
-            params = data.getQueryParameter("category_id");
+            categoryId = data.getQueryParameter("category_id");
         }
-
-        initialize(id,params);
+        initialize(id, categoryId);
         setUpAdapter();
         List<Post> posts = new ArrayList<>();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             posts = (List<Post>) savedInstanceState.getSerializable(STATE_POST_LIST);
         }
-        if(posts.isEmpty()) {
+        if (posts.isEmpty()) {
             loadPostsList(INITIAL_OFFSET);
         } else {
             mListAdapter.setDataCollection(posts);
@@ -113,7 +123,7 @@ public class FeedActivity extends MediaServiceActivity implements
 
     private void initialize(long id, String params) {
         DaggerDataComponent.builder()
-                .dataModule(new DataModule(id,params))
+                .dataModule(new DataModule(id, params))
                 .activityModule(getActivityModule())
                 .applicationComponent(getApplicationComponent())
                 .build()
@@ -162,6 +172,12 @@ public class FeedActivity extends MediaServiceActivity implements
         mUseCaseData.putInteger(UseCaseData.OFFSET, pPage);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
 
+        if (!getPreferences().getLocation().equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)
+                && getPreferences().getLocation().equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+            Country country = Country.makeCountryFromPreference(getPreferences().getLocation());
+            mUseCaseData.putString(UseCaseData.COUNTRY_ID, String.valueOf(country.getId()));
+        }
+        mUseCaseData.putString(UseCaseData.CATEGORY_ID, categoryId);
         mPresenter.initialize(mUseCaseData);
     }
 
@@ -260,7 +276,7 @@ public class FeedActivity extends MediaServiceActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(STATE_POST_LIST, (Serializable) mListAdapter.getDataCollection());
-        Logger.e(TAG,"saveInstanceState mListAdapter.getDataCollection().size(): "+ mListAdapter.getDataCollection().size());
+        Logger.e(TAG, "saveInstanceState mListAdapter.getDataCollection().size(): " + mListAdapter.getDataCollection().size());
         super.onSaveInstanceState(outState);
     }
 }

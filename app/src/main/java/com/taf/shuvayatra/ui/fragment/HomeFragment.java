@@ -1,12 +1,17 @@
 package com.taf.shuvayatra.ui.fragment;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.taf.data.utils.DateUtils;
@@ -17,10 +22,11 @@ import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetData;
 import com.taf.model.CountryWidgetModel;
+import com.taf.model.Notice;
+import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.base.BaseFragment;
-import com.taf.shuvayatra.base.PlayerFragmentActivity;
+import com.taf.shuvayatra.base.BaseNavigationFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryWidgetPresenter;
@@ -28,16 +34,19 @@ import com.taf.shuvayatra.presenter.HomePresenter;
 import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.BlocksAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
+import com.taf.shuvayatra.ui.interfaces.BlockItemAnalytics;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickWithDataTypeListener;
 import com.taf.shuvayatra.ui.views.CountryWidgetView;
 import com.taf.shuvayatra.ui.views.HomeView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.Adapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -47,11 +56,12 @@ import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 import static android.text.format.DateUtils.FORMAT_SHOW_YEAR;
 import static android.text.format.DateUtils.formatDateTime;
 
-public class HomeFragment extends BaseFragment implements
+public class HomeFragment extends BaseNavigationFragment implements
         HomeView,
         CountryWidgetView,
-        ListItemClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        ListItemClickWithDataTypeListener,
+        BlockItemAnalytics {
 
     public static final String TAG = "HomeFragment";
 
@@ -76,8 +86,23 @@ public class HomeFragment extends BaseFragment implements
 
     private boolean showCountryWidget;
 
-    public static HomeFragment getInstance() {
+    @Override
+    public String screenName() {
+        return "Navigation - Home";
+    }
+
+    public static HomeFragment newInstance() {
         return new HomeFragment();
+    }
+
+    @Override
+    public Fragment defaultInstance() {
+        return newInstance();
+    }
+
+    @Override
+    public String fragmentTag() {
+        return TAG;
     }
 
     @Override
@@ -93,6 +118,14 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public int getLayout() {
         return R.layout.fragment_home;
+    }
+
+    @Override
+    public void initNavigation(int layout, FragmentManager fragmentManager) {
+        Fragment fragment = fragmentManager.findFragmentByTag(TAG) == null ?
+                HomeFragment.newInstance() :
+                fragmentManager.findFragmentByTag(TAG);
+        fragmentManager.beginTransaction().replace(layout, fragment, TAG).commit();
     }
 
     @Override
@@ -112,7 +145,7 @@ public class HomeFragment extends BaseFragment implements
 
         initialize();
 
-        mAdapter = new BlocksAdapter(getContext());
+        mAdapter = new BlocksAdapter(getContext(), this, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(emptyView);
@@ -120,6 +153,57 @@ public class HomeFragment extends BaseFragment implements
 
         mPresenter.initialize(getUserCredentialsUseCase());
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+    }
+
+    @Override
+    public void onListItemSelected(BaseModel model, int dataType, int adapterPosition) {
+
+        if (dataType == Adapter.VIEW_TYPE_RADIO_WIDGET) {
+            // send to radio widget
+            getContext().sendBroadcast(new Intent(MyConstants.Intent.ACTION_SHOW_RADIO));
+        }
+
+        if (dataType == MyConstants.Adapter.VIEW_TYPE_NOTICE) {
+            // dismiss notice
+            mAdapter.getBlocks().remove(adapterPosition);
+            mAdapter.notifyItemRemoved(adapterPosition);
+            getTypedActivity().getPreferences().setNoticeDismissId(((Block) model).getNotice().getId());
+        }
+
+        if (dataType == Adapter.TYPE_COUNTRY_WIDGET) {
+            // send to destination detail
+            Logger.e(TAG, ">>> CLICK ON COUNTRY WIDGET");
+            Intent intent = new Intent(MyConstants.Intent.ACTION_SHOW_DESTINATION);
+            intent.putExtra(MyConstants.Extras.KEY_COUNTRY_WIDGET, model);
+            getContext().sendBroadcast(intent);
+        }
+    }
+
+    @Override
+    public void onDeeplinkSelected(String deeplink, BaseModel model, int dataType, int adapterPosition) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(deeplink));
+        if (dataType == MyConstants.Adapter.VIEW_TYPE_NOTICE) {
+            Notice notice = ((Block) model).getNotice();
+            intent.putExtra(MyConstants.Extras.KEY_PAGE_TITLE, notice.getTitle());
+            intent.putExtra(MyConstants.Extras.KEY_ID, notice.getId());
+
+            AnalyticsUtil.logReadMoreEvent(getAnalytics(), model.getId(), ((Block) model).getNotice()
+                    .getTitle(), screenName(), ((Block) model).getLayout());
+        } else {
+            intent.putExtra(MyConstants.Extras.KEY_PAGE_TITLE, ((Block) model).getTitle());
+            intent.putExtra(MyConstants.Extras.KEY_POST_ID, model.getId());
+
+            AnalyticsUtil.logReadMoreEvent(getAnalytics(), model.getId(), ((Block) model).getTitle(),
+                    screenName(), ((Block) model).getLayout());
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBlockItemSelected(Block block, Post post) {
+        AnalyticsUtil.logBlockEvent(getAnalytics(), block.getTitle(), post.getTitle(),
+                screenName(), block.getLayout());
     }
 
     @Override
@@ -268,11 +352,6 @@ public class HomeFragment extends BaseFragment implements
     }
 
     @Override
-    public void onListItemSelected(BaseModel pModel, int pIndex) {
-
-    }
-
-    @Override
     public void onLoadingView(int type) {
         mSwipeContainer.setRefreshing(true);
     }
@@ -290,7 +369,6 @@ public class HomeFragment extends BaseFragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Logger.e(TAG, "onDestroyViewCalled: ");
         mPresenter.destroy();
     }
 

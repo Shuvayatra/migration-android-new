@@ -3,14 +3,19 @@ package com.taf.shuvayatra.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.taf.data.entity.ScreenType;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.ui.fragment.BlockScreenFragment;
+import com.taf.shuvayatra.ui.fragment.FeedScreenFragment;
 import com.taf.util.MyConstants;
 
 import java.util.Locale;
@@ -18,7 +23,8 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
+public abstract class BaseFragment<T extends BaseActivity> extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener {
 
     public Unbinder mUnbinder;
 
@@ -69,6 +75,19 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
             if (itemDecoration != null)
                 fragmentRecycler().removeItemDecoration(itemDecoration);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        // space for rent
+    }
+
+    /**
+     * only used by {@link FeedScreenFragment} and {@link BlockScreenFragment} to define screen type
+     */
+    @ScreenType
+    public String getScreenType() {
+        return null;
     }
 
     public boolean shouldAddOrRemoveDecoration() {
@@ -124,5 +143,9 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment {
 
     public T getTypedActivity() {
         return (T) getActivity();
+    }
+
+    public FirebaseAnalytics getAnalytics() {
+        return ((BaseActivity) getContext()).getAnalytics();
     }
 }

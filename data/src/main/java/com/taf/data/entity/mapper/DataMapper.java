@@ -34,6 +34,7 @@ import com.taf.data.entity.SyncDataEntity;
 import com.taf.data.entity.UserInfoEntity;
 import com.taf.data.utils.DateUtils;
 import com.taf.data.utils.Logger;
+import com.taf.data.utils.Utils;
 import com.taf.model.Block;
 import com.taf.model.Category;
 import com.taf.model.Channel;
@@ -54,6 +55,8 @@ import com.taf.model.ScreenDataModel;
 import com.taf.model.ScreenModel;
 import com.taf.model.SyncData;
 import com.taf.model.UserInfoModel;
+import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.Adapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,6 +65,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import static com.taf.util.MyConstants.Adapter.TYPE_COUNTRY;
 
 @PerActivity
 public class DataMapper {
@@ -94,6 +99,7 @@ public class DataMapper {
         return postList;
     }
 
+
     public Post transformPost(PostEntity pEntity) {
         if (pEntity != null) {
             Post post = new Post();
@@ -102,8 +108,10 @@ public class DataMapper {
             post.setTitle(pEntity.getTitle());
             post.setDescription(pEntity.getDescription());
             post.setSource(pEntity.getSource());
+            post.setSourceUrl(pEntity.getSourceUrl());
             post.setShareUrl(pEntity.getShareUrl());
             post.setUpdatedAt(pEntity.getUpdatedAt());
+            post.setPhotoCredit(pEntity.getPhotoCredit());
             post.setCreatedAt(pEntity.getCreatedAt());
             post.setTags(pEntity.getTags());
             post.setData(transformPostData(pEntity.getData()));
@@ -176,7 +184,6 @@ public class DataMapper {
     }
 
     public List<Country> transformCountryList(List<CountryEntity> countries) {
-        Gson gson = new Gson();
         List<Country> countryList = new ArrayList<>();
         for (CountryEntity countryEntity : countries) {
             Country country = new Country();
@@ -196,10 +203,10 @@ public class DataMapper {
                 countryInfos.add(countryInfo);
             }
             country.setInformation(countryInfos);
+            country.setDataType(TYPE_COUNTRY);
             countryList.add(country);
-
         }
-        return countryList;
+        return Utils.sortByCountryName(countryList);
     }
 
     public List<Post> transformPostFromDb(Map<String, Object> pObjectMap) {

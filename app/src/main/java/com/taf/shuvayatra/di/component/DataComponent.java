@@ -1,7 +1,7 @@
 package com.taf.shuvayatra.di.component;
 
 import com.taf.data.di.PerActivity;
-import com.taf.shuvayatra.base.CategoryDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.activity.CategoryDetailActivity;
 import com.taf.shuvayatra.di.module.ActivityModule;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.gcm.MyFcmListenerService;
@@ -22,7 +22,7 @@ import com.taf.shuvayatra.ui.deprecated.activity.SearchListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.SplashScreenActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.TagListActivity;
 import com.taf.shuvayatra.ui.deprecated.activity.VideoDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.deprecated.fragment.FeedListFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
 import com.taf.shuvayatra.ui.fragment.BlockScreenFragment;
@@ -61,7 +61,7 @@ public interface DataComponent extends ActivityComponent {
 
     void inject(TagListActivity pActivity);
 
-    void inject(FeedFragment pFragment);
+    void inject(FeedListFragment pFragment);
 
     void inject(com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment pFragment);
 

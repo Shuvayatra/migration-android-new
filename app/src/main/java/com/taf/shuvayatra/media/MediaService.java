@@ -79,7 +79,7 @@ public class MediaService extends Service implements
     private boolean mStoppedByUser = false;
     private String mCurrentTitle = "";
     private String mCurrentImage = "";
-    private String mCurrentDescription="";
+    private String mCurrentDescription = "";
     private Runnable updateSeekTime = new Runnable() {
         @Override
         public void run() {
@@ -165,19 +165,10 @@ public class MediaService extends Service implements
 
     public void setTrack(Post pTrack) {
         Log.d(TAG, "setTrack() called with: pTrack = [" + pTrack + "]");
-//        if (mTrack == null) {
         stopPlayback(false);
         mTrack = pTrack;
         mCurrentPlayType = PlayType.POST;
         startStreaming(true);
-//        } else {
-//            if (mCurrentPlayType != PlayType.POST && !mTrack.equals(pTrack)) {
-//                stopPlayback();
-//                mTrack = pTrack;
-//                mCurrentPlayType = PlayType.POST;
-//                startStreaming();
-//            }
-//        }
     }
 
     /**
@@ -446,7 +437,7 @@ public class MediaService extends Service implements
         if (manager == null)
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent notificationIntent = new Intent(MediaService.this, NotificationBroadcastReceiver.class);
+        Intent notificationIntent = new Intent(MyConstants.Intent.ACTION_CLICK_PLAYER);
         PendingIntent toOpen = PendingIntent.getBroadcast(getApplicationContext(), NOTIFICATION_ID,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

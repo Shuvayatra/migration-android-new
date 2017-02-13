@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -92,10 +93,24 @@ public class AudioDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    public String screenName() {
+        return "Content: Audio";
+    }
+
+    @Override
     public void onPause() {
         if (mediaReceiver != null)
             unregisterReceiver(mediaReceiver);
         super.onPause();
+    }
+
+    @Override
+    public void checkDeeplinkMetadata() {
+        if (getIntent().getData() != null) {
+            Uri deeplinkUri = getIntent().getData();
+            mId = Long.parseLong(deeplinkUri.getQueryParameter(MyConstants.Deeplink.PARAM_POST_ID));
+            setFromDeeplink(true);
+        }
     }
 
     private void shareViaBluetooth() {
@@ -179,6 +194,8 @@ public class AudioDetailActivity extends PostDetailActivity implements
         } else if (pModel.getDataType() == MyConstants.Adapter.TYPE_NEWS || pModel.getDataType()
                 == MyConstants.Adapter.TYPE_TEXT) {
             intent = new Intent(this, ArticleDetailActivity.class);
+        } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_PLACE)) {
+            intent = new Intent(this, PlaceDetailActivity.class);
         }
 
         if (intent != null) {
@@ -266,7 +283,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
                 .setPositiveButton(R.string.action_confirmed, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(file.delete()) {
+                        if (file.delete()) {
                             Snackbar.make(mScrollView, getString(R.string.message_deleted, mPost.getTitle()), Snackbar.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
@@ -331,7 +348,7 @@ public class AudioDetailActivity extends PostDetailActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        if(mPost!=null) {
+        if (mPost != null) {
 
             switch (item.getItemId()) {
                 case R.id.action_download:

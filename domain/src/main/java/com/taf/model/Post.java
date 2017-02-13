@@ -20,6 +20,7 @@ public class Post extends BaseModel {
     Integer likes;
     Integer share;
     String featuredImage;
+    String photoCredit;
 
     Boolean isFavourite;
     Boolean isSynced;
@@ -28,6 +29,8 @@ public class Post extends BaseModel {
     Integer mViewCount;
     Integer mUnSyncedViewCount;
     Integer mUnSyncedShareCount;
+
+    String sourceUrl;
 
     String mCategory;
     // for pagination purpose
@@ -39,8 +42,16 @@ public class Post extends BaseModel {
     public static final String TYPE_AUDIO = "audio";
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_TEXT = "text";
+    public static final String TYPE_PLACE = "place";
     public static final String TYPE_NEWS = "news";
 
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
 
     public Long getCreatedAt() {
         return mCreatedAt;
@@ -297,10 +308,18 @@ public class Post extends BaseModel {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null) return false;
-        if(!(o instanceof Post)) return false;
-        if(this.id.equals(((Post) o).getId())) return true;
+        if (this == o) return true;
+        if (o == null) return false;
+        if (!(o instanceof Post)) return false;
+        if (this.id.equals(((Post) o).getId())) return true;
         else return false;
+    }
+
+    public String getPhotoCredit() {
+        return photoCredit;
+    }
+
+    public void setPhotoCredit(String photoCredit) {
+        this.photoCredit = photoCredit;
     }
 }

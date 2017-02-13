@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.net.Uri;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import com.taf.model.BaseModel;
 import com.taf.model.Block;
 import com.taf.model.Country;
 import com.taf.model.CountryWidgetModel;
-import com.taf.model.Notice;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockListDataBinding;
 import com.taf.shuvayatra.databinding.BlockNoticeDataBinding;
@@ -26,19 +23,26 @@ import com.taf.shuvayatra.databinding.BlockRadioWidgetDataBinding;
 import com.taf.shuvayatra.databinding.BlockSliderDataBinding;
 import com.taf.shuvayatra.databinding.CountryWidgetDataBinding;
 import com.taf.shuvayatra.databinding.ItemCountryInformationDataBinding;
-import com.taf.shuvayatra.ui.activity.DeepLinkActivity;
-import com.taf.shuvayatra.ui.activity.DestinationDetailActivity;
-import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
+import com.taf.shuvayatra.ui.interfaces.BlockItemAnalytics;
+import com.taf.shuvayatra.ui.interfaces.ListItemClickWithDataTypeListener;
+import com.taf.shuvayatra.ui.views.BlockViewHolder;
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.taf.util.MyConstants.Adapter.TYPE_COUNTRY_WIDGET;
+import static com.taf.util.MyConstants.Adapter.VIEW_TYPE_LIST;
+import static com.taf.util.MyConstants.Adapter.VIEW_TYPE_NOTICE;
+import static com.taf.util.MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET;
+import static com.taf.util.MyConstants.Adapter.VIEW_TYPE_SLIDER;
 
 /**
  * Created by julian on 10/18/16.
  */
 
-public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder> {
+public class BlocksAdapter extends RecyclerView.Adapter<BlockViewHolder> {
 
     public static final String TAG = "BlocksAdapter";
 
@@ -47,11 +51,15 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
     private Context mContext;
 
     private AppPreferences mPreferences;
+    private ListItemClickWithDataTypeListener mCallback;
+    private BlockItemAnalytics analyticsCallback;
 
-    public BlocksAdapter(Context context) {
+    public BlocksAdapter(Context context, ListItemClickWithDataTypeListener callback, BlockItemAnalytics analyticsCallback) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPreferences = new AppPreferences(context);
+        mCallback = callback;
+        this.analyticsCallback = analyticsCallback;
     }
 
     public List<BaseModel> getBlocks() {
@@ -65,107 +73,91 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
 
     private List<BaseModel> removeDismissedNotice(List<BaseModel> items) {
         List<BaseModel> baseModels = new ArrayList<>();
-        for (BaseModel item : items) {
-            baseModels.add(item);
-
-            if (item instanceof Block) {
-                if (((Block) item).getLayout().equalsIgnoreCase(Block.TYPE_NOTICE) &&
-                        mPreferences.getNoticeDismissId().contains(((Block) item).getNotice().getId()
-                                .toString())) {
-                    baseModels.remove(item);
+        // added null check for config changes
+        if (items != null)
+            for (BaseModel item : items) {
+                baseModels.add(item);
+                if (item instanceof Block) {
+                    if (((Block) item).getLayout().equalsIgnoreCase(Block.TYPE_NOTICE) &&
+                            mPreferences.getNoticeDismissId().contains(((Block) item).getNotice().getId()
+                                    .toString())) {
+                        baseModels.remove(item);
+                    }
                 }
             }
-        }
         return baseModels;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BlockViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
-                Logger.e(TAG, "country widget called");
+
+            case TYPE_COUNTRY_WIDGET:
                 CountryWidgetDataBinding widgetBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.list_item_country_widget, parent, false);
-                return new ViewHolder<>(widgetBinding);
-            case MyConstants.Adapter.VIEW_TYPE_NOTICE:
+                return new CountryWidgetViewHolder(widgetBinding);
+
+            case Adapter.VIEW_TYPE_NOTICE:
                 BlockNoticeDataBinding noticeBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_notice, parent, false);
-                return new ViewHolder<>(noticeBinding);
-            case MyConstants.Adapter.VIEW_TYPE_LIST:
+                return new NoticeViewHolder(noticeBinding);
+
+            case VIEW_TYPE_LIST:
                 BlockListDataBinding listBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_list, parent, false);
-                return new ViewHolder<>(listBinding);
-            case MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET:
+                return new ListViewHolder(listBinding);
+
+            case Adapter.VIEW_TYPE_RADIO_WIDGET:
                 BlockRadioWidgetDataBinding radioBinding = DataBindingUtil.inflate(mInflater, R
                         .layout.view_block_radio_widget, parent, false);
-                return new ViewHolder<>(radioBinding);
-            default:
-            case MyConstants.Adapter.VIEW_TYPE_SLIDER:
+                return new RadioWidgetViewHolder(radioBinding);
+
+            case Adapter.VIEW_TYPE_SLIDER:
                 BlockSliderDataBinding sliderBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.view_block_slider, parent, false);
-                return new ViewHolder<>(sliderBinding);
-            case MyConstants.Adapter.TYPE_COUNTRY:
+                return new SliderViewHolder(sliderBinding);
+
+            default:
+            case Adapter.TYPE_COUNTRY:
                 ItemCountryInformationDataBinding countryBinding = DataBindingUtil.inflate(mInflater,
                         R.layout.item_country_information, parent, false);
-                return new ViewHolder<>(countryBinding);
+                return new CountryInformationViewHolder(countryBinding);
+
         }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        switch (getItemViewType(position)) {
-            case MyConstants.Adapter.TYPE_COUNTRY:
-                ((ViewHolder<ItemCountryInformationDataBinding>) holder).mBinding
-                        .setCountry((Country) mBlocks.get(position));
-                break;
-            case MyConstants.Adapter.TYPE_COUNTRY_WIDGET:
-                ((BlocksAdapter.ViewHolder<CountryWidgetDataBinding>) holder).mBinding
-                        .setWidgetModel((CountryWidgetModel) mBlocks.get(position));
-                break;
-            case MyConstants.Adapter.VIEW_TYPE_NOTICE:
-                Logger.e(TAG,"image notice: "+ ((Block) mBlocks.get(position)).getNotice().getImage());
-                ((BlocksAdapter.ViewHolder<BlockNoticeDataBinding>) holder).mBinding
-                        .setBlock((Block) mBlocks.get(position));
-                break;
-            case MyConstants.Adapter.VIEW_TYPE_LIST:
-                ((BlocksAdapter.ViewHolder<BlockListDataBinding>) holder).mBinding
-                        .setBlock((Block) mBlocks.get(position));
-                break;
-            case MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET:
-                ((ViewHolder<BlockRadioWidgetDataBinding>) holder).mBinding
-                        .setBlock((Block) mBlocks.get(position));
-                break;
-            default:
-            case MyConstants.Adapter.VIEW_TYPE_SLIDER:
-                ((BlocksAdapter.ViewHolder<BlockSliderDataBinding>) holder).mBinding
-                        .setBlock((Block) mBlocks.get(position));
-                break;
-        }
+    public void onBindViewHolder(BlockViewHolder holder, int position) {
+        holder.setModel(mBlocks.get(position));
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mBlocks.get(position).getId();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_BLOCK) {
+        if (mBlocks.get(position).getDataType() == Adapter.TYPE_BLOCK) {
             Block block = (Block) mBlocks.get(position);
             if (block.getLayout().equalsIgnoreCase(Block.TYPE_LIST)) {
-                return MyConstants.Adapter.VIEW_TYPE_LIST;
+                return VIEW_TYPE_LIST;
             } else if (block.getLayout().equalsIgnoreCase(Block.TYPE_SLIDER)) {
-                return MyConstants.Adapter.VIEW_TYPE_SLIDER;
+                return Adapter.VIEW_TYPE_SLIDER;
             } else if (block.getLayout().equalsIgnoreCase(Block.TYPE_NOTICE)) {
-                Logger.e(TAG, "has notice");
-                return MyConstants.Adapter.VIEW_TYPE_NOTICE;
+                return Adapter.VIEW_TYPE_NOTICE;
             } else if (block.getLayout().equalsIgnoreCase(Block.TYPE_RADIO)) {
-                return MyConstants.Adapter.VIEW_TYPE_RADIO_WIDGET;
+                return Adapter.VIEW_TYPE_RADIO_WIDGET;
             }
-        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY ||
-                mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_SELECTED) {
-            return MyConstants.Adapter.TYPE_COUNTRY;
-        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_COUNTRY_WIDGET) {
-            return MyConstants.Adapter.TYPE_COUNTRY_WIDGET;
-        } else if (mBlocks.get(position).getDataType() == MyConstants.Adapter.TYPE_NOTICE) {
-            return MyConstants.Adapter.VIEW_TYPE_NOTICE;
+        } else if (mBlocks.get(position).getDataType() == Adapter.TYPE_COUNTRY ||
+                mBlocks.get(position).getDataType() == Adapter.TYPE_COUNTRY_SELECTED) {
+            return Adapter.TYPE_COUNTRY;
+        } else if (mBlocks.get(position).getDataType() == TYPE_COUNTRY_WIDGET) {
+            return TYPE_COUNTRY_WIDGET;
+        } else if (mBlocks.get(position).getDataType() == Adapter.TYPE_NOTICE) {
+            return Adapter.VIEW_TYPE_NOTICE;
         }
-        return MyConstants.Adapter.VIEW_TYPE_LIST;
+        return VIEW_TYPE_LIST;
     }
 
     @Override
@@ -187,10 +179,11 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
             }
         }
 
-        if (!mPreferences.getLocation().equalsIgnoreCase(MyConstants.Preferences
-                .DEFAULT_LOCATION) && !mPreferences.getLocation()
-                .equalsIgnoreCase(mContext.getString(R.string.country_not_decided_yet))) {
-            String countryId = mPreferences.getLocation().split(",")[0];
+        String location = mPreferences.getLocation();
+        if (!location.equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)
+                && !location.equalsIgnoreCase(mContext.getString(R.string.country_not_decided_yet))) {
+            Country country = Country.makeCountryFromPreference(mPreferences.getLocation());
+            String countryId = String.valueOf(country.getId());
             Logger.e(TAG, ">>> country id: " + countryId);
             deepLink += "&country_id=" + countryId;
         }
@@ -206,96 +199,192 @@ public class BlocksAdapter extends RecyclerView.Adapter<BlocksAdapter.ViewHolder
         return deepLink;
     }
 
-    public class ViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
-        public final T mBinding;
+    public class ListViewHolder extends BlockViewHolder<BlockListDataBinding, Block> {
 
-        public ViewHolder(final T binding) {
-            super(binding.getRoot());
-            mBinding = binding;
+        public ListViewHolder(BlockListDataBinding binding) {
+            super(binding);
 
-            View view = null;
-            if (mBinding instanceof BlockListDataBinding) {
-                view = ((BlockListDataBinding) mBinding).deeplink;
-            } else if (mBinding instanceof BlockSliderDataBinding) {
-                view = ((BlockSliderDataBinding) mBinding).deeplink;
-            } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
-                view = ((BlockRadioWidgetDataBinding) mBinding).play;
-            } else if (mBinding instanceof BlockNoticeDataBinding) {
-                ((BlockNoticeDataBinding) mBinding).dismiss.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
-                        mBlocks.remove(block);
+            binding.deeplink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String deeplink;
+                    deeplink = getModel().getDeeplink();
+                    deeplink = getFormattedDeepLink(deeplink, getModel().getFilterIds());
+                    mCallback.onDeeplinkSelected(deeplink, getModel(), getDataType(), getAdapterPosition());
+                }
+            });
+        }
 
-                        mPreferences.setNoticeDismissId(block.getNotice().getId());
-                        BlocksAdapter.this.notifyItemRemoved(mBlocks.indexOf(block));
-                        return;
+        @Override
+        public Block getModel() {
+            return getBinding().getBlock();
+        }
+
+        @Override
+        public void setModel(Block model) {
+            getBinding().setBlock(model);
+            getBinding().setCallback(analyticsCallback);
+        }
+
+        @Override
+        public int getDataType() {
+            return VIEW_TYPE_LIST;
+        }
+    }
+
+    public class SliderViewHolder extends BlockViewHolder<BlockSliderDataBinding, Block> {
+
+        public SliderViewHolder(BlockSliderDataBinding binding) {
+            super(binding);
+
+            binding.deeplink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String deeplink;
+                    deeplink = getModel().getDeeplink();
+                    deeplink = getFormattedDeepLink(deeplink, getModel().getFilterIds());
+                    mCallback.onDeeplinkSelected(deeplink, getModel(), getDataType(),
+                            getAdapterPosition());
+                }
+            });
+        }
+
+        @Override
+        public Block getModel() {
+            return getBinding().getBlock();
+        }
+
+        @Override
+        public void setModel(Block model) {
+            getBinding().setBlock(model);
+            getBinding().setCallback(analyticsCallback);
+        }
+
+        @Override
+        public int getDataType() {
+            return VIEW_TYPE_SLIDER;
+        }
+    }
+
+    private class RadioWidgetViewHolder extends BlockViewHolder<BlockRadioWidgetDataBinding, Block> {
+
+        public RadioWidgetViewHolder(BlockRadioWidgetDataBinding binding) {
+            super(binding);
+
+            binding.radioContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallback.onListItemSelected(getModel(), getDataType(), getAdapterPosition());
+                }
+            });
+        }
+
+        @Override
+        public Block getModel() {
+            return getBinding().getBlock();
+        }
+
+        @Override
+        public void setModel(Block model) {
+            getBinding().setBlock(model);
+        }
+
+        @Override
+        public int getDataType() {
+            return VIEW_TYPE_RADIO_WIDGET;
+        }
+    }
+
+    private class NoticeViewHolder extends BlockViewHolder<BlockNoticeDataBinding, Block> {
+
+        public NoticeViewHolder(BlockNoticeDataBinding binding) {
+            super(binding);
+
+            binding.dismiss.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallback.onListItemSelected(getModel(), getDataType(), getAdapterPosition());
+                }
+            });
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (getModel().getNotice() != null && getModel().getNotice().getDeeplink() != null
+                            && !getModel().getNotice().getDeeplink().isEmpty()) {
+
+                        String deeplink = getFormattedDeepLink(getModel().getNotice().getDeeplink(),
+                                getModel().getFilterIds());
+                        mCallback.onDeeplinkSelected(deeplink, getModel(), getDataType(), getAdapterPosition());
                     }
-                });
+                }
+            });
+        }
 
-                mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        Block block = ((BlockNoticeDataBinding) mBinding).getBlock();
-//                        if (block.getNotice().getDeeplink() != null
-//                                && !block.getNotice().getDeeplink().isEmpty()) {
-//                            Intent intent = new Intent(Intent.ACTION_VIEW,
-//                                    Uri.parse(block.getNotice().getDeeplink()));
-//                            intent.putExtra("title", block.getNotice().getTitle());
-//                            intent.putExtra("id", block.getNotice().getId());
-//                            mContext.startActivity(intent);
-//                        }
-                    }
-                });
-            } else if (mBinding instanceof CountryWidgetDataBinding) {
-                ((CountryWidgetDataBinding) mBinding).showCountry.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.e(TAG, "onClick: ");
-                        Intent intent = new Intent(mContext, DestinationDetailActivity.class);
-                        CountryWidgetModel countryWidgetModel = ((CountryWidgetDataBinding) mBinding).getWidgetModel();
+        @Override
+        public Block getModel() {
+            return getBinding().getBlock();
+        }
 
-                        intent.putExtra(MyConstants.Extras.KEY_COUNTRY_TITLE, countryWidgetModel.getCountryName());
-                        intent.putExtra(MyConstants.Extras.KEY_COUNTRY_ID, countryWidgetModel.getId());
-                        mContext.startActivity(intent);
-                        return;
-                    }
-                });
-            }
+        @Override
+        public void setModel(Block model) {
+            getBinding().setBlock(model);
+        }
 
-            if (view != null) {
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Block block = null;
-                        String deepLink = null;
-                        if (mBinding instanceof BlockNoticeDataBinding) {
-                            block = ((BlockNoticeDataBinding) mBinding).getBlock();
-                            deepLink = block.getNotice().getDeeplink();
-                        } else {
-                            if (mBinding instanceof BlockListDataBinding) {
-                                block = ((BlockListDataBinding) mBinding).getBlock();
-                            } else if (mBinding instanceof BlockSliderDataBinding) {
-                                block = ((BlockSliderDataBinding) mBinding).getBlock();
-                            } else if (mBinding instanceof BlockRadioWidgetDataBinding) {
-                                mContext.sendBroadcast(new Intent(MyConstants.Intent
-                                        .ACTION_SHOW_RADIO));
-                                return;
-                            }
-                            deepLink = block.getDeeplink();
-                        }
+        @Override
+        public int getDataType() {
+            return VIEW_TYPE_NOTICE;
+        }
+    }
 
-                        deepLink = getFormattedDeepLink(deepLink, block.getFilterIds());
-                        if (deepLink != null && !deepLink.isEmpty()) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(deepLink));
-                            intent.putExtra("title", block.getTitle());
-                            intent.putExtra("id", block.getId());
-                            mContext.startActivity(intent);
-                        }
-                    }
-                });
-            }
+    private class CountryWidgetViewHolder extends BlockViewHolder<CountryWidgetDataBinding, CountryWidgetModel> {
+
+        public CountryWidgetViewHolder(CountryWidgetDataBinding binding) {
+            super(binding);
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCallback.onListItemSelected(getModel(), getDataType(), getAdapterPosition());
+                }
+            });
+        }
+
+        @Override
+        public CountryWidgetModel getModel() {
+            return getBinding().getWidgetModel();
+        }
+
+        @Override
+        public void setModel(CountryWidgetModel model) {
+            getBinding().setWidgetModel(model);
+        }
+
+        @Override
+        public int getDataType() {
+            return TYPE_COUNTRY_WIDGET;
+        }
+    }
+
+    private class CountryInformationViewHolder extends BlockViewHolder<ItemCountryInformationDataBinding, Country> {
+
+        public CountryInformationViewHolder(ItemCountryInformationDataBinding binding) {
+            super(binding);
+        }
+
+        @Override
+        public Country getModel() {
+            return getBinding().getCountry();
+        }
+
+        @Override
+        public void setModel(Country model) {
+            getBinding().setCountry(model);
+        }
+
+        @Override
+        public int getDataType() {
+            return Adapter.TYPE_COUNTRY;
         }
     }
 }

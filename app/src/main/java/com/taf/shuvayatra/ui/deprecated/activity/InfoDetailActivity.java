@@ -2,10 +2,14 @@ package com.taf.shuvayatra.ui.deprecated.activity;
 
 import android.os.Bundle;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.util.MyConstants;
-
+@Deprecated
 public class InfoDetailActivity extends CategoryDetailActivity {
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

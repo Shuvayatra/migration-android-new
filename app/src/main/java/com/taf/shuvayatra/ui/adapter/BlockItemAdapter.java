@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.taf.data.utils.Logger;
+import com.taf.model.Block;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.databinding.BlockListItemDataBinding;
@@ -19,6 +20,7 @@ import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
 import com.taf.shuvayatra.ui.activity.PlaceDetailActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
+import com.taf.shuvayatra.ui.interfaces.BlockItemAnalytics;
 import com.taf.util.MyConstants;
 
 import java.util.List;
@@ -34,12 +36,18 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
     final int mOrientation;
     List<Post> mItems;
     private Context mContext;
+    private Block mParentBlock;
+    private BlockItemAnalytics mCallback;
 
-    public BlockItemAdapter(Context context, List<Post> items, int orientation) {
+    public BlockItemAdapter(Context context, Block parentBlock,
+                            BlockItemAnalytics blockItemAnalytics,
+                            List<Post> items, int orientation) {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mItems = items;
         this.mOrientation = orientation;
+        this.mParentBlock = parentBlock;
+        this.mCallback = blockItemAnalytics;
     }
 
     public void setItems(List<Post> items) {
@@ -93,27 +101,22 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
             // TODO: 11/2/16 refactor code
 
             if (binding instanceof BlockListItemDataBinding) {
-                Logger.e(TAG, ">>> view and post initialized [item list]");
                 ((BlockListItemDataBinding) binding).mainContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         Post post = ((BlockListItemDataBinding) binding).getPost();
-                        Logger.e(TAG, ">>> selected post: " + post);
 
                         Intent intent = null;
                         switch (post.getDataType()) {
                             case MyConstants.Adapter.TYPE_AUDIO:
-                                Logger.e(TAG, ">>> audio type");
                                 intent = new Intent(mContext, AudioDetailActivity.class);
                                 break;
                             case MyConstants.Adapter.TYPE_VIDEO:
-                                Logger.e(TAG, ">>> video type");
                                 intent = new Intent(mContext, VideoDetailActivity.class);
                                 break;
                             case MyConstants.Adapter.TYPE_NEWS:
                             case MyConstants.Adapter.TYPE_TEXT:
-                                Logger.e(TAG, ">>> news|text type");
                                 intent = new Intent(mContext, ArticleDetailActivity.class);
                                 break;
                             case MyConstants.Adapter.TYPE_PLACE:
@@ -122,7 +125,6 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
                         }
 
                         if (intent != null) {
-                            Logger.e(TAG, ">>> intent not null, start activity");
                             intent.putExtra(MyConstants.Extras.KEY_ID, post.getId());
                             mContext.startActivity(intent);
                         }
@@ -136,27 +138,22 @@ public class BlockItemAdapter extends RecyclerView.Adapter<BlockItemAdapter.View
                     public void onClick(View v) {
 
                         Post post = ((BlockSliderItemDataBinding) binding).getPost();
-                        Logger.e(TAG, ">>> selected post: " + post);
 
                         Intent intent = null;
                         switch (post.getDataType()) {
                             case MyConstants.Adapter.TYPE_AUDIO:
-                                Logger.e(TAG, ">>> audio type");
                                 intent = new Intent(mContext, AudioDetailActivity.class);
                                 break;
                             case MyConstants.Adapter.TYPE_VIDEO:
-                                Logger.e(TAG, ">>> video type");
                                 intent = new Intent(mContext, VideoDetailActivity.class);
                                 break;
                             case MyConstants.Adapter.TYPE_NEWS:
                             case MyConstants.Adapter.TYPE_TEXT:
-                                Logger.e(TAG, ">>> news|text type");
                                 intent = new Intent(mContext, ArticleDetailActivity.class);
                                 break;
                         }
 
                         if (intent != null) {
-                            Logger.e(TAG, ">>> intent not null, start activity");
                             intent.putExtra(MyConstants.Extras.KEY_ID, post.getId());
                             mContext.startActivity(intent);
                         }

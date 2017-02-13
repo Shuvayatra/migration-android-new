@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +20,13 @@ import com.taf.model.ScreenDataModel;
 import com.taf.model.ScreenModel;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.base.BaseFragment;
+import com.taf.shuvayatra.base.BaseDynamicNavigationFragment;
 import com.taf.shuvayatra.base.PlayerFragmentActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ScreenDataPresenter;
 import com.taf.shuvayatra.ui.activity.ArticleDetailActivity;
 import com.taf.shuvayatra.ui.activity.AudioDetailActivity;
-import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.activity.VideoDetailActivity;
 import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
@@ -34,6 +34,7 @@ import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.ScreenDataView;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.DynamicScreen;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,13 +44,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import retrofit2.http.POST;
 
 /**
  * Created by umesh on 1/14/17.
  */
 
-public class FeedScreenFragment extends BaseFragment implements ScreenDataView, ListItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class FeedScreenFragment extends BaseDynamicNavigationFragment implements ScreenDataView, ListItemClickListener {
 
     public static final String TAG = "FeedScreenFragment";
     private static final String STATE_SCREEN = "screen";
@@ -81,15 +81,34 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     boolean mIsLastPage = false;
 
     public static FeedScreenFragment newInstance(ScreenModel screenModel) {
-
         FeedScreenFragment fragment = new FeedScreenFragment();
         fragment.mScreen = screenModel;
         return fragment;
     }
 
     @Override
+    public String screenName() {
+        return "Navigation - " + mScreen.getTitle();
+    }
+
+    @Override
+    public Fragment defaultInstance(ScreenModel screenModel) {
+        return newInstance(screenModel);
+    }
+
+    @Override
+    public String fragmentTag() {
+        return TAG + "_" + mScreen.getId();
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.item_empty_recycler_view;
+    }
+
+    @Override
+    public String getScreenType() {
+        return DynamicScreen.TYPE_FEED;
     }
 
     @Override
@@ -135,7 +154,6 @@ public class FeedScreenFragment extends BaseFragment implements ScreenDataView, 
     private void setUpAdapter() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mAdapter = new ListAdapter<>(getContext(), this);
-        mAdapter.setHasStableIds(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setEmptyView(mEmptyView);

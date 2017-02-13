@@ -1,8 +1,8 @@
 package com.taf.model;
 
-import com.taf.util.MyConstants;
+        import com.taf.util.MyConstants;
 
-import java.util.TimeZone;
+        import java.util.TimeZone;
 
 public class CountryWidgetModel extends BaseModel {
 
@@ -106,5 +106,18 @@ public class CountryWidgetModel extends BaseModel {
 
     public TimeZone getTimeZone() {
         return mTimeZone;
+    }
+
+    @Override
+    public String toString() {
+        return "CountryWidgetModel{" +
+                "mId='" + getId() + '\'' +
+                "mCountryName='" + mCountryName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && (o instanceof Country || o instanceof BaseModel) && getId().equals(((BaseModel) o).getId());
     }
 }

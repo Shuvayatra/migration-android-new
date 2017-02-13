@@ -122,9 +122,10 @@ public class Block extends BaseModel {
     @Override
     public String toString() {
         return "Block{" +
-                "mLayout='" + mLayout + '\'' +
-                ", mTitle='" + mTitle + '\'' +
+                "mId='" + getId() + '\'' +
+                "mTitle='" + mTitle + '\'' +
                 ", mNotice=" + mNotice +
+                ", deeplink='" + deeplink + '\'' +
                 '}';
     }
 

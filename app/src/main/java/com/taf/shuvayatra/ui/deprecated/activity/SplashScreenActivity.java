@@ -40,13 +40,17 @@ public class SplashScreenActivity extends BaseActivity implements
     @Inject
     SyncFavouritesPresenter mSyncPresenter;
 
-
     @BindView(R.id.message)
     TextView messageView;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
     UseCaseData mUseCaseData = new UseCaseData();
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

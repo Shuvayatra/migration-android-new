@@ -11,6 +11,8 @@ public class PostEntity {
     String type;
     PostDataEntity data;
     String source;
+    @SerializedName("source_url")
+    String sourceUrl;
     @SerializedName("share_url")
     String shareUrl;
     List<String> tags;
@@ -26,12 +28,23 @@ public class PostEntity {
     Integer favouriteCount;
     @SerializedName("share_count")
     Integer shareCount;
+    @SerializedName("photo_credit")
+    String photoCredit;
+
     @SerializedName("view_count")
     Integer viewCount;
     Integer priority;
 
     @SerializedName("similar_posts")
     List<PostEntity> similarPosts;
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
 
     public Long getId() {
         return id;
@@ -75,6 +88,14 @@ public class PostEntity {
 
     public String getSource() {
         return source;
+    }
+
+    public String getPhotoCredit() {
+        return photoCredit;
+    }
+
+    public void setPhotoCredit(String photoCredit) {
+        this.photoCredit = photoCredit;
     }
 
     public void setSource(String pSource) {

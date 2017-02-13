@@ -18,6 +18,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.taf.util.MyConstants.UseCase.CASE_COUNTRY_LIST;
+
 /**
  * Presenter for country list as found in
  * <a href="api.shuvayatra.org/api/destinations">Country API call</a>
@@ -32,10 +34,12 @@ public class CountryListPresenter implements Presenter {
     CountryView mView;
     UseCase mUseCase;
 
+    public boolean shouldHideLoading = false;
+
     private static final String TAG = "CountryListPresenter";
 
     @Inject
-    public CountryListPresenter(@Named(MyConstants.UseCase.CASE_COUNTRY_LIST) UseCase pUseCase) {
+    public CountryListPresenter(@Named(CASE_COUNTRY_LIST) UseCase pUseCase) {
         mUseCase = pUseCase;
     }
 
@@ -56,6 +60,9 @@ public class CountryListPresenter implements Presenter {
 
     @Override
     public void initialize(UseCaseData pData) {
+        if (pData != null) {
+            shouldHideLoading = pData.getBoolean(UseCaseData.SHOULD_SHOW_LOADING, false);
+        }
         mView.showLoadingView();
         mUseCase.execute(new CountrySubscriber(), pData);
     }
@@ -69,21 +76,21 @@ public class CountryListPresenter implements Presenter {
 
         @Override
         public void onCompleted() {
-            mView.hideLoadingView();
+            if (!shouldHideLoading)
+                mView.hideLoadingView();
         }
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            Logger.e(TAG, ">>> presenter onError() called <<<");
-            mView.hideLoadingView();
+            if (!shouldHideLoading)
+                mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
         }
 
         @Override
         public void onNext(List<Country> pT) {
-            Logger.e(TAG, ">>> call to on next <<<");
             if (mView.getContext() != null)
                 mView.renderCountries(pT);
         }

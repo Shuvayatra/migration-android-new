@@ -3,6 +3,7 @@ package com.taf.shuvayatra.ui.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +43,20 @@ public class VideoDetailActivity extends PostDetailActivity implements
     @Override
     public int getLayout() {
         return R.layout.activity_video_detail;
+    }
+
+    @Override
+    public String screenName() {
+        return "Content: Video";
+    }
+
+    @Override
+    public void checkDeeplinkMetadata() {
+        if (getIntent().getData() != null) {
+            Uri deeplinkUri = getIntent().getData();
+            mId = Long.parseLong(deeplinkUri.getQueryParameter(MyConstants.Deeplink.PARAM_POST_ID));
+            setFromDeeplink(true);
+        }
     }
 
     @Override
@@ -162,6 +177,8 @@ public class VideoDetailActivity extends PostDetailActivity implements
         } else if (pModel.getDataType() == MyConstants.Adapter.TYPE_NEWS || pModel.getDataType()
                 == MyConstants.Adapter.TYPE_TEXT) {
             intent = new Intent(this, ArticleDetailActivity.class);
+        } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_PLACE)) {
+            intent = new Intent(this, PlaceDetailActivity.class);
         }
 
         if (intent != null) {

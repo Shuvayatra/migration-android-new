@@ -80,6 +80,11 @@ public class OnBoardActivity extends BaseActivity implements
     private int currentItem;
 
     @Override
+    public String screenName() {
+        return "Onboarding Screen";
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.activity_on_board;
     }

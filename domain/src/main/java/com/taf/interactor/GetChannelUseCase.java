@@ -21,7 +21,7 @@ public class GetChannelUseCase extends UseCase<List<Channel>> {
 
     @Inject
     public GetChannelUseCase(IChannelRepository iChannelRepository, ThreadExecutor
-            threadExecutor, PostExecutionThread postExecutionThread){
+            threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         mIChannelRepository = iChannelRepository;
     }
@@ -29,9 +29,6 @@ public class GetChannelUseCase extends UseCase<List<Channel>> {
 
     @Override
     protected Observable<List<Channel>> buildUseCaseObservable(UseCaseData pData) {
-        if (pData != null && pData.getBoolean(UseCaseData.CACHED_DATA, false)){
-            return  mIChannelRepository.getCachedChannelList();
-        }
         return mIChannelRepository.getChannelList();
     }
 }

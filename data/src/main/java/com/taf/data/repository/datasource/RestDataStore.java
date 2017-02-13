@@ -126,18 +126,18 @@ public class RestDataStore implements IDataStore {
         }
     }
 
-    public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, String filterParams, long id) {
+    public Observable<PostResponseEntity> getPosts(int feedType, int limit, int offset, ApiQueryParams params) {
 
         if (isThereInternetConnection()) {
 
             if (feedType == 0) {
-                return mApiRequest.getPosts(limit, offset, filterParams, id)
-                        .doOnNext(responseEntity -> mCache.savePosts(feedType, filterParams,
+                return mApiRequest.getPosts(limit, offset, params)
+                        .doOnNext(responseEntity -> mCache.savePosts(feedType, params.categoryId,
                                 responseEntity.getData(), (offset != 1)));
             }
 
             return mApiRequest.getNewsList(limit, offset)
-                    .doOnNext(responseEntity -> mCache.savePosts(feedType, filterParams,
+                    .doOnNext(responseEntity -> mCache.savePosts(feedType, params.categoryId,
                             responseEntity.getData(), (offset != 1)));
         } else {
             return Observable.error(new NetworkConnectionException());
@@ -192,7 +192,7 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<JsonElement> getWeatherInfo(String place, String unit) {
-        Logger.e(TAG,"weather component from api");
+        Logger.e(TAG, "weather component from api");
         if (isThereInternetConnection()) {
             return mApiRequest.getWeather(place, unit)
                     .doOnNext(mCache::saveWeather);
@@ -237,7 +237,7 @@ public class RestDataStore implements IDataStore {
     }
 
     public Observable<JsonElement> getForexInfo() {
-        Logger.e(TAG,"forex component from api");
+        Logger.e(TAG, "forex component from api");
 
         if (isThereInternetConnection())
             return mApiRequest.getForex()
@@ -331,17 +331,6 @@ public class RestDataStore implements IDataStore {
 
         return isConnected;
     }
-
-//    public Observable<PostResponseEntity> getNewsList(int page) {
-//        if (isThereInternetConnection()) {
-//            return mApiRequest.getNewsList(page)
-//                    .doOnNext(blockEntities -> {
-//                        mCache.saveNewsBlocks(blockEntities);
-//                    });
-//        } else {
-//            return Observable.error(new NetworkConnectionException());
-//        }
-//    }
 
     public Observable<InfoEntity> getInfo(String key) {
         if (isThereInternetConnection()) {

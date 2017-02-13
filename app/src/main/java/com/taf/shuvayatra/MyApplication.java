@@ -27,10 +27,11 @@ public class MyApplication extends Application {
     ApplicationComponent mApplicationComponent;
     private GcmNetworkManager mGcmNetworkManager;
     public static boolean isActivityShowing;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.e(TAG,"Applicaiton on create called");
+        Logger.e(TAG, "Application on create called");
 
         this.mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))

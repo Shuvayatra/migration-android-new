@@ -1,15 +1,8 @@
 package com.taf.shuvayatra.base;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.Settings;
-import android.provider.Telephony;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,7 +34,6 @@ import butterknife.BindView;
 
 import static com.taf.util.MyConstants.Extras.KEY_ID;
 import static com.taf.util.MyConstants.Extras.KEY_POST;
-import static com.taf.util.MyConstants.Extras.KEY_VIDEO;
 
 public abstract class PostDetailActivity extends PlayerFragmentActivity implements PostDetailView {
     private static final String TAG = "PostDetailActivity";
@@ -57,7 +49,6 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     protected Post mPost;
     private boolean mOldFavouriteState;
-
 
 
     @BindView(R.id.web_view_content)
@@ -86,15 +77,31 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         return true;
     }
 
+    public void checkDeeplinkMetadata() {
+
+    }
+
+    private boolean isFromDeeplink = false;
+
+    public void setFromDeeplink(boolean status) {
+        isFromDeeplink = status;
+    }
+
+    public boolean shouldIgnoreIntent() {
+        return isFromDeeplink;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkDeeplinkMetadata();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bundle bundle = getIntent().getExtras();
-        mId = bundle.getLong(KEY_ID);
+        if (!shouldIgnoreIntent()) {
+            Bundle bundle = getIntent().getExtras();
+            mId = bundle.getLong(KEY_ID);
+        }
 
         initialize();
         if (savedInstanceState != null) {
@@ -103,7 +110,7 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
         } else {
             enableAnalytics = true;
         }
-        if(mPost == null){
+        if (mPost == null) {
             loadPost();
         } else {
             renderPost(mPost);
@@ -148,7 +155,6 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
                 getPreferences().removeFromFavourites(mPost.getId());
             }
 
-//            boolean status = !(mPost.isFavourite() != null && mPost.isFavourite());
             data.putBoolean(UseCaseData.FAVOURITE_STATE, mPost.isFavourite());
             data.putSerializable(UseCaseData.POST, mPost);
             AnalyticsUtil.logFavouriteEvent(getAnalytics(), mPost.getId(), mPost.getTitle(), mPost
@@ -174,22 +180,13 @@ public abstract class PostDetailActivity extends PlayerFragmentActivity implemen
 
     @Override
     public void onPostFavouriteStateUpdated(Boolean status) {
-        //boolean newFavouriteState = status ? !mOldFavouriteState : mOldFavouriteState;
         boolean newFavouriteState = !mOldFavouriteState;
-//
-////        if (newFavouriteState) {
-////            mPreferences.addToFavourites(mPost.getNoticeId());
-////        } else {
-////            mPreferences.removeFromFavourites(mPost.getNoticeId());
-////        }
-//        mPost.setIsFavourite(newFavouriteState);
         int likes = mPost.getLikes() == null ? 0 : mPost.getLikes();
         mPost.setLikes(newFavouriteState == mOldFavouriteState
                 ? likes
                 : newFavouriteState ? likes + 1 : likes - 1);
         updateView(mPost);
         mOldFavouriteState = mPost.isFavourite();
-//        invalidateOptionsMenu();
     }
 
     @Override

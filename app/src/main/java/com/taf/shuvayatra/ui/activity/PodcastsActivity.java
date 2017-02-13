@@ -78,6 +78,11 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     private LinearLayoutManager mLayoutManager;
 
     @Override
+    public String screenName() {
+        return "Podcast Screen";
+    }
+
+    @Override
     public int getLayout() {
         return R.layout.activity_podcasts;
     }
@@ -100,12 +105,13 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
 
         getSupportActionBar().setTitle(mTitle);
         if (savedInstanceState != null) {
-            AnalyticsUtil.logViewEvent(getAnalytics(), mId, mTitle, "podcast-channel");
             List<Podcast> podcasts = (List<Podcast>) savedInstanceState.get(STATE_PODCASTS);
             mAdapter.setDataCollection(podcasts);
         } else {
             loadPodcasts(INITIAL_OFFSET);
         }
+
+        AnalyticsUtil.logRadioViewEvent(getAnalytics(), mId, mTitle);
     }
 
     private boolean isPlayingFromHere(List<Podcast> podcasts) {
@@ -153,7 +159,6 @@ public class PodcastsActivity extends PlayerFragmentActivity implements
     }
 
     public void loadPodcasts(int page) {
-//        mPage = page;
         mSwipeContainer.setRefreshing(true);
         mUseCaseData.clearAll();
         mUseCaseData.putInteger(UseCaseData.OFFSET, page);

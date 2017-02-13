@@ -13,7 +13,7 @@ import com.taf.shuvayatra.base.BaseFragment;
 import com.taf.shuvayatra.ui.deprecated.adapter.UserSectionPagerAdapter;
 
 import butterknife.BindView;
-
+@Deprecated
 public class UserFragment extends BaseFragment {
 
     @BindView(R.id.viewpager)

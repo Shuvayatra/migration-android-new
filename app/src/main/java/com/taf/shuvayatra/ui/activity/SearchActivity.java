@@ -37,6 +37,7 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.shuvayatra.ui.views.SearchPostListView;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
@@ -50,12 +51,15 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
-public class SearchActivity extends MediaServiceActivity implements ListItemClickListener, SearchPostListView, SwipeRefreshLayout.OnRefreshListener {
+public class SearchActivity extends MediaServiceActivity implements
+        ListItemClickListener, SearchPostListView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "SearchActivity";
-    public static final String STATE_POST= "posts";
+    public static final String STATE_POST = "posts";
     public static final String STATE_QUERY_TEXT = "query";
     public static final String STATE_QUERY_TYPE = "type";
     public static final String STATE_PAGE = "page";
@@ -79,7 +83,6 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
     @BindView(R.id.empty_view)
     RelativeLayout mEmptyView;
 
-
     LinearLayoutManager mLayoutManager;
     ListAdapter<Post> mPostAdapter;
     UseCaseData mUseCaseData;
@@ -96,12 +99,17 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
     }
 
     @Override
+    public String screenName() {
+        return "Search Screen";
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initialize();
         List<Post> posts = new ArrayList<>();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             posts = (List<Post>) savedInstanceState.getSerializable(STATE_POST);
             mQuery = savedInstanceState.getString(STATE_QUERY_TEXT);
             mSearchType = savedInstanceState.getString(STATE_QUERY_TYPE);
@@ -148,15 +156,13 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         RxTextView.textChangeEvents(mSearchTextBox)
-                .debounce(5, TimeUnit.SECONDS)
+                .debounce(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<TextViewTextChangeEvent, Object>() {
                     @Override
                     public Object call(TextViewTextChangeEvent textViewTextChangeEvent) {
-                        Logger.e(TAG, "mIsLoading: " + mIsLoading);
-                        Logger.e(TAG, "mQuery " + mQuery.equals(mSearchTextBox.getText().toString()));
                         if (!mQuery.equals(mSearchTextBox.getText().toString())) {
                             mQuery = mSearchTextBox.getText().toString();
-                            Logger.e(TAG,"seargching from text change");
                             searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
                         }
                         return null;
@@ -168,7 +174,6 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
             public void onClick(View v) {
                 mQuery = mSearchTextBox.getText().toString();
                 mSwipeRefreshLayout.setRefreshing(true);
-
                 searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
             }
         });
@@ -180,8 +185,6 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
                     mQuery = mSearchTextBox.getText().toString();
                     mSwipeRefreshLayout.setRefreshing(true);
                     searchPosts(INITIAL_OFFSET, mQuery, mSearchType);
-                   hideKeyboard();
-
                 }
                 return false;
             }
@@ -192,7 +195,7 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 hideKeyboard();
                 String type = (String) mTypeSpinner.getSelectedItem();
-                Logger.e(TAG,"searching from spinner");
+                Logger.e(TAG, "searching from spinner");
                 if (position == 0) {
                     type = "";
                 } else if (type.equals(getString(R.string.audio))) {
@@ -240,7 +243,7 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
                             && firstVisibleItemPosition >= 0) {
                         Logger.e(TAG, "mPage: " + mPage);
                         mSwipeRefreshLayout.setRefreshing(true);
-                        Logger.e(TAG,"searching from scroll");
+                        Logger.e(TAG, "searching from scroll");
                         searchPosts(mPage + 1, mQuery, mSearchType);
                     }
                 }
@@ -248,19 +251,23 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
         });
 
     }
-    private void hideKeyboard(){
+
+    private void hideKeyboard() {
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
+
     private void searchPosts(int page, String query, String type) {
+        hideKeyboard();
+
         mPage = page;
-        mPresenter.destroy();       //cancel any pending query before initating new one
+        mPresenter.destroy();       //cancel any pending query before initiating new one
         mUseCaseData.putInteger(UseCaseData.OFFSET, page);
         mUseCaseData.putInteger(UseCaseData.LIMIT, PAGE_LIMIT);
         mUseCaseData.putString(UseCaseData.SEARCH_QUERY, query);
         mUseCaseData.putString(UseCaseData.SEARCH_TYPE, type);
-
         mPresenter.initialize(mUseCaseData);
+        AnalyticsUtil.logSearchEvent(getAnalytics(), query, type);
     }
 
 
@@ -327,6 +334,9 @@ public class SearchActivity extends MediaServiceActivity implements ListItemClic
     @Override
     public void showLoadingView() {
         mIsLoading = true;
+        if (!mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
     }
 
     @Override

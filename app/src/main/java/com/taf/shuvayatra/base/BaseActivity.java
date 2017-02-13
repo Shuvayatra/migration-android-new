@@ -18,6 +18,7 @@ import com.taf.shuvayatra.MyApplication;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.di.component.ApplicationComponent;
 import com.taf.shuvayatra.di.module.ActivityModule;
+import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
@@ -40,6 +41,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract int getLayout();
 
+    public abstract String screenName();
+
     public boolean isDataBindingEnabled() {
         return false;
     }
@@ -56,7 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initLanguage();
-
         getApplicationComponent().inject(this);
         if (!isDataBindingEnabled()) {
             setContentView(getLayout());
@@ -67,6 +69,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         if (mToolbar != null)
             initializeToolbar();
+
+        // log screen time
+        AnalyticsUtil.logScreenTime(getAnalytics(), this, screenName());
     }
 
     protected void initLanguage() {

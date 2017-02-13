@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -29,7 +30,7 @@ import butterknife.BindView;
 
 public class PlaceDetailActivity extends PostDetailActivity implements
         SwipeRefreshLayout.OnRefreshListener, ListItemClickListener,
-        AppBarLayout.OnOffsetChangedListener  {
+        AppBarLayout.OnOffsetChangedListener {
 
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout mContainer;
@@ -42,6 +43,19 @@ public class PlaceDetailActivity extends PostDetailActivity implements
     @BindView(R.id.empty_view)
     View mEmptyView;
 
+    @Override
+    public String screenName() {
+        return "Places Screen";
+    }
+
+    @Override
+    public void checkDeeplinkMetadata() {
+        if (getIntent().getData() != null) {
+            Uri deeplinkUri = getIntent().getData();
+            mId = Long.parseLong(deeplinkUri.getQueryParameter(MyConstants.Deeplink.PARAM_POST_ID));
+            setFromDeeplink(true);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +65,6 @@ public class PlaceDetailActivity extends PostDetailActivity implements
         mEmptyStateRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mEmptyStateRecyclerView.setAdapter(new ListAdapter(this, this));
         mEmptyStateRecyclerView.setEmptyView(mEmptyView);
-
     }
 
     @Override
@@ -67,7 +80,6 @@ public class PlaceDetailActivity extends PostDetailActivity implements
             }
         }
     }
-
 
 
     @Override
@@ -97,6 +109,8 @@ public class PlaceDetailActivity extends PostDetailActivity implements
             intent = new Intent(this, ArticleDetailActivity.class);
         } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_VIDEO)) {
             intent = new Intent(this, VideoDetailActivity.class);
+        } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_PLACE)) {
+            intent = new Intent(this, PlaceDetailActivity.class);
         }
 
         if (intent != null) {

@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class NotificationsFragment extends BaseFragment implements
         NotificationView {
 

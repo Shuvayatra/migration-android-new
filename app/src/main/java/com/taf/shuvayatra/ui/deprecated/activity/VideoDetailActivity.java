@@ -16,7 +16,6 @@ import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.VideoDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -51,6 +50,11 @@ public class VideoDetailActivity extends FacebookActivity implements
     boolean mOldFavouriteState;
     Boolean IsFromIntent = false;
     private YouTubePlayerSupportFragment mYouTubePlayerFragment;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

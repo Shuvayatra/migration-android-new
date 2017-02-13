@@ -48,6 +48,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
     private Boolean mFromInfo = false;
     private String mDefaultCategory = null;
 
+    private static final String TAG = "ListAdapter";
+
     public ListAdapter(Context pContext, ListItemClickListener pListener) {
         this.mLayoutInflater = (LayoutInflater) pContext.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
@@ -162,6 +164,7 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (mFromInfo) {
@@ -193,6 +196,8 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 ((PlaceViewHolder) holder).mBinding.setPlace((Post) mDataCollection.get(position));
                 break;
             case Adapter.TYPE_PODCAST:
+                Logger.e(TAG, String.format("name: %s, img: %s", ((Podcast) mDataCollection.get
+                        (position)).getTitle(), ((Podcast) mDataCollection.get(position)).getImage()));
                 ((PodcastViewHolder) holder).mBinding.setPodcast((Podcast) mDataCollection.get
                         (position));
                 break;
@@ -411,15 +416,6 @@ public class ListAdapter<T extends BaseModel> extends RecyclerView.Adapter<Recyc
                 }
             });
 
-            mDataBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    Notice notice = mDataBinding.getNotice();
-//                    notice.setFromDismiss(false);
-//
-//                    mListener.onListItemSelected(mDataBinding.getNotice(), mDataCollection.indexOf(mDataBinding.getNotice()));
-                }
-            });
         }
 
     }
