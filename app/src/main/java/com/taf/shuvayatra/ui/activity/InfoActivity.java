@@ -26,6 +26,11 @@ public class InfoActivity extends BaseActivity {
     }
 
     @Override
+    public String screenName() {
+        return "About/Contact Screen";
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

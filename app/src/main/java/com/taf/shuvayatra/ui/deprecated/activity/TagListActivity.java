@@ -30,6 +30,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+@Deprecated
 public class TagListActivity extends BaseActivity implements
         TagListView, SearchView.OnQueryTextListener {
 
@@ -43,6 +44,11 @@ public class TagListActivity extends BaseActivity implements
     @Override
     public int getLayout() {
         return R.layout.activity_tag_list;
+    }
+
+    @Override
+    public String screenName() {
+        return null;
     }
 
     @Override
@@ -106,8 +112,6 @@ public class TagListActivity extends BaseActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AnalyticsUtil.logSearchEvent(getAnalytics(), tag, true);
-
                     Intent intent = new Intent(TagListActivity.this, SearchListActivity.class);
                     intent.putExtra(MyConstants.Extras.KEY_TAG, tag);
                     startActivity(intent);
@@ -143,8 +147,6 @@ public class TagListActivity extends BaseActivity implements
             Intent intent = new Intent(this, SearchListActivity.class);
             intent.putExtra(MyConstants.Extras.KEY_TITLE, query);
             startActivity(intent);
-
-            AnalyticsUtil.logSearchEvent(getAnalytics(), query, false);
         }
         return true;
     }

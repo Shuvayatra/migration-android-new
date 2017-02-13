@@ -1,4 +1,4 @@
-package com.taf.shuvayatra.base;
+package com.taf.shuvayatra.ui.deprecated.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,12 +7,11 @@ import android.view.MenuItem;
 import com.taf.data.utils.Logger;
 import com.taf.model.Category;
 import com.taf.shuvayatra.R;
+import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.CategoryPresenter;
-import com.taf.shuvayatra.ui.deprecated.activity.CountryDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.activity.InfoDetailActivity;
-import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.deprecated.fragment.FeedListFragment;
 import com.taf.shuvayatra.ui.deprecated.interfaces.CategoryView;
 import com.taf.util.MyConstants;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
+@Deprecated
 public abstract class CategoryDetailActivity extends BaseActivity implements CategoryView {
     public Category mCategory;
 
@@ -40,10 +39,10 @@ public abstract class CategoryDetailActivity extends BaseActivity implements Cat
             excludeTypes.add("place");
         }
 
-        FeedFragment fragment = (FeedFragment) getSupportFragmentManager().findFragmentByTag
+        FeedListFragment fragment = (FeedListFragment) getSupportFragmentManager().findFragmentByTag
                 ("feeds");
         if (fragment == null) {
-            fragment = FeedFragment.newInstance(true, mCategory.getId(), mCategory.getTitle(),
+            fragment = FeedListFragment.newInstance(true, mCategory.getId(), mCategory.getTitle(),
                     excludeTypes,
                     pCategories
             );

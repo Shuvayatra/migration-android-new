@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Country;
@@ -27,6 +28,7 @@ import com.taf.shuvayatra.ui.adapter.DropDownAdapter;
 import com.taf.shuvayatra.ui.adapter.OnBoardQuestionAdapter;
 import com.taf.shuvayatra.ui.views.CountryView;
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,8 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
     public BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            List<Country> countries = (List<Country>) intent.getSerializableExtra(MyConstants.OnBoarding.INTENT_COUNTRY);
+            List<Country> countries = (List<Country>) intent
+                    .getSerializableExtra(MyConstants.OnBoarding.INTENT_COUNTRY);
             renderCountries(countries);
             LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(this);
         }
@@ -94,9 +97,6 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
                 .applicationComponent(((BaseActivity) getActivity()).getApplicationComponent())
                 .build().inject(this);
         presenter.attachView(this);
-//        UseCaseData metaData = new UseCaseData();
-//        metaData.putBoolean(UseCaseData.CACHED_DATA, true);
-//        presenter.initialize(metaData);
     }
 
     @OnClick(R.id.button_back)
@@ -143,7 +143,7 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
         DropDownAdapter adapter = new CountryDropDownAdapter(getContext(), dataList);
         spinnerCountry.setAdapter(adapter);
         spinnerCountry.setOnItemSelectedListener(this);
-        if (!getTypedActivity().getPreferences().getLocation().equalsIgnoreCase(MyConstants.Preferences.DEFAULT_LOCATION)) {
+        if (!getTypedActivity().getPreferences().getLocation().equalsIgnoreCase(Preferences.DEFAULT_LOCATION)) {
             Logger.e(TAG, ">>> preference: " + getTypedActivity().getPreferences().getLocation());
             int index = dataList.indexOf(getTypedActivity().getPreferences().getLocation());
             if (index != -1)
@@ -153,8 +153,24 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position != 0)
-            getTypedActivity().getPreferences().setLocation(dataList.get(spinnerCountry.getSelectedItemPosition()));
+
+        if (position != 0) {
+
+            String previousLocation = getTypedActivity().getPreferences().getLocation();
+            if (!previousLocation.equalsIgnoreCase(Preferences.DEFAULT_LOCATION)
+                    && !previousLocation.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+                Country country = Country.makeCountryFromPreference(previousLocation);
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(country.getTitleEnglish());
+            }
+
+            getTypedActivity().getPreferences().setLocation(dataList.get(spinnerCountry
+                    .getSelectedItemPosition()));
+
+            String currentLocation = getTypedActivity().getPreferences().getLocation();
+            Country country = Country.makeCountryFromPreference(currentLocation);
+            FirebaseMessaging.getInstance().subscribeToTopic(country.getTitleEnglish());
+
+        }
     }
 
     @Override

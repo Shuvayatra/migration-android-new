@@ -26,7 +26,6 @@ import com.taf.interactor.UseCaseData;
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.ActivityAudioDetailBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -140,6 +139,11 @@ public class AudioDetailActivity extends FacebookActivity implements
             }
         }
     };
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

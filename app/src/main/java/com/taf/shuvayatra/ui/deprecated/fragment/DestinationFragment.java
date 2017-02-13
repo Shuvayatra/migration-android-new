@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class DestinationFragment extends BaseFragment implements
         CategoryView,
         ListItemClickListener {

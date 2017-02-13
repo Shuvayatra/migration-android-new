@@ -34,7 +34,7 @@ import butterknife.BindView;
 /**
  *
  */
-
+@Deprecated
 public abstract class FeedFragment extends BaseFragment implements
         ListItemClickListener,
         PostListView,
@@ -75,7 +75,6 @@ public abstract class FeedFragment extends BaseFragment implements
     @FeedType
     public abstract int feedType();
 
-    // todo make more generic presenter
     @Inject
     public PostListPresenter mPresenter;
 

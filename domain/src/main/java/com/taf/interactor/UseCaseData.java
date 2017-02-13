@@ -16,6 +16,7 @@ public class UseCaseData implements Serializable {
     public static final String DOWNLOAD_STATUS = "download_status";
     public static final String EXCLUDE_LIST = "exclude_list";
     public static final String CACHED_DATA = "cached_data";
+    public static final String SHOULD_SHOW_LOADING = "show_loading";
     public static final String CALENDAR_INSTANCE = "calendar_instance";
     public static final String COUNTRY_CODE = "country_code";
     public static final String SUBMISSION_DATA = "submission_data";
@@ -37,6 +38,7 @@ public class UseCaseData implements Serializable {
     public static final String COMPONENT_TYPE = "component_type";
 
     public static final String NO_CACHE = "no_cache";
+    public static final String BLOCK_ID = "block_id";
 
     Map<String, Object> data = null;
 

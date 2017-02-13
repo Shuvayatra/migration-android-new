@@ -41,12 +41,4 @@ public class ChannelRepository implements IChannelRepository {
         return Observable.concatDelayError(cacheObservable, apiObservable);
     }
 
-    @Override
-    public Observable<List<Channel>> getCachedChannelList() {
-        return mDataStoreFactory.createCacheDataStore()
-                .getChannelList()
-                .map(channelEntities -> mDataMapper.transformChannelList(channelEntities));
-
-    }
-
 }

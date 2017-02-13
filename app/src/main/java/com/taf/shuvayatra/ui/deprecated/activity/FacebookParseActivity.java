@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+@Deprecated
 public class FacebookParseActivity extends BaseActivity implements PostView {
 
     Long mId;
@@ -34,6 +35,11 @@ public class FacebookParseActivity extends BaseActivity implements PostView {
     @Override
     public int getLayout() {
         return R.layout.activity_facebook_parse;
+    }
+
+    @Override
+    public String screenName() {
+        return null;
     }
 
     @Override

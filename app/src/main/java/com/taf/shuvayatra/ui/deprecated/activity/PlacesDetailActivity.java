@@ -13,7 +13,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.PlaceDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -29,8 +28,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-
 @Deprecated
 public class PlacesDetailActivity extends FacebookActivity implements PlacesListView, PostDetailView {
 
@@ -45,6 +42,11 @@ public class PlacesDetailActivity extends FacebookActivity implements PlacesList
     Post mPlace;
     Long mCountryId;
     boolean mOldFavouriteState;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

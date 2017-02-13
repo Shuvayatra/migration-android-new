@@ -41,10 +41,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public List<BaseModel> getCountries() {
-        return mCountries;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewDataBinding binding;
@@ -69,8 +65,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         int type = getItemViewType(position);
         switch (type) {
             case MyConstants.Adapter.TYPE_COUNTRY:
-                Logger.e(TAG, position + "((Country) mCountries.get(position)).getTitleEnglish();: " + ((Country) mCountries.get(position)).getTitleEnglish());
-
+                Logger.e(TAG, position + "((Country) mCountries.get(position)).getTitleEnglish();: "
+                        + ((Country) mCountries.get(position)).getTitleEnglish());
                 ((ItemCountryListDataBinding) holder.mBinding)
                         .setCountry((Country) mCountries.get(position));
                 return;
@@ -81,8 +77,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             case MyConstants.Adapter.TYPE_COUNTRY_SELECTED:
                 ((ItemCountryListSelectedDataBinding) holder.mBinding)
                         .setCountry((Country) mCountries.get(position));
-                Logger.e(TAG, "((Country) mCountries.get(position)).getTitleEnglish();: " + ((Country) mCountries.get(position)).getTitleEnglish());
-
+                Logger.e(TAG, "((Country) mCountries.get(position)).getTitleEnglish();: "
+                        + ((Country) mCountries.get(position)).getTitleEnglish());
+                return;
         }
     }
 
@@ -112,7 +109,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
                 mBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Logger.e(TAG, "country clicked: ");
                         Country country = null;
                         if (mBinding instanceof ItemCountryListSelectedDataBinding)
                             country = ((ItemCountryListSelectedDataBinding) mBinding).getCountry();

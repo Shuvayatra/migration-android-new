@@ -1,71 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-	<data class="BlockListDataBinding">
+    <data class="BlockListDataBinding">
 
-		<import type="android.support.v7.widget.LinearLayoutManager"/>
+        <import type="android.support.v7.widget.LinearLayoutManager" />
 
-		<import type="android.view.View"/>
+        <import type="android.view.View" />
 
-		<variable
-			name="block"
-			type="com.taf.model.Block"/>
+        <variable
+            name="block"
+            type="com.taf.model.Block" />
 
-	</data>
+        <variable
+            name="callback"
+            type="com.taf.shuvayatra.ui.interfaces.BlockItemAnalytics" />
 
-	<android.support.v7.widget.CardView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/spacing_small"
-		android:background="@android:color/white"
-		app:cardElevation="4dp">
+    </data>
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:paddingTop="@dimen/spacing_small"
-			android:theme="@style/AppTheme.Block.List">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:background="@android:color/white"
+        app:cardElevation="4dp">
 
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/spacing_small"
-				android:paddingLeft="@dimen/spacing_large"
-				android:paddingRight="@dimen/spacing_18"
-				android:text="@{block.title}"
-				android:textStyle="bold"
-				tools:text="News"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/spacing_small"
+            android:theme="@style/AppTheme.Block.List">
 
-			<android.support.v7.widget.RecyclerView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/spacing_12"
-				app:data="@{block.data}"
-				app:orientation='@{LinearLayoutManager.VERTICAL}'>
-			</android.support.v7.widget.RecyclerView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:paddingLeft="@dimen/spacing_large"
+                android:paddingRight="@dimen/spacing_18"
+                android:text="@{block.title}"
+                android:textStyle="bold"
+                tools:text="News" />
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:visibility="@{block.showViewMore ? View.VISIBLE : View.GONE}">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_12"
+                app:block="@{block}"
+                app:callback="@{callback}"
+                app:orientation='@{LinearLayoutManager.VERTICAL}' />
 
-				<View
-					android:layout_width="match_parent"
-					android:layout_height="1dp"
-					android:background="@color/divider"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{block.showViewMore ? View.VISIBLE : View.GONE}">
 
-				<TextView
-					android:id="@+id/deeplink"
-					style="@style/AppTheme.Block.Link"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:text="@{block.viewMoreTitle}"/>
-			</LinearLayout>
-		</LinearLayout>
-	</android.support.v7.widget.CardView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:id="@+id/deeplink"
+                    style="@style/AppTheme.Block.Link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{block.viewMoreTitle}" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </layout>

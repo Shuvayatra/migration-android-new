@@ -1,10 +1,11 @@
-package com.taf.shuvayatra.base;
+package com.taf.shuvayatra.ui.deprecated.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.taf.model.BaseModel;
 import com.taf.model.Post;
+import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.presenter.deprecated.PostShareCountPresenter;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 /**
  * Created by Nirazan-PC on 4/28/2016.
  */
+@Deprecated
 public abstract class FacebookActivity extends BaseActivity {
 
     @Inject
@@ -21,51 +23,9 @@ public abstract class FacebookActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FacebookSdk.sdkInitialize(getApplicationContext());
-
-//        initializeFbShare();
+        //  FacebookSdk.sdkInitialize(getApplicationContext());
+        //  initializeFbShare();
     }
-
-    /*private void initializeFbShare() {
-        mShareDialog = new ShareDialog(this);
-        mCallback = CallbackManager.Factory.create();
-        mFbCallBack = new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                Logger.e("ArticleDetailActivity", "succcess");
-                mSharePresenter.initialize(null);
-            }
-
-            @Override
-            public void onCancel() {
-                Logger.e("ArticleDetailActivity", "canceled");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Logger.e("ArticleDetailActivity", "error: " + error.toString());
-                error.printStackTrace();
-            }
-        };
-
-        LoginManager.getInstance().registerCallback(mCallback, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult result) {
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                error.printStackTrace();
-            }
-        });
-
-        mShareDialog.registerCallback(mCallback, mFbCallBack);
-    }*/
 
     public boolean share(final BaseModel pModel) {
         try {
@@ -87,7 +47,7 @@ public abstract class FacebookActivity extends BaseActivity {
     }
 
     //// TODO: 5/16/2016 use after app verification
-    public boolean share1(final BaseModel pModel) {
+    public boolean shareFromFB(final BaseModel pModel) {
 //        if (mShareDialog.canShow(ShareOpenGraphContent.class)) {
 //            mShareDialog.show(getShareContent(pModel));
 //            return true;

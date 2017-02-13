@@ -1,6 +1,7 @@
 package com.taf.shuvayatra.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -19,6 +20,7 @@ import com.taf.shuvayatra.ui.adapter.ListAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.interfaces.ListItemClickListener;
 import com.taf.util.MyConstants;
+import com.taf.util.MyConstants.Deeplink;
 
 import butterknife.BindView;
 
@@ -44,12 +46,22 @@ public class ArticleDetailActivity extends PostDetailActivity implements
     }
 
     @Override
+    public String screenName() {
+        return "Content: Article";
+    }
+
+    @Override
+    public void checkDeeplinkMetadata() {
+        if (getIntent().getData() != null) {
+            Uri deeplinkUri = getIntent().getData();
+            mId = Long.parseLong(deeplinkUri.getQueryParameter(Deeplink.PARAM_POST_ID));
+            setFromDeeplink(true);
+        }
+    }
+
+    @Override
     protected void updateView(Post post) {
         mPost = post;
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayShowTitleEnabled(true);
-//            getSupportActionBar().setTitle(post.getTitle());
-//        }
         Log.e(TAG, "updateView: " + post);
         ((ArticleDetailDataBinding) mBinding).setArticle(post);
         ((ArticleDetailDataBinding) mBinding).setListener(this);
@@ -68,6 +80,8 @@ public class ArticleDetailActivity extends PostDetailActivity implements
             intent = new Intent(this, ArticleDetailActivity.class);
         } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_VIDEO)) {
             intent = new Intent(this, VideoDetailActivity.class);
+        } else if (((Post) pModel).getType().equalsIgnoreCase(Post.TYPE_PLACE)) {
+            intent = new Intent(this, PlaceDetailActivity.class);
         }
 
         if (intent != null) {

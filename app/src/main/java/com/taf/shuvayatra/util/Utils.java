@@ -25,6 +25,7 @@ import android.view.View;
 import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Block;
+import com.taf.model.Country;
 import com.taf.model.Post;
 import com.taf.util.MyConstants;
 
@@ -56,7 +57,6 @@ public class Utils {
         };
     }
 
-
     public static RecyclerView.ItemDecoration getBottomMarginDecorationForGrid(final Context context,
                                                                                @DimenRes final int padding) {
         return new RecyclerView.ItemDecoration() {
@@ -84,6 +84,16 @@ public class Utils {
                 }
             }
         };
+    }
+
+    public static List<BaseModel> sortCountry(List<BaseModel> countries) {
+        Collections.sort(countries, new Comparator<BaseModel>() {
+            @Override
+            public int compare(BaseModel o1, BaseModel o2) {
+                return o2.getDataType() - o1.getDataType();
+            }
+        });
+        return countries;
     }
 
     public static ColorStateList getIconColorTint(int color, int checkedColor) {

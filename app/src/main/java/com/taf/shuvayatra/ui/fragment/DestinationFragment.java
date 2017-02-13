@@ -3,24 +3,21 @@ package com.taf.shuvayatra.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Country;
 import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.base.BaseFragment;
-import com.taf.shuvayatra.base.PlayerFragmentActivity;
+import com.taf.shuvayatra.base.BaseNavigationFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.CountryListPresenter;
-import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.CountryAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.CountryView;
@@ -28,17 +25,18 @@ import com.taf.shuvayatra.util.Utils;
 import com.taf.util.MyConstants;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class DestinationFragment extends BaseFragment implements CountryView, SwipeRefreshLayout.OnRefreshListener {
+import static com.taf.util.MyConstants.Adapter.TYPE_COUNTRY_HEADER;
+import static com.taf.util.MyConstants.Adapter.TYPE_COUNTRY_SELECTED;
+import static com.taf.util.MyConstants.Preferences.DEFAULT_LOCATION;
+
+public class DestinationFragment extends BaseNavigationFragment
+        implements CountryView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "DestinationFragment";
 
@@ -52,13 +50,25 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     @Inject
     CountryListPresenter mPresenter;
 
-    CountryAdapter mAdapter;
-
+    private CountryAdapter mAdapter;
 
     public static DestinationFragment newInstance() {
+        return new DestinationFragment();
+    }
 
-        DestinationFragment fragment = new DestinationFragment();
-        return fragment;
+    @Override
+    public String screenName() {
+        return "Navigation - Destination";
+    }
+
+    @Override
+    public Fragment defaultInstance() {
+        return newInstance();
+    }
+
+    @Override
+    public String fragmentTag() {
+        return TAG;
     }
 
     @Override
@@ -110,7 +120,6 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
             @Override
             public int getSpanSize(int position) {
                 int type = mRecyclerView.getAdapter().getItemViewType(position);
-                Logger.e(TAG, "span type: " + type);
                 if (type == MyConstants.Adapter.TYPE_COUNTRY) {
                     return 1;
                 } else {
@@ -136,62 +145,29 @@ public class DestinationFragment extends BaseFragment implements CountryView, Sw
     @Override
     public void renderCountries(List<Country> countryList) {
 
-        Logger.e(TAG, ">>> call to render countries:\n" + countryList);
-
-        Collections.sort(countryList, new Comparator<Country>() {
-            @Override
-            public int compare(Country o1, Country o2) {
-                if (o2.getTitleEnglish() == null && o1.getTitleEnglish() != null) {
-                    return -1;
-                } else if (o1.getTitleEnglish() == null && o2.getTitleEnglish() != null) {
-                    return 1;
-                } else if (o1.getTitleEnglish() == null && o2.getTitleEnglish() == null) {
-                    return 0;
-                }
-                return o1.getTitleEnglish().trim().toUpperCase().compareTo(o2.getTitleEnglish()
-                        .trim().toUpperCase());
-            }
-        });
-
         // copy list of country to list of base mScreenModel after sorting
         List<BaseModel> allList = new ArrayList<>();
         allList.addAll(countryList);
+
+        HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
+        headerItem.setDataType(TYPE_COUNTRY_HEADER);
+        headerItem.setId(0l);
+        allList.add(headerItem);
+
         String selectedCountry = ((BaseActivity) getActivity()).getPreferences().getLocation();
 
-        if (!selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+        if (!selectedCountry.equalsIgnoreCase(getString(R.string.country_not_decided_yet)) &&
+                !selectedCountry.equalsIgnoreCase(DEFAULT_LOCATION)) {
 
-            if (selectedCountry.equals(MyConstants.Preferences.DEFAULT_LOCATION)) {
-                HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
-                headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
-                headerItem.setId(0l);
-                if (!allList.isEmpty()) {
-                    allList.add(0, headerItem);
-                }
-            } else {
-                Country preferredCountry = Country.makeCountryFromPreference(selectedCountry);
-                int index = allList.indexOf(preferredCountry);
-                if (index != -1) {
-                    Country country = (Country) allList.get(index);
-                    country.setDataType(MyConstants.Adapter.TYPE_COUNTRY_SELECTED);
-                    allList.remove(countryList.indexOf(country));
-                    if (allList.size() > 0) {
-                        allList.add(0, country);
-                    }
-                    HeaderItem headerItem = new HeaderItem(getString(R.string.all_country));
-                    headerItem.setDataType(MyConstants.Adapter.TYPE_COUNTRY_HEADER);
-                    headerItem.setId(0l);
-                    allList.add(1, headerItem);
-                }
+            Country preferredCountry = Country.makeCountryFromPreference(selectedCountry);
+            int index = allList.indexOf(preferredCountry);
+            if (index != -1) {
+                Country country = (Country) allList.get(index);
+                country.setDataType(TYPE_COUNTRY_SELECTED);
             }
         }
 
-//        if (mAdapter.getCountries() != null && !mAdapter.getCountries().isEmpty()
-//                && !mAdapter.getCountries().containsAll(allList)) {
-//            Logger.e(TAG, ">>> updating country list");
-            mAdapter.setCountries(allList);
-//        } else {
-//            Logger.e(TAG, ">>> country list not updated");
-//        }
+        mAdapter.setCountries(Utils.sortCountry(allList));
     }
 
     @Override

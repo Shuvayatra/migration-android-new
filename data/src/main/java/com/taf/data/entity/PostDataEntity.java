@@ -13,6 +13,8 @@ public class PostDataEntity {
     @SerializedName("phone")
     List<String> phoneNumbers;
     String address;
+    @SerializedName("photo_credit")
+    String photoCredit;
 
     public String getMediaUrl() {
         return mediaUrl;

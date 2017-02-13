@@ -3,7 +3,9 @@ package com.taf.shuvayatra.ui.fragment;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -202,9 +204,6 @@ public class MiniPlayerFragment extends BaseFragment implements
     @Override
     public void onDismissPlayer() {
         ((PlayerFragmentActivity) getActivity()).togglePlayerFragment();
-//        if (getView() != null) {
-//            getView().setVisibility(View.GONE);
-//        }
     }
 
     private void updateView() {
@@ -214,8 +213,20 @@ public class MiniPlayerFragment extends BaseFragment implements
         );
         mTitle.setText(((MyApplication) getContext().getApplicationContext()).mService
                 .getCurrentTitle());
-        mDescription.setText(((MyApplication) getContext().getApplicationContext()).mService
-                .getCurrentDescription());
+
+        try {
+            String description = ((MyApplication) getContext().getApplicationContext()).mService
+                    .getCurrentDescription();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                description = Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY).toString();
+            } else {
+                description = Html.fromHtml(description).toString();
+            }
+            mDescription.setText(description.replaceAll("\uFFFC", ""));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         BindingUtil.setImage(mediaImage, ((MyApplication) getContext().getApplicationContext())
                 .mService.getCurrentImageResource());
     }

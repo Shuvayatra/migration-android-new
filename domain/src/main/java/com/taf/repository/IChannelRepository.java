@@ -13,5 +13,4 @@ import rx.Observable;
 
 public interface IChannelRepository {
     Observable<List<Channel>> getChannelList();
-    Observable<List<Channel>> getCachedChannelList();
 }

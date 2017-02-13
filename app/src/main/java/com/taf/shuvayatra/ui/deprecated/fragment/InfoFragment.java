@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+@Deprecated
 public class InfoFragment extends BaseFragment implements CategoryView, ListItemClickListener {
 
 

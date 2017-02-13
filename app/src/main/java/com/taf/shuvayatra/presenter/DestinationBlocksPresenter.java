@@ -23,7 +23,7 @@ public class DestinationBlocksPresenter implements Presenter {
     DestinationDetailView mView;
 
     @Inject
-    public DestinationBlocksPresenter(@Named("destination-blocks") UseCase useCase){
+    public DestinationBlocksPresenter(@Named("destination-blocks") UseCase useCase) {
         mUseCase = useCase;
     }
 
@@ -53,7 +53,7 @@ public class DestinationBlocksPresenter implements Presenter {
         mView = (DestinationDetailView) view;
     }
 
-    public class DestinationBlocksSubscriber extends DefaultSubscriber<List<Block>>{
+    public class DestinationBlocksSubscriber extends DefaultSubscriber<List<Block>> {
 
         @Override
         public void onCompleted() {
@@ -70,7 +70,6 @@ public class DestinationBlocksPresenter implements Presenter {
 
         @Override
         public void onNext(List<Block> pT) {
-            onCompleted();
             mView.renderBlocks(pT);
         }
     }

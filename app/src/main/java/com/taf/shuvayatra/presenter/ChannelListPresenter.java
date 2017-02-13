@@ -18,6 +18,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.taf.util.MyConstants.UseCase.CASE_CHANNEL_LIST;
+
 /**
  * Created by ngima on 11/3/16.
  */
@@ -30,7 +32,7 @@ public class ChannelListPresenter implements Presenter {
     private static final String TAG = "ChannelListPresenter";
 
     @Inject
-    public ChannelListPresenter(@Named(MyConstants.UseCase.CASE_CHANNEL_LIST) UseCase mUseCase) {
+    public ChannelListPresenter(@Named(CASE_CHANNEL_LIST) UseCase mUseCase) {
         this.mUseCase = mUseCase;
     }
 
@@ -60,7 +62,8 @@ public class ChannelListPresenter implements Presenter {
         mView = (ChannelView) view;
     }
 
-    class ChannelSubscriber extends DefaultSubscriber<List<Channel>>{
+    private class ChannelSubscriber extends DefaultSubscriber<List<Channel>> {
+
         @Override
         public void onCompleted() {
             mView.hideLoadingView();
@@ -69,8 +72,6 @@ public class ChannelListPresenter implements Presenter {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-
-            Log.e(TAG, ">>> presenter onError: called <<<", e);
             mView.hideLoadingView();
             mView.showErrorView(ErrorMessageFactory.create(mView.getContext(), new
                     DefaultErrorBundle((Exception) e).getException()));
@@ -78,9 +79,7 @@ public class ChannelListPresenter implements Presenter {
 
         @Override
         public void onNext(List<Channel> pT) {
-            Logger.e(TAG, ">>> call to on next <<<");
             mView.renderChannel(pT);
-            onCompleted();
         }
     }
 }

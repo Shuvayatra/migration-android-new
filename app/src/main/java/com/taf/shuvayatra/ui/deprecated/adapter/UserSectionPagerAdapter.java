@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.deprecated.fragment.FeedListFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.NotificationsFragment;
-
+@Deprecated
 public class UserSectionPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
     private String mTitles[] = new String[PAGE_COUNT];
@@ -34,7 +34,7 @@ public class UserSectionPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new NotificationsFragment();
             case 1:
-                return FeedFragment.newInstance(true);
+                return FeedListFragment.newInstance(true);
             default:
                 throw new IllegalStateException();
         }

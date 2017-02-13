@@ -4,7 +4,6 @@ import com.taf.util.MyConstants;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by rakeeb on 10/25/16.
@@ -28,11 +27,10 @@ public class Country extends BaseModel {
     String smallIcon;
     String titleEnglish;
     String timeZoneId;
-    List<CountryInfo> informations;
+    List<CountryInfo> informationList;
 
     @Override
     public int getDataType() {
-        System.out.println("country data type: " + mDataType);
         return super.getDataType() == 0 ? MyConstants.Adapter.TYPE_COUNTRY : super.getDataType();
     }
 
@@ -97,23 +95,30 @@ public class Country extends BaseModel {
         this.timeZoneId = timeZoneId;
     }
 
+    // do not change this!
     @Override
     public String toString() {
         return String.format(Locale.getDefault(), "%d,%s,%s,%s", getId(), getTitle(), getTitleEnglish(), getTimeZoneId());
     }
 
     public List<CountryInfo> getInformation() {
-        return informations;
+        return informationList;
     }
 
     public void setInformation(List<CountryInfo> information) {
-        this.informations = information;
+        this.informationList = information;
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (o == null) return false;
+        if (o instanceof CountryWidgetModel)
+            return getId().equals(((CountryWidgetModel) o).getId());
+
+        if (getClass() != o.getClass()) return false;
 
         Country country = (Country) o;
 
@@ -131,19 +136,24 @@ public class Country extends BaseModel {
         return result;
     }
 
-    // if information is avilable gets the first key and value to show for the selected country in country list screen
+    // if information is available gets the first key and value to show for the selected country in
+    // country list screen
     public String getFirstInformation() {
-        if (!informations.isEmpty()) {
-            CountryInfo info = informations.get(0);
-            return info.getAttribute() + " : " + info.getValue();
+        if (!informationList.isEmpty()) {
+            CountryInfo info = informationList.get(0);
+            if (!info.getAttribute().isEmpty() && !info.getValue().isEmpty())
+                return info.getAttribute() + " : " + info.getValue();
+            else
+                return "";
         }
         return "";
     }
 
     public String getAllInformation() {
         String info = "";
-        for (CountryInfo countryInfo : informations) {
-            info += countryInfo.getAttribute() + " : " + countryInfo.getValue() + "\n";
+        for (CountryInfo countryInfo : informationList) {
+            if (!countryInfo.getAttribute().isEmpty() && !countryInfo.getValue().isEmpty())
+                info += countryInfo.getAttribute() + " : " + countryInfo.getValue() + "\n";
         }
         return info;
     }

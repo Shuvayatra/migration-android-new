@@ -72,6 +72,8 @@
                                 android:id="@+id/web_view_content"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                app:isAudio="@{false}"
+                                app:post="@{video}"
                                 android:visibility="@{video.description!=null?View.VISIBLE:View.GONE}"
                                 app:htmlContent="@{video.description}"
                                 tools:text="This is the description of the video."/>

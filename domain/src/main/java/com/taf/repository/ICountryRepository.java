@@ -14,7 +14,6 @@ import rx.Observable;
 
 public interface ICountryRepository {
 
-    Observable<List<Country>> getCountryList();
-    Observable<List<Country>> getCachedCountryList();
+    Observable<List<Country>> getCountryList(boolean useCache);
     Observable<List<Block>> getCountryBlocks(long id, ApiQueryParams params);
 }

@@ -44,7 +44,7 @@
     <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.UserFragment">
         User Screen
     </screenName>
-    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment">
+    <screenName name="com.taf.shuvayatra.ui.deprecated.fragment.FeedListFragment">
         Feeds Section
     </screenName>
 </resources>

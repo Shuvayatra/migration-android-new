@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="listener"
-            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener"/>
+            type="com.taf.shuvayatra.ui.interfaces.ListItemClickListener" />
 
         <variable
             name="similarAudios"
-            type="java.util.List&lt;com.taf.model.Post&gt;"/>
+            type="java.util.List&lt;com.taf.model.Post&gt;" />
 
         <variable
             name="audio"
-            type="com.taf.model.Post"/>
+            type="com.taf.model.Post" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -37,10 +36,10 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/audio_toolbar_image_height"
-                app:titleEnabled="false"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:statusBarScrim="?attr/colorPrimaryDark">
+                app:statusBarScrim="?attr/colorPrimaryDark"
+                app:titleEnabled="false">
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/content_art"
@@ -55,7 +54,8 @@
                     app:progressBarImageScaleType="centerInside"
                     fresco:actualImageScaleType="focusCrop"
                     fresco:fadeDuration="300"
-                    fresco:overlayImage="@drawable/audio_toolbar_gradient"/>
+                    fresco:overlayImage="@drawable/audio_toolbar_gradient" />
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:progressDrawable="@drawable/seekbar_progress"
-                        android:thumb="@drawable/seekbar_thumb"/>
+                        android:thumb="@drawable/seekbar_thumb" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                             android:layout_width="@dimen/play_btn_size"
                             android:layout_height="@dimen/play_btn_size"
                             android:layout_gravity="center_vertical"
-                            app:srcCompat="@drawable/ic_play"/>
+                            app:srcCompat="@drawable/ic_play" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                                 android:text="@{audio.getTitle()}"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/text_large"
-                                tools:text="My experience on applying for Quwait citizenship"/>
+                                tools:text="My experience on applying for Quwait citizenship" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                                     android:layout_marginTop="@dimen/spacing_small"
                                     android:text="00:00 | 00:00"
                                     android:textColor="@android:color/white"
-                                    android:textSize="@dimen/text_large"/>
+                                    android:textSize="@dimen/text_large" />
 
                                 <TextView
                                     android:id="@+id/buffering"
@@ -124,7 +124,7 @@
                                     android:text="@string/message_buffering"
                                     android:textColor="@android:color/white"
                                     android:textSize="@dimen/text_small"
-                                    android:visibility="gone"/>
+                                    android:visibility="gone" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -135,15 +135,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
         <include
             layout="@layout/content_audio_detail"
-            app:similarAudios="@{similarAudios}"
             app:listener="@{listener}"
-            bind:audio="@{audio}"/>
+            app:similarAudios="@{similarAudios}"
+            bind:audio="@{audio}" />
 
         <include layout="@layout/content_mini_player" />
 

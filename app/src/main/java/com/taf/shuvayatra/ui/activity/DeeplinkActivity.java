@@ -12,14 +12,15 @@ import com.taf.data.utils.Logger;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
+import com.taf.shuvayatra.base.PostDetailActivity;
 import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
+@Deprecated
+public class DeeplinkActivity extends BaseActivity {
 
-public class DeepLinkActivity extends BaseActivity {
-
-    private static final String TAG = "DeepLinkActivity";
+    private static final String TAG = "DeeplinkActivity";
 
     @BindView(R.id.fragment_container)
     FrameLayout mContainer;
@@ -41,6 +42,11 @@ public class DeepLinkActivity extends BaseActivity {
     }
 
     @Override
+    public String screenName() {
+        return "IGNORED";
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -52,8 +58,8 @@ public class DeepLinkActivity extends BaseActivity {
         Fragment fragment = null;
 
         if (data.getHost().equals("post")) {
-            String postType = data.getQueryParameter("type");
-            String postId = data.getQueryParameter("id");
+            String postType = data.getQueryParameter("post_type");
+            String postId = data.getQueryParameter("post_id");
 
             if (postType == null || postId == null) {
                 Snackbar.make(mContainer, "Could not load the post detail. Sufficient data not " +
@@ -62,12 +68,14 @@ public class DeepLinkActivity extends BaseActivity {
             }
 
             Intent intent = null;
-            if (postType.equals(Post.TYPE_AUDIO)) {
+            if (postType.equalsIgnoreCase(Post.TYPE_AUDIO)) {
                 intent = new Intent(this, AudioDetailActivity.class);
-            } else if (postType.equals(Post.TYPE_VIDEO)) {
+            } else if (postType.equalsIgnoreCase(Post.TYPE_VIDEO)) {
                 intent = new Intent(this, VideoDetailActivity.class);
-            } else if (postType.equals(Post.TYPE_TEXT)) {
+            } else if (postType.equalsIgnoreCase(Post.TYPE_TEXT)) {
                 intent = new Intent(this, ArticleDetailActivity.class);
+            } else if(postType.equalsIgnoreCase(Post.TYPE_PLACE)) {
+                intent = new Intent(this, PlaceDetailActivity.class);
             }
 
             if (intent != null) {

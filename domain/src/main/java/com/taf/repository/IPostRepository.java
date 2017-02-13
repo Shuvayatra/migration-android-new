@@ -2,6 +2,7 @@ package com.taf.repository;
 
 import com.taf.model.Post;
 import com.taf.model.PostResponse;
+import com.taf.model.base.ApiQueryParams;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import rx.Observable;
  */
 
 public interface IPostRepository {
-    Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams, long id);
+    Observable<PostResponse> getList(int feedType, int limit, int offset, ApiQueryParams params);
 
     Observable<Post> getDetail(Long id);
 

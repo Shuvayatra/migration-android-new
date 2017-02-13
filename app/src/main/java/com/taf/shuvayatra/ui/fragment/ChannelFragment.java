@@ -3,23 +3,21 @@ package com.taf.shuvayatra.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 
-import com.taf.data.utils.Logger;
 import com.taf.model.BaseModel;
 import com.taf.model.Channel;
 import com.taf.model.HeaderItem;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
-import com.taf.shuvayatra.base.BaseFragment;
-import com.taf.shuvayatra.base.PlayerFragmentActivity;
+import com.taf.shuvayatra.base.BaseNavigationFragment;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.ChannelListPresenter;
-import com.taf.shuvayatra.ui.activity.HomeActivity;
 import com.taf.shuvayatra.ui.adapter.ChannelAdapter;
 import com.taf.shuvayatra.ui.custom.EmptyStateRecyclerView;
 import com.taf.shuvayatra.ui.views.ChannelView;
@@ -39,7 +37,9 @@ import butterknife.BindView;
  * Created by ngima on 11/3/16.
  */
 
-public class ChannelFragment extends BaseFragment implements ChannelView, SwipeRefreshLayout.OnRefreshListener {
+public class ChannelFragment extends BaseNavigationFragment
+        implements ChannelView,
+        SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "ChannelFragment";
 
@@ -55,11 +55,25 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
     @Inject
     ChannelListPresenter mPresenter;
 
-    ChannelAdapter mAdapter;
+    private ChannelAdapter mAdapter;
 
-    public static ChannelFragment getInstance() {
-        Logger.e(TAG, "instance created");
+    @Override
+    public String screenName() {
+        return "Navigation - Radio";
+    }
+
+    public static ChannelFragment newInstance() {
         return new ChannelFragment();
+    }
+
+    @Override
+    public Fragment defaultInstance() {
+        return newInstance();
+    }
+
+    @Override
+    public String fragmentTag() {
+        return TAG;
     }
 
     @Override
@@ -83,7 +97,6 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
         super.onActivityCreated(savedInstanceState);
 
         ((BaseActivity) getActivity()).getSupportActionBar().setTitle("Radio");
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initialize();
     }
@@ -139,7 +152,7 @@ public class ChannelFragment extends BaseFragment implements ChannelView, SwipeR
 
     @Override
     public void showLoadingView() {
-
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override

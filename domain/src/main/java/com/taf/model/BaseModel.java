@@ -52,4 +52,29 @@ public class BaseModel implements Serializable {
         }
         return baseModels;
     }
+
+    @Override
+    public String toString() {
+        return "BaseModel{" +
+                "id=" + id +
+                ", mDataType=" + mDataType +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (o instanceof Country) return ((Country) o).getId().equals(getId());
+        if (getClass() != o.getClass()) return false;
+        BaseModel baseModel = (BaseModel) o;
+
+        return id != null ? id.equals(baseModel.id) : baseModel.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

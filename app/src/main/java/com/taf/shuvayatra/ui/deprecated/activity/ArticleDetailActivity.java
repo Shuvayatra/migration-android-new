@@ -12,7 +12,6 @@ import com.taf.data.utils.Logger;
 import com.taf.interactor.UseCaseData;
 import com.taf.model.Post;
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.FacebookActivity;
 import com.taf.shuvayatra.databinding.ArticleDetailDataBinding;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
@@ -24,6 +23,7 @@ import com.taf.util.MyConstants;
 
 import javax.inject.Inject;
 
+@Deprecated
 public class ArticleDetailActivity extends FacebookActivity implements PostDetailView {
 
     public static final String TAG = "ArticleDetailActivity";
@@ -37,6 +37,11 @@ public class ArticleDetailActivity extends FacebookActivity implements PostDetai
 
     Post mPost;
     private boolean mOldFavouriteState;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {

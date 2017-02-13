@@ -32,7 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-
+@Deprecated
 public class JourneyFragment extends BaseFragment implements
         CategoryView, ListItemClickListener,
         SearchView.OnQueryTextListener {

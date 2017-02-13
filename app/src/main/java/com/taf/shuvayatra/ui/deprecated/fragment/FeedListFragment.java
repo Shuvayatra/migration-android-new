@@ -23,7 +23,7 @@ import com.taf.model.Post;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.base.BaseFragment;
-import com.taf.shuvayatra.base.CategoryDetailActivity;
+import com.taf.shuvayatra.ui.deprecated.activity.CategoryDetailActivity;
 import com.taf.shuvayatra.di.component.DaggerDataComponent;
 import com.taf.shuvayatra.di.module.DataModule;
 import com.taf.shuvayatra.presenter.deprecated.DeletedContentPresenter;
@@ -50,8 +50,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-public class FeedFragment extends BaseFragment implements
+@Deprecated
+public class FeedListFragment extends BaseFragment implements
         ListItemClickListener,
         PostListView,
         LatestContentView,
@@ -108,20 +108,20 @@ public class FeedFragment extends BaseFragment implements
     private Long mCategoryId;
     private String mDefaultCategory = null;
 
-    public FeedFragment() {
+    public FeedListFragment() {
     }
 
-    public static FeedFragment newInstance(boolean favouritesOnly) {
-        FeedFragment feedFragment = new FeedFragment();
+    public static FeedListFragment newInstance(boolean favouritesOnly) {
+        FeedListFragment feedListFragment = new FeedListFragment();
         Bundle data = new Bundle();
         data.putBoolean(MyConstants.Extras.KEY_FAVOURITES_ONLY, favouritesOnly);
-        feedFragment.setArguments(data);
-        return feedFragment;
+        feedListFragment.setArguments(data);
+        return feedListFragment;
     }
 
-    public static FeedFragment newInstance(boolean fromCategory, long categoryId, String
+    public static FeedListFragment newInstance(boolean fromCategory, long categoryId, String
             pDefaultCategory, List<String> excludeTypes, List<Category> pCategories) {
-        FeedFragment feedFragment = new FeedFragment();
+        FeedListFragment feedListFragment = new FeedListFragment();
 
         Bundle data = new Bundle();
         data.putBoolean(MyConstants.Extras.KEY_FROM_CATEGORY, fromCategory);
@@ -129,14 +129,14 @@ public class FeedFragment extends BaseFragment implements
         data.putString(MyConstants.Extras.KEY_CATEGORY, pDefaultCategory);
         data.putSerializable(MyConstants.Extras.KEY_SUBCATEGORY, (Serializable) pCategories);
         data.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) excludeTypes);
-        feedFragment.setArguments(data);
-        return feedFragment;
+        feedListFragment.setArguments(data);
+        return feedListFragment;
     }
 
-    public static FeedFragment newInstance(List<String> pExcludeTypes) {
+    public static FeedListFragment newInstance(List<String> pExcludeTypes) {
         Bundle args = new Bundle();
         args.putSerializable(MyConstants.Extras.KEY_EXCLUDE_LIST, (Serializable) pExcludeTypes);
-        FeedFragment fragment = new FeedFragment();
+        FeedListFragment fragment = new FeedListFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -290,7 +290,7 @@ public class FeedFragment extends BaseFragment implements
 
     @Override
     public void onListItemSelected(BaseModel pModel, int pIndex) {
-        Logger.e("FeedFragment", "Post createdAt: " + ((Post) pModel).getCreatedAt());
+        Logger.e("FeedListFragment", "Post createdAt: " + ((Post) pModel).getCreatedAt());
         Intent intent = null;
         listItemSelection = pIndex;
         switch (pModel.getDataType()) {
@@ -431,12 +431,12 @@ public class FeedFragment extends BaseFragment implements
                 boolean status = data.getBooleanExtra(MyConstants.Extras.KEY_FAVOURITE_STATUS,
                         false);
                 int viewCount = data.getIntExtra(MyConstants.Extras.KEY_VIEW_COUNT, 0);
-                Logger.e("FeedFragment", "view count = " + viewCount);
+                Logger.e("FeedListFragment", "view count = " + viewCount);
                 if (viewCount != 0) {
                     mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedViewCount(viewCount);
                 }
                 int shareCount = data.getIntExtra(MyConstants.Extras.KEY_SHARE_COUNT, 0);
-                Logger.e("FeedFragment", "share count = " + shareCount);
+                Logger.e("FeedListFragment", "share count = " + shareCount);
                 if (shareCount != 0) {
                     mListAdapter.getDataCollection().get(listItemSelection).setUnSyncedShareCount(shareCount);
                 }

@@ -24,6 +24,7 @@ import com.taf.data.repository.deprecated.NotificationRepository;
 import com.taf.data.repository.deprecated.SectionCategoryRepository;
 import com.taf.data.repository.deprecated.TagRepository;
 import com.taf.data.utils.AppPreferences;
+import com.taf.data.utils.Logger;
 import com.taf.executor.PostExecutionThread;
 import com.taf.executor.ThreadExecutor;
 import com.taf.interactor.GetChannelUseCase;
@@ -111,7 +112,7 @@ public class DataModule {
         mId = pId;
     }
 
-    public DataModule(long id,String filterParams) {
+    public DataModule(long id, String filterParams) {
         mFilterParams = filterParams;
         mId = id;
     }
@@ -435,9 +436,12 @@ public class DataModule {
     @Named("post_list")
     UseCase providePostListUseCase(IPostRepository pRepository, ThreadExecutor
             pThreadExecutor, PostExecutionThread pPostExecutionThread) {
-        return new GetPostListUseCase(mId,mFilterParams, pRepository, pThreadExecutor,
+        Logger.e(TAG, ">>> BLOCK ID: " + mId);
+        return new GetPostListUseCase(mId, mFilterParams, pRepository, pThreadExecutor,
                 pPostExecutionThread);
     }
+
+    private static final String TAG = "DataModule";
 
     @Provides
     @PerActivity
@@ -591,7 +595,7 @@ public class DataModule {
 
     @Provides
     @PerActivity
-    IInfoRepository provideInfoRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper){
+    IInfoRepository provideInfoRepository(DataStoreFactory dataStoreFactory, DataMapper dataMapper) {
         return new InfoRepository(dataStoreFactory, dataMapper);
     }
 }

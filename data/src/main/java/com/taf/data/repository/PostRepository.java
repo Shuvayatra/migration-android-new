@@ -6,6 +6,7 @@ import com.taf.data.repository.datasource.DataStoreFactory;
 import com.taf.data.utils.AppPreferences;
 import com.taf.model.Post;
 import com.taf.model.PostResponse;
+import com.taf.model.base.ApiQueryParams;
 import com.taf.repository.IPostRepository;
 
 import java.util.List;
@@ -26,15 +27,15 @@ public class PostRepository implements IPostRepository {
     }
 
     @Override
-    public Observable<PostResponse> getList(int feedType, int limit, int offset, String filterParams, long id) {
+    public Observable<PostResponse> getList(int feedType, int limit, int offset, ApiQueryParams params) {
 
 
         Observable apiObservable = mDataStoreFactory.createRestDataStore()
-                .getPosts(feedType, limit, offset, filterParams, id)
+                .getPosts(feedType, limit, offset, params)
                 .map(responseEntity -> mDataMapper.transformPostResponse(responseEntity));
 
         Observable cacheObservable = mDataStoreFactory.createCacheDataStore()
-                .getPosts(feedType, filterParams)
+                .getPosts(feedType, params.categoryId)
                 .map(entities -> {
                     PostResponse response = new PostResponse(1, 1);
                     response.setData(mDataMapper.transformPost(entities));

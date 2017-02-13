@@ -9,7 +9,7 @@ import com.taf.data.utils.Logger;
 import com.taf.shuvayatra.R;
 import com.taf.shuvayatra.base.BaseActivity;
 import com.taf.shuvayatra.ui.deprecated.fragment.DestinationFragment;
-import com.taf.shuvayatra.ui.deprecated.fragment.FeedFragment;
+import com.taf.shuvayatra.ui.deprecated.fragment.FeedListFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.InfoFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.JourneyFragment;
 import com.taf.shuvayatra.ui.deprecated.fragment.UserFragment;
@@ -28,6 +28,11 @@ public class MainActivity extends BaseActivity {
     FrameLayout mFragmentContainer;
 
     int currentFragment = 4;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {
@@ -152,13 +157,13 @@ public class MainActivity extends BaseActivity {
             case 4:
                 List<String> excludes = new ArrayList<>();
                 excludes.add("place");
-                FeedFragment feedFragment = (FeedFragment) getSupportFragmentManager()
+                FeedListFragment feedListFragment = (FeedListFragment) getSupportFragmentManager()
                         .findFragmentByTag("home");
-                if (feedFragment == null) {
-                    feedFragment = FeedFragment.newInstance(excludes);
+                if (feedListFragment == null) {
+                    feedListFragment = FeedListFragment.newInstance(excludes);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        feedFragment, "home").commit();
+                        feedListFragment, "home").commit();
                 break;
         }
     }

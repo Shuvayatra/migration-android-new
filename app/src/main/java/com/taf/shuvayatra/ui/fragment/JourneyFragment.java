@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
+@Deprecated
 public class JourneyFragment extends BaseFragment implements JourneyView, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "JourneyFragment";
@@ -61,7 +62,7 @@ public class JourneyFragment extends BaseFragment implements JourneyView, SwipeR
 
         initialize();
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mBlocksAdapter = new BlocksAdapter(getContext());
+//        mBlocksAdapter = new BlocksAdapter(getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mBlocksAdapter);
         mRecyclerView.setEmptyView(mEmptyView);

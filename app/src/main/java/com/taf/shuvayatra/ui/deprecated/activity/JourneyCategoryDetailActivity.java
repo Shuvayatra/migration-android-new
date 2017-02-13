@@ -4,17 +4,22 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 
 import com.taf.shuvayatra.R;
-import com.taf.shuvayatra.base.CategoryDetailActivity;
 import com.taf.shuvayatra.databinding.JourneyCategoryDetailDataBinding;
 import com.taf.shuvayatra.util.AnalyticsUtil;
 import com.taf.util.MyConstants;
 
 import butterknife.BindView;
 
+@Deprecated
 public class JourneyCategoryDetailActivity extends CategoryDetailActivity {
 
     @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
+
+    @Override
+    public String screenName() {
+        return null;
+    }
 
     @Override
     public int getLayout() {
