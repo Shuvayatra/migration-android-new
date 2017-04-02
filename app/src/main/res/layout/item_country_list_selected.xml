@@ -36,38 +36,50 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingLeft="@dimen/spacing_standard"
-            android:paddingRight="@dimen/spacing_standard"
-            android:paddingTop="@dimen/spacing_large"
+            android:paddingRight="@dimen/spacing_14"
+            android:paddingTop="@dimen/spacing_standard"
             android:paddingBottom="@dimen/spacing_large"
             android:orientation="horizontal">
+
             <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_marginTop="@dimen/spacing_14"
                 android:id="@+id/image_view_flag"
                 android:layout_width="@dimen/country_list_selected_flag_width"
                 android:layout_height="@dimen/country_list_selected_flag_height"
                 app:imageUrl="@{country.icon}"
                 app:actualImageScaleType="fitXY"
                 android:layout_marginRight="@dimen/spacing_large"
+                android:gravity="center_vertical"
                 app:progressBarAutoRotateInterval="1000"
                 app:progressBarImage="@drawable/ic_refresh"
                 app:progressBarImageScaleType="centerCrop"/>
-        <TextView
-            android:id="@+id/country_name"
-            android:layout_toRightOf="@id/image_view_flag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{country.title}"
-            android:textColor="@color/warm_grey"
-            android:textSize="@dimen/text_xxlarge"
-            tools:text="Qatar"/>
-            <TextView
-                android:layout_below="@id/country_name"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
                 android:layout_toRightOf="@id/image_view_flag"
+                >
+             <TextView
+                android:id="@+id/country_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{country.title}"
+                android:textColor="@color/text_color_1"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_display"
+                tools:text="Qatar"/>
+            <TextView
+                android:layout_below="@id/country_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_2"
                 android:text='@{country.firstInformation}'
                 tools:text="Currency: Ringit"/>
-            </RelativeLayout>
-
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

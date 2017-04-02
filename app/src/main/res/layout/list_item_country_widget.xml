@@ -28,72 +28,98 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{widgetModel.countryName}"
-                android:textColor="@color/greyish_brown"
-                android:textSize="@dimen/text_large"
+                android:textColor="@color/text_color_1"
+                android:textStyle="bold"
+
+                android:textSize="@dimen/text_display"
                 tools:text="Country Name" />
 
-            <TextView
-                android:id="@+id/nepali_date"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:text="@{widgetModel.nepaliDate}"
-                android:textColor="@color/warm_grey"
-                android:textSize="@dimen/text_xxlarge"
-                tools:text="१९ आश्विन २०७३, बुधवार" />
+                android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/forex"
-                android:layout_width="match_parent"
+                android:id="@+id/english_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:text="@{widgetModel.forex}"
-                android:textColor="@color/warm_grey"
+
+                android:text="@{widgetModel.englishDate}"
+                android:textColor="@color/text_color_2"
                 android:textSize="@dimen/text_large"
-                tools:text="Exchange Rate" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xxlarge"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/english_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@{widgetModel.englishDate}"
-                    android:textColor="@color/warm_grey"
-                    android:textSize="@dimen/text_large"
-                    tools:text="Monday,\n 23 October 2o16" />
+                android:paddingTop="@dimen/spacing_small"
+                android:fontFamily="sans-serif-light"
+                tools:text="Monday,\n23 October 2o16" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="end|right|center_vertical"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageview_weather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing_xxxsmall"
+                        app:resourceId="@{widgetModel.imageResource}"
+                        tools:src="@drawable/ic_rain"/>
 
                     <TextView
                         android:id="@+id/textview_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{widgetModel.temperature}"
-                        android:textColor="@color/warm_grey"
-                        android:textSize="24sp"
+                        android:textColor="@color/text_color_2"
+
+                        android:textSize="@dimen/text_large"
+                        android:fontFamily="sans-serif-light"
+
                         tools:text="3C" />
-					
-					<ImageView
-						android:id="@+id/imageview_weather"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginLeft="@dimen/spacing_xxxsmall"
-						app:resourceId="@{widgetModel.imageResource}"
-						tools:src="@drawable/ic_rain"/>
+
+
                 </LinearLayout>
-            </LinearLayout>
+
+            </FrameLayout>
+
+
+            <TextView
+                android:id="@+id/forex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="italic"
+                android:text="@{widgetModel.forex}"
+                android:textColor="@color/text_color_2"
+                android:textSize="@dimen/text_large"
+                android:paddingTop="@dimen/spacing_small"
+                tools:text="Exchange Rate" />
+
+
+
+            <TextView
+                android:paddingTop="@dimen/spacing_standard"
+                android:id="@+id/nepali_date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:textColor="@color/text_color_3"
+                android:textSize="@dimen/text_default"
+                android:text="अहिले नेपालमा" />
+
+            <TextView
+                android:id="@+id/nepali_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:text="@{widgetModel.nepaliDate}"
+                android:textColor="@color/text_color_2"
+                android:textSize="@dimen/text_large"
+                tools:text="१९ आश्विन २०७३, बुधवार" />
+
+
+
+
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

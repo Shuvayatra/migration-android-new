@@ -25,7 +25,8 @@
         android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/main_background"
+        android:background="@android:color/white"
+
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.taf.shuvayatra.ui.activity.ArticleDetailActivity"
@@ -56,6 +57,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:minHeight="250dp"
                         android:background="@android:color/white"
                         android:padding="@dimen/spacing_standard">
 
@@ -63,8 +65,12 @@
                             android:id="@+id/web_view_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+
+
+                            android:scrollbars="none"
                             app:isAudio="@{false}"
                             app:post="@{article}"
+
                             android:visibility="@{article.description!=null?View.VISIBLE:View.GONE}"
                             app:htmlContent='@{article.description}'/>
                     </LinearLayout>
@@ -73,9 +79,10 @@
                         android:id="@+id/similar_video_section"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/player_control_section_height"
+
                         android:orientation="vertical"
-                        android:visibility="@{(similarStories == null || similarStories.isEmpty()) ? View.INVISIBLE : View.VISIBLE}">
+                        android:background="@color/main_background"
+                        android:visibility="@{(article.description == null || similarStories == null || similarStories.isEmpty()) ? View.GONE : View.VISIBLE}">
 
                         <TextView
                             android:id="@+id/label"
@@ -84,6 +91,7 @@
                             android:padding="@dimen/spacing_standard"
                             android:text="@string/similar_stories"
                             android:textAllCaps="true"
+                            android:textStyle="bold"
                             android:textSize="@dimen/text_default"/>
 
                         <FrameLayout

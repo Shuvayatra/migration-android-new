@@ -24,6 +24,7 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/image_view_flag"
+                android:layout_marginTop="@dimen/spacing_14"
                 android:layout_width="@dimen/country_list_selected_flag_width"
                 android:layout_height="@dimen/country_list_selected_flag_height"
                 android:layout_marginRight="@dimen/spacing_large"
@@ -38,9 +39,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_xxsmall"
                 android:layout_toRightOf="@id/image_view_flag"
+                android:textStyle="bold"
                 android:text="@{country.title}"
-                android:textColor="@color/warm_grey"
-                android:textSize="@dimen/text_xxlarge"
+                android:textColor="@color/text_color_1"
+                android:textSize="@dimen/text_display"
                 tool:text="Malaysia" />
 
             <TextView
@@ -50,7 +52,7 @@
                 android:layout_toRightOf="@id/image_view_flag"
                 android:lineSpacingExtra="@dimen/text_xsmall"
                 android:text="@{country.allInformation}"
-                android:textColor="@color/warm_grey"
+                android:textColor="@color/text_color_2"
                 android:textSize="@dimen/text_default"
                 tool:text="Capital : Kuala Lumpur\nCurrency : Ringgit \nLanguage : Bahasa Malaysia English \nPopulation :31.220.000" />
 

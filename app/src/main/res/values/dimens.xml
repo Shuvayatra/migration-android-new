@@ -11,6 +11,7 @@
 	<dimen name="spacing_xlarge">22dp</dimen>
 	<dimen name="spacing_large">20dp</dimen>
 	<dimen name="spacing_18">18dp</dimen>
+	<dimen name="spacing_14">14dp</dimen>
 	<dimen name="spacing_12">12dp</dimen>
 	<dimen name="spacing_standard">16dp</dimen>
 	<dimen name="spacing_small">10dp</dimen>
@@ -52,6 +53,7 @@
 	<dimen name="category_title_top_offset">141dp</dimen>
 	<dimen name="searchTopOverlay">34dp</dimen>
 
+	<dimen name="text_display">36sp</dimen>
 	<dimen name="text_xxlarge">26sp</dimen>
 	<dimen name="text_xlarge">20sp</dimen>
 	<dimen name="text_large">18sp</dimen>
@@ -60,7 +62,7 @@
 	<dimen name="text_small">12sp</dimen>
 	<dimen name="text_xsmall">10sp</dimen>
 	<dimen name="text_header_title_24sp">24sp</dimen>
-
+	<dimen name="text_header_title_36sp">36sp</dimen>
 	<dimen name="large_line_height">22sp</dimen>
 
 	<dimen name="thumbnail_height">102dp</dimen>

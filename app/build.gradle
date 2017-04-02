@@ -66,6 +66,9 @@ dependencies {
     compile appDependencies.cardView
     compile appDependencies.firebaseAnalytics
     compile appDependencies.firebaseMessaging
+    compile appDependencies.firebaseCrash
+
+
     compile appDependencies.gravitySnapHelper
     compile appDependencies.gcm
 

@@ -30,30 +30,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/spacing_small"
+            android:paddingTop="@dimen/spacing_standard"
+
+            android:layout_marginBottom="@dimen/spacing_small"
             android:theme="@style/AppTheme.Block.Slider">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
+                android:paddingBottom="@dimen/spacing_standard"
+                >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/spacing_large"
-                android:paddingRight="@dimen/spacing_18"
+
+
                 android:text="@{block.title}"
+                android:textSize="@dimen/text_xxlarge"
+                android:textColor="@color/text_color_1"
                 android:textStyle="bold"
                 tools:text="News" />
 
+
             <TextView
                 style="@style/SliderSecondaryText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_small"
+
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:paddingLeft="@dimen/spacing_large"
-                android:paddingRight="@dimen/spacing_18"
+
+
+                android:textSize="@dimen/text_large"
+                android:textColor="@color/text_color_2"
+
                 android:text="@{block.description}"
                 android:textStyle="bold"
-                tools:text="How to find the right man power agency" />
+                tools:text="How to find the right man power agency"
+                android:visibility="@{block.description == null || block.description.length() ==0 ? View.GONE : View.VISIBLE}"
+
+                />
+            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"

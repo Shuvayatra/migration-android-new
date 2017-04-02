@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="BlockRadioWidgetDataBinding">
+        <import type="android.view.View" />
 
         <variable
             name="block"
@@ -22,26 +23,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fffeef"
-            android:backgroundTint="#d8d8d8"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
+            android:padding="@dimen/spacing_standard"
             android:theme="@style/AppTheme.Block.List">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/spacing_small"
-                android:layout_marginRight="@dimen/spacing_small"
+
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_standard"
+
                 android:theme="@style/AppTheme.Block.List">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
+                    android:textColor="@color/text_color_1"
+                    android:textSize="@dimen/text_xxlarge"
                     android:lines="1"
                     android:text="@{block.title}"
                     android:textStyle="bold"
@@ -54,7 +56,14 @@
                     android:layout_marginBottom="@dimen/spacing_small"
                     android:ellipsize="end"
                     android:maxLines="2"
+
+                    android:visibility="@{block.description == null || block.description.length() ==0 ? View.GONE : View.VISIBLE}"
+
+
                     android:text="@{block.description}"
+
+
+
                     tools:text="How to find the right man power agency" />
             </LinearLayout>
 
@@ -62,7 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/spacing_standard"
+
+
                 android:theme="@style/AppTheme.RadioWidget"
                 app:elevation="5dp"
                 app:srcCompat="@drawable/ic_video_white" />

@@ -30,16 +30,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/spacing_small"
+            android:paddingTop="@dimen/spacing_12"
             android:theme="@style/AppTheme.Block.List">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_small"
-                android:paddingLeft="@dimen/spacing_large"
-                android:paddingRight="@dimen/spacing_18"
+                android:paddingLeft="@dimen/spacing_standard"
+                android:paddingRight="@dimen/spacing_standard"
                 android:text="@{block.title}"
+                android:textSize="@dimen/text_xxlarge"
+                android:textColor="@color/text_color_1"
                 android:textStyle="bold"
                 tools:text="News" />
 
@@ -64,6 +66,7 @@
 
                 <TextView
                     android:id="@+id/deeplink"
+                    tools:text="View All"
                     style="@style/AppTheme.Block.Link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

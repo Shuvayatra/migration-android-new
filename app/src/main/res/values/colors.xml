@@ -10,6 +10,7 @@
     <color name="white_alpha_70">#b3ffffff</color>
     <color name="black_alpha_54">#8b000000</color>
     <color name="black_alpha_55">#8C000000</color>
+
     <color name="black_alpha_87">#de000000</color>
     <color name="nav_header_bg">#029baf</color>
     <color name="window_background">#ededed</color>
@@ -18,7 +19,9 @@
     <color name="colorEmptyState">#b2b2b2</color>
 
     <color name="article_art_bg">#f0f0f0</color>
-    <color name="divider">#979797</color>
+    <color name="divider">#8c979797</color>
+
+
 
     <color name="pager_indicator_inactive">#33ffffff</color>
     <color name="pager_indicator_active">#ffffff</color>
@@ -44,4 +47,9 @@
     <color name="grey_white">#dddddd</color>
     <color name="greyish_brown">#4a4a4a</color>
     <color name="pinkish_grey">#bdbdbd</color>
+
+    <color name="text_color_1">#de000000</color>
+    <color name="text_color_2">#de333333</color>
+    <color name="text_color_3">#de666666</color>
+
 </resources>
