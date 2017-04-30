@@ -27,6 +27,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equalsIgnoreCase(MyConstants.Intent.ACTION_CLICK_PLAYER)) {
             if (!MyApplication.isActivityShowing) {
                 Intent appIntent = new Intent(context, SplashActivity.class);
+                appIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(appIntent);
             }
         }

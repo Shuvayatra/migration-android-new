@@ -50,7 +50,7 @@ public class ComponentRepository implements IWidgetComponentRepository {
             case CountryWidgetData.COMPONENT_FOREX:
                 // create base url here
                 long lastForexUpdatedTime = mAppPreferences.getLastForexUpdatedTime();
-                Logger.e(TAG,"component lastForexUpdatedTime: "+ lastForexUpdatedTime);
+                Logger.e(TAG,"component lastForexUpdatedTime: "+ lastForexUpdatedTime+" base url ="+BuildConfig.HAMRO_PATRO_URL);
                 if(lastForexUpdatedTime == Long.MIN_VALUE ||
                         (lastForexUpdatedTime + android.text.format.DateUtils.HOUR_IN_MILLIS * 2)< System.currentTimeMillis()) {
                     return mDataStoreFactory.createRestDataStore(BuildConfig.HAMRO_PATRO_URL)
@@ -68,7 +68,7 @@ public class ComponentRepository implements IWidgetComponentRepository {
             case CountryWidgetData.COMPONENT_WEATHER:
 
                 long lastWeatherUpdatedTime = mAppPreferences.getLastWeatherUpdatedTime();
-                Logger.e(TAG,"component lastWeatherUpdatedTime: "+ lastWeatherUpdatedTime);
+                Logger.e(TAG,"component lastWeatherUpdatedTime: "+ lastWeatherUpdatedTime+" : Base URL = "+BuildConfig.OPEN_WEATHER_URL);
                 if(lastWeatherUpdatedTime == Long.MIN_VALUE ||
                         (lastWeatherUpdatedTime + android.text.format.DateUtils.HOUR_IN_MILLIS * 2)< System.currentTimeMillis()) {
 

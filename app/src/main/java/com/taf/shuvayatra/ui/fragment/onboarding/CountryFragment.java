@@ -163,12 +163,21 @@ public class CountryFragment extends BaseFragment implements CountryView, Adapte
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(country.getTitleEnglish());
             }
 
+
             getTypedActivity().getPreferences().setLocation(dataList.get(spinnerCountry
                     .getSelectedItemPosition()));
 
+
             String currentLocation = getTypedActivity().getPreferences().getLocation();
-            Country country = Country.makeCountryFromPreference(currentLocation);
-            FirebaseMessaging.getInstance().subscribeToTopic(country.getTitleEnglish());
+
+            if (!currentLocation.equalsIgnoreCase(Preferences.DEFAULT_LOCATION)
+                    && !currentLocation.equalsIgnoreCase(getString(R.string.country_not_decided_yet))) {
+
+                Country country = Country.makeCountryFromPreference(currentLocation);
+                FirebaseMessaging.getInstance().subscribeToTopic(country.getTitleEnglish());
+            }
+
+
 
         }
     }

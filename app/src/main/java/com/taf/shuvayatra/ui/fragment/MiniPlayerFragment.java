@@ -123,7 +123,9 @@ public class MiniPlayerFragment extends BaseFragment implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.play:
-                ((MyApplication) getContext().getApplicationContext()).mService.playPause();
+                if(isMediaServiceReady()) {
+                    ((MyApplication) getContext().getApplicationContext()).mService.playPause();
+                }
                 break;
             default:
                 break;
@@ -147,7 +149,9 @@ public class MiniPlayerFragment extends BaseFragment implements
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         mCurrentProgress = seekBar.getProgress();
-        ((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
+        if(isMediaServiceReady()) {
+            ((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
+        }
         seekbarChangeByUser = false;
     }
 
@@ -163,10 +167,16 @@ public class MiniPlayerFragment extends BaseFragment implements
 
     @Override
     public void onMediaPrepared() {
+        if(getActivity() == null) return;
         //((MyApplication) getContext().getApplicationContext()).mService.seekTo(mCurrentProgress);
         ((PlayerFragmentActivity) getActivity()).togglePlayerFragment();
         mPlayBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
         updateView();
+    }
+
+
+    private boolean isMediaServiceReady () {
+        return ((MyApplication) getContext().getApplicationContext()).mService !=null;
     }
 
     @Override
@@ -207,27 +217,37 @@ public class MiniPlayerFragment extends BaseFragment implements
     }
 
     private void updateView() {
-        mPlayBtn.setImageDrawable(getResources().getDrawable(
-                ((MyApplication) getContext().getApplicationContext()).mService.getPlayStatus() ?
-                        R.drawable.ic_pause : R.drawable.ic_play)
-        );
-        mTitle.setText(((MyApplication) getContext().getApplicationContext()).mService
-                .getCurrentTitle());
+        if(getContext()==null) return;
 
-        try {
-            String description = ((MyApplication) getContext().getApplicationContext()).mService
-                    .getCurrentDescription();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                description = Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY).toString();
-            } else {
-                description = Html.fromHtml(description).toString();
+        if(isMediaServiceReady()){
+            try {
+                mPlayBtn.setImageDrawable(getResources().getDrawable(
+                        ((MyApplication) getContext().getApplicationContext()).mService.getPlayStatus() ?
+                                R.drawable.ic_pause : R.drawable.ic_play)
+                );
+                mTitle.setText(((MyApplication) getContext().getApplicationContext()).mService
+                        .getCurrentTitle());
+                BindingUtil.setImage(mediaImage, ((MyApplication) getContext().getApplicationContext())
+                        .mService.getCurrentImageResource());
+                String description = ((MyApplication) getContext().getApplicationContext()).mService
+                        .getCurrentDescription();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    description = Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY).toString();
+                } else {
+                    description = Html.fromHtml(description).toString();
+                }
+                mDescription.setText(description.replaceAll("\uFFFC", ""));
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
-            mDescription.setText(description.replaceAll("\uFFFC", ""));
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        }else {
+            mPlayBtn.setImageDrawable(getResources().getDrawable(
+                    R.drawable.ic_play)
+            );
         }
 
-        BindingUtil.setImage(mediaImage, ((MyApplication) getContext().getApplicationContext())
-                .mService.getCurrentImageResource());
+
+
+
     }
 }

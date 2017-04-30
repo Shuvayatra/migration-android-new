@@ -10,9 +10,11 @@ import com.taf.data.di.NetworkComponent;
 import com.taf.data.di.NetworkModule;
 import com.taf.data.di.PerActivity;
 import com.taf.data.entity.mapper.DataMapper;
+import com.taf.data.utils.Logger;
 
 @PerActivity
 public class DataStoreFactory {
+    private static final String TAG="DataStoreFactory";
     private final Context mContext;
     private final DataMapper mDataMapper;
     private final DatabaseHelper mHelper;
@@ -41,6 +43,8 @@ public class DataStoreFactory {
     }
 
     public RestDataStore createRestDataStore(String baseUrl) {
+        Logger.i(TAG,"base url = "+ baseUrl);
+
         NetworkComponent networkComponent = DaggerNetworkComponent
                 .builder()
                 .networkModule(new NetworkModule(baseUrl))

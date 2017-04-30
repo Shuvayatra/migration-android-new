@@ -160,12 +160,19 @@ public class Country extends BaseModel {
 
     public static Country makeCountryFromPreference(String preference) {
         Country country = new Country();
-        String[] data = preference.split(",");
-        country.id = data.length > 0 ? Long.valueOf(data[INDEX_ID]) : Long.MIN_VALUE;
-        country.title = data.length >= 2 ? data[INDEX_TITLE] : null;
-        country.titleEnglish = data.length >= 3 ? data[INDEX_TITLE_EN] : null;
-        country.timeZoneId = data.length >= 4 ? data[INDEX_TIME_ZONE] : null;
-        return country;
+        try {
+            String[] data = preference.split(",");
+            country.id = data.length > 0 ? Long.valueOf(data[INDEX_ID]) : Long.MIN_VALUE;
+            country.title = data.length >= 2 ? data[INDEX_TITLE] : null;
+            country.titleEnglish = data.length >= 3 ? data[INDEX_TITLE_EN] : null;
+            country.timeZoneId = data.length >= 4 ? data[INDEX_TIME_ZONE] : null;
+            return country;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            country.id =-1L;
+            country.title = "Nepal";
+            country.titleEnglish = "Nepal";
+            return country;
+        }
     }
-
 }
